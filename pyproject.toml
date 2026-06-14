@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "domain-bounded-cslr"
+version = "0.1.0"
+description = "Domain-bounded Chinese Sign Language recognition and semantic reconstruction prototype"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "fastapi==0.115.8",
+  "numpy==1.26.4",
+  "python-multipart==0.0.20",
+  "PyYAML==6.0.2",
+  "uvicorn[standard]==0.34.0",
+]
+
+[project.optional-dependencies]
+ml = [
+  "mediapipe==0.10.21",
+  "onnx==1.17.0",
+  "onnxruntime==1.20.1",
+  "opencv-python-headless==4.11.0.86",
+  "scikit-learn==1.6.1",
+  "torch==2.6.0",
+]
+dev = [
+  "httpx==0.28.1",
+  "mypy==1.15.0",
+  "pytest==8.3.4",
+  "pytest-cov==6.0.0",
+  "ruff==0.9.7",
+]
+
+[project.scripts]
+cslr = "cslr.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true

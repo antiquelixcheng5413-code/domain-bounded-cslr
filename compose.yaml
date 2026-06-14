@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      CSLR_MODEL_PATH: /workspace/artifacts/exports/lstm.onnx
+      CSLR_LABELS_PATH: /workspace/configs/hospital_intents.yaml
+      CSLR_DEMO_MODE: ${CSLR_DEMO_MODE:-false}
+      CSLR_CONFIDENCE_THRESHOLD: ${CSLR_CONFIDENCE_THRESHOLD:-0.65}
+    volumes:
+      - ./artifacts/exports:/workspace/artifacts/exports:ro
+    restart: unless-stopped
+
+  dev:
+    build:
+      context: .
+    profiles: ["dev"]
+    working_dir: /workspace
+    entrypoint: ["python", "-m", "cslr.cli"]
+    environment:
+      PYTHONPATH: /workspace/src
+    volumes:
+      - ./:/workspace
+      - ./data:/workspace/data
+      - ./artifacts:/workspace/artifacts
+
+  test:
+    build:
+      context: .
+    profiles: ["test"]
+    working_dir: /workspace
+    entrypoint: ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
+    environment:
+      PYTHONPATH: /workspace/src
+    volumes:
+      - ./:/workspace

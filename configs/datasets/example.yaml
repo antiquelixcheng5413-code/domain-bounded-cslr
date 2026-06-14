@@ -1,0 +1,14 @@
+name: example
+adapter: csv_manifest
+manifest: data/manifests/example.csv
+video_root: data/raw/example
+columns:
+  sample_id: sample_id
+  video: video
+  label: label
+  signer: signer
+  session: session
+  split: split
+license:
+  name: replace-after-dataset-selection
+  url: ""

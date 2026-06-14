@@ -1,0 +1,5 @@
+name: tcn
+input_size: 368
+channels: [128, 128, 128]
+kernel_size: 3
+dropout: 0.25

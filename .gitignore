@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+.deps/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets and local configuration
+.env
+*.pem
+*.key
+
+# Data: only documentation, manifests, and fixed splits are versioned
+data/raw/**
+data/interim/**
+data/processed/**
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Models and runtime output
+artifacts/checkpoints/**
+artifacts/exports/**
+artifacts/logs/**
+!artifacts/checkpoints/.gitkeep
+!artifacts/exports/.gitkeep
+!artifacts/logs/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.tflite
+
+# Participant and consent material must never enter Git
+data/participants/
+docs/ethics/consent-forms/
+
+# Build output
+build/
+dist/
+*.egg-info/

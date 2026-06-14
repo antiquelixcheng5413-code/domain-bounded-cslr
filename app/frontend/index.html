@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>医院前台手语识别原型</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <p class="eyebrow">GROUP 11 · CONTROLLED RESEARCH PROTOTYPE</p>
+        <h1>医院前台手语识别</h1>
+        <p class="lead">
+          上传或录制一段 1–4 秒的视频。系统只识别配置中的受限意图，不用于医疗诊断或紧急决策。
+        </p>
+        <div id="system-status" class="status">正在检查模型状态...</div>
+      </header>
+
+      <section class="panel">
+        <div class="video-frame">
+          <video id="preview" autoplay muted playsinline></video>
+        </div>
+        <div class="controls">
+          <button id="camera-button" type="button">开启摄像头</button>
+          <button id="record-button" type="button" disabled>录制 3 秒</button>
+          <label class="file-button">
+            选择视频
+            <input id="file-input" type="file" accept="video/*" />
+          </label>
+        </div>
+        <p id="selection" class="muted">尚未选择视频。</p>
+      </section>
+
+      <section class="panel result-panel" aria-live="polite">
+        <div class="result-heading">
+          <h2>识别结果</h2>
+          <span id="result-status" class="badge">等待输入</span>
+        </div>
+        <p id="result-text" class="result-text">完成录制或选择视频后开始。</p>
+        <dl class="details">
+          <div><dt>Intent</dt><dd id="result-intent">-</dd></div>
+          <div><dt>Gloss</dt><dd id="result-gloss">-</dd></div>
+          <div><dt>Confidence</dt><dd id="result-confidence">-</dd></div>
+          <div><dt>Latency</dt><dd id="result-latency">-</dd></div>
+        </dl>
+        <ul id="warnings" class="warnings"></ul>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

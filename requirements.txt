@@ -1,0 +1,11 @@
+fastapi==0.115.8
+mediapipe==0.10.21
+numpy==1.26.4
+onnx==1.17.0
+onnxruntime==1.20.1
+opencv-python-headless==4.11.0.86
+python-multipart==0.0.20
+PyYAML==6.0.2
+scikit-learn==1.6.1
+torch==2.6.0
+uvicorn[standard]==0.34.0

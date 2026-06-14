@@ -1,0 +1,7 @@
+name: compact_transformer
+input_size: 368
+model_dim: 128
+num_heads: 4
+num_layers: 2
+feedforward_dim: 256
+dropout: 0.20

@@ -1,0 +1,190 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, "Microsoft YaHei", Arial, sans-serif;
+  background: #eef2f6;
+  color: #17202a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(51, 120, 171, 0.2), transparent 35%),
+    #eef2f6;
+}
+
+.shell {
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 64px;
+}
+
+header {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  color: #176b87;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+h1 {
+  margin: 8px 0;
+  font-size: clamp(2rem, 6vw, 4rem);
+  letter-spacing: -0.04em;
+}
+
+.lead {
+  max-width: 720px;
+  color: #4f5d6b;
+  line-height: 1.65;
+}
+
+.status,
+.panel {
+  border: 1px solid #d5dce3;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 50px rgba(30, 52, 70, 0.08);
+}
+
+.status {
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+}
+
+.status[data-kind="warning"] {
+  border-color: #e8c77b;
+  background: #fff8e7;
+}
+
+.status[data-kind="error"] {
+  border-color: #d88d8d;
+  background: #fff0f0;
+}
+
+.panel {
+  margin: 18px 0;
+  padding: 22px;
+}
+
+.video-frame {
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  background: #111820;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+button,
+.file-button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  background: #176b87;
+  color: white;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.file-button {
+  background: #293b4a;
+}
+
+.file-button input {
+  display: none;
+}
+
+.muted {
+  color: #697785;
+  font-size: 0.9rem;
+}
+
+.result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-heading h2 {
+  margin: 0;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #e5edf2;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.result-text {
+  min-height: 52px;
+  margin: 24px 0;
+  color: #0f5268;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 700;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.details div {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f4f7f9;
+}
+
+dt {
+  color: #778491;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 6px 0 0;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.warnings {
+  color: #9b4d13;
+}
+
+@media (max-width: 680px) {
+  .shell {
+    padding-top: 24px;
+  }
+
+  .details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,6 @@
+name: bilstm
+input_size: 368
+hidden_size: 96
+num_layers: 2
+dropout: 0.30
+bidirectional: true

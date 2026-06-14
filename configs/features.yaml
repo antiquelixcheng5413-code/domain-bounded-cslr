@@ -1,0 +1,19 @@
+sequence_length: 48
+minimum_valid_frame_ratio: 0.80
+normalization:
+  origin: shoulder_midpoint
+  scale: shoulder_width
+  epsilon: 0.000001
+landmarks:
+  hands:
+    points_per_hand: 21
+    dimensions: [x, y, z]
+  pose:
+    indices: [11, 12, 13, 14, 15, 16, 23, 24]
+    dimensions: [x, y, z, visibility]
+  face:
+    indices: [10, 33, 61, 133, 152, 263, 291, 362]
+    dimensions: [x, y, z]
+include_missing_masks: true
+include_motion_deltas: true
+output_size: 368
