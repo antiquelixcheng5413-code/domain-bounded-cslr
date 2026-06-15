@@ -1,16 +1,21 @@
 # Week 6 local progress review
 
-## Current evidence as of 2026-06-15
+## Current evidence as of 2026-06-16
 
 - [x] WSL 2 and Docker Desktop are installed on the Windows development computer.
+- [x] Docker Desktop program, data disk, config, downloads, and tools were moved to `D:`.
+- [x] Docker starts from `D:\DockerDesktop`.
 - [x] The application container is healthy at `http://localhost:8088`.
-- [x] All 18 tests pass in the Docker test image.
+- [x] `docker compose up -d --build app` starts the `app` service.
+- [x] Health endpoint returns `model_ready=false` while no ONNX model is installed.
+- [x] Prediction endpoint returns `model_unavailable` rather than a fake result.
+- [x] All 20 tests pass in the Docker test image.
 - [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification.
 - [x] One official MP4 produced an accepted `48 x 368` MediaPipe feature sequence.
 - [ ] A complete NationalCSL-DP image archive has been inspected.
 - [ ] The dataset adapter and fixed manifest have been generated.
 - [ ] A real LSTM model has been trained and exported.
-- [ ] GitHub remote deployment is complete; account authentication is still required.
+- [x] GitHub private remote deployment is complete.
 
 ## Required live demonstration
 

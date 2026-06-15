@@ -84,6 +84,9 @@ docker compose up --build app
 <http://localhost:8088/api/v1/health>。若端口被占用，可先设置
 `$env:CSLR_PORT="其他端口"`。
 
+当前 Docker 服务构建和健康检查记录见
+[Docker service audit](docs/setup/docker-service-audit.md)。
+
 只检查界面流程时：
 
 ```powershell
