@@ -1,5 +1,17 @@
 # Week 6 local progress review
 
+## Current evidence as of 2026-06-15
+
+- [x] WSL 2 and Docker Desktop are installed on the Windows development computer.
+- [x] The application container is healthy at `http://localhost:8088`.
+- [x] All 18 tests pass in the Docker test image.
+- [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification.
+- [x] One official MP4 produced an accepted `48 x 368` MediaPipe feature sequence.
+- [ ] A complete NationalCSL-DP image archive has been inspected.
+- [ ] The dataset adapter and fixed manifest have been generated.
+- [ ] A real LSTM model has been trained and exported.
+- [ ] GitHub remote deployment is complete; account authentication is still required.
+
 ## Required live demonstration
 
 - [ ] `docker compose up app` starts on a clean Windows/Docker setup.

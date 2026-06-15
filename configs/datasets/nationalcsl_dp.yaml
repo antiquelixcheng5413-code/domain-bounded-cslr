@@ -1,0 +1,64 @@
+name: nationalcsl_dp
+status: provisional
+task: isolated_intent_classification
+adapter: pending_image_archive_inspection
+data_root: data/raw/nationalcsl-dp
+source:
+  article: https://www.nature.com/articles/s41597-025-04986-x
+  figshare: https://figshare.com/articles/media/NationalCSL-DP/27261843
+  doi: 10.6084/m9.figshare.27261843.v3
+  access_date: "2026-06-15"
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+representation:
+  primary: image_sequences
+  image_size: [256, 256]
+  views: [front, left]
+  raw_video_sample_only: true
+proposed_signer_split:
+  train: [Participant_01, Participant_02, Participant_03, Participant_04, Participant_05,
+          Participant_06, Participant_07]
+  validation: [Participant_08]
+  test: [Participant_09, Participant_10]
+intent_labels:
+  REGISTER:
+    ids: ["1660"]
+    glosses: ["挂号"]
+    confidence: strong
+  APPOINTMENT:
+    ids: ["1871"]
+    glosses: ["预约"]
+    confidence: strong
+  PHARMACY:
+    ids: ["1305"]
+    glosses: ["药房"]
+    confidence: strong
+  HELP:
+    ids: ["5094"]
+    glosses: ["帮助"]
+    confidence: strong
+  PAIN:
+    ids: ["1682", "5760"]
+    glosses: ["疼痛1-1", "疼痛1-2"]
+    confidence: strong
+  EMERGENCY:
+    ids: ["2465"]
+    glosses: ["急诊室"]
+    confidence: medium
+    review_note: "Location gloss is not equivalent to declaring an emergency."
+  DIRECTIONS:
+    ids: ["4128", "5604"]
+    glosses: ["位置2-2", "位置2-1"]
+    confidence: weak
+    review_note: "Requires CSL semantic review before training."
+  PAYMENT:
+    ids: ["0533"]
+    glosses: ["结账"]
+    confidence: weak
+    review_note: "Hospital payment meaning is not guaranteed."
+final_lock_checks:
+  - inspect_full_image_archive
+  - verify_selected_ids_in_both_views
+  - benchmark_extraction_cost
+  - complete_csl_semantic_review

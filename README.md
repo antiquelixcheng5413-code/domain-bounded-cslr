@@ -9,9 +9,16 @@
 
 - 已完成项目骨架、统一数据契约、MediaPipe Holistic 特征提取、四类时序模型、
   ONNX 推理接口、规则语义模块、FastAPI/Web 页面、Docker 和 CI。
-- 尚未选定或下载公开数据集。
+- NationalCSL-DP 已成为暂定主数据集；最终锁定仍需检查一个完整图片帧归档。
+- 已校验官方标签表和一个 Participant 08 原视频归档，并成功提取一个官方样本：
+  133 个源帧、91.73% 有效帧、输出 `48 x 368` 特征。
 - 尚未训练或发布模型。默认运行时会返回 `model_unavailable`，不会伪造预测。
 - `CSLR_DEMO_MODE=true` 只用于检查网页流程，结果不得写入实验报告。
+
+数据集评分和审计记录：
+
+- [候选数据集评分](docs/datasets/candidate-scorecard.md)
+- [NationalCSL-DP 审计](docs/datasets/nationalcsl-dp-audit.md)
 
 ## Windows 10 环境
 
@@ -100,7 +107,9 @@ docker compose down
 
 ## 数据流程
 
-公开数据集尚未确定，因此训练代码不能写死数据集目录。每个 adapter 最终统一生成：
+NationalCSL-DP 是暂定主数据集，但完整图片归档结构尚待核验，因此 adapter 仍不能
+写死未经观察的目录。数据集配置位于
+`configs/datasets/nationalcsl_dp.yaml`。每个 adapter 最终统一生成：
 
 ```csv
 sample_id,video,label,signer,session,split
