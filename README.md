@@ -9,7 +9,7 @@
 
 - 已完成项目骨架、统一数据契约、MediaPipe Holistic 特征提取、四类时序模型、
   ONNX 推理接口、规则语义模块、FastAPI/Web 页面、Docker 和 CI。
-- NationalCSL-DP 已成为暂定主数据集；最终锁定仍需检查一个完整图片帧归档。
+- NationalCSL-DP 只是当前临时主候选数据集；最终数据集仍需第二周正式锁定。
 - 已校验官方标签表和一个 Participant 08 原视频归档，并成功提取一个官方样本：
   133 个源帧、91.73% 有效帧、输出 `48 x 368` 特征。
 - 尚未训练或发布模型。默认运行时会返回 `model_unavailable`，不会伪造预测。
@@ -17,6 +17,8 @@
 
 数据集评分和审计记录：
 
+- [团队交接指南](docs/onboarding/team-handoff.md)
+- [本机运行手册](docs/onboarding/local-runbook.md)
 - [候选数据集评分](docs/datasets/candidate-scorecard.md)
 - [NationalCSL-DP 审计](docs/datasets/nationalcsl-dp-audit.md)
 

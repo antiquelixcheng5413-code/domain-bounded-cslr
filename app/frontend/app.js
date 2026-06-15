@@ -25,7 +25,7 @@ async function loadHealth() {
       systemStatus.textContent = "界面演示模式：结果不是模型预测，不能用于实验报告。";
       systemStatus.dataset.kind = "warning";
     } else {
-      systemStatus.textContent = "模型尚未安装。可检查界面和上传流程，但不能进行真实识别。";
+      systemStatus.textContent = "模型尚未安装。可以检查界面和上传流程，但不能进行真实识别。";
       systemStatus.dataset.kind = "warning";
     }
   } catch (error) {
