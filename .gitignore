@@ -9,6 +9,7 @@ htmlcov/
 .venv/
 venv/
 .deps/
+.downloads/
 
 # Editors and operating systems
 .idea/

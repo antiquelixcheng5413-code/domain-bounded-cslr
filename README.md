@@ -60,8 +60,9 @@ docker run --rm hello-world
 docker compose up --build app
 ```
 
-打开 <http://localhost:8000>，健康检查位于
-<http://localhost:8000/api/v1/health>。
+打开 <http://localhost:8088>，健康检查位于
+<http://localhost:8088/api/v1/health>。若端口被占用，可先设置
+`$env:CSLR_PORT="其他端口"`。
 
 只检查界面流程时：
 

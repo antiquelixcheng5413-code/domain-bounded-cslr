@@ -3,7 +3,7 @@ services:
     build:
       context: .
     ports:
-      - "8000:8000"
+      - "${CSLR_PORT:-8088}:8000"
     environment:
       CSLR_MODEL_PATH: /workspace/artifacts/exports/lstm.onnx
       CSLR_LABELS_PATH: /workspace/configs/hospital_intents.yaml
@@ -29,6 +29,7 @@ services:
   test:
     build:
       context: .
+      target: test
     profiles: ["test"]
     working_dir: /workspace
     entrypoint: ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
