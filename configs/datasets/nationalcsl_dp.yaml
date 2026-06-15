@@ -1,8 +1,10 @@
 name: nationalcsl_dp
 status: provisional
 task: isolated_intent_classification
-adapter: pending_image_archive_inspection
-data_root: data/raw/nationalcsl-dp
+adapter: nationalcsl_dp_image_sequence
+data_root: /workspace/data/nationalcsl-dp
+adapter_options:
+  views: [front]
 source:
   article: https://www.nature.com/articles/s41597-025-04986-x
   figshare: https://figshare.com/articles/media/NationalCSL-DP/27261843

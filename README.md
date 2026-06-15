@@ -58,6 +58,19 @@ docker run --rm hello-world
 - <https://learn.microsoft.com/windows/wsl/install>
 - <https://docs.docker.com/desktop/setup/install/windows-install/>
 
+### 4. Docker 登录
+
+本项目不要求登录 Docker 账号。常规开发、运行本地 Compose、拉取公开基础镜像和构建
+本项目镜像都可以不登录。
+
+只有以下情况才需要 Docker 登录：
+
+- 拉取私有 Docker 镜像。
+- 把镜像推送到 Docker Hub 或组织镜像仓库。
+- 匿名拉取公开镜像触发 Docker Hub rate limit，需要临时登录解除限制。
+
+当前项目镜像只保存在本机 Docker Desktop 中，不发布到 Docker Hub。
+
 ## 启动 Web 系统
 
 真实模式要求 `artifacts/exports/lstm.onnx` 和同目录的
@@ -107,13 +120,38 @@ docker compose down
 
 ## 数据流程
 
-NationalCSL-DP 是暂定主数据集，但完整图片归档结构尚待核验，因此 adapter 仍不能
-写死未经观察的目录。数据集配置位于
-`configs/datasets/nationalcsl_dp.yaml`。每个 adapter 最终统一生成：
+当前临时采用 NationalCSL-DP 作为主候选数据集，原因是它是公开发布的中国手语孤立词
+数据集，带 10 名 signer、front/left 双视角和 CC BY 4.0 许可，且官方标签表覆盖医院
+前台需要的核心词，如 `挂号`、`预约`、`药房`、`帮助`、`疼痛`、`急诊室`、`医保卡`。
+
+这仍是“暂定”，不是最终实验锁定。已下载的是审计材料，不是完整训练集：
+
+- `gloss.csv`：官方标签表，MD5 已校验。
+- Participant 08 小型原视频样本包：用于验证视频解码和 MediaPipe 特征提取。
+- Participant 02 大归档 ZIP 中央目录：只读取目录清单，确认图片帧结构和目标 ID 存在。
+
+完整数据集不放在 Git 仓库。配置位于 `configs/datasets/nationalcsl_dp.yaml`。每个
+adapter 最终统一生成：
 
 ```csv
 sample_id,video,label,signer,session,split
 ```
+
+大文件不要放进 Git 工作区。当前本机约定：
+
+- 代码仓库：`E:\college\FYP`
+- 下载缓存：`D:\FYP_downloads`
+- 数据集根目录：`D:\FYP_downloads\data`
+
+PowerShell 中可这样让 Docker 挂载 D 盘数据：
+
+```powershell
+$env:CSLR_DATA_ROOT="D:\FYP_downloads\data"
+docker compose run --rm dev list-adapters
+```
+
+Docker 和下载目录迁移记录见
+[存储迁移核查](docs/setup/storage-migration-audit.md)。
 
 验证 manifest：
 

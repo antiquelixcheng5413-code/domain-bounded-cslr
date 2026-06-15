@@ -2,6 +2,9 @@
 
 Audit date: 2026-06-15.
 
+Current status: temporary primary candidate for implementation planning and adapter work. It is
+not the final locked experiment dataset until the remaining gates are complete.
+
 ## Source record
 
 | Field | Verified value |
@@ -25,7 +28,8 @@ video pipeline.
 
 ## Integrity checks
 
-The downloaded metadata files remain under the ignored `.downloads/` directory.
+The downloaded metadata files are kept outside the Git repository under the local cache
+`D:\FYP_downloads\dataset-audit`.
 
 | File | Size | Expected MD5 | Result |
 |---|---:|---|---|
@@ -34,6 +38,11 @@ The downloaded metadata files remain under the ignored `.downloads/` directory.
 
 The Participant 08 archive contains 10 front MP4 files and the corresponding 10 left-view
 MP4 files. This archive is a sample of raw videos, not the complete signer data.
+
+A range-read of the Participant 02 large archive central directory confirmed the primary
+Figshare representation uses image-frame directories such as
+`Participant_02/front/0000/00001.jpg`. The parsed directory had 222,067 entries, including
+208,650 `.jpg` files, and all provisional hospital intent IDs listed below were present.
 
 ## Pipeline check
 
@@ -78,7 +87,7 @@ by a qualified CSL user before the final intent set is frozen.
 
 ## Remaining gate
 
-1. Download and inspect one full image-frame participant archive.
+1. Inspect one full image-frame participant archive from `D:\FYP_downloads`.
 2. Confirm the exact frame directory structure and selected label IDs.
 3. Implement the image-sequence adapter from the observed structure.
 4. Benchmark MediaPipe extraction time on at least 20 selected samples.

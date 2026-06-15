@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -15,6 +15,7 @@ FACE_INDICES = (10, 33, 61, 133, 152, 263, 291, 362)
 BASE_FEATURE_SIZE = 182
 MASK_SIZE = 4
 OUTPUT_FEATURE_SIZE = BASE_FEATURE_SIZE + MASK_SIZE + BASE_FEATURE_SIZE
+IMAGE_SUFFIXES = {".bmp", ".jpeg", ".jpg", ".png"}
 
 
 @dataclass(frozen=True)
@@ -35,7 +36,7 @@ class MediaPipeHolisticExtractor:
         self.sequence_length = sequence_length
         self.minimum_valid_ratio = minimum_valid_ratio
 
-    def extract(self, video_path: Path) -> ExtractionResult:
+    def extract(self, source_path: Path) -> ExtractionResult:
         try:
             import cv2
             import mediapipe as mp
@@ -43,10 +44,6 @@ class MediaPipeHolisticExtractor:
             raise RuntimeError(
                 "MediaPipe extraction dependencies are unavailable. Install requirements.txt."
             ) from exc
-
-        capture = cv2.VideoCapture(str(video_path))
-        if not capture.isOpened():
-            raise ValueError(f"unable to open video: {video_path}")
 
         frames: list[np.ndarray] = []
         valid_flags: list[bool] = []
@@ -59,10 +56,7 @@ class MediaPipeHolisticExtractor:
             min_tracking_confidence=0.5,
         )
         try:
-            while True:
-                ok, frame = capture.read()
-                if not ok:
-                    break
+            for frame in self._iter_frames(source_path, cv2):
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 result = holistic.process(rgb)
                 vector, valid = self._frame_vector(result)
@@ -70,7 +64,6 @@ class MediaPipeHolisticExtractor:
                 valid_flags.append(valid)
         finally:
             holistic.close()
-            capture.release()
 
         quality = assess_frame_quality(valid_flags, self.minimum_valid_ratio)
         if not frames:
@@ -88,6 +81,42 @@ class MediaPipeHolisticExtractor:
             quality=quality,
             source_frames=len(frames),
         )
+
+    @classmethod
+    def _image_paths(cls, directory: Path) -> list[Path]:
+        if not directory.exists():
+            raise FileNotFoundError(directory)
+        if not directory.is_dir():
+            raise NotADirectoryError(directory)
+        return sorted(
+            path
+            for path in directory.iterdir()
+            if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES
+        )
+
+    def _iter_frames(self, source_path: Path, cv2: Any) -> Iterable[np.ndarray]:
+        if source_path.is_dir():
+            paths = self._image_paths(source_path)
+            if not paths:
+                raise ValueError(f"image sequence directory is empty: {source_path}")
+            for path in paths:
+                frame = cv2.imread(str(path))
+                if frame is None:
+                    raise ValueError(f"unable to read image frame: {path}")
+                yield frame
+            return
+
+        capture = cv2.VideoCapture(str(source_path))
+        if not capture.isOpened():
+            raise ValueError(f"unable to open video or image sequence: {source_path}")
+        try:
+            while True:
+                ok, frame = capture.read()
+                if not ok:
+                    break
+                yield frame
+        finally:
+            capture.release()
 
     def _frame_vector(self, result: Any) -> tuple[np.ndarray, bool]:
         pose = result.pose_landmarks.landmark if result.pose_landmarks else None

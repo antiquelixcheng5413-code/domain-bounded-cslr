@@ -46,3 +46,25 @@ def validate_manifest(records: Iterable[SampleRecord]) -> None:
         if record.sample_id in seen:
             raise ValueError(f"duplicate sample_id: {record.sample_id}")
         seen.add(record.sample_id)
+
+
+def write_manifest(path: Path, records: Iterable[SampleRecord]) -> int:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    count = 0
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=REQUIRED_COLUMNS)
+        writer.writeheader()
+        for record in records:
+            record.validate()
+            writer.writerow(
+                {
+                    "sample_id": record.sample_id,
+                    "video": record.video.as_posix(),
+                    "label": record.label,
+                    "signer": record.signer,
+                    "session": record.session,
+                    "split": record.split,
+                }
+            )
+            count += 1
+    return count

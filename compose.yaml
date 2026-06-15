@@ -23,7 +23,9 @@ services:
       PYTHONPATH: /workspace/src
     volumes:
       - ./:/workspace
-      - ./data:/workspace/data
+      - type: bind
+        source: ${CSLR_DATA_ROOT:-./data}
+        target: /workspace/data
       - ./artifacts:/workspace/artifacts
 
   test:
