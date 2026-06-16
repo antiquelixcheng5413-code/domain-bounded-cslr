@@ -20,16 +20,32 @@ dataset.
 | Last write time | 2026-06-17 00:21:45 |
 | Git status | Do not commit archive or extracted videos |
 
-The archive should be extracted outside the Git repository, for example:
+The source archive remains at `E:\Download\CE-CSL.zip`.
+
+## Local Extraction
+
+The dataset has been extracted for project use at:
 
 ```text
-D:\FYP_downloads\data\ce-csl
+E:\college\FYP\data\ce-csl
 ```
 
-The Docker mount should then point to the parent directory:
+This directory is ignored by Git through `data/ce-csl/**`. It is inside the project working
+directory only so Docker Compose can use the default `./data -> /workspace/data` mount.
 
-```powershell
-$env:CSLR_DATA_ROOT="D:\FYP_downloads\data"
+Observed extracted contents:
+
+| Item | Count |
+|---|---:|
+| MP4 videos | 5,988 |
+| Label CSV files | 3 |
+| Total files | 5,991 |
+| Extracted bytes | 9,846,721,378 |
+
+The generated project manifest is:
+
+```text
+data/manifests/ce-csl.csv
 ```
 
 ## Observed Archive Structure

@@ -15,7 +15,8 @@ The goal is to keep large Docker, dataset, and tool artifacts off the system `C:
 | Docker user config and CLI plugins | `D:\DockerDesktopConfig` | 0.67 GB | C user paths are junctions into this folder |
 | Docker migration backup | `D:\DockerDesktopBackup` | 17.16 GB | Keep until Docker has been rechecked after restarts |
 | Dataset and installer downloads | `D:\FYP_downloads` | 0.89 GB | Includes NationalCSL-DP audit files and Docker installer |
-| Final CE-CSL archive | `E:\Download\CE-CSL.zip` | 9.84 GB | Final dataset archive selected on 2026-06-17; extract or move outside Git before training |
+| Final CE-CSL archive | `E:\Download\CE-CSL.zip` | 9.84 GB | Source archive retained |
+| Extracted CE-CSL dataset | `E:\college\FYP\data\ce-csl` | 9.85 GB | Project-local working copy; ignored by Git |
 | Portable helper tools | `D:\FYP_tools` | 0.04 GB | Includes portable GitHub CLI |
 
 ## C-drive junctions
@@ -69,18 +70,15 @@ Do not delete `D:\DockerDesktop`, `D:\DockerDesktopData`, `D:\DockerDesktopConfi
 
 ## CE-CSL follow-up
 
-The final dataset archive currently sits at `E:\Download\CE-CSL.zip`. This is acceptable as an
-external archive, but the training workflow expects an extracted directory mounted through
-`CSLR_DATA_ROOT`.
-
-Recommended extraction target:
+The final dataset archive remains at `E:\Download\CE-CSL.zip`. A project-local working copy has
+been extracted to:
 
 ```text
-D:\FYP_downloads\data\ce-csl
+E:\college\FYP\data\ce-csl
 ```
 
-After extraction, keep the Git repository clean and set:
+This path is intentionally ignored by Git. The generated manifest is versionable:
 
-```powershell
-$env:CSLR_DATA_ROOT="D:\FYP_downloads\data"
+```text
+E:\college\FYP\data\manifests\ce-csl.csv
 ```

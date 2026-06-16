@@ -27,6 +27,7 @@ Thumbs.db
 data/raw/**
 data/interim/**
 data/processed/**
+data/ce-csl/**
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep

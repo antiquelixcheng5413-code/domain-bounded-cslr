@@ -150,16 +150,18 @@ sample_id,video,label,signer,session,split
 
 - 代码仓库：`E:\college\FYP`
 - 下载缓存：`D:\FYP_downloads`
-- 数据集根目录：`D:\FYP_downloads\data`
+- CE-CSL 工作副本：`E:\college\FYP\data\ce-csl`
+- CE-CSL 源归档：`E:\Download\CE-CSL.zip`
 
-PowerShell 中可这样让 Docker 挂载 D 盘数据：
+项目内工作副本会通过 Docker Compose 默认的 `./data -> /workspace/data` 挂载使用：
 
 ```powershell
-$env:CSLR_DATA_ROOT="D:\FYP_downloads\data"
 docker compose run --rm dev list-adapters
 docker compose run --rm dev build-manifest configs/datasets/ce_csl.yaml `
   --output data/manifests/ce-csl.csv
 ```
+
+`data\ce-csl` 已被 Git 忽略，只提交 `data\manifests\ce-csl.csv` 这类轻量索引。
 
 Docker 和下载目录迁移记录见
 [存储迁移核查](docs/setup/storage-migration-audit.md)。
