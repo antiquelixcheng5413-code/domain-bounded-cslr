@@ -9,9 +9,8 @@
 
 - 已完成项目骨架、统一数据契约、MediaPipe Holistic 特征提取、四类时序模型、
   ONNX 推理接口、规则语义模块、FastAPI/Web 页面、Docker 和 CI。
-- NationalCSL-DP 只是当前临时主候选数据集；最终数据集仍需第二周正式锁定。
-- 已校验官方标签表和一个 Participant 08 原视频归档，并成功提取一个官方样本：
-  133 个源帧、91.73% 有效帧、输出 `48 x 368` 特征。
+- CE-CSL 已确定为最终实验数据集；本地归档为 `E:\Download\CE-CSL.zip`。
+- CE-CSL 是句子级连续中国手语数据，当前基线会优先使用官方 train/dev/test 划分。
 - 尚未训练或发布模型。默认运行时会返回 `model_unavailable`，不会伪造预测。
 - `CSLR_DEMO_MODE=true` 只用于检查网页流程，结果不得写入实验报告。
 
@@ -19,8 +18,9 @@
 
 - [团队交接指南](docs/onboarding/team-handoff.md)
 - [本机运行手册](docs/onboarding/local-runbook.md)
+- [CE-CSL 最终数据集审计](docs/datasets/ce-csl-audit.md)
 - [候选数据集评分](docs/datasets/candidate-scorecard.md)
-- [NationalCSL-DP 审计](docs/datasets/nationalcsl-dp-audit.md)
+- [NationalCSL-DP 历史审计](docs/datasets/nationalcsl-dp-audit.md)
 
 ## Windows 10 环境
 
@@ -125,18 +125,22 @@ docker compose down
 
 ## 数据流程
 
-当前临时采用 NationalCSL-DP 作为主候选数据集，原因是它是公开发布的中国手语孤立词
-数据集，带 10 名 signer、front/left 双视角和 CC BY 4.0 许可，且官方标签表覆盖医院
-前台需要的核心词，如 `挂号`、`预约`、`药房`、`帮助`、`疼痛`、`急诊室`、`医保卡`。
+当前最终实验数据集为 CE-CSL。本机归档位于 `E:\Download\CE-CSL.zip`，大小约
+9.84 GB，SHA256 已记录在 [CE-CSL 最终数据集审计](docs/datasets/ce-csl-audit.md)。
 
-这仍是“暂定”，不是最终实验锁定。已下载的是审计材料，不是完整训练集：
+CE-CSL 的结构为：
 
-- `gloss.csv`：官方标签表，MD5 已校验。
-- Participant 08 小型原视频样本包：用于验证视频解码和 MediaPipe 特征提取。
-- Participant 02 大归档 ZIP 中央目录：只读取目录清单，确认图片帧结构和目标 ID 存在。
+```text
+label/{train,dev,test}.csv
+video/{train,dev,test}/{Translator}/{Number}.mp4
+```
 
-完整数据集不放在 Git 仓库。配置位于 `configs/datasets/nationalcsl_dp.yaml`。每个
-adapter 最终统一生成：
+它是句子级连续中国手语数据，不是孤立医院意图数据。因此正式实验需要把 CE-CSL
+结果、团队摄像头演示和医院语义模板分开报告。医院模板可以作为后续映射或子集实验，
+不能伪装成 CE-CSL 的主实验目标。
+
+完整数据集不放在 Git 仓库。配置位于 `configs/datasets/ce_csl.yaml`。每个 adapter
+最终统一生成：
 
 ```csv
 sample_id,video,label,signer,session,split
@@ -153,6 +157,8 @@ PowerShell 中可这样让 Docker 挂载 D 盘数据：
 ```powershell
 $env:CSLR_DATA_ROOT="D:\FYP_downloads\data"
 docker compose run --rm dev list-adapters
+docker compose run --rm dev build-manifest configs/datasets/ce_csl.yaml `
+  --output data/manifests/ce-csl.csv
 ```
 
 Docker 和下载目录迁移记录见
@@ -195,7 +201,7 @@ docker compose run --rm dev train `
 ```
 
 训练输出必须记录数据集版本、split、seed 和 Git commit。当前 runner 提供受控基线；
-正式实验还需在数据集锁定后补充类别权重和 signer-independent 汇总。
+正式实验还需在 CE-CSL manifest 和标签策略确定后补充类别权重与 split 汇总。
 
 导出 ONNX：
 

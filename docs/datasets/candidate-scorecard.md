@@ -1,6 +1,6 @@
 # Public dataset candidate scorecard
 
-Last verified: 2026-06-15.
+Last verified: 2026-06-17.
 
 Scoring: 0 = unsuitable, 1 = weak, 2 = acceptable, 3 = strong. Weighted maximum is
 105. Scores marked with `*` still require access or archive verification.
@@ -72,13 +72,10 @@ Do not delay implementation while waiting for an uncertain download approval.
 
 ## Decision record
 
-- Provisional primary dataset: NationalCSL-DP.
-- Intended representation: published 256 x 256 image sequences, not the 1.8 TB raw-video
-  collection.
-- Intended task: domain-bounded isolated intent classification.
-- Proposed signer-independent split: signers 01-07 train, 08 validation, 09-10 test.
-- Final lock condition: inspect one full image archive, verify selected label IDs in both
-  views, and measure extraction cost.
-- Fallback: request NMFs-CSL through the supervisor while retaining CSL-Daily for a later
-  continuous-language experiment.
-- Decision owner and final selection date: pending team review.
+Final selected dataset as of 2026-06-17: CE-CSL.
+
+- Local archive: `E:\Download\CE-CSL.zip`.
+- Observed representation: MP4 videos plus official `train`, `dev`, and `test` CSV labels.
+- Intended task: sentence/gloss-level continuous CSL baseline.
+- NationalCSL-DP is retained as a historical candidate and audit record, but it is no longer the
+  primary training/evaluation dataset.

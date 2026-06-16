@@ -3,7 +3,7 @@
 Last updated: 2026-06-16.
 
 This guide is for teammates who need to understand the current framework and start working
-without touching the final dataset decision yet.
+from the selected CE-CSL dataset.
 
 ## Current project status
 
@@ -19,7 +19,7 @@ The repository already contains:
 
 The repository does not yet contain:
 
-- Final selected dataset.
+- Raw CE-CSL videos or extracted CE-CSL landmarks.
 - Extracted landmarks for training.
 - Trained PyTorch checkpoint.
 - ONNX model file.
@@ -136,7 +136,7 @@ Suggested split:
 | Role | Immediate work |
 |---|---|
 | Environment/Git owner | Verify clone, Docker start, tests, Git workflow |
-| Dataset owner | Compare datasets, record license/access/storage facts |
+| Dataset owner | Verify CE-CSL source/license, extraction location, and manifest generation |
 | Feature pipeline owner | Validate single-video/image-sequence extraction |
 | Model owner | Prepare LSTM baseline and ONNX export path |
 | Frontend/backend owner | Keep web upload/camera flow stable |
@@ -193,9 +193,13 @@ docker compose run --rm dev validate-manifest data/manifests/example.csv
 
 ## Current dataset note
 
-NationalCSL-DP is only a temporary primary candidate. It is useful because it is public,
-Chinese, isolated-sign based, signer-labeled, and has hospital-related glosses. The team must
-still finalize the dataset choice before formal training and reporting.
+CE-CSL is now the final selected dataset. The local archive is `E:\Download\CE-CSL.zip`.
+It contains sentence-level continuous CSL videos with official `train`, `dev`, and `test`
+CSV labels.
+
+This changes the immediate experiment target from isolated hospital-intent classification to a
+sentence/gloss-level CE-CSL baseline. Hospital semantic templates remain useful for the Web demo
+and later mapping experiments, but they must be reported separately from CE-CSL metrics.
 
 Manual team recordings are allowed only for UI and workflow demonstration, not as the main
 training/evaluation evidence.

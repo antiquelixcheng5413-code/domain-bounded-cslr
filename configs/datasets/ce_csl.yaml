@@ -1,0 +1,40 @@
+name: ce_csl
+status: final
+task: continuous_sentence_recognition
+adapter: ce_csl_video
+data_root: /workspace/data/ce-csl
+adapter_options:
+  split_files:
+    train: label/train.csv
+    validation: label/dev.csv
+    test: label/test.csv
+  video_splits:
+    train: train
+    validation: dev
+    test: test
+  video_dir: video
+  sample_id_column: Number
+  signer_column: Translator
+  label_column: Chinese Sentences
+  require_videos: true
+source:
+  local_archive: "E:\\Download\\CE-CSL.zip"
+  sha256: 9E87B76D3D3A5A6AC24195445A302431A0F508BDA3C129B74592853731C4AC41
+  access_date: "2026-06-17"
+license:
+  name: unknown
+  review_required: true
+representation:
+  primary: mp4_videos
+  labels:
+    - Chinese Sentences
+    - Gloss
+  signers: [A, B, C, D, E, F, G, H, I, J, K, L]
+official_split:
+  train: 4973
+  validation: 515
+  test: 500
+notes:
+  - CE-CSL is sentence-level continuous CSL data, not an isolated hospital-intent dataset.
+  - The first baseline can classify or retrieve sentence labels from fixed-length landmarks.
+  - Hospital semantic templates must be treated as a later mapping or subset experiment.

@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from cslr.data.adapters import available_adapters
+from cslr.data.adapters import available_adapters, get_adapter
 from cslr.data.manifest import read_manifest, validate_manifest, write_manifest
 
 
@@ -57,15 +57,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "build-manifest":
         import yaml
 
-        from cslr.data.adapters import NationalCSLDPImageSequenceAdapter
-
         config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
         adapter_name = config.get("adapter")
-        if adapter_name != "nationalcsl_dp_image_sequence":
-            raise ValueError(f"unsupported build-manifest adapter: {adapter_name}")
-        adapter = NationalCSLDPImageSequenceAdapter.from_config(
-            config, data_root_override=args.data_root
-        )
+        adapter = get_adapter(adapter_name).from_config(config, data_root_override=args.data_root)
         records = list(adapter.records())
         validate_manifest(records)
         count = write_manifest(args.output, records)

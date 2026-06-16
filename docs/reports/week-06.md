@@ -10,10 +10,12 @@
 - [x] Health endpoint returns `model_ready=false` while no ONNX model is installed.
 - [x] Prediction endpoint returns `model_unavailable` rather than a fake result.
 - [x] All 20 tests pass in the Docker test image.
-- [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification.
+- [x] CE-CSL final archive was identified and SHA256-audited.
+- [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification as a
+  historical candidate.
 - [x] One official MP4 produced an accepted `48 x 368` MediaPipe feature sequence.
-- [ ] A complete NationalCSL-DP image archive has been inspected.
-- [ ] The dataset adapter and fixed manifest have been generated.
+- [x] The CE-CSL archive structure and official split CSV files have been inspected.
+- [ ] The CE-CSL fixed manifest has been generated after extracting the archive outside Git.
 - [ ] A real LSTM model has been trained and exported.
 - [x] GitHub private remote deployment is complete.
 
@@ -51,7 +53,7 @@
 
 ## Fallback rules
 
-- If the primary dataset remains inaccessible by the end of Week 2, switch candidates.
+- If CE-CSL license/source metadata cannot be documented, record the gap before final report.
 - If a real model is not available, show the upload pipeline but label the milestone incomplete.
 - Never replace missing results with demo-mode predictions.
 - If signer-independent performance is low, report it and investigate rather than changing the
