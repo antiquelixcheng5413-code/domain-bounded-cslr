@@ -30,6 +30,17 @@ def build_parser() -> argparse.ArgumentParser:
     extract.add_argument("source", type=Path)
     extract.add_argument("--output", type=Path, required=True)
 
+    extract_manifest = commands.add_parser(
+        "extract-manifest", help="extract landmarks for records in a manifest"
+    )
+    extract_manifest.add_argument("manifest", type=Path)
+    extract_manifest.add_argument("--data-root", type=Path, required=True)
+    extract_manifest.add_argument("--output", type=Path, required=True)
+    extract_manifest.add_argument("--limit", type=int)
+    extract_manifest.add_argument("--overwrite", action="store_true")
+    extract_manifest.add_argument("--continue-on-error", action="store_true")
+    extract_manifest.add_argument("--report", type=Path)
+
     train = commands.add_parser("train", help="train a temporal model from extracted features")
     train.add_argument("--manifest", type=Path, required=True)
     train.add_argument("--features", type=Path, required=True)
@@ -84,6 +95,27 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0 if result.quality.accepted else 2
+    if args.command == "extract-manifest":
+        from cslr.features.batch import extract_manifest_features, write_extraction_report
+        from cslr.features.extractor import MediaPipeHolisticExtractor
+
+        records = read_manifest(args.manifest)
+        validate_manifest(records)
+        summary = extract_manifest_features(
+            records=records,
+            data_root=args.data_root,
+            output_root=args.output,
+            extractor=MediaPipeHolisticExtractor(),
+            limit=args.limit,
+            overwrite=args.overwrite,
+            continue_on_error=args.continue_on_error,
+        )
+        payload = summary.as_dict()
+        if args.report:
+            payload["report_records"] = write_extraction_report(args.report, summary.items)
+            payload["report"] = str(args.report)
+        print(json.dumps(payload, ensure_ascii=False))
+        return 1 if summary.failed else 0
     if args.command == "train":
         from cslr.training.runner import train_model
 

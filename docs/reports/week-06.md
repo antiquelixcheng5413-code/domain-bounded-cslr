@@ -9,13 +9,14 @@
 - [x] `docker compose up -d --build app` starts the `app` service.
 - [x] Health endpoint returns `model_ready=false` while no ONNX model is installed.
 - [x] Prediction endpoint returns `model_unavailable` rather than a fake result.
-- [x] All 20 tests pass in the Docker test image.
+- [x] All 24 tests pass in the Docker test image.
 - [x] CE-CSL final archive was identified and SHA256-audited.
 - [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification as a
   historical candidate.
 - [x] One official MP4 produced an accepted `48 x 368` MediaPipe feature sequence.
 - [x] The CE-CSL archive structure and official split CSV files have been inspected.
-- [ ] The CE-CSL fixed manifest has been generated after extracting the archive outside Git.
+- [x] The CE-CSL fixed manifest has been generated and validated.
+- [x] CE-CSL batch extraction smoke test succeeded for two training videos.
 - [ ] A real LSTM model has been trained and exported.
 - [x] GitHub private remote deployment is complete.
 

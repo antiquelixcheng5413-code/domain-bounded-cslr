@@ -175,8 +175,28 @@ docker compose run --rm dev validate-manifest data/manifests/example.csv
 提取单个视频的 48 帧特征：
 
 ```powershell
-docker compose run --rm dev extract data/raw/DATASET/example.mp4 `
-  --output data/processed/example.npy
+docker compose run --rm dev extract data/ce-csl/video/train/A/train-00001.mp4 `
+  --output data/processed/ce-csl/train-00001.npy
+```
+
+按 manifest 批量提取 CE-CSL 特征：
+
+```powershell
+docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
+  --data-root data/ce-csl `
+  --output data/processed/ce-csl `
+  --report artifacts/logs/ce-csl-extraction.csv
+```
+
+先做小批量 smoke test 时可加 `--limit`：
+
+```powershell
+docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
+  --data-root data/ce-csl `
+  --output data/processed/ce-csl `
+  --limit 2 `
+  --overwrite `
+  --report artifacts/logs/ce-csl-extraction-smoke.csv
 ```
 
 当前每帧输出 368 维：

@@ -84,6 +84,31 @@ train-00001,A,2023年高考到了。,2/0/2/3/高/考/时间/到/。,
 
 Translator IDs observed: `A` through `L`.
 
+## Feature Extraction Smoke Test
+
+MediaPipe extraction has been verified on the first two CE-CSL training videos through the
+project Docker environment.
+
+Command:
+
+```powershell
+docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
+  --data-root data/ce-csl `
+  --output data/processed/ce-csl `
+  --limit 2 `
+  --overwrite `
+  --report artifacts/logs/ce-csl-extraction-smoke.csv
+```
+
+Result:
+
+| Sample | Source frames | Valid frames | Valid ratio | Output |
+|---|---:|---:|---:|---|
+| `train-00001` | 193 | 193 | 1.0 | `48 x 368` |
+| `train-00002` | 185 | 185 | 1.0 | `48 x 368` |
+
+The generated `.npy` files and smoke-test report are local artifacts and are ignored by Git.
+
 ## Task Impact
 
 CE-CSL is sentence-level continuous Chinese Sign Language data. This changes the project
