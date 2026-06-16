@@ -43,7 +43,7 @@ class NationalCSLDPImageSequenceAdapter(DatasetAdapter):
     @classmethod
     def from_config(
         cls, config: dict[str, Any], data_root_override: Path | None = None
-    ) -> "NationalCSLDPImageSequenceAdapter":
+    ) -> NationalCSLDPImageSequenceAdapter:
         labels: dict[str, list[str]] = {}
         for label, details in config.get("intent_labels", {}).items():
             ids = [str(value).zfill(4) for value in details.get("ids", [])]
