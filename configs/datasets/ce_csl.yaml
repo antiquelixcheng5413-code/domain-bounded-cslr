@@ -1,6 +1,6 @@
 name: ce_csl
 status: final
-task: continuous_sentence_recognition
+task: dataset_bounded_gloss_token_recognition
 adapter: ce_csl_video
 data_root: /workspace/data/ce-csl
 adapter_options:
@@ -15,7 +15,7 @@ adapter_options:
   video_dir: video
   sample_id_column: Number
   signer_column: Translator
-  label_column: Chinese Sentences
+  label_column: Gloss
   require_videos: true
 source:
   local_archive: "E:\\Download\\CE-CSL.zip"
@@ -35,6 +35,6 @@ official_split:
   validation: 515
   test: 500
 notes:
-  - CE-CSL is sentence-level continuous CSL data, not an isolated hospital-intent dataset.
-  - The first baseline can classify or retrieve sentence labels from fixed-length landmarks.
-  - Hospital semantic templates must be treated as a later mapping or subset experiment.
+  - CE-CSL is sentence-level continuous CSL data, not a domain-specific intent dataset.
+  - The primary baseline uses Gloss as the supervised label source.
+  - Chinese Sentences are retained as semantic references, not closed-set class labels.

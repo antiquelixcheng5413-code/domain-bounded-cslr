@@ -1,93 +1,62 @@
-# Domain-Bounded Chinese Sign Language Recognition
+# CE-CSL Dataset-Bounded Chinese Sign Language Recognition
 
-面向医院前台场景的受限域中国手语识别与中文语义重构原型。
+基于 CE-CSL 数据集的受限词组/语义单元识别与中文语义重构原型。
 
-> 这是受控研究原型，不是医疗设备，也不用于诊断、分诊或紧急决策。公开数据集是
-> 主要训练与评估来源；团队录制仅用于界面和流程验证。
+> 本项目是受控研究原型，不是诊断、公共服务或业务决策系统。当前“受限域”指识别范围受 CE-CSL 数据集中的 `Gloss`、词组和句子标签约束，不再固定某个业务场景作为主实验范围。
 
 ## 当前状态
 
-- 已完成项目骨架、统一数据契约、MediaPipe Holistic 特征提取、四类时序模型、
-  ONNX 推理接口、规则语义模块、FastAPI/Web 页面、Docker 和 CI。
-- CE-CSL 已确定为最终实验数据集；本地归档为 `E:\Download\CE-CSL.zip`。
-- CE-CSL 是句子级连续中国手语数据，当前基线会优先使用官方 train/dev/test 划分。
-- 尚未训练或发布模型。默认运行时会返回 `model_unavailable`，不会伪造预测。
-- `CSLR_DEMO_MODE=true` 只用于检查网页流程，结果不得写入实验报告。
+- 已完成项目骨架、FastAPI/Web 页面、Docker/CI、MediaPipe Holistic 特征提取、LSTM/BiLSTM/TCN/compact Transformer 模型定义、ONNX 推理接口。
+- CE-CSL 已确定为最终主实验数据集；源归档保留在 `E:\Download\CE-CSL.zip`。
+- `data/manifests/ce-csl.csv` 已改为使用 CE-CSL `Gloss` 字段作为训练标签来源。
+- `data/manifests/ce-csl-gloss-vocab.csv` 是从 train split 生成的可复现 token-frequency 词表，默认 `min_frequency=2`。
+- 尚未完成 CE-CSL 全量 landmark 提取，也尚未训练可报告的真实模型。
+- 无模型时接口返回 `model_unavailable`，不会伪造预测；`CSLR_DEMO_MODE=true` 只用于检查界面流程，不能写入实验结果。
 
-数据集评分和审计记录：
+## 关键文档
 
 - [团队交接指南](docs/onboarding/team-handoff.md)
 - [本机运行手册](docs/onboarding/local-runbook.md)
 - [CE-CSL 最终数据集审计](docs/datasets/ce-csl-audit.md)
 - [候选数据集评分](docs/datasets/candidate-scorecard.md)
-- [NationalCSL-DP 历史审计](docs/datasets/nationalcsl-dp-audit.md)
+- [Docker 服务审计](docs/setup/docker-service-audit.md)
+- [存储迁移核查](docs/setup/storage-migration-audit.md)
+- [第六周局部汇报清单](docs/reports/week-06.md)
 
-## Windows 10 环境
+## Windows 与 Docker
 
-项目日常仍在 Windows、PowerShell 和 VS Code 中操作。Docker Desktop 使用 WSL 2
-作为后台运行环境，不要求另备 Linux 电脑。
+日常开发仍在 Windows、PowerShell 和 VS Code 中完成。Docker Desktop 使用 WSL 2 backend 提供统一运行环境，不要求单独准备 Linux 电脑。
 
-### 1. 确认虚拟化
+所有新下载的软件、安装包、大型数据和工具缓存应放在 `D:` 盘；当前 Docker 程序和数据已迁移到 `D:\DockerDesktop`、`D:\DockerDesktopData`、`D:\DockerDesktopConfig`。CE-CSL 源归档当前保留在 `E:\Download\CE-CSL.zip`，项目工作副本为 `E:\college\FYP\data\ce-csl`。
 
-打开“任务管理器 → 性能 → CPU”，确认“虚拟化”为“已启用”。若未启用，需要进入
-BIOS/UEFI 打开 Intel VT-x 或 AMD-V。
-
-### 2. 安装 WSL 2
-
-以管理员身份打开 PowerShell：
-
-```powershell
-wsl --install
-```
-
-命令完成后重启电脑，再运行：
-
-```powershell
-wsl --status
-```
-
-### 3. 安装 Docker Desktop
-
-安装 Docker Desktop for Windows，保留 “Use WSL 2 based engine” 设置。启动后验证：
-
-```powershell
-docker version
-docker run --rm hello-world
-```
-
-官方说明：
-
-- <https://learn.microsoft.com/windows/wsl/install>
-- <https://docs.docker.com/desktop/setup/install/windows-install/>
-
-### 4. Docker 登录
-
-本项目不要求登录 Docker 账号。常规开发、运行本地 Compose、拉取公开基础镜像和构建
-本项目镜像都可以不登录。
-
-只有以下情况才需要 Docker 登录：
-
-- 拉取私有 Docker 镜像。
-- 把镜像推送到 Docker Hub 或组织镜像仓库。
-- 匿名拉取公开镜像触发 Docker Hub rate limit，需要临时登录解除限制。
-
-当前项目镜像只保存在本机 Docker Desktop 中，不发布到 Docker Hub。
+Docker 登录不是必需项。只有拉取私有镜像、推送镜像或遇到 Docker Hub 匿名限流时才需要登录。
 
 ## 启动 Web 系统
 
-真实模式要求 `artifacts/exports/lstm.onnx` 和同目录的
-`lstm.labels.json`：
+真实模式要求存在：
+
+```text
+artifacts/exports/lstm.onnx
+artifacts/exports/lstm.labels.json
+```
+
+启动：
 
 ```powershell
 docker compose up --build app
 ```
 
-打开 <http://localhost:8088>，健康检查位于
-<http://localhost:8088/api/v1/health>。若端口被占用，可先设置
-`$env:CSLR_PORT="其他端口"`。
+打开：
 
-当前 Docker 服务构建和健康检查记录见
-[Docker service audit](docs/setup/docker-service-audit.md)。
+```text
+http://localhost:8088
+```
+
+健康检查：
+
+```text
+http://localhost:8088/api/v1/health
+```
 
 只检查界面流程时：
 
@@ -96,7 +65,7 @@ $env:CSLR_DEMO_MODE="true"
 docker compose up --build app
 ```
 
-页面会持续标记这是 demo 结果。停止服务：
+停止服务：
 
 ```powershell
 docker compose down
@@ -104,126 +73,99 @@ docker compose down
 
 ## 目录职责
 
-| 路径 | 职责 | 是否提交 Git |
+| 路径 | 职责 | 提交 Git |
 |---|---|---|
-| `app/` | FastAPI 后端及浏览器摄像头页面 | 是 |
-| `configs/` | 数据、特征、模型、训练和医院意图配置 | 是 |
-| `src/cslr/data/` | 数据集 adapter 和 manifest 校验 | 是 |
-| `src/cslr/features/` | MediaPipe 提取、归一化、重采样和质量检查 | 是 |
+| `app/` | FastAPI 后端和浏览器上传/摄像头页面 | 是 |
+| `configs/` | 数据、特征、模型、训练配置 | 是 |
+| `src/cslr/data/` | dataset adapter、manifest、Gloss token 工具 | 是 |
+| `src/cslr/features/` | MediaPipe 提取、归一化、重采样、质量检查 | 是 |
 | `src/cslr/models/` | LSTM、BiLSTM、TCN、Transformer | 是 |
-| `src/cslr/training/` | 特征数据集和训练流程 | 是 |
-| `src/cslr/inference/` | ONNX CPU 推理与拒识 | 是 |
-| `src/cslr/semantic/` | 受限意图到中文模板 | 是 |
-| `data/manifests/` | 匿名样本索引 | 是 |
-| `data/splits/` | 固定随机及 signer-independent 划分 | 是 |
-| `data/raw/` | 公开数据原始视频 | 否 |
+| `src/cslr/training/` | 单标签历史 baseline 和 Gloss token 多标签训练 | 是 |
+| `src/cslr/inference/` | ONNX CPU 推理、低质量/低置信拒识 | 是 |
+| `src/cslr/semantic/` | 可选模板映射，当前不作为主实验默认输出 | 是 |
+| `data/manifests/` | 匿名样本索引和可复现词表 | 是 |
+| `data/ce-csl/` | CE-CSL 解压工作副本 | 否 |
 | `data/processed/` | landmark 特征 | 否 |
 | `artifacts/checkpoints/` | PyTorch 权重 | 否 |
 | `artifacts/exports/` | ONNX 权重 | 否，使用 Release |
-| `artifacts/metrics/` | 用于论文的紧凑指标和图表 | 是 |
 | `docs/` | 文献、数据决策、实验和阶段报告 | 是 |
 
 ## 数据流程
 
-当前最终实验数据集为 CE-CSL。本机归档位于 `E:\Download\CE-CSL.zip`，大小约
-9.84 GB，SHA256 已记录在 [CE-CSL 最终数据集审计](docs/datasets/ce-csl-audit.md)。
-
-CE-CSL 的结构为：
+CE-CSL 结构：
 
 ```text
 label/{train,dev,test}.csv
 video/{train,dev,test}/{Translator}/{Number}.mp4
 ```
 
-它是句子级连续中国手语数据，不是孤立医院意图数据。因此正式实验需要把 CE-CSL
-结果、团队摄像头演示和医院语义模板分开报告。医院模板可以作为后续映射或子集实验，
-不能伪装成 CE-CSL 的主实验目标。
-
-完整数据集不放在 Git 仓库。配置位于 `configs/datasets/ce_csl.yaml`。每个 adapter
-最终统一生成：
+标签 CSV 包含：
 
 ```csv
-sample_id,video,label,signer,session,split
+Number,Translator,Chinese Sentences,Gloss,Note
 ```
 
-大文件不要放进 Git 工作区。当前本机约定：
+本项目主实验使用：
 
-- 代码仓库：`E:\college\FYP`
-- 下载缓存：`D:\FYP_downloads`
-- CE-CSL 工作副本：`E:\college\FYP\data\ce-csl`
-- CE-CSL 源归档：`E:\Download\CE-CSL.zip`
+- `Gloss`：主要监督来源，拆分为 token 后做多标签识别。
+- `Chinese Sentences`：语义解释参考，不作为完整句子闭集分类主目标。
+- 官方 `train/dev/test`：保留官方划分，不用团队自录替代。
 
-项目内工作副本会通过 Docker Compose 默认的 `./data -> /workspace/data` 挂载使用：
+生成 manifest：
 
 ```powershell
-docker compose run --rm dev list-adapters
 docker compose run --rm dev build-manifest configs/datasets/ce_csl.yaml `
+  --data-root data/ce-csl `
   --output data/manifests/ce-csl.csv
 ```
-
-`data\ce-csl` 已被 Git 忽略，只提交 `data\manifests\ce-csl.csv` 这类轻量索引。
-
-Docker 和下载目录迁移记录见
-[存储迁移核查](docs/setup/storage-migration-audit.md)。
 
 验证 manifest：
 
 ```powershell
-docker compose run --rm dev validate-manifest data/manifests/example.csv
+docker compose run --rm dev validate-manifest data/manifests/ce-csl.csv
 ```
 
-提取单个视频的 48 帧特征：
+生成 Gloss token 词表：
+
+```powershell
+docker compose run --rm dev build-gloss-vocab data/manifests/ce-csl.csv `
+  --output data/manifests/ce-csl-gloss-vocab.csv `
+  --min-frequency 2
+```
+
+单视频提取：
 
 ```powershell
 docker compose run --rm dev extract data/ce-csl/video/train/A/train-00001.mp4 `
   --output data/processed/ce-csl/train-00001.npy
 ```
 
-按 manifest 批量提取 CE-CSL 特征：
+全量提取：
 
 ```powershell
 docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
   --data-root data/ce-csl `
   --output data/processed/ce-csl `
-  --report artifacts/logs/ce-csl-extraction.csv
+  --report artifacts/logs/ce-csl-extraction.csv `
+  --continue-on-error
 ```
 
-先做小批量 smoke test 时可加 `--limit`：
+不要给全量提取加 `--overwrite`，这样中断后重跑会跳过已完成样本。
 
-```powershell
-docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
-  --data-root data/ce-csl `
-  --output data/processed/ce-csl `
-  --limit 2 `
-  --overwrite `
-  --report artifacts/logs/ce-csl-extraction-smoke.csv
-```
+## 训练与导出
 
-当前每帧输出 368 维：
+默认训练配置 `configs/training.yaml` 使用 `task: gloss_token_multilabel`，损失函数为 BCEWithLogitsLoss，指标为 micro-F1、macro-F1、subset accuracy 和 per-token F1。
 
-- 双手 126 维。
-- 上半身 32 维。
-- 选定面部点 24 维。
-- 四个模态存在掩码。
-- 182 维一阶运动差分。
-
-有效帧比例低于 80% 时，推理拒绝输出意图。
-
-## 训练
-
-先为 manifest 中每个 `sample_id` 生成
-`data/processed/<sample_id>.npy`，再运行：
+训练 LSTM baseline：
 
 ```powershell
 docker compose run --rm dev train `
-  --manifest data/manifests/selected-dataset.csv `
-  --features data/processed `
+  --manifest data/manifests/ce-csl.csv `
+  --features data/processed/ce-csl `
   --model-config configs/models/lstm.yaml `
+  --training-config configs/training.yaml `
   --output artifacts/checkpoints/lstm.pt
 ```
-
-训练输出必须记录数据集版本、split、seed 和 Git commit。当前 runner 提供受控基线；
-正式实验还需在 CE-CSL manifest 和标签策略确定后补充类别权重与 split 汇总。
 
 导出 ONNX：
 
@@ -233,7 +175,7 @@ docker compose run --rm dev export `
   artifacts/exports/lstm.onnx
 ```
 
-导出命令会同时生成 `lstm.labels.json`，推理服务要求这两个文件同时存在。
+导出会同时生成 `lstm.labels.json`，其中包含 `task`、`labels`、`label_counts` 和 `prediction_threshold`。
 
 ## 测试
 
@@ -243,7 +185,7 @@ Docker：
 docker compose --profile test run --rm test
 ```
 
-本地已有 Python 3.11 环境时：
+本地已有 Python 3.11+ 环境时：
 
 ```powershell
 python -m pip install -e ".[dev]"
@@ -251,34 +193,26 @@ python -m unittest discover -s tests -v
 python scripts/check_repository_safety.py
 ```
 
-## Git 协作
+## Git 协作规则
 
 主分支为 `main`。每项工作使用短期分支：
 
 ```powershell
-git switch -c feature/dataset-adapter
-git add .
-git commit -m "feat: add selected dataset adapter"
-git push -u origin feature/dataset-adapter
+git switch -c feature/short-name
+git add path/to/files
+git commit -m "feat(scope): short description"
+git push -u origin feature/short-name
 ```
 
-通过 Pull Request 合并。分支建议：
-
-- `feature/...`：功能。
-- `experiment/...`：实验。
-- `fix/...`：修复。
-- `docs/...`：文档。
-
-禁止提交原始视频、landmark 全量数据、参与者身份、同意书、密钥、日志和权重。
-ONNX 模型随版本标签上传到私有 GitHub Release。
+禁止提交原始视频、完整 landmark、权重、日志、身份资料、`.env` 和密钥。ONNX 模型通过 GitHub Release 发布，不放入普通 Git 历史。
 
 ## 六周节点
 
-1. 第1周：WSL/Docker、Git、数据集评分、adapter 契约。
-2. 第2周：锁定数据集、manifest/split、单视频提取。
-3. 第3周：批量提取及质量报告。
-4. 第4周：LSTM 训练和基础评估。
-5. 第5周：signer-independent 初测、ONNX 和语义模板。
-6. 第6周：Web 端到端演示、F1、混淆矩阵、延迟和复现说明。
+1. 第 1 周：WSL/Docker、Git、数据集评分、adapter 契约。
+2. 第 2 周：锁定 CE-CSL、manifest/split、单视频提取。
+3. 第 3 周：全量 landmark 提取和质量报告。
+4. 第 4 周：LSTM Gloss token baseline 和基础评估。
+5. 第 5 周：ONNX 导出、Web 接入、低置信拒识。
+6. 第 6 周：Web 端到端演示、F1、错误分析、延迟和复现说明。
 
-详细检查表见 [docs/reports/week-06.md](docs/reports/week-06.md)。
+报告中不把 CE-CSL 结果解释成业务意图准确率，也不把完整中文句子闭集分类作为主结果。

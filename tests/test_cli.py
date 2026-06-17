@@ -19,7 +19,7 @@ class CliTests(unittest.TestCase):
             (data_root / "video" / "train" / "A" / "train-00001.mp4").write_bytes(b"video")
             (data_root / "label" / "train.csv").write_text(
                 "Number,Translator,Chinese Sentences,Gloss,Note\n"
-                "train-00001,A,2023年高考到了。,2/0/2/3/高/考/时间/到/。,\n",
+                "train-00001,A,Sentence one,A/B/C,\n",
                 encoding="utf-8",
             )
             config = root / "ce_csl.yaml"
@@ -35,6 +35,7 @@ class CliTests(unittest.TestCase):
                         "    train: label/train.csv",
                         "  video_splits:",
                         "    train: train",
+                        "  label_column: Gloss",
                     ]
                 ),
                 encoding="utf-8",
@@ -50,7 +51,41 @@ class CliTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertEqual(result["records"], 1)
         self.assertEqual(records[0].video.as_posix(), "video/train/A/train-00001.mp4")
-        self.assertEqual(records[0].label, "2023年高考到了。")
+        self.assertEqual(records[0].label, "A/B/C")
+
+    def test_build_gloss_vocab_command(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "manifest.csv"
+            output = root / "vocab.csv"
+            manifest.write_text(
+                "sample_id,video,label,signer,session,split\n"
+                "s1,a.mp4,A/B/C,p01,s,train\n"
+                "s2,b.mp4,A/B/D,p02,s,train\n"
+                "s3,c.mp4,A/E,p03,s,validation\n",
+                encoding="utf-8",
+            )
+            stdout = StringIO()
+
+            with redirect_stdout(stdout):
+                exit_code = main(
+                    [
+                        "build-gloss-vocab",
+                        str(manifest),
+                        "--output",
+                        str(output),
+                        "--min-frequency",
+                        "2",
+                    ]
+                )
+
+            result = json.loads(stdout.getvalue())
+            content = output.read_text(encoding="utf-8")
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(result["tokens"], 2)
+        self.assertIn("A,2", content)
+        self.assertIn("B,2", content)
 
 
 if __name__ == "__main__":

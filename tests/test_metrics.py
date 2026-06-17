@@ -1,6 +1,6 @@
 import unittest
 
-from cslr.evaluation.metrics import classification_metrics
+from cslr.evaluation.metrics import classification_metrics, multilabel_metrics
 
 
 class MetricTests(unittest.TestCase):
@@ -12,6 +12,16 @@ class MetricTests(unittest.TestCase):
     def test_length_mismatch(self) -> None:
         with self.assertRaises(ValueError):
             classification_metrics(["a"], [])
+
+    def test_multilabel_metrics(self) -> None:
+        result = multilabel_metrics(
+            expected=[["a", "b"], ["b"]],
+            predicted=[["a"], ["b", "c"]],
+            labels=["a", "b", "c"],
+        )
+        self.assertAlmostEqual(result["micro_f1"], 4 / 6)
+        self.assertEqual(result["subset_accuracy"], 0.0)
+        self.assertEqual(result["per_label"]["a"]["f1"], 1.0)
 
 
 if __name__ == "__main__":

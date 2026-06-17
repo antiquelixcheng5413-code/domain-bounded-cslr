@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>医院前台手语识别原型</title>
+    <title>CE-CSL 数据集受限手语识别原型</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <main class="shell">
       <header>
-        <p class="eyebrow">GROUP 11 - CONTROLLED RESEARCH PROTOTYPE</p>
-        <h1>医院前台手语识别</h1>
+        <p class="eyebrow">GROUP 11 - DATASET-BOUNDED RESEARCH PROTOTYPE</p>
+        <h1>CE-CSL 数据集受限手语识别</h1>
         <p class="lead">
-          上传或录制一段 1-3 秒的视频。系统只识别配置中的受限意图，不用于医疗诊断或紧急决策。
+          上传或录制一段短视频。系统以 CE-CSL 数据集中的 gloss/token
+          范围为识别边界，展示预测标签、置信度、延迟和受限中文重构结果。
         </p>
         <div id="system-status" class="status">正在检查模型状态...</div>
       </header>
@@ -39,8 +40,8 @@
         </div>
         <p id="result-text" class="result-text">完成录制或选择视频后开始。</p>
         <dl class="details">
-          <div><dt>Intent</dt><dd id="result-intent">-</dd></div>
-          <div><dt>Gloss</dt><dd id="result-gloss">-</dd></div>
+          <div><dt>Label</dt><dd id="result-label">-</dd></div>
+          <div><dt>Gloss Tokens</dt><dd id="result-gloss-tokens">-</dd></div>
           <div><dt>Confidence</dt><dd id="result-confidence">-</dd></div>
           <div><dt>Latency</dt><dd id="result-latency">-</dd></div>
         </dl>

@@ -14,15 +14,15 @@ def _as_bool(value: str) -> bool:
 
 
 def create_recognition_service() -> RecognitionService:
-    labels_path = Path(
-        os.getenv("CSLR_LABELS_PATH", str(PROJECT_ROOT / "configs/hospital_intents.yaml"))
-    )
+    labels_config = os.getenv("CSLR_LABELS_PATH", "")
+    labels_path = Path(labels_config) if labels_config else None
     configured_model = os.getenv(
         "CSLR_MODEL_PATH", str(PROJECT_ROOT / "artifacts/exports/lstm.onnx")
     )
     model_path = Path(configured_model) if configured_model else None
+    catalog = IntentCatalog.from_yaml(labels_path) if labels_path else None
     return RecognitionService(
-        catalog=IntentCatalog.from_yaml(labels_path),
+        catalog=catalog,
         model_path=model_path,
         confidence_threshold=float(os.getenv("CSLR_CONFIDENCE_THRESHOLD", "0.65")),
         demo_mode=_as_bool(os.getenv("CSLR_DEMO_MODE", "false")),

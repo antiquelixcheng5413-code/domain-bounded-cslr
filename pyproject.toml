@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "domain-bounded-cslr"
 version = "0.1.0"
-description = "Domain-bounded Chinese Sign Language recognition and semantic reconstruction prototype"
+description = "CE-CSL dataset-bounded Chinese Sign Language recognition and semantic reconstruction prototype"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [

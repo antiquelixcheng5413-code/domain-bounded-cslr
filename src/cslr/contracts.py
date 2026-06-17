@@ -44,11 +44,13 @@ class QualityReport:
 @dataclass(frozen=True)
 class Prediction:
     status: str
+    label: str
+    gloss_tokens: list[str]
     intent: str
     gloss: str
     text_zh: str
     confidence: float
-    top_k: list[dict[str, float]]
+    top_k: list[dict[str, object]]
     warnings: list[str]
     latency_ms: dict[str, float]
     model_version: str | None = None

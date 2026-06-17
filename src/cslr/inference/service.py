@@ -11,7 +11,7 @@ from cslr.semantic import IntentCatalog
 class RecognitionService:
     def __init__(
         self,
-        catalog: IntentCatalog,
+        catalog: IntentCatalog | None,
         model_path: Path | None,
         confidence_threshold: float = 0.65,
         demo_mode: bool = False,
@@ -42,6 +42,8 @@ class RecognitionService:
         if self.model is None and not self.demo_mode:
             return Prediction(
                 status="model_unavailable",
+                label="unknown",
+                gloss_tokens=[],
                 intent="unknown",
                 gloss="UNKNOWN",
                 text_zh="模型尚未安装或训练，当前不能进行真实识别。",
@@ -60,12 +62,13 @@ class RecognitionService:
         extraction = MediaPipeHolisticExtractor().extract(video_path)
         extraction_ms = self._elapsed_ms(extraction_started)
         if not extraction.quality.accepted:
-            fallback = self.catalog.reconstruct("unknown", 0.0, self.confidence_threshold)
             return Prediction(
                 status="low_quality",
-                intent=fallback.intent,
-                gloss=fallback.gloss,
-                text_zh=fallback.text_zh,
+                label="unknown",
+                gloss_tokens=[],
+                intent="unknown",
+                gloss="UNKNOWN",
+                text_zh="视频质量不足，无法得到可靠的 CE-CSL 识别结果。",
                 confidence=0.0,
                 top_k=[],
                 warnings=extraction.quality.warnings,
@@ -74,18 +77,22 @@ class RecognitionService:
             )
 
         inference_started = time.perf_counter()
-        intent, confidence, top_k = self.model.predict(extraction.features)
+        prediction = self.model.predict(extraction.features)
         inference_ms = self._elapsed_ms(inference_started)
-        template = self.catalog.reconstruct(intent, confidence, self.confidence_threshold)
-        status = "ok" if template.intent != "unknown" else "low_confidence"
+        label = str(prediction["label"])
+        tokens = [str(token) for token in prediction["gloss_tokens"]]
+        confidence = float(prediction["confidence"])
+        status = "ok" if confidence >= self.confidence_threshold else "low_confidence"
         warnings = [] if status == "ok" else ["prediction confidence is below threshold"]
         return Prediction(
             status=status,
-            intent=template.intent,
-            gloss=template.gloss,
-            text_zh=template.text_zh,
+            label=label,
+            gloss_tokens=tokens,
+            intent=label,
+            gloss=label,
+            text_zh=self._reconstruct_text(label, tokens, confidence),
             confidence=confidence,
-            top_k=top_k,
+            top_k=list(prediction["top_k"]),
             warnings=warnings,
             latency_ms={
                 "extraction": extraction_ms,
@@ -96,22 +103,35 @@ class RecognitionService:
         )
 
     def _demo_prediction(self, video_path: Path, started: float) -> Prediction:
-        intents = sorted(self.catalog.intents)
         digest = hashlib.sha256(video_path.read_bytes()).digest()
-        intent = intents[int.from_bytes(digest[:2], "big") % len(intents)]
+        demo_tokens = ["CE-CSL-DEMO", f"TOKEN-{int.from_bytes(digest[:2], 'big') % 100:02d}"]
+        label = "/".join(demo_tokens)
         confidence = 0.75
-        template = self.catalog.reconstruct(intent, confidence, self.confidence_threshold)
         return Prediction(
             status="demo_only",
-            intent=template.intent,
-            gloss=template.gloss,
-            text_zh=template.text_zh,
+            label=label,
+            gloss_tokens=demo_tokens,
+            intent=label,
+            gloss=label,
+            text_zh=self._reconstruct_text(label, demo_tokens, confidence),
             confidence=confidence,
-            top_k=[{"intent": intent, "confidence": confidence}],
+            top_k=[
+                {"label": token, "token": token, "confidence": confidence}
+                for token in demo_tokens
+            ],
             warnings=["界面演示模式：该结果不是模型识别结果，禁止用于实验报告。"],
             latency_ms={"total": self._elapsed_ms(started)},
             model_version="demo-only",
         )
+
+    def _reconstruct_text(self, label: str, tokens: list[str], confidence: float) -> str:
+        if self.catalog is not None and len(tokens) == 1:
+            template = self.catalog.reconstruct(tokens[0], confidence, self.confidence_threshold)
+            if template.intent != "unknown":
+                return template.text_zh
+        if tokens:
+            return f"预测的 CE-CSL gloss/token：{' / '.join(tokens)}。"
+        return f"预测标签：{label}。"
 
     @staticmethod
     def _elapsed_ms(started: float) -> float:

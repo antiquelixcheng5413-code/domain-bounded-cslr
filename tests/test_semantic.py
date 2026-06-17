@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class SemanticTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.catalog = IntentCatalog.from_yaml(ROOT / "configs/hospital_intents.yaml")
+        cls.catalog = IntentCatalog.from_yaml(ROOT / "configs/example_intents.yaml")
 
     def test_known_intent_above_threshold(self) -> None:
         result = self.catalog.reconstruct("registration", 0.9, 0.65)
