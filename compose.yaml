@@ -6,7 +6,6 @@ services:
       - "${CSLR_PORT:-8088}:8000"
     environment:
       CSLR_MODEL_PATH: /workspace/artifacts/exports/lstm.onnx
-      CSLR_LABELS_PATH: /workspace/configs/hospital_intents.yaml
       CSLR_DEMO_MODE: ${CSLR_DEMO_MODE:-false}
       CSLR_CONFIDENCE_THRESHOLD: ${CSLR_CONFIDENCE_THRESHOLD:-0.65}
     volumes:

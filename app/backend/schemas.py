@@ -4,12 +4,16 @@ from pydantic import BaseModel
 
 
 class RankedPrediction(BaseModel):
-    intent: str
+    label: str | None = None
+    token: str | None = None
+    intent: str | None = None
     confidence: float
 
 
 class PredictionResponse(BaseModel):
     status: str
+    label: str
+    gloss_tokens: list[str]
     intent: str
     gloss: str
     text_zh: str

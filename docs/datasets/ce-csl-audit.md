@@ -1,14 +1,13 @@
-# CE-CSL final dataset audit
+# CE-CSL Final Dataset Audit
 
 Last verified: 2026-06-17.
 
 ## Lock Status
 
-CE-CSL is the final experiment dataset selected by the team.
+CE-CSL is the final training and evaluation dataset for the main experiment.
 
-This replaces NationalCSL-DP as the primary dataset candidate. NationalCSL-DP remains a useful
-reference and historical audit record, but it is no longer the selected training/evaluation
-dataset.
+This replaces NationalCSL-DP as the selected dataset. NationalCSL-DP remains a historical audit
+record and possible future comparison source, but it is not the current primary experiment data.
 
 ## Local Archive
 
@@ -24,14 +23,14 @@ The source archive remains at `E:\Download\CE-CSL.zip`.
 
 ## Local Extraction
 
-The dataset has been extracted for project use at:
+The working copy is:
 
 ```text
 E:\college\FYP\data\ce-csl
 ```
 
-This directory is ignored by Git through `data/ce-csl/**`. It is inside the project working
-directory only so Docker Compose can use the default `./data -> /workspace/data` mount.
+This directory is ignored by Git through `data/ce-csl/**`. It is kept inside the project only so
+Docker Compose can use the default `./data -> /workspace/data` mount.
 
 Observed extracted contents:
 
@@ -42,13 +41,7 @@ Observed extracted contents:
 | Total files | 5,991 |
 | Extracted bytes | 9,846,721,378 |
 
-The generated project manifest is:
-
-```text
-data/manifests/ce-csl.csv
-```
-
-## Observed Archive Structure
+## Structure and Labels
 
 ```text
 label/
@@ -67,20 +60,29 @@ Label CSV columns:
 Number,Translator,Chinese Sentences,Gloss,Note
 ```
 
-Example row:
+Example decoded row:
 
 ```csv
 train-00001,A,2023年高考到了。,2/0/2/3/高/考/时间/到/。,
 ```
 
-## Counts
+## Versioned Project Files
 
-| Split | Manifest split | Videos |
-|---|---|---:|
-| `train` | `train` | 4,973 |
-| `dev` | `validation` | 515 |
-| `test` | `test` | 500 |
-| Total |  | 5,988 |
+| File | Purpose |
+|---|---|
+| `data/manifests/ce-csl.csv` | Manifest generated from official split CSVs using `Gloss` as `label` |
+| `data/manifests/ce-csl-gloss-vocab.csv` | Train-split token-frequency table with `min_frequency=2` |
+| `configs/datasets/ce_csl.yaml` | CE-CSL adapter configuration |
+
+Current counts:
+
+| Item | Count |
+|---|---:|
+| Manifest records | 5,988 |
+| Train records | 4,973 |
+| Validation records | 515 |
+| Test records | 500 |
+| Gloss tokens retained at min frequency 2 | 1,937 |
 
 Translator IDs observed: `A` through `L`.
 
@@ -111,20 +113,19 @@ The generated `.npy` files and smoke-test report are local artifacts and are ign
 
 ## Task Impact
 
-CE-CSL is sentence-level continuous Chinese Sign Language data. This changes the project
-assumption from isolated hospital-intent classification to a sentence/gloss-level baseline.
+CE-CSL is sentence-level continuous Chinese Sign Language data. The final implementation therefore
+uses a dataset-bounded recognition target:
 
-Immediate implementation:
+- Primary supervision comes from `Gloss`, split into reproducible token labels.
+- `Chinese Sentences` are semantic references for explanation and reporting.
+- Full Chinese sentence labels are not used as the main closed-set classification target because
+  official dev/test sentences rarely repeat train sentences.
+- Domain-specific templates are future migration work and are not part of CE-CSL main metrics.
 
-- Build a manifest from the official train/dev/test CSV files.
-- Use `Chinese Sentences` as the initial label column for the baseline.
-- Keep `Gloss` available for later sequence-aware or semantic reconstruction experiments.
-- Report CE-CSL results separately from any hospital-intent demo templates.
+## Open Checks Before Final Report
 
-Open checks before final report:
-
-- Record the official source and citation for CE-CSL.
+- Record the official source URL and citation for CE-CSL.
 - Verify the license/access terms.
-- Decide whether the final model predicts full sentence labels, gloss strings, or a filtered
-  domain subset.
-- Benchmark MediaPipe extraction time on representative videos from all three splits.
+- Complete full landmark extraction and failure-rate reporting.
+- Train and compare LSTM, BiLSTM, TCN, and compact Transformer on the Gloss token task.
+- Report micro-F1, macro-F1, per-token F1, latency, and failure examples.

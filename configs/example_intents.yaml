@@ -6,7 +6,7 @@ fallback:
 intents:
   registration:
     gloss: REGISTER
-    text_zh: "我想挂号。"
+    text_zh: "我想登记。"
     safety_level: normal
   appointment:
     gloss: APPOINTMENT
@@ -14,11 +14,11 @@ intents:
     safety_level: normal
   payment:
     gloss: PAY
-    text_zh: "我想缴费。"
+    text_zh: "我想付款。"
     safety_level: normal
-  pharmacy:
-    gloss: MEDICINE
-    text_zh: "请问药房在哪里？"
+  information:
+    gloss: INFO
+    text_zh: "我想咨询信息。"
     safety_level: normal
   directions:
     gloss: WHERE
@@ -27,12 +27,4 @@ intents:
   help:
     gloss: HELP
     text_zh: "我需要帮助。"
-    safety_level: elevated
-  emergency:
-    gloss: EMERGENCY
-    text_zh: "这是紧急情况，请立即联系工作人员。"
-    safety_level: critical
-  pain:
-    gloss: PAIN
-    text_zh: "我感到疼痛，请安排工作人员确认具体情况。"
     safety_level: elevated

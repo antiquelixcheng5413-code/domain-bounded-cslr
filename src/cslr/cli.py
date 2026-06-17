@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
 
 from cslr.data.adapters import available_adapters, get_adapter
+from cslr.data.gloss import build_gloss_vocabulary
 from cslr.data.manifest import read_manifest, validate_manifest, write_manifest
 
 
@@ -40,6 +42,15 @@ def build_parser() -> argparse.ArgumentParser:
     extract_manifest.add_argument("--overwrite", action="store_true")
     extract_manifest.add_argument("--continue-on-error", action="store_true")
     extract_manifest.add_argument("--report", type=Path)
+
+    gloss_vocab = commands.add_parser(
+        "build-gloss-vocab", help="build a CE-CSL gloss token vocabulary from a manifest"
+    )
+    gloss_vocab.add_argument("manifest", type=Path)
+    gloss_vocab.add_argument("--output", type=Path, required=True)
+    gloss_vocab.add_argument("--split", default="train")
+    gloss_vocab.add_argument("--min-frequency", type=int, default=2)
+    gloss_vocab.add_argument("--max-tokens", type=int)
 
     train = commands.add_parser("train", help="train a temporal model from extracted features")
     train.add_argument("--manifest", type=Path, required=True)
@@ -116,6 +127,35 @@ def main(argv: list[str] | None = None) -> int:
             payload["report"] = str(args.report)
         print(json.dumps(payload, ensure_ascii=False))
         return 1 if summary.failed else 0
+    if args.command == "build-gloss-vocab":
+        records = read_manifest(args.manifest)
+        validate_manifest(records)
+        split_records = [record for record in records if record.split == args.split]
+        if not split_records:
+            raise ValueError(f"manifest contains no records for split: {args.split}")
+        tokens, counts = build_gloss_vocabulary(
+            split_records,
+            min_frequency=args.min_frequency,
+            max_tokens=args.max_tokens,
+        )
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        with args.output.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=["token", "frequency"])
+            writer.writeheader()
+            for token in tokens:
+                writer.writerow({"token": token, "frequency": counts[token]})
+        print(
+            json.dumps(
+                {
+                    "status": "ok",
+                    "split": args.split,
+                    "tokens": len(tokens),
+                    "output": str(args.output),
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 0
     if args.command == "train":
         from cslr.training.runner import train_model
 

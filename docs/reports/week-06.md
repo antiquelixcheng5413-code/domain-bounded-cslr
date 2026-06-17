@@ -1,6 +1,6 @@
-# Week 6 local progress review
+# Week 6 Local Progress Review
 
-## Current evidence as of 2026-06-16
+## Current Evidence as of 2026-06-17
 
 - [x] WSL 2 and Docker Desktop are installed on the Windows development computer.
 - [x] Docker Desktop program, data disk, config, downloads, and tools were moved to `D:`.
@@ -9,53 +9,53 @@
 - [x] `docker compose up -d --build app` starts the `app` service.
 - [x] Health endpoint returns `model_ready=false` while no ONNX model is installed.
 - [x] Prediction endpoint returns `model_unavailable` rather than a fake result.
-- [x] All 24 tests pass in the Docker test image.
-- [x] CE-CSL final archive was identified and SHA256-audited.
-- [x] NationalCSL-DP metadata and a raw-video sample archive passed MD5 verification as a
-  historical candidate.
-- [x] One official MP4 produced an accepted `48 x 368` MediaPipe feature sequence.
-- [x] The CE-CSL archive structure and official split CSV files have been inspected.
-- [x] The CE-CSL fixed manifest has been generated and validated.
-- [x] CE-CSL batch extraction smoke test succeeded for two training videos.
-- [ ] A real LSTM model has been trained and exported.
 - [x] GitHub private remote deployment is complete.
+- [x] CE-CSL final archive was identified and SHA256-audited.
+- [x] The CE-CSL archive structure and official split CSV files have been inspected.
+- [x] CE-CSL manifest has been generated from `Gloss` labels and validated.
+- [x] Train-split Gloss token vocabulary has been generated with `min_frequency=2`.
+- [x] CE-CSL batch extraction smoke test succeeded for two training videos.
+- [ ] Full CE-CSL landmark extraction has been completed.
+- [ ] A real LSTM Gloss token model has been trained and exported.
 
-## Required live demonstration
+## Required Live Demonstration
 
 - [ ] `docker compose up app` starts on a clean Windows/Docker setup.
 - [ ] Browser upload works.
-- [ ] Browser camera records a 1–4 second clip.
+- [ ] Browser camera records a 1-3 second clip.
 - [ ] The backend decodes video and extracts a 48-frame feature sequence.
-- [ ] A trained LSTM ONNX model produces a bounded prediction.
+- [ ] A trained LSTM ONNX model returns dataset-bounded gloss/token predictions.
 - [ ] Low-quality and low-confidence clips are rejected.
-- [ ] The Chinese template preserves the recognized intent.
+- [ ] Web response shows predicted label, gloss tokens, confidence, and latency.
 - [ ] Demo mode is disabled for reported results.
 
-## Required evidence
+## Required Evidence
 
 - [ ] Dataset name, version, license, URL, checksum, and access date.
-- [ ] Manifest schema and sample counts by label/signer/split.
+- [ ] Manifest schema and sample counts by signer/split.
+- [ ] Gloss token vocabulary size, frequency threshold, and split coverage.
 - [ ] Landmark success and rejection rates.
-- [ ] Random-split Top-1 and macro-F1.
-- [ ] Signer-independent preliminary Top-1 and macro-F1.
-- [ ] Confusion matrix and at least three failure examples.
+- [ ] LSTM validation micro-F1, macro-F1, subset accuracy, and per-token F1.
+- [ ] Later model comparison: BiLSTM, TCN, compact Transformer.
+- [ ] Error analysis with at least three failure examples.
 - [ ] Extraction, inference, and end-to-end P50/P95 latency.
 - [ ] Git commit and exact configuration for every table or figure.
 
-## Presentation structure
+## Presentation Structure
 
-1. Scope and non-claims.
-2. Dataset decision.
-3. Reproducible pipeline.
-4. Live demonstration.
-5. Preliminary results.
-6. Failure analysis.
-7. Weeks 7–12 decisions.
+1. Scope and non-claims: CE-CSL dataset-bounded recognition, not open-domain translation.
+2. Dataset decision and why full sentence closed-set classification is not the main target.
+3. Reproducible pipeline: manifest, Gloss vocabulary, landmark extraction, training.
+4. Live Web demonstration.
+5. Preliminary LSTM token-level results.
+6. Failure analysis and next model comparison.
+7. Weeks 7-12 decisions.
 
-## Fallback rules
+## Fallback Rules
 
 - If CE-CSL license/source metadata cannot be documented, record the gap before final report.
 - If a real model is not available, show the upload pipeline but label the milestone incomplete.
 - Never replace missing results with demo-mode predictions.
-- If signer-independent performance is low, report it and investigate rather than changing the
-  split.
+- Do not report business-intent accuracy unless a separate validated intent-labeled dataset or
+  explicit mapping experiment exists.
+- Do not report full Chinese sentence closed-set accuracy as the main CE-CSL result.

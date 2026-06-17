@@ -1,12 +1,11 @@
-# Docker service audit
+# Docker Service Audit
 
-Audit date: 2026-06-16.
+Audit date: 2026-06-17.
 
-This document records the current Docker service state. It is independent of the final dataset
-choice: the web service can start, report that no trained model is installed, and refuse to
-fake predictions.
+This document records the current Docker service state. It is independent of model quality: the
+web service can start, report that no trained model is installed, and refuse to fake predictions.
 
-## Storage and runtime
+## Storage and Runtime
 
 | Item | Verified value |
 |---|---|
@@ -15,12 +14,9 @@ fake predictions.
 | Docker data disk | `D:\DockerDesktopData` |
 | Compose project | `E:\college\FYP` |
 | Service | `app` |
-| Image | `fyp-app:latest` |
-| Container | `fyp-app-1` |
 | Port mapping | `0.0.0.0:8088->8000/tcp` |
-| Health | `healthy` |
 
-## Build and start
+## Build and Start
 
 Run from `E:\college\FYP`:
 
@@ -33,17 +29,9 @@ Check service state:
 
 ```powershell
 docker compose ps
-docker inspect --format "{{.State.Health.Status}}" fyp-app-1
 ```
 
-Expected result:
-
-```text
-fyp-app-1 ... Up ... (healthy) ... 0.0.0.0:8088->8000/tcp
-healthy
-```
-
-## HTTP checks
+## HTTP Checks
 
 Health endpoint:
 
@@ -69,7 +57,7 @@ Invoke-WebRequest -Uri "http://localhost:8088/" -UseBasicParsing
 Invoke-WebRequest -Uri "http://localhost:8088/static/styles.css" -UseBasicParsing
 ```
 
-Expected result: both return HTTP 200. The page contains `医院前台手语识别`.
+Expected result: both return HTTP 200. The page contains `CE-CSL 数据集受限手语识别`.
 
 Prediction endpoint before a model is trained:
 
@@ -86,6 +74,8 @@ Expected response:
 ```json
 {
   "status": "model_unavailable",
+  "label": "unknown",
+  "gloss_tokens": [],
   "intent": "unknown",
   "gloss": "UNKNOWN",
   "text_zh": "模型尚未安装或训练，当前不能进行真实识别。",
@@ -101,21 +91,7 @@ Expected response:
 This is a pass condition for the service layer. It means the system is honest about missing
 model artifacts and does not fabricate recognition results.
 
-## Stop and restart
-
-Stop:
-
-```powershell
-docker compose down
-```
-
-Restart:
-
-```powershell
-docker compose up -d app
-```
-
-## Model artifact contract
+## Model Artifact Contract
 
 Real prediction requires both files below under the project directory:
 
@@ -125,5 +101,4 @@ artifacts/exports/lstm.labels.json
 ```
 
 These are intentionally ignored by Git. The final ONNX model should be distributed through a
-private GitHub Release or another approved artifact channel, not committed to normal Git
-history.
+private GitHub Release or another approved artifact channel, not committed to normal Git history.

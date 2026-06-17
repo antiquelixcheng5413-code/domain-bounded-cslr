@@ -21,7 +21,7 @@ class ApiTests(unittest.TestCase):
         page = self.client.get("/")
         styles = self.client.get("/static/styles.css")
         self.assertEqual(page.status_code, 200)
-        self.assertIn("医院前台手语识别", page.text)
+        self.assertIn("CE-CSL 数据集受限手语识别", page.text)
         self.assertEqual(styles.status_code, 200)
         self.assertIn(".result-heading", styles.text)
 
@@ -40,6 +40,8 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         body = response.json()
         self.assertEqual(body["status"], "model_unavailable")
+        self.assertEqual(body["label"], "unknown")
+        self.assertEqual(body["gloss_tokens"], [])
         self.assertEqual(body["confidence"], 0.0)
 
 

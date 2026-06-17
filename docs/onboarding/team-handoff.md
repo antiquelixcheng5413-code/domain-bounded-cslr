@@ -1,11 +1,11 @@
-# Team handoff guide
+# Team Handoff Guide
 
-Last updated: 2026-06-16.
+Last updated: 2026-06-17.
 
-This guide is for teammates who need to understand the current framework and start working
-from the selected CE-CSL dataset.
+This guide is for teammates who need to understand the current framework and continue from the
+selected CE-CSL dataset.
 
-## Current project status
+## Current Project Status
 
 The repository already contains:
 
@@ -13,22 +13,22 @@ The repository already contains:
 - Docker Compose service for running the web app.
 - MediaPipe-based landmark extraction code.
 - LSTM, BiLSTM, TCN, and compact Transformer model definitions.
-- Training, ONNX export, inference, evaluation, and semantic-template modules.
-- Tests and CI workflow.
-- Dataset decision documents.
+- Single-label legacy training plus CE-CSL Gloss token multi-label training.
+- ONNX export, ONNX inference, evaluation metrics, tests, and CI workflow.
+- CE-CSL manifest and train-split Gloss token vocabulary.
 
-The repository does not yet contain:
+The repository does not contain:
 
 - Raw CE-CSL videos or extracted CE-CSL landmarks.
-- Extracted landmarks for training.
+- Full extracted landmarks for training.
 - Trained PyTorch checkpoint.
 - ONNX model file.
-- Real accuracy, F1, confusion matrix, or latency tables.
+- Real F1, failure-analysis, or latency tables.
 
 Because there is no trained model yet, the web app currently starts and honestly reports
 `model_unavailable`. This is expected.
 
-## What each teammate should install
+## What Each Teammate Should Install
 
 Required:
 
@@ -40,17 +40,19 @@ Required:
 
 Docker login is not required.
 
-Recommended local storage layout:
+Storage rule:
 
 ```text
 Code repository:       E:\college\FYP or another non-C project folder
-Large downloads/data:  D:\FYP_downloads
+Large downloads/data:  D:\FYP_downloads or another D: location
 Docker program/data:   D:\DockerDesktop and D:\DockerDesktopData if possible
+CE-CSL source archive: currently E:\Download\CE-CSL.zip
 ```
 
+All newly downloaded software, installers, tools, and large archives should be placed on `D:`.
 Do not put raw videos, extracted frames, landmarks, checkpoints, or ONNX models into Git.
 
-## First run
+## First Run
 
 Clone the private GitHub repository:
 
@@ -93,7 +95,7 @@ Stop the app:
 docker compose down
 ```
 
-## How the framework fits together
+## How the Framework Fits Together
 
 ```text
 Browser UI
@@ -102,7 +104,7 @@ Browser UI
   -> MediaPipe landmark extraction
   -> temporal model inference through ONNX
   -> low-quality / low-confidence rejection
-  -> deterministic Chinese template output
+  -> CE-CSL label/token output and constrained Chinese explanation
 ```
 
 Current behavior:
@@ -111,61 +113,38 @@ Current behavior:
 - If demo mode is enabled: return clearly marked `demo_only`.
 - If a model exists but input quality is poor: return `low_quality`.
 - If confidence is too low: return `low_confidence`.
-- Only accepted predictions should be used for reported results.
+- Only accepted real-model predictions should be used for reported results.
 
-## Main folders
+## Main Folders
 
 | Path | Purpose |
 |---|---|
 | `app/backend` | FastAPI routes, schemas, and service creation |
-| `app/frontend` | Browser UI for upload/camera/demo result display |
+| `app/frontend` | Browser UI for upload/camera/result display |
+| `src/cslr/data` | Dataset adapters, manifests, Gloss token vocabulary tools |
 | `src/cslr/features` | MediaPipe extraction, normalization, resampling |
 | `src/cslr/models` | LSTM, BiLSTM, TCN, Transformer definitions |
 | `src/cslr/training` | Training runner and ONNX export |
+| `src/cslr/evaluation` | Single-label and multi-label metrics |
 | `src/cslr/inference` | ONNX recognizer and recognition service |
-| `src/cslr/semantic` | Intent-to-Chinese-template reconstruction |
-| `configs` | Dataset/model/training/feature/intent configs |
-| `data/manifests` | Anonymous sample indexes that can be committed |
+| `src/cslr/semantic` | Optional template mapping, not the current default main output |
+| `configs` | Dataset/model/training/feature configs |
+| `data/manifests` | Anonymous sample indexes and token vocabulary |
 | `docs` | Dataset decisions, setup notes, experiment records, reports |
 | `artifacts` | Local-only model exports, checkpoints, logs, metrics |
 
-## Team roles for the next phase
-
-Suggested split:
+## Team Roles for the Next Phase
 
 | Role | Immediate work |
 |---|---|
 | Environment/Git owner | Verify clone, Docker start, tests, Git workflow |
-| Dataset owner | Verify CE-CSL source/license, extraction location, and manifest generation |
-| Feature pipeline owner | Validate single-video/image-sequence extraction |
-| Model owner | Prepare LSTM baseline and ONNX export path |
-| Frontend/backend owner | Keep web upload/camera flow stable |
+| Dataset owner | Verify CE-CSL source/license, extraction location, manifest and vocabulary |
+| Feature pipeline owner | Run full CE-CSL landmark extraction and quality report |
+| Model owner | Train LSTM Gloss token baseline and export ONNX |
+| Frontend/backend owner | Keep upload/camera flow and token result display stable |
 | Report owner | Maintain Week 6 evidence and experiment record templates |
 
-## Git workflow
-
-Use short branches:
-
-```powershell
-git switch -c feature/short-name
-git status
-git add path/to/files
-git commit -m "feat(scope): short description"
-git push -u origin feature/short-name
-```
-
-Keep `main` clean. Avoid committing:
-
-- raw videos
-- extracted frame folders
-- full landmark arrays
-- `.pt`, `.pth`, `.ckpt`, `.onnx`
-- logs
-- `.env`
-- keys or tokens
-- identity/consent materials
-
-## Useful checks
+## Useful Checks
 
 Run tests:
 
@@ -185,21 +164,42 @@ List dataset adapters:
 docker compose run --rm dev list-adapters
 ```
 
-Validate a manifest:
+Validate CE-CSL manifest:
 
 ```powershell
-docker compose run --rm dev validate-manifest data/manifests/example.csv
+docker compose run --rm dev validate-manifest data/manifests/ce-csl.csv
 ```
 
-## Current dataset note
+Build CE-CSL Gloss token vocabulary:
 
-CE-CSL is now the final selected dataset. The local archive is `E:\Download\CE-CSL.zip`.
-It contains sentence-level continuous CSL videos with official `train`, `dev`, and `test`
-CSV labels.
+```powershell
+docker compose run --rm dev build-gloss-vocab data/manifests/ce-csl.csv `
+  --output data/manifests/ce-csl-gloss-vocab.csv `
+  --min-frequency 2
+```
 
-This changes the immediate experiment target from isolated hospital-intent classification to a
-sentence/gloss-level CE-CSL baseline. Hospital semantic templates remain useful for the Web demo
-and later mapping experiments, but they must be reported separately from CE-CSL metrics.
+Full extraction command for the feature owner:
+
+```powershell
+docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
+  --data-root data/ce-csl `
+  --output data/processed/ce-csl `
+  --report artifacts/logs/ce-csl-extraction.csv `
+  --continue-on-error
+```
+
+## Current Dataset Note
+
+CE-CSL is the final selected dataset. It contains sentence-level continuous CSL videos with
+official `train`, `dev`, and `test` CSV labels.
+
+The project target is now CE-CSL dataset-bounded recognition:
+
+- Main supervision: `Gloss` split into token labels.
+- Semantic reference: `Chinese Sentences`.
+- Main metrics: micro-F1, macro-F1, per-token F1, latency, and failure analysis.
+- Not a main metric: business-intent accuracy.
+- Not a main metric: full Chinese sentence closed-set classification accuracy.
 
 Manual team recordings are allowed only for UI and workflow demonstration, not as the main
 training/evaluation evidence.

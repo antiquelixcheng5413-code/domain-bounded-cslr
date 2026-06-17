@@ -34,7 +34,10 @@ def export_checkpoint_to_onnx(
         opset_version=17,
     )
     metadata = {
+        "task": str(checkpoint.get("task", "single_label_classification")),
         "labels": labels,
+        "label_counts": checkpoint.get("label_counts", {}),
+        "prediction_threshold": float(checkpoint.get("prediction_threshold", 0.5)),
         "version": output_path.stem,
         "checkpoint_sha256": hashlib.sha256(checkpoint_path.read_bytes()).hexdigest(),
     }
