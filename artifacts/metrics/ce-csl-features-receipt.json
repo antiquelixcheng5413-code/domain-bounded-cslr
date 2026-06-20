@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "feature_root": "data\\clean_datas\\ce_csl",
+  "expected_records": 5988,
+  "valid_records": 5988,
+  "expected_shape": [
+    48,
+    368
+  ],
+  "expected_dtype": "float32",
+  "split_counts": {
+    "test": 500,
+    "train": 4973,
+    "validation": 515
+  },
+  "missing_count": 0,
+  "invalid_shape_count": 0,
+  "invalid_dtype_count": 0,
+  "unreadable_count": 0,
+  "missing_sample_ids": [],
+  "invalid_shapes": [],
+  "invalid_dtypes": [],
+  "unreadable_files": [],
+  "integrity": {
+    "algorithm": "sha256-tree",
+    "digest": "7c240ffa3d5493c51f0c019ad8b1d068bdc40645507d6b6ee68803a5ea634386"
+  }
+}

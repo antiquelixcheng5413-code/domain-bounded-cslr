@@ -19,13 +19,15 @@ The repository already contains:
 
 The repository does not contain:
 
-- Raw CE-CSL videos or extracted CE-CSL landmarks.
-- Full extracted landmarks for training.
+- Raw CE-CSL videos.
 - Trained PyTorch checkpoint.
 - ONNX model file.
 - Real F1, failure-analysis, or latency tables.
 
-Because there is no trained model yet, the web app currently starts and honestly reports
+The received CE-CSL landmarks are local-only in `data/clean_datas/ce_csl`; they are not in Git.
+They passed manifest validation on 2026-06-21: 5,988/5,988 files, `48 x 368 float32`, SHA-256 tree
+digest `7c240ffa3d5493c51f0c019ad8b1d068bdc40645507d6b6ee68803a5ea634386`. Because there is no
+trained model yet, the web app currently starts and honestly reports
 `model_unavailable`. This is expected.
 
 ## What Each Teammate Should Install
@@ -186,6 +188,15 @@ docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
   --output data/processed/ce-csl `
   --report artifacts/logs/ce-csl-extraction.csv `
   --continue-on-error
+```
+
+Validate the received feature bundle:
+
+```powershell
+docker compose run --rm dev verify-features data/manifests/ce-csl.csv `
+  --features data/clean_datas/ce_csl `
+  --sha256 `
+  --receipt artifacts/metrics/ce-csl-features-receipt.json
 ```
 
 ## Current Dataset Note

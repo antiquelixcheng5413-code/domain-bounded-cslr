@@ -10,7 +10,9 @@
 - CE-CSL 已确定为最终主实验数据集；源归档保留在 `E:\Download\CE-CSL.zip`。
 - `data/manifests/ce-csl.csv` 已改为使用 CE-CSL `Gloss` 字段作为训练标签来源。
 - `data/manifests/ce-csl-gloss-vocab.csv` 是从 train split 生成的可复现 token-frequency 词表，默认 `min_frequency=2`。
-- 尚未完成 CE-CSL 全量 landmark 提取，也尚未训练可报告的真实模型。
+- 已接收并验收 CE-CSL 全量 landmark 特征：5,988 个 `48 x 368 float32` 文件，SHA-256
+  tree digest 为 `7c240ffa3d5493c51f0c019ad8b1d068bdc40645507d6b6ee68803a5ea634386`。
+- 尚未训练可报告的真实模型。
 - 无模型时接口返回 `model_unavailable`，不会伪造预测；`CSLR_DEMO_MODE=true` 只用于检查界面流程，不能写入实验结果。
 
 ## 关键文档
@@ -86,6 +88,7 @@ docker compose down
 | `data/manifests/` | 匿名样本索引和可复现词表 | 是 |
 | `data/ce-csl/` | CE-CSL 解压工作副本 | 否 |
 | `data/processed/` | landmark 特征 | 否 |
+| `data/clean_datas/` | 已接收并验收的本地 landmark 特征包 | 否 |
 | `artifacts/checkpoints/` | PyTorch 权重 | 否 |
 | `artifacts/exports/` | ONNX 权重 | 否，使用 Release |
 | `docs/` | 文献、数据决策、实验和阶段报告 | 是 |
@@ -161,7 +164,7 @@ docker compose run --rm dev extract-manifest data/manifests/ce-csl.csv `
 ```powershell
 docker compose run --rm dev train `
   --manifest data/manifests/ce-csl.csv `
-  --features data/processed/ce-csl `
+  --features data/clean_datas/ce_csl `
   --model-config configs/models/lstm.yaml `
   --training-config configs/training.yaml `
   --output artifacts/checkpoints/lstm.pt

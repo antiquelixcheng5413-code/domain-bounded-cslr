@@ -52,6 +52,14 @@ def build_parser() -> argparse.ArgumentParser:
     gloss_vocab.add_argument("--min-frequency", type=int, default=2)
     gloss_vocab.add_argument("--max-tokens", type=int)
 
+    verify_features = commands.add_parser(
+        "verify-features", help="validate a local landmark bundle against a manifest"
+    )
+    verify_features.add_argument("manifest", type=Path)
+    verify_features.add_argument("--features", type=Path, required=True)
+    verify_features.add_argument("--sha256", action="store_true")
+    verify_features.add_argument("--receipt", type=Path)
+
     train = commands.add_parser("train", help="train a temporal model from extracted features")
     train.add_argument("--manifest", type=Path, required=True)
     train.add_argument("--features", type=Path, required=True)
@@ -156,6 +164,20 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0
+    if args.command == "verify-features":
+        from cslr.data.feature_bundle import verify_feature_bundle
+
+        records = read_manifest(args.manifest)
+        validate_manifest(records)
+        result = verify_feature_bundle(records, args.features, include_sha256=args.sha256)
+        if args.receipt:
+            args.receipt.parent.mkdir(parents=True, exist_ok=True)
+            args.receipt.write_text(
+                json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            )
+            result["receipt"] = str(args.receipt)
+        print(json.dumps(result, ensure_ascii=False))
+        return 0 if result["status"] == "ok" else 1
     if args.command == "train":
         from cslr.training.runner import train_model
 

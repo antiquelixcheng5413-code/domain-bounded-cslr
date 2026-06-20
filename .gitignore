@@ -11,6 +11,7 @@ venv/
 .deps/
 .downloads/
 .tools/
+.tmp-tests/
 
 # Editors and operating systems
 .idea/
@@ -28,9 +29,11 @@ data/raw/**
 data/interim/**
 data/processed/**
 data/ce-csl/**
+data/clean_datas/**
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
+!data/clean_datas/.gitkeep
 
 # Models and runtime output
 artifacts/checkpoints/**

@@ -5,6 +5,8 @@ from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
 
+import numpy as np
+
 from cslr.cli import main
 from cslr.data.manifest import read_manifest
 
@@ -86,6 +88,41 @@ class CliTests(unittest.TestCase):
         self.assertEqual(result["tokens"], 2)
         self.assertIn("A,2", content)
         self.assertIn("B,2", content)
+
+    def test_verify_features_writes_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "manifest.csv"
+            features = root / "features"
+            receipt = root / "receipt.json"
+            features.mkdir()
+            manifest.write_text(
+                "sample_id,video,label,signer,session,split\n"
+                "s1,a.mp4,A,p01,s,train\n",
+                encoding="utf-8",
+            )
+            np.save(features / "s1.npy", np.zeros((48, 368), dtype=np.float32))
+            stdout = StringIO()
+
+            with redirect_stdout(stdout):
+                exit_code = main(
+                    [
+                        "verify-features",
+                        str(manifest),
+                        "--features",
+                        str(features),
+                        "--sha256",
+                        "--receipt",
+                        str(receipt),
+                    ]
+                )
+
+            result = json.loads(stdout.getvalue())
+            receipt_exists = receipt.exists()
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(result["status"], "ok")
+        self.assertTrue(receipt_exists)
 
 
 if __name__ == "__main__":
