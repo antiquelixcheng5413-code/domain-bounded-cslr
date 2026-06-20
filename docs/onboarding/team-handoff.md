@@ -5,6 +5,9 @@ Last updated: 2026-06-17.
 This guide is for teammates who need to understand the current framework and continue from the
 selected CE-CSL dataset.
 
+The completed teammate delivery review is recorded in
+[`teammate-handoff-2026-06-21.md`](teammate-handoff-2026-06-21.md).
+
 ## Current Project Status
 
 The repository already contains:
