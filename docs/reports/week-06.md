@@ -1,6 +1,6 @@
 # Week 6 Local Progress Review
 
-## Current Evidence as of 2026-06-17
+## Current Evidence as of 2026-06-21
 
 - [x] WSL 2 and Docker Desktop are installed on the Windows development computer.
 - [x] Docker Desktop program, data disk, config, downloads, and tools were moved to `D:`.
@@ -15,8 +15,24 @@
 - [x] CE-CSL manifest has been generated from `Gloss` labels and validated.
 - [x] Train-split Gloss token vocabulary has been generated with `min_frequency=2`.
 - [x] CE-CSL batch extraction smoke test succeeded for two training videos.
-- [ ] Full CE-CSL landmark extraction has been completed.
+- [x] Full CE-CSL landmark feature bundle received and validated: 5,988/5,988 files,
+  `48 x 368 float32`, no missing or unreadable files.
 - [ ] A real LSTM Gloss token model has been trained and exported.
+
+## Teammate CTC Handoff (Not Yet Independently Reproduced)
+
+The teammate delivered a CTC checkpoint and ONNX model, both retained outside Git and verified to
+load in Docker. The reported official-split metrics are recorded in
+[`teammate-ctc-official-split-summary.json`](../../artifacts/metrics/teammate-ctc-official-split-summary.json):
+
+| Split | Samples | Sequence accuracy | WER |
+|---|---:|---:|---:|
+| Dev | 515 | 26.60% | 24.58% |
+| Test | 500 | 19.80% | 26.56% |
+
+Reported average CPU inference latency is 12.5 ms. These are CTC sequence-recognition results,
+not the active LSTM multi-label baseline, and must be labelled as teammate-provided until the
+current repository reproduces them with the official split files.
 
 ## Required Live Demonstration
 
@@ -34,7 +50,7 @@
 - [ ] Dataset name, version, license, URL, checksum, and access date.
 - [ ] Manifest schema and sample counts by signer/split.
 - [ ] Gloss token vocabulary size, frequency threshold, and split coverage.
-- [ ] Landmark success and rejection rates.
+- [x] Landmark file-success report: 5,988 success, 0 failure; valid-frame ratio is still missing.
 - [ ] LSTM validation micro-F1, macro-F1, subset accuracy, and per-token F1.
 - [ ] Later model comparison: BiLSTM, TCN, compact Transformer.
 - [ ] Error analysis with at least three failure examples.

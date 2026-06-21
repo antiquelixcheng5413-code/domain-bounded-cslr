@@ -62,16 +62,27 @@ addressed:
 ## Evidence Still Required From the Teammate
 
 The GitHub repository contains training scripts and a written training process; the final CTC
-artifact bundle was delivered separately and is now retained locally. The following evidence is
-still required before its claimed metrics can be reported.
+artifact bundle was delivered separately and is now retained locally. The teammate supplied the
+following CE-CSL official-split evaluation summary:
+
+| Split | Samples | Sequence accuracy | WER |
+|---|---:|---:|---:|
+| Train | 4,973 | Not reported | Not reported |
+| Dev | 515 | 26.60% | 24.58% |
+| Test | 500 | 19.80% | 26.56% |
+
+Reported average CPU inference latency is approximately 12.5 ms. The split counts sum to 5,988
+and match the accepted CE-CSL manifest. These values are recorded as teammate-provided results;
+they are not yet independently reproduced in the current repository.
+
+The following evidence is still required before the values can be treated as fully auditable
+project results.
 
 1. A quality report with valid-frame ratio and failure reason. The delivered report records only
    `sample_id`, `status`, and `size_bytes`; all rows are successful but it has no quality ratio.
-2. Machine-readable evaluation results for the official CE-CSL train/dev/test split: token-level
-   F1, a sequence metric, failures, and inference latency per split.
-3. The exact source manifest and split used for the recorded CTC metrics. The delivery note claims
-   approximately 30% sequence accuracy, 35% WER, and 12.5 ms CPU latency, but also names 5,988
-   test samples, which is the full dataset count rather than an official test partition.
+2. Machine-readable predictions or evaluation results for the official CE-CSL train/dev/test
+   split, including token-level F1, sequence outputs, failure counts, and latency per split.
+3. The exact source manifest and split file used for the recorded CTC metrics.
 4. Full command logs tying the delivered final checkpoint to the cited commit, configuration, seed,
    and Docker image.
 

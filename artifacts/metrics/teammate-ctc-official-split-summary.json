@@ -1,0 +1,20 @@
+{
+  "source": "teammate-provided evaluation summary",
+  "reproduction_status": "not independently reproduced in the current repository",
+  "model": "LSTM + CTC",
+  "dataset": "CE-CSL",
+  "split_counts": {
+    "train": 4973,
+    "dev": 515,
+    "test": 500
+  },
+  "dev": {
+    "sequence_accuracy": 0.266,
+    "wer": 0.2458
+  },
+  "test": {
+    "sequence_accuracy": 0.198,
+    "wer": 0.2656
+  },
+  "average_cpu_inference_latency_ms": 12.5
+}
