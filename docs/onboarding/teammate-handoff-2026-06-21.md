@@ -9,6 +9,7 @@ Date: 2026-06-21
 | Teammate repository | `su1274167870-svg/domain-bounded-cslr`, `main` at `52b025b` | Reviewed as source code and process record |
 | Feature delivery | `data/clean_datas/ce_csl.zip` | Received and retained locally |
 | Extracted feature bundle | `data/clean_datas/ce_csl/` | Accepted after validation |
+| CTC artifact delivery | `data/clean_datas/ctc-delivery-2026-06-21/` | Received, hashes checked, ONNX loaded |
 
 The received ZIP SHA-256 is
 `d0715eb8304cf86d97d664f35ab69f442a5acbd3f33e2c9968e6b954a9d6bec7`.
@@ -30,6 +31,16 @@ The extracted feature bundle SHA-256 tree digest is
    - alignment scripts, a CTC vocabulary, and CE-CSL manifests.
 4. The teammate repository also documents a TCN intent-classification implementation. It is retained
    as historical work, not imported into the current CE-CSL dataset-bounded main experiment.
+5. Final CTC artifact bundle, retained outside Git:
+   - `ctc_model_final.pt`, SHA-256
+     `7a5f32d03cae509666aa1fa62addfecf2d554bcbef05306c1a3ee69d6a514747`.
+   - `ctc_model.onnx` and required `ctc_model.onnx.data`, both hash-checked.
+   - `vocab.txt`, SHA-256
+     `85ea606a8a10cc1611a4e8755e875f09360727c8608ee0bbc14950c541d1abb3`.
+   - `feature_extraction_report.csv`: 5,988 rows, all `success`.
+
+The ONNX file was loaded in the project Docker environment. It accepts `features` with shape
+`[batch, 48, 368]` and returns `logits` with shape `[batch, 48, 3863]`.
 
 ## Current Integration Decision
 
@@ -50,15 +61,19 @@ addressed:
 
 ## Evidence Still Required From the Teammate
 
-The GitHub repository contains training scripts and a written training process, but the following
-artifacts are not present in its Git tree. Its `artifacts/checkpoints`, `artifacts/exports`, and
-`artifacts/logs` directories contain only `.gitkeep` placeholders.
+The GitHub repository contains training scripts and a written training process; the final CTC
+artifact bundle was delivered separately and is now retained locally. The following evidence is
+still required before its claimed metrics can be reported.
 
-1. Per-sample feature-extraction quality report: status, valid-frame ratio, and failure reason.
-2. CTC checkpoint and ONNX export, with SHA-256 hashes and vocabulary/output metadata.
-3. Exact extraction and training commands, source commit IDs, Docker image version, and seed.
-4. Results on official CE-CSL train/dev/test splits: token-level F1, a sequence metric, failures,
-   and inference latency.
+1. A quality report with valid-frame ratio and failure reason. The delivered report records only
+   `sample_id`, `status`, and `size_bytes`; all rows are successful but it has no quality ratio.
+2. Machine-readable evaluation results for the official CE-CSL train/dev/test split: token-level
+   F1, a sequence metric, failures, and inference latency per split.
+3. The exact source manifest and split used for the recorded CTC metrics. The delivery note claims
+   approximately 30% sequence accuracy, 35% WER, and 12.5 ms CPU latency, but also names 5,988
+   test samples, which is the full dataset count rather than an official test partition.
+4. Full command logs tying the delivered final checkpoint to the cited commit, configuration, seed,
+   and Docker image.
 
 These are evidence requirements, not a statement that the recorded training process is invalid.
 The GitHub scripts document how the work was intended to run; the missing artifacts are required
