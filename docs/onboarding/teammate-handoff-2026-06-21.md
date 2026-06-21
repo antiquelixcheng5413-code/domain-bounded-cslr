@@ -75,15 +75,22 @@ Reported average CPU inference latency is approximately 12.5 ms. The split count
 and match the accepted CE-CSL manifest. These values are recorded as teammate-provided results;
 they are not yet independently reproduced in the current repository.
 
+The delivered `artifacts/metrics/teammate-ctc-eval-detailed.csv` contains all 1,015 Dev/Test
+reference-hypothesis pairs. It independently verifies sequence accuracy: 137/515 Dev samples
+(26.60%) and 99/500 Test samples (19.80%) are exact matches. However, standard whitespace-token
+Levenshtein scoring on that CSV gives 30.12% Dev WER and 35.66% Test WER, not the reported
+24.58% and 26.56%. The original evaluation normalization/tokenization code is required to explain
+or reproduce the reported WER values.
+
 The following evidence is still required before the values can be treated as fully auditable
 project results.
 
 1. A quality report with valid-frame ratio and failure reason. The delivered report records only
    `sample_id`, `status`, and `size_bytes`; all rows are successful but it has no quality ratio.
-2. Machine-readable predictions or evaluation results for the official CE-CSL train/dev/test
-   split, including token-level F1, sequence outputs, failure counts, and latency per split.
-3. The exact source manifest and split file used for the recorded CTC metrics.
-4. Full command logs tying the delivered final checkpoint to the cited commit, configuration, seed,
+2. Original WER evaluation code, including its tokenization and normalization rules.
+3. Token-level F1, failure counts, and latency per split.
+4. The exact source manifest and split file used for the recorded CTC metrics.
+5. Full command logs tying the delivered final checkpoint to the cited commit, configuration, seed,
    and Docker image.
 
 These are evidence requirements, not a statement that the recorded training process is invalid.

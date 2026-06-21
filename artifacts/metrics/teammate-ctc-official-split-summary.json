@@ -1,6 +1,6 @@
 {
-  "source": "teammate-provided evaluation summary",
-  "reproduction_status": "not independently reproduced in the current repository",
+  "source": "teammate-provided evaluation summary and detailed prediction CSV",
+  "reproduction_status": "sequence accuracy verified from detailed predictions; reported WER not reproduced",
   "model": "LSTM + CTC",
   "dataset": "CE-CSL",
   "split_counts": {
@@ -16,5 +16,19 @@
     "sequence_accuracy": 0.198,
     "wer": 0.2656
   },
-  "average_cpu_inference_latency_ms": 12.5
+  "average_cpu_inference_latency_ms": 12.5,
+  "detailed_predictions": {
+    "path": "artifacts/metrics/teammate-ctc-eval-detailed.csv",
+    "sha256": "d404f586425eb522efea44565983b53248e595e27b1236f4e470c1b6f4210d4c",
+    "rows": 1015,
+    "sequence_accuracy_verified": {
+      "dev": 0.266,
+      "test": 0.198
+    },
+    "whitespace_token_wer": {
+      "dev": 0.3012,
+      "test": 0.3566
+    },
+    "note": "Whitespace-token Levenshtein WER differs from the teammate-reported WER. The original evaluation normalization/tokenization code is still required."
+  }
 }

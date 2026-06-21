@@ -30,9 +30,11 @@ load in Docker. The reported official-split metrics are recorded in
 | Dev | 515 | 26.60% | 24.58% |
 | Test | 500 | 19.80% | 26.56% |
 
-Reported average CPU inference latency is 12.5 ms. These are CTC sequence-recognition results,
-not the active LSTM multi-label baseline, and must be labelled as teammate-provided until the
-current repository reproduces them with the official split files.
+Reported average CPU inference latency is 12.5 ms. The detailed prediction CSV independently
+confirms the Dev/Test sequence accuracies, but whitespace-token WER recomputation gives 30.12%
+Dev and 35.66% Test rather than the reported 24.58% and 26.56%. The CTC evaluation script's
+normalization/tokenization rules are required before reporting WER as reproduced. These are CTC
+sequence-recognition results, not the active LSTM multi-label baseline.
 
 ## Required Live Demonstration
 
