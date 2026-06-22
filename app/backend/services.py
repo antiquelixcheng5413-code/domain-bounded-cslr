@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 
 from cslr.inference.service import RecognitionService
-from cslr.semantic import IntentCatalog
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -14,16 +13,19 @@ def _as_bool(value: str) -> bool:
 
 
 def create_recognition_service() -> RecognitionService:
-    labels_config = os.getenv("CSLR_LABELS_PATH", "")
-    labels_path = Path(labels_config) if labels_config else None
     configured_model = os.getenv(
         "CSLR_MODEL_PATH", str(PROJECT_ROOT / "artifacts/exports/lstm.onnx")
     )
     model_path = Path(configured_model) if configured_model else None
-    catalog = IntentCatalog.from_yaml(labels_path) if labels_path else None
+    configured_data_root = os.getenv("CSLR_SEMANTIC_DATA_ROOT", "")
+    semantic_data_root = Path(configured_data_root) if configured_data_root else None
+    ctc_vocabulary = os.getenv("CSLR_CTC_VOCAB_PATH", "")
     return RecognitionService(
-        catalog=catalog,
         model_path=model_path,
         confidence_threshold=float(os.getenv("CSLR_CONFIDENCE_THRESHOLD", "0.65")),
         demo_mode=_as_bool(os.getenv("CSLR_DEMO_MODE", "false")),
+        model_kind=os.getenv("CSLR_MODEL_KIND", "multilabel"),
+        ctc_vocabulary_path=Path(ctc_vocabulary) if ctc_vocabulary else None,
+        semantic_data_root=semantic_data_root,
+        allow_legacy_ctc=_as_bool(os.getenv("CSLR_ENABLE_LEGACY_CTC", "false")),
     )

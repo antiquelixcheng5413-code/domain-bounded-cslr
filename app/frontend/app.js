@@ -10,6 +10,9 @@ const resultLabel = document.querySelector("#result-label");
 const resultGlossTokens = document.querySelector("#result-gloss-tokens");
 const resultConfidence = document.querySelector("#result-confidence");
 const resultLatency = document.querySelector("#result-latency");
+const resultModel = document.querySelector("#result-model");
+const resultScoreType = document.querySelector("#result-score-type");
+const resultSemanticStatus = document.querySelector("#result-semantic-status");
 const warnings = document.querySelector("#warnings");
 
 let mediaStream;
@@ -19,7 +22,7 @@ async function loadHealth() {
     const response = await fetch("/api/v1/health");
     const health = await response.json();
     if (health.model_ready) {
-      systemStatus.textContent = "模型已加载，可以进行真实 CE-CSL 识别。";
+      systemStatus.textContent = `模型已加载（${health.model_kind}），可以进行真实 CE-CSL 识别。`;
       systemStatus.dataset.kind = "ready";
     } else if (health.demo_mode) {
       systemStatus.textContent = "界面演示模式：结果不是模型预测，不能用于实验报告。";
@@ -95,6 +98,9 @@ async function submitVideo(file) {
     resultGlossTokens.textContent = "-";
     resultConfidence.textContent = "-";
     resultLatency.textContent = "-";
+    resultModel.textContent = "-";
+    resultScoreType.textContent = "-";
+    resultSemanticStatus.textContent = "-";
   }
 }
 
@@ -105,8 +111,14 @@ function renderResult(result) {
   resultGlossTokens.textContent = result.gloss_tokens?.length
     ? result.gloss_tokens.join(" / ")
     : "-";
-  resultConfidence.textContent = `${(result.confidence * 100).toFixed(1)}%`;
+  resultConfidence.textContent = formatScore(result.confidence, result.confidence_kind);
   resultLatency.textContent = `${result.latency_ms.total ?? 0} ms`;
+  resultModel.textContent = [result.model_kind, result.model_version].filter(Boolean).join(" / ");
+  resultScoreType.textContent = result.confidence_kind ?? "-";
+  resultSemanticStatus.textContent = [
+    result.semantic_status,
+    result.semantic_reference_sample_id,
+  ].filter(Boolean).join(" / ") || "-";
   warnings.replaceChildren(
     ...result.warnings.map((warning) => {
       const item = document.createElement("li");
@@ -119,6 +131,13 @@ function renderResult(result) {
 function formatBytes(bytes) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function formatScore(score, kind) {
+  if (kind === "ctc_path_score_uncalibrated") {
+    return `${score.toFixed(4)} (path score)`;
+  }
+  return `${(score * 100).toFixed(1)}%`;
 }
 
 loadHealth();

@@ -47,6 +47,20 @@ sequence-recognition results, not the active LSTM multi-label baseline.
 - [ ] Web response shows predicted label, gloss tokens, confidence, and latency.
 - [ ] Demo mode is disabled for reported results.
 
+## CTC Sequence Comparison Update
+
+- [x] Teammate legacy CTC checkpoint and ONNX were integrated through a compatibility layer.
+- [x] Legacy ONNX Dev/Test evaluation was regenerated with official splits and corpus-level WER.
+- [x] The 3,862-token ordered vocabulary is versioned and checksum recorded.
+- [x] Legacy checkpoint and ONNX produce identical Dev predictions under the corrected decoder.
+- [x] CTC v2 training, export, evaluation, and Web model-kind plumbing are implemented.
+- [ ] Train CTC v2 with official Train, select by Dev corpus WER, then evaluate Test once.
+
+The reproducible legacy metrics are Dev sequence accuracy 26.60% / corpus WER 30.12% and Test
+sequence accuracy 19.80% / corpus WER 35.66%. Do not use the earlier stated WER values of 24.58%
+and 26.56%, which are not reproduced by the detailed predictions. Full commands and error counts
+are in [the CTC experiment record](../experiments/ctc-sequence-recognition.md).
+
 ## Required Evidence
 
 - [ ] Dataset name, version, license, URL, checksum, and access date.

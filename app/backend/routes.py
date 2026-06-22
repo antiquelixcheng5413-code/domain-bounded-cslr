@@ -32,6 +32,7 @@ def health() -> HealthResponse:
         status="ok",
         model_ready=service.ready,
         demo_mode=service.demo_mode,
+        model_kind=service.model_kind,
         model_error=service.model_error,
     )
 

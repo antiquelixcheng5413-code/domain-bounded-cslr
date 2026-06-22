@@ -71,6 +71,34 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("checkpoint", type=Path)
     export.add_argument("output", type=Path)
     export.add_argument("--sequence-length", type=int, default=48)
+
+    train_ctc = commands.add_parser("train-ctc", help="train a CTC sequence recognizer")
+    train_ctc.add_argument("--manifest", type=Path, required=True)
+    train_ctc.add_argument("--features", type=Path, required=True)
+    train_ctc.add_argument("--vocab", type=Path, required=True)
+    train_ctc.add_argument(
+        "--model-config", type=Path, default=Path("configs/models/ctc_lstm.yaml")
+    )
+    train_ctc.add_argument(
+        "--training-config", type=Path, default=Path("configs/training_ctc.yaml")
+    )
+    train_ctc.add_argument("--output", type=Path, default=Path("artifacts/checkpoints/ctc_v2.pt"))
+    train_ctc.add_argument("--feature-receipt", type=Path)
+
+    evaluate_ctc = commands.add_parser(
+        "evaluate-ctc", help="evaluate a CTC checkpoint or ONNX model"
+    )
+    evaluate_ctc.add_argument("--manifest", type=Path, required=True)
+    evaluate_ctc.add_argument("--features", type=Path, required=True)
+    evaluate_ctc.add_argument("--model", type=Path, required=True)
+    evaluate_ctc.add_argument("--model-kind", choices=["legacy_ctc", "ctc_v2"], required=True)
+    evaluate_ctc.add_argument("--vocab", type=Path)
+    evaluate_ctc.add_argument("--split", choices=["validation", "test"], required=True)
+    evaluate_ctc.add_argument("--output", type=Path, required=True)
+
+    export_ctc = commands.add_parser("export-ctc", help="export a ctc_v2 checkpoint to ONNX")
+    export_ctc.add_argument("checkpoint", type=Path)
+    export_ctc.add_argument("output", type=Path)
     return parser
 
 
@@ -198,6 +226,72 @@ def main(argv: list[str] | None = None) -> int:
             output_path=args.output,
             sequence_length=args.sequence_length,
         )
+        print(json.dumps(result, ensure_ascii=False))
+        return 0
+    if args.command == "train-ctc":
+        from cslr.training.ctc import train_ctc_model
+
+        result = train_ctc_model(
+            manifest_path=args.manifest,
+            feature_root=args.features,
+            vocabulary_path=args.vocab,
+            model_config_path=args.model_config,
+            training_config_path=args.training_config,
+            output_path=args.output,
+            feature_receipt_path=args.feature_receipt,
+        )
+        print(json.dumps(result, ensure_ascii=False))
+        return 0
+    if args.command == "evaluate-ctc":
+        from cslr.training.ctc import (
+            evaluate_ctc_checkpoint,
+            evaluate_ctc_onnx,
+            evaluate_legacy_ctc_checkpoint,
+            write_ctc_evaluation,
+        )
+
+        if args.model.suffix.lower() == ".onnx":
+            metrics, records = evaluate_ctc_onnx(
+                model_path=args.model,
+                vocabulary_path=args.vocab,
+                manifest_path=args.manifest,
+                feature_root=args.features,
+                split=args.split,
+                model_kind=args.model_kind,
+            )
+        elif args.model_kind == "legacy_ctc":
+            if args.vocab is None:
+                raise ValueError("legacy_ctc checkpoint evaluation requires --vocab")
+            metrics, records = evaluate_legacy_ctc_checkpoint(
+                checkpoint_path=args.model,
+                vocabulary_path=args.vocab,
+                manifest_path=args.manifest,
+                feature_root=args.features,
+                split=args.split,
+            )
+        else:
+            metrics, records = evaluate_ctc_checkpoint(
+                checkpoint_path=args.model,
+                manifest_path=args.manifest,
+                feature_root=args.features,
+                split=args.split,
+            )
+        summary_path = write_ctc_evaluation(args.output, metrics, records)
+        print(
+            json.dumps(
+                {
+                    "metrics": metrics,
+                    "output": str(args.output),
+                    "summary": str(summary_path),
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 0
+    if args.command == "export-ctc":
+        from cslr.training.ctc import export_ctc_checkpoint_to_onnx
+
+        result = export_ctc_checkpoint_to_onnx(args.checkpoint, args.output)
         print(json.dumps(result, ensure_ascii=False))
         return 0
     raise RuntimeError(f"unhandled command: {args.command}")

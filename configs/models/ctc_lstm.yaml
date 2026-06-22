@@ -1,0 +1,6 @@
+name: ctc_lstm
+input_size: 368
+hidden_size: 512
+num_layers: 3
+dropout: 0.30
+bidirectional: true

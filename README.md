@@ -196,6 +196,16 @@ python -m unittest discover -s tests -v
 python scripts/check_repository_safety.py
 ```
 
+## CTC Sequence Recognition
+
+The continuous-sequence comparison has two explicit paths: `legacy_ctc` for reproduction of the
+teammate delivery, and `ctc_v2` for the corrected formal CTC experiment. The formal model uses the
+official Train/Dev/Test split, blank ID `0`, `log_softmax` before `CTCLoss`, and corpus-level WER.
+The versioned 3,862-token CTC vocabulary is at `data/manifests/ce-csl-ctc-vocab.txt`; model and
+landmark binaries remain outside Git. See
+[CTC sequence-recognition record](docs/experiments/ctc-sequence-recognition.md) for commands,
+reproduced legacy metrics, and Web configuration.
+
 ## Git 协作规则
 
 主分支为 `main`。每项工作使用短期分支：

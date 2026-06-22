@@ -5,27 +5,50 @@ import time
 from pathlib import Path
 
 from cslr.contracts import Prediction
-from cslr.semantic import IntentCatalog
+from cslr.semantic.references import ExactSemanticResolver
 
 
 class RecognitionService:
     def __init__(
         self,
-        catalog: IntentCatalog | None,
         model_path: Path | None,
         confidence_threshold: float = 0.65,
         demo_mode: bool = False,
+        model_kind: str = "multilabel",
+        ctc_vocabulary_path: Path | None = None,
+        semantic_data_root: Path | None = None,
+        allow_legacy_ctc: bool = False,
     ) -> None:
-        self.catalog = catalog
         self.confidence_threshold = confidence_threshold
         self.demo_mode = demo_mode
+        self.model_kind = model_kind
+        self.allow_legacy_ctc = allow_legacy_ctc
+        self.semantic_resolver = ExactSemanticResolver.from_ce_csl(semantic_data_root)
         self.model = None
         self.model_error: str | None = None
         if model_path and model_path.exists():
             try:
-                from cslr.inference.onnx import OnnxRecognizer
+                if model_kind == "multilabel":
+                    from cslr.inference.onnx import OnnxRecognizer
 
-                self.model = OnnxRecognizer(model_path)
+                    self.model = OnnxRecognizer(model_path)
+                elif model_kind == "legacy_ctc":
+                    if not allow_legacy_ctc:
+                        raise ValueError(
+                            "legacy_ctc is disabled for the formal Web service; "
+                            "set CSLR_ENABLE_LEGACY_CTC=true only for internal reproduction"
+                        )
+                    if ctc_vocabulary_path is None:
+                        raise ValueError("legacy_ctc requires CSLR_CTC_VOCAB_PATH")
+                    from cslr.inference.ctc import CTCOnnxRecognizer
+
+                    self.model = CTCOnnxRecognizer.legacy(model_path, ctc_vocabulary_path)
+                elif model_kind == "ctc_v2":
+                    from cslr.inference.ctc import CTCOnnxRecognizer
+
+                    self.model = CTCOnnxRecognizer.v2(model_path)
+                else:
+                    raise ValueError(f"unsupported CSLR_MODEL_KIND: {model_kind}")
             except (RuntimeError, FileNotFoundError, ValueError) as exc:
                 self.model_error = str(exc)
         elif model_path:
@@ -44,13 +67,14 @@ class RecognitionService:
                 status="model_unavailable",
                 label="unknown",
                 gloss_tokens=[],
-                intent="unknown",
+                intent="not_applicable",
                 gloss="UNKNOWN",
                 text_zh="模型尚未安装或训练，当前不能进行真实识别。",
                 confidence=0.0,
                 top_k=[],
                 warnings=[self.model_error or "model unavailable"],
                 latency_ms={"total": self._elapsed_ms(started)},
+                model_kind=self.model_kind,
             )
 
         if self.demo_mode and self.model is None:
@@ -66,7 +90,7 @@ class RecognitionService:
                 status="low_quality",
                 label="unknown",
                 gloss_tokens=[],
-                intent="unknown",
+                intent="not_applicable",
                 gloss="UNKNOWN",
                 text_zh="视频质量不足，无法得到可靠的 CE-CSL 识别结果。",
                 confidence=0.0,
@@ -74,11 +98,45 @@ class RecognitionService:
                 warnings=extraction.quality.warnings,
                 latency_ms={"extraction": extraction_ms, "total": self._elapsed_ms(started)},
                 model_version=self.model.version,
+                model_kind=self.model_kind,
             )
 
         inference_started = time.perf_counter()
         prediction = self.model.predict(extraction.features)
         inference_ms = self._elapsed_ms(inference_started)
+        if self.model_kind in {"legacy_ctc", "ctc_v2"}:
+            tokens = [str(token) for token in prediction["tokens"]]
+            label = "/".join(tokens) if tokens else "UNKNOWN"
+            semantic = self.semantic_resolver.resolve(tokens)
+            warnings = ["CTC path score is not calibrated for rejection."]
+            if self.model_kind == "legacy_ctc":
+                warnings.append("Legacy CTC is for comparison only, not the formal Web model.")
+            return Prediction(
+                status="ok",
+                label=label,
+                gloss_tokens=tokens,
+                intent="not_applicable",
+                gloss=label,
+                text_zh=semantic.text_zh,
+                confidence=float(prediction["path_score"]),
+                top_k=[
+                    {
+                        "label": label,
+                        "confidence": float(prediction["path_score"]),
+                    }
+                ],
+                warnings=warnings,
+                latency_ms={
+                    "extraction": extraction_ms,
+                    "inference": inference_ms,
+                    "total": self._elapsed_ms(started),
+                },
+                model_version=str(prediction["model_version"]),
+                model_kind=str(prediction["model_kind"]),
+                confidence_kind="ctc_path_score_uncalibrated",
+                semantic_status=semantic.status,
+                semantic_reference_sample_id=semantic.sample_id,
+            )
         label = str(prediction["label"])
         tokens = [str(token) for token in prediction["gloss_tokens"]]
         confidence = float(prediction["confidence"])
@@ -88,9 +146,9 @@ class RecognitionService:
             status=status,
             label=label,
             gloss_tokens=tokens,
-            intent=label,
+            intent="not_applicable",
             gloss=label,
-            text_zh=self._reconstruct_text(label, tokens, confidence),
+            text_zh=self._reconstruct_multilabel_text(tokens),
             confidence=confidence,
             top_k=list(prediction["top_k"]),
             warnings=warnings,
@@ -100,6 +158,8 @@ class RecognitionService:
                 "total": self._elapsed_ms(started),
             },
             model_version=self.model.version,
+            model_kind=self.model_kind,
+            semantic_status="token_set_not_sequence",
         )
 
     def _demo_prediction(self, video_path: Path, started: float) -> Prediction:
@@ -111,9 +171,9 @@ class RecognitionService:
             status="demo_only",
             label=label,
             gloss_tokens=demo_tokens,
-            intent=label,
+            intent="not_applicable",
             gloss=label,
-            text_zh=self._reconstruct_text(label, demo_tokens, confidence),
+            text_zh=self._reconstruct_multilabel_text(demo_tokens),
             confidence=confidence,
             top_k=[
                 {"label": token, "token": token, "confidence": confidence}
@@ -122,16 +182,16 @@ class RecognitionService:
             warnings=["界面演示模式：该结果不是模型识别结果，禁止用于实验报告。"],
             latency_ms={"total": self._elapsed_ms(started)},
             model_version="demo-only",
+            model_kind="demo",
+            confidence_kind="demo_only",
+            semantic_status="demo_only",
         )
 
-    def _reconstruct_text(self, label: str, tokens: list[str], confidence: float) -> str:
-        if self.catalog is not None and len(tokens) == 1:
-            template = self.catalog.reconstruct(tokens[0], confidence, self.confidence_threshold)
-            if template.intent != "unknown":
-                return template.text_zh
+    @staticmethod
+    def _reconstruct_multilabel_text(tokens: list[str]) -> str:
         if tokens:
-            return f"预测的 CE-CSL gloss/token：{' / '.join(tokens)}。"
-        return f"预测标签：{label}。"
+            return f"Predicted CE-CSL token set: {' / '.join(tokens)}."
+        return "No CE-CSL token passed the configured threshold."
 
     @staticmethod
     def _elapsed_ms(started: float) -> float:

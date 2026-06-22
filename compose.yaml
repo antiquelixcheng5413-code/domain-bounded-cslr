@@ -5,11 +5,17 @@ services:
     ports:
       - "${CSLR_PORT:-8088}:8000"
     environment:
-      CSLR_MODEL_PATH: /workspace/artifacts/exports/lstm.onnx
+      CSLR_MODEL_KIND: ${CSLR_MODEL_KIND:-multilabel}
+      CSLR_MODEL_PATH: ${CSLR_MODEL_PATH:-/workspace/artifacts/exports/lstm.onnx}
+      CSLR_CTC_VOCAB_PATH: ${CSLR_CTC_VOCAB_PATH:-/workspace/artifacts/ctc/vocab.txt}
+      CSLR_SEMANTIC_DATA_ROOT: ${CSLR_SEMANTIC_DATA_ROOT:-/workspace/data/ce-csl}
+      CSLR_ENABLE_LEGACY_CTC: ${CSLR_ENABLE_LEGACY_CTC:-false}
       CSLR_DEMO_MODE: ${CSLR_DEMO_MODE:-false}
       CSLR_CONFIDENCE_THRESHOLD: ${CSLR_CONFIDENCE_THRESHOLD:-0.65}
     volumes:
       - ./artifacts/exports:/workspace/artifacts/exports:ro
+      - ./data/clean_datas/ctc-delivery-2026-06-21:/workspace/artifacts/ctc:ro
+      - ./data/ce-csl:/workspace/data/ce-csl:ro
     restart: unless-stopped
 
   dev:

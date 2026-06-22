@@ -54,3 +54,7 @@ class Prediction:
     warnings: list[str]
     latency_ms: dict[str, float]
     model_version: str | None = None
+    model_kind: str = "multilabel"
+    confidence_kind: str = "class_probability"
+    semantic_status: str = "not_available"
+    semantic_reference_sample_id: str | None = None

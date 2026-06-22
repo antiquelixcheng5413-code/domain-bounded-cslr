@@ -16,6 +16,7 @@ class ApiTests(unittest.TestCase):
         body = response.json()
         self.assertEqual(body["status"], "ok")
         self.assertFalse(body["model_ready"])
+        self.assertEqual(body["model_kind"], "multilabel")
 
     def test_homepage_and_styles_are_served(self) -> None:
         page = self.client.get("/")

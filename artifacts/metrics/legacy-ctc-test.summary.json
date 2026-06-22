@@ -1,0 +1,21 @@
+{
+  "split": "test",
+  "samples": 500,
+  "exact_matches": 99,
+  "sequence_accuracy": 0.198,
+  "corpus_wer": {
+    "substitutions": 350,
+    "deletions": 733,
+    "insertions": 1,
+    "reference_tokens": 3040,
+    "errors": 1084,
+    "wer": 0.35657894736842105
+  },
+  "inference_ms": {
+    "p50": 21.803149982588366,
+    "p95": 41.969840007368475
+  },
+  "model_kind": "legacy_ctc",
+  "model_sha256": "d79541d9e4feaf1a471b3c15534c8619c1c1239b1b621c190d35f0ea9d5737a1",
+  "vocabulary_sha256": "85ea606a8a10cc1611a4e8755e875f09360727c8608ee0bbc14950c541d1abb3"
+}

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from cslr.cli import main
+from cslr.cli import build_parser, main
 from cslr.data.manifest import read_manifest
 
 
@@ -123,6 +123,13 @@ class CliTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertEqual(result["status"], "ok")
         self.assertTrue(receipt_exists)
+
+    def test_ctc_commands_are_registered(self) -> None:
+        parser = build_parser()
+        commands = parser._subparsers._group_actions[0].choices
+        self.assertIn("train-ctc", commands)
+        self.assertIn("evaluate-ctc", commands)
+        self.assertIn("export-ctc", commands)
 
 
 if __name__ == "__main__":
