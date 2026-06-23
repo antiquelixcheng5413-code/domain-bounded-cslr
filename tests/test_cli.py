@@ -130,6 +130,8 @@ class CliTests(unittest.TestCase):
         self.assertIn("train-ctc", commands)
         self.assertIn("evaluate-ctc", commands)
         self.assertIn("export-ctc", commands)
+        self.assertIn("gpu-preflight", commands)
+        self.assertIn("benchmark-ctc", commands)
 
 
 if __name__ == "__main__":

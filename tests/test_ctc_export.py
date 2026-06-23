@@ -7,7 +7,11 @@ import torch
 
 from cslr.inference.ctc import CTCOnnxRecognizer
 from cslr.models.ctc import build_ctc_model
-from cslr.training.ctc import export_ctc_checkpoint_to_onnx, load_ctc_checkpoint
+from cslr.training.ctc import (
+    export_ctc_checkpoint_to_onnx,
+    load_ctc_checkpoint,
+    write_ctc_benchmark,
+)
 
 
 class CTCExportTests(unittest.TestCase):
@@ -48,6 +52,31 @@ class CTCExportTests(unittest.TestCase):
         self.assertEqual(restored_model(torch.zeros(1, 48, 368)).shape[-1], 3)
         self.assertEqual(exported["model"], str(onnx_path))
         self.assertEqual(result["model_kind"], "ctc_v2")
+
+    def test_benchmark_writer_creates_csv_and_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / "benchmark.csv"
+            summary_path = write_ctc_benchmark(
+                output_path,
+                {"samples": 1, "latency_ms": {"total": {"p50": 1.0, "p95": 1.0}}},
+                [
+                    {
+                        "split": "validation",
+                        "sample_id": "dev-00001",
+                        "status": "ok",
+                        "token_count": 2,
+                        "extraction_ms": 3.0,
+                        "inference_ms": 1.0,
+                        "total_ms": 4.0,
+                    }
+                ],
+            )
+
+            content = output_path.read_text(encoding="utf-8")
+            summary = summary_path.read_text(encoding="utf-8")
+
+        self.assertIn("dev-00001", content)
+        self.assertIn('"samples": 1', summary)
 
 
 if __name__ == "__main__":

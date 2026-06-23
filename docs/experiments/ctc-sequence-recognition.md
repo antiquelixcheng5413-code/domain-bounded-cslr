@@ -50,6 +50,34 @@ recalculation.
 
 ## Commands
 
+### GPU Preflight And Training
+
+The CPU Web and CI images remain unchanged. GPU training uses the separate `Dockerfile.gpu` and
+`compose.gpu.yaml` service. Docker Desktop already stores images and layers on `D:`.
+
+```powershell
+docker compose -f compose.yaml -f compose.gpu.yaml --profile gpu run --rm dev-gpu gpu-preflight
+```
+
+The command must report `status: ok` and `cuda_available: true`. Do not start formal training if
+the preflight fails.
+
+Run a one-epoch smoke check before the formal run:
+
+```powershell
+docker compose -f compose.yaml -f compose.gpu.yaml --profile gpu run --rm dev-gpu train-ctc `
+  --manifest data/manifests/ce-csl.csv `
+  --features data/clean_datas/ce_csl `
+  --vocab data/manifests/ce-csl-ctc-vocab.txt `
+  --model-config configs/models/ctc_lstm.yaml `
+  --training-config configs/training_ctc_smoke.yaml `
+  --feature-receipt artifacts/metrics/ce-csl-features-receipt.json `
+  --output artifacts/checkpoints/ctc_v2_smoke.pt
+```
+
+The formal run uses `configs/training_ctc.yaml`. It writes the best checkpoint and a resumable
+`ctc_v2.last.pt`; continue an interrupted run with `--resume artifacts/checkpoints/ctc_v2.last.pt`.
+
 Reproduce the legacy ONNX evaluation:
 
 ```powershell
@@ -66,7 +94,7 @@ docker compose --profile dev run --rm dev evaluate-ctc `
 Train the formal CTC v2 model (not yet run as of this document):
 
 ```powershell
-docker compose --profile dev run --rm dev train-ctc `
+docker compose -f compose.yaml -f compose.gpu.yaml --profile gpu run --rm dev-gpu train-ctc `
   --manifest data/manifests/ce-csl.csv `
   --features data/clean_datas/ce_csl `
   --vocab data/manifests/ce-csl-ctc-vocab.txt `
@@ -75,7 +103,7 @@ docker compose --profile dev run --rm dev train-ctc `
   --feature-receipt artifacts/metrics/ce-csl-features-receipt.json `
   --output artifacts/checkpoints/ctc_v2.pt
 
-docker compose --profile dev run --rm dev export-ctc `
+docker compose -f compose.yaml -f compose.gpu.yaml --profile gpu run --rm dev-gpu export-ctc `
   artifacts/checkpoints/ctc_v2.pt `
   artifacts/exports/ctc_v2.onnx
 ```
@@ -107,3 +135,18 @@ The result displays ordered Gloss tokens, an uncalibrated CTC path score, model 
 and an exact-reference Chinese reconstruction state. A Chinese sentence is returned only when the
 predicted complete Gloss sequence has a unique exact CE-CSL reference; otherwise the result states
 that no reliable Chinese reconstruction is available. No hospital intent mapping is used.
+
+## End-To-End Latency
+
+After exporting CTC v2, benchmark the first fixed 50 official Dev videos. The output contains
+per-video extraction, ONNX inference, total latency, and P50/P95 summary values.
+
+```powershell
+docker compose --profile dev run --rm dev benchmark-ctc `
+  --manifest data/manifests/ce-csl.csv `
+  --data-root data/ce-csl `
+  --model artifacts/exports/ctc_v2.onnx `
+  --split validation `
+  --limit 50 `
+  --output artifacts/metrics/ctc-v2-web-benchmark.csv
+```

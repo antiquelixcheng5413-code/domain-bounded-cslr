@@ -1,0 +1,18 @@
+services:
+  dev-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    profiles: ["gpu"]
+    working_dir: /workspace
+    entrypoint: ["python", "-m", "cslr.cli"]
+    environment:
+      PYTHONPATH: /workspace/src
+      CUDA_VISIBLE_DEVICES: "0"
+    gpus: all
+    volumes:
+      - ./:/workspace
+      - type: bind
+        source: ${CSLR_DATA_ROOT:-./data}
+        target: /workspace/data
+      - ./artifacts:/workspace/artifacts

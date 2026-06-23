@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,7 @@ class CTCOnnxRecognizer:
         vocabulary: CTCVocabulary,
         model_kind: str,
         model_version: str | None = None,
+        vocabulary_sha256: str | None = None,
     ) -> None:
         try:
             import onnxruntime as ort
@@ -27,6 +29,7 @@ class CTCOnnxRecognizer:
         self.vocabulary = vocabulary
         self.model_kind = model_kind
         self.version = model_version or model_path.stem
+        self.vocabulary_sha256 = vocabulary_sha256
         self.session = ort.InferenceSession(str(model_path), providers=["CPUExecutionProvider"])
         self.input_name = self.session.get_inputs()[0].name
         output_shape = self.session.get_outputs()[0].shape
@@ -43,7 +46,13 @@ class CTCOnnxRecognizer:
         vocabulary = CTCVocabulary.from_file(vocabulary_path, blank_index=0)
         # The delivered legacy model used the final vocabulary index as blank.
         vocabulary = CTCVocabulary(tokens=vocabulary.tokens, blank_index=len(vocabulary.tokens))
-        return cls(model_path, vocabulary, model_kind="legacy_ctc", model_version="legacy_ctc")
+        return cls(
+            model_path,
+            vocabulary,
+            model_kind="legacy_ctc",
+            model_version="legacy_ctc",
+            vocabulary_sha256=hashlib.sha256(vocabulary_path.read_bytes()).hexdigest(),
+        )
 
     @classmethod
     def v2(cls, model_path: Path) -> CTCOnnxRecognizer:
@@ -62,6 +71,7 @@ class CTCOnnxRecognizer:
             vocabulary,
             model_kind="ctc_v2",
             model_version=str(metadata_path.stem),
+            vocabulary_sha256=str(metadata.get("vocabulary_sha256", "")) or None,
         )
 
     def predict(self, features: np.ndarray) -> dict[str, Any]:

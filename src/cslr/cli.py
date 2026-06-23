@@ -84,6 +84,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     train_ctc.add_argument("--output", type=Path, default=Path("artifacts/checkpoints/ctc_v2.pt"))
     train_ctc.add_argument("--feature-receipt", type=Path)
+    train_ctc.add_argument("--resume", type=Path)
 
     evaluate_ctc = commands.add_parser(
         "evaluate-ctc", help="evaluate a CTC checkpoint or ONNX model"
@@ -99,6 +100,18 @@ def build_parser() -> argparse.ArgumentParser:
     export_ctc = commands.add_parser("export-ctc", help="export a ctc_v2 checkpoint to ONNX")
     export_ctc.add_argument("checkpoint", type=Path)
     export_ctc.add_argument("output", type=Path)
+
+    commands.add_parser("gpu-preflight", help="verify CUDA access from the current container")
+
+    benchmark_ctc = commands.add_parser(
+        "benchmark-ctc", help="benchmark CTC v2 extraction, ONNX inference, and total latency"
+    )
+    benchmark_ctc.add_argument("--manifest", type=Path, required=True)
+    benchmark_ctc.add_argument("--data-root", type=Path, required=True)
+    benchmark_ctc.add_argument("--model", type=Path, required=True)
+    benchmark_ctc.add_argument("--split", choices=["validation", "test"], default="validation")
+    benchmark_ctc.add_argument("--limit", type=int, default=50)
+    benchmark_ctc.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -239,6 +252,7 @@ def main(argv: list[str] | None = None) -> int:
             training_config_path=args.training_config,
             output_path=args.output,
             feature_receipt_path=args.feature_receipt,
+            resume_path=args.resume,
         )
         print(json.dumps(result, ensure_ascii=False))
         return 0
@@ -293,6 +307,30 @@ def main(argv: list[str] | None = None) -> int:
 
         result = export_ctc_checkpoint_to_onnx(args.checkpoint, args.output)
         print(json.dumps(result, ensure_ascii=False))
+        return 0
+    if args.command == "gpu-preflight":
+        from cslr.training.gpu import gpu_preflight
+
+        result = gpu_preflight()
+        print(json.dumps(result, ensure_ascii=False))
+        return 0 if result["status"] == "ok" else 2
+    if args.command == "benchmark-ctc":
+        from cslr.training.ctc import benchmark_ctc_end_to_end, write_ctc_benchmark
+
+        metrics, rows = benchmark_ctc_end_to_end(
+            model_path=args.model,
+            manifest_path=args.manifest,
+            data_root=args.data_root,
+            split=args.split,
+            limit=args.limit,
+        )
+        summary_path = write_ctc_benchmark(args.output, metrics, rows)
+        print(
+            json.dumps(
+                {"metrics": metrics, "output": str(args.output), "summary": str(summary_path)},
+                ensure_ascii=False,
+            )
+        )
         return 0
     raise RuntimeError(f"unhandled command: {args.command}")
 

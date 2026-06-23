@@ -1,0 +1,28 @@
+FROM pytorch/pytorch:2.6.0-cuda12.6-cudnn9-runtime AS gpu-dev
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN apt-get -o Acquire::Retries=5 update \
+    && apt-get -o Acquire::Retries=5 install --no-install-recommends -y ffmpeg libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+
+COPY requirements.txt pyproject.toml README.md ./
+COPY src ./src
+RUN sed '/^torch==/d' requirements.txt > /tmp/requirements-gpu.txt \
+    && python -m pip install --upgrade pip \
+    && python -m pip install -r /tmp/requirements-gpu.txt \
+    && python -m pip install --no-deps .
+
+COPY app ./app
+COPY configs ./configs
+
+RUN groupadd --system cslr \
+    && useradd --system --gid cslr --create-home cslr \
+    && mkdir -p /workspace/artifacts /workspace/data \
+    && chown -R cslr:cslr /workspace
+
+USER cslr

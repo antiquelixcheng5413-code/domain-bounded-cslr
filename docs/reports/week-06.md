@@ -54,6 +54,7 @@ sequence-recognition results, not the active LSTM multi-label baseline.
 - [x] The 3,862-token ordered vocabulary is versioned and checksum recorded.
 - [x] Legacy checkpoint and ONNX produce identical Dev predictions under the corrected decoder.
 - [x] CTC v2 training, export, evaluation, and Web model-kind plumbing are implemented.
+- [ ] GPU preflight and one-epoch CTC v2 smoke training.
 - [ ] Train CTC v2 with official Train, select by Dev corpus WER, then evaluate Test once.
 
 The reproducible legacy metrics are Dev sequence accuracy 26.60% / corpus WER 30.12% and Test

@@ -139,6 +139,57 @@ def _feature_receipt_sha256(path: Path | None) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path and path.exists() else None
 
 
+def _capture_random_state() -> dict[str, object]:
+    return {
+        "python": random.getstate(),
+        "numpy": np.random.get_state(),
+        "torch": torch.get_rng_state(),
+        "cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+    }
+
+
+def _restore_random_state(state: dict[str, object]) -> None:
+    random.setstate(state["python"])  # type: ignore[arg-type]
+    np.random.set_state(state["numpy"])  # type: ignore[arg-type]
+    torch.set_rng_state(state["torch"])  # type: ignore[arg-type]
+    cuda_state = state.get("cuda")
+    if cuda_state is not None and torch.cuda.is_available():
+        torch.cuda.set_rng_state_all(cuda_state)  # type: ignore[arg-type]
+
+
+def _checkpoint_metadata(
+    model_config: dict[str, object],
+    vocabulary: CTCVocabulary,
+    vocabulary_path: Path,
+    seed: int,
+    feature_receipt_path: Path | None,
+    best_wer: float,
+    state_dict: dict[str, torch.Tensor],
+) -> dict[str, object]:
+    return {
+        "model_kind": "ctc_v2",
+        "model_config": model_config,
+        "tokens": vocabulary.tokens,
+        "blank_index": vocabulary.blank_index,
+        "vocabulary_sha256": hashlib.sha256(vocabulary_path.read_bytes()).hexdigest(),
+        "seed": seed,
+        "feature_receipt_sha256": _feature_receipt_sha256(feature_receipt_path),
+        "best_validation_corpus_wer": best_wer,
+        "state_dict": state_dict,
+    }
+
+
+def _cpu_state_dict(model: nn.Module) -> dict[str, torch.Tensor]:
+    return {key: value.detach().cpu() for key, value in model.state_dict().items()}
+
+
+def _move_optimizer_state(optimizer: torch.optim.Optimizer, device: torch.device) -> None:
+    for state in optimizer.state.values():
+        for key, value in state.items():
+            if isinstance(value, torch.Tensor):
+                state[key] = value.to(device)
+
+
 def train_ctc_model(
     manifest_path: Path,
     feature_root: Path,
@@ -147,6 +198,7 @@ def train_ctc_model(
     training_config_path: Path,
     output_path: Path,
     feature_receipt_path: Path | None = None,
+    resume_path: Path | None = None,
 ) -> dict[str, object]:
     records = read_manifest(manifest_path)
     validate_manifest(records)
@@ -179,7 +231,30 @@ def train_ctc_model(
     history: list[dict[str, object]] = []
     patience = int(training_config.get("early_stopping_patience", 8))
     waiting = 0
-    for epoch in range(1, int(training_config.get("epochs", 60)) + 1):
+    start_epoch = 1
+    if resume_path:
+        resume = torch.load(resume_path, map_location="cpu", weights_only=False)
+        if str(resume.get("model_kind")) != "ctc_v2":
+            raise ValueError("resume checkpoint is not ctc_v2")
+        if resume.get("model_config") != model_config:
+            raise ValueError("resume checkpoint model config does not match")
+        if list(resume.get("tokens", [])) != vocabulary.tokens:
+            raise ValueError("resume checkpoint vocabulary does not match")
+        model.load_state_dict(resume["state_dict"])
+        optimizer.load_state_dict(resume["optimizer_state_dict"])
+        _move_optimizer_state(optimizer, device)
+        best_state = resume["best_state_dict"]
+        best_wer = float(resume["best_validation_corpus_wer"])
+        history = list(resume["history"])
+        waiting = int(resume["waiting"])
+        start_epoch = int(resume["epoch"]) + 1
+        _restore_random_state(resume["random_state"])
+    epochs = int(training_config.get("epochs", 60))
+    if start_epoch > epochs:
+        raise ValueError("resume checkpoint has already completed the configured epoch count")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    latest_path = output_path.with_name(f"{output_path.stem}.last{output_path.suffix}")
+    for epoch in range(start_epoch, epochs + 1):
         model.train()
         loss_total = 0.0
         sample_total = 0
@@ -217,33 +292,55 @@ def train_ctc_model(
         )
         if current_wer < best_wer:
             best_wer = current_wer
-            best_state = {key: value.detach().cpu() for key, value in model.state_dict().items()}
+            best_state = _cpu_state_dict(model)
             waiting = 0
+            torch.save(
+                _checkpoint_metadata(
+                    model_config,
+                    vocabulary,
+                    vocabulary_path,
+                    seed,
+                    feature_receipt_path,
+                    best_wer,
+                    best_state,
+                ),
+                output_path,
+            )
         else:
             waiting += 1
-            if waiting >= patience:
-                break
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    checkpoint = {
-        "model_kind": "ctc_v2",
-        "model_config": model_config,
-        "tokens": vocabulary.tokens,
-        "blank_index": vocabulary.blank_index,
-        "vocabulary_sha256": hashlib.sha256(vocabulary_path.read_bytes()).hexdigest(),
-        "seed": seed,
-        "feature_receipt_sha256": _feature_receipt_sha256(feature_receipt_path),
-        "best_validation_corpus_wer": best_wer,
-        "state_dict": best_state,
-    }
-    torch.save(checkpoint, output_path)
-    history_path = output_path.with_suffix(".history.json")
-    history_path.write_text(
-        json.dumps(history, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+        latest = _checkpoint_metadata(
+            model_config,
+            vocabulary,
+            vocabulary_path,
+            seed,
+            feature_receipt_path,
+            best_wer,
+            _cpu_state_dict(model),
+        )
+        latest.update(
+            {
+                "optimizer_state_dict": optimizer.state_dict(),
+                "best_state_dict": best_state,
+                "epoch": epoch,
+                "history": history,
+                "waiting": waiting,
+                "random_state": _capture_random_state(),
+            }
+        )
+        torch.save(latest, latest_path)
+        history_path = output_path.with_suffix(".history.json")
+        history_path.write_text(
+            json.dumps(history, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        if waiting >= patience:
+            break
+    if not best_state:
+        raise RuntimeError("CTC training completed without a valid checkpoint")
     return {
         "checkpoint": str(output_path),
         "history": str(history_path),
+        "last_checkpoint": str(latest_path),
         "best_validation_corpus_wer": best_wer,
         "vocabulary_size": len(vocabulary.tokens),
         "device": str(device),
@@ -361,9 +458,7 @@ def evaluate_ctc_onnx(
         "inference_ms": _latency_percentiles(latencies),
         "model_kind": model_kind,
         "model_sha256": hashlib.sha256(model_path.read_bytes()).hexdigest(),
-        "vocabulary_sha256": (
-            hashlib.sha256(vocabulary_path.read_bytes()).hexdigest() if vocabulary_path else None
-        ),
+        "vocabulary_sha256": recognizer.vocabulary_sha256,
     }, predictions
 
 
@@ -414,3 +509,85 @@ def export_ctc_checkpoint_to_onnx(checkpoint_path: Path, output_path: Path) -> d
         encoding="utf-8",
     )
     return {"model": str(output_path), "metadata": str(metadata_path)}
+
+
+def benchmark_ctc_end_to_end(
+    model_path: Path,
+    manifest_path: Path,
+    data_root: Path,
+    split: str,
+    limit: int,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    from time import perf_counter
+
+    from cslr.features.extractor import MediaPipeHolisticExtractor
+
+    records = [record for record in read_manifest(manifest_path) if record.split == split]
+    if not records:
+        raise ValueError(f"manifest contains no records for split: {split}")
+    if limit <= 0:
+        raise ValueError("benchmark limit must be positive")
+    recognizer = CTCOnnxRecognizer.v2(model_path)
+    extractor = MediaPipeHolisticExtractor()
+    rows: list[dict[str, object]] = []
+    for record in records[:limit]:
+        total_started = perf_counter()
+        extraction_started = perf_counter()
+        extraction = extractor.extract(data_root / record.video)
+        extraction_ms = (perf_counter() - extraction_started) * 1000
+        inference_ms = 0.0
+        if extraction.quality.accepted:
+            inference_started = perf_counter()
+            prediction = recognizer.predict(extraction.features)
+            inference_ms = (perf_counter() - inference_started) * 1000
+            status = "ok"
+            token_count = len(prediction["tokens"])
+        else:
+            status = "low_quality"
+            token_count = 0
+        rows.append(
+            {
+                "split": split,
+                "sample_id": record.sample_id,
+                "status": status,
+                "token_count": token_count,
+                "extraction_ms": extraction_ms,
+                "inference_ms": inference_ms,
+                "total_ms": (perf_counter() - total_started) * 1000,
+            }
+        )
+    accepted = [row for row in rows if row["status"] == "ok"]
+    return {
+        "model_kind": "ctc_v2",
+        "model_sha256": hashlib.sha256(model_path.read_bytes()).hexdigest(),
+        "vocabulary_sha256": recognizer.vocabulary_sha256,
+        "split": split,
+        "requested_samples": limit,
+        "samples": len(rows),
+        "accepted_samples": len(accepted),
+        "low_quality_samples": len(rows) - len(accepted),
+        "latency_ms": {
+            "extraction": _latency_percentiles([float(row["extraction_ms"]) for row in rows]),
+            "inference": _latency_percentiles([float(row["inference_ms"]) for row in accepted]),
+            "total": _latency_percentiles([float(row["total_ms"]) for row in rows]),
+        },
+    }, rows
+
+
+def write_ctc_benchmark(
+    output_path: Path,
+    metrics: dict[str, object],
+    rows: list[dict[str, object]],
+) -> Path:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(rows[0]) if rows else ["split", "sample_id", "status"]
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    summary_path = output_path.with_suffix(".summary.json")
+    summary_path.write_text(
+        json.dumps(metrics, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return summary_path

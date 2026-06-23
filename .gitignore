@@ -39,6 +39,7 @@ data/clean_datas/**
 artifacts/checkpoints/**
 artifacts/exports/**
 artifacts/logs/**
+artifacts/metrics/*smoke*
 !artifacts/checkpoints/.gitkeep
 !artifacts/exports/.gitkeep
 !artifacts/logs/.gitkeep
