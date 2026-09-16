@@ -3,51 +3,74 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CE-CSL 数据集受限手语识别原型</title>
+    <title>手语识别</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <header>
-        <p class="eyebrow">GROUP 11 - DATASET-BOUNDED RESEARCH PROTOTYPE</p>
-        <h1>CE-CSL 数据集受限手语识别</h1>
-        <p class="lead">
-          上传或录制一段短视频。系统以 CE-CSL 数据集中的 gloss/token
-          范围为识别边界，展示预测标签、置信度、延迟和受限中文重构结果。
-        </p>
-        <div id="system-status" class="status">正在检查模型状态...</div>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+              <path d="M8 12V5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V6a1.5 1.5 0 0 1 3 0v8a7 7 0 0 1-7 7h-.3a7 7 0 0 1-5.9-3.2l-1.8-2.7a1.8 1.8 0 0 1 2.9-2.1L7 16V7a1.5 1.5 0 0 1 3 0v5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div class="brand-text">
+            <h1>手语识别</h1>
+            <p class="subtitle">上传或录制 1–3 秒手语视频，识别手语词汇与意图</p>
+          </div>
+        </div>
+        <span id="system-status" class="status-pill" data-kind="loading">正在检查模型…</span>
       </header>
 
-      <section class="panel">
-        <div class="video-frame">
-          <video id="preview" autoplay muted playsinline></video>
-        </div>
-        <div class="controls">
-          <button id="camera-button" type="button">开启摄像头</button>
-          <button id="record-button" type="button" disabled>录制 3 秒</button>
-          <label class="file-button">
-            选择视频
-            <input id="file-input" type="file" accept="video/*" />
-          </label>
-        </div>
-        <p id="selection" class="muted">尚未选择视频。</p>
-      </section>
+      <main class="card-column">
+        <section class="card video-card">
+          <div class="visual" id="visual-stage">
+            <video id="preview" autoplay muted playsinline></video>
+            <div class="placeholder" id="placeholder">
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="13" r="4"/>
+                <path d="M4 8h2l1.5-2h3L12 8h8v10H4z" stroke-linejoin="round"/>
+              </svg>
+              <p>视频将在此预览</p>
+              <span>支持上传视频文件</span>
+            </div>
+          </div>
 
-      <section class="panel result-panel" aria-live="polite">
-        <div class="result-heading">
-          <h2>识别结果</h2>
-          <span id="result-status" class="badge">等待输入</span>
-        </div>
-        <p id="result-text" class="result-text">完成录制或选择视频后开始。</p>
-        <dl class="details">
-          <div><dt>Label</dt><dd id="result-label">-</dd></div>
-          <div><dt>Gloss Tokens</dt><dd id="result-gloss-tokens">-</dd></div>
-          <div><dt>Confidence</dt><dd id="result-confidence">-</dd></div>
-          <div><dt>Latency</dt><dd id="result-latency">-</dd></div>
-        </dl>
-        <ul id="warnings" class="warnings"></ul>
-      </section>
-    </main>
+          <div class="controls">
+            <label class="action primary" for="file-input">
+              选择视频
+              <input id="file-input" type="file" accept="video/*" />
+            </label>
+            <button id="predict-button" class="action ghost" type="button" disabled>识别</button>
+            <button id="camera-button" class="action ghost" type="button">打开摄像头</button>
+            <button id="record-button" class="action ghost" type="button" disabled>录制 3 秒</button>
+          </div>
+          <p id="selection" class="hint">尚未选择视频。</p>
+        </section>
+
+        <section class="card result-card" aria-live="polite">
+          <div class="result-heading">
+            <h2>识别结果</h2>
+            <span id="result-status" class="badge idle">等待输入</span>
+          </div>
+          <p id="result-text" class="result-text">完成录制或选择视频后开始识别。</p>
+
+          <div class="details">
+            <div><dt>意图</dt><dd id="result-intent">-</dd></div>
+            <div><dt>手语词</dt><dd id="result-gloss">-</dd></div>
+            <div><dt>置信度</dt><dd id="result-confidence">-</dd></div>
+            <div><dt>耗时</dt><dd id="result-latency">-</dd></div>
+          </div>
+
+          <div id="warnings" class="warnings" hidden></div>
+        </section>
+      </main>
+
+      <footer class="foot">
+        GROUP 11 · 受控研究原型，识别结果仅供参考
+      </footer>
+    </div>
     <script src="/static/app.js"></script>
   </body>
 </html>
