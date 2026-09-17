@@ -114,6 +114,16 @@ class TinyTransformerChineseDecoder(ChineseDecoder):
             tgt_mask = self._causal_mask(out_ids.shape[1], device)
             decoded = self.decoder(emb, visual_tokens, tgt_mask=tgt_mask, memory_key_padding_mask=memory_key_padding)
             logits = self.output_proj(decoded[:, -1])  # [B, V]
+            if out_ids.shape[1] >= 2:
+                seq = out_ids.tolist()
+                prev = [r[-1] for r in seq]
+                banned = [set(zip(r[:-1], r[1:])) for r in seq]
+                for b in range(batch_size):
+                    if finished[b]:
+                        continue
+                    for nid in range(logits.shape[1]):
+                        if (prev[b], nid) in banned[b]:
+                            logits[b, nid] = float("-inf")
             next_id = torch.argmax(logits, dim=-1)  # greedy
             next_id = torch.where(finished, torch.tensor(self.eos_id, device=device), next_id)
             out_ids = torch.cat([out_ids, next_id.unsqueeze(1)], dim=1)

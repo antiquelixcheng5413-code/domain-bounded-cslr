@@ -42,6 +42,7 @@ class Part3SpaMoModel(nn.Module):
         decoder_heads: int = 4,
         decoder_ff: int | None = None,
         gloss_aux_weight: float = 0.0,
+        feature_dim: dict[str, int] | None = None,
         device: str = "cpu",
     ) -> None:
         super().__init__()
@@ -50,6 +51,8 @@ class Part3SpaMoModel(nn.Module):
         self.vocab_size = len(vocab)
         self.gloss_aux_weight = gloss_aux_weight
         self.device_device = torch.device(device)
+        if feature_dim is None:
+            feature_dim = {"rgb": hidden_dim, "motion": hidden_dim, "landmark": 368}
 
         self.fusion = LightSpaMoFusion(
             modalities=modalities,
@@ -58,7 +61,7 @@ class Part3SpaMoModel(nn.Module):
             num_layers=fusion_layers,
             feedforward_dim=fusion_ff,
             dropout=dropout,
-            feature_dim={"rgb": hidden_dim, "motion": hidden_dim, "landmark": 368},
+            feature_dim=feature_dim,
         )
         self.decoder = TinyTransformerChineseDecoder(
             vocab_size=self.vocab_size,
@@ -144,7 +147,10 @@ class Part3SpaMoModel(nn.Module):
         return getattr(self.decoder, "gloss_head", None) is not None
 
 
-def build_model_from_config(cfg, vocab: dict[str, int], *, gloss_vocab_size: int | None = None) -> Part3SpaMoModel:
+def build_model_from_config(
+    cfg, vocab: dict[str, int], *, gloss_vocab_size: int | None = None,
+    feature_dim: dict[str, int] | None = None,
+) -> Part3SpaMoModel:
     return Part3SpaMoModel(
         modalities=cfg.fusion.modalities,
         hidden_dim=cfg.model.hidden_dim,
@@ -159,6 +165,7 @@ def build_model_from_config(cfg, vocab: dict[str, int], *, gloss_vocab_size: int
         decoder_heads=cfg.model.decoder.num_heads,
         decoder_ff=cfg.model.decoder.feedforward_dim,
         gloss_aux_weight=cfg.model.gloss_aux_weight,
+        feature_dim=feature_dim,
         device=cfg.device,
     )
 

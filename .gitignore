@@ -41,6 +41,7 @@ data/manifests/
 artifacts/checkpoints/**
 artifacts/exports/**
 artifacts/logs/**
+artifacts/part3_features/**
 !artifacts/checkpoints/.gitkeep
 !artifacts/exports/.gitkeep
 !artifacts/logs/.gitkeep

@@ -64,6 +64,7 @@ class LightSpaMoFusion(nn.Module):
         dropout: float = 0.0,
         feature_dim: dict[str, int] | None = None,
         encoders: dict[str, BaseSequenceEncoder] | None = None,
+        max_seq_len: int = 2048,
     ) -> None:
         super().__init__()
         self.modalities = list(modalities)
@@ -87,7 +88,7 @@ class LightSpaMoFusion(nn.Module):
                 hidden_dim, hidden_dim, dropout
             )
 
-        self.positional = PositionalEncoding(hidden_dim)
+        self.positional = PositionalEncoding(hidden_dim, max_len=max_seq_len)
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=hidden_dim,
             nhead=num_heads,

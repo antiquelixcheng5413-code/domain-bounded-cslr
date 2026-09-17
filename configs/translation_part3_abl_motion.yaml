@@ -1,0 +1,31 @@
+root: .
+split: train
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+model:
+  hidden_dim: 256
+  num_heads: 8
+  num_layers: 3
+  feedforward_dim: 1024
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder:
+    type: transformer
+    hidden_dim: 256
+    num_layers: 3
+    num_heads: 8
+    max_target_len: 128
+    dropout: 0.1
+fusion:
+  modalities:
+  - motion
+  num_heads: 8
+  num_layers: 2
+  dropout: 0.1
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+device: cuda
