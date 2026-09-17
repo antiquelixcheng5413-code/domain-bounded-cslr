@@ -1,0 +1,35 @@
+# Independent Part 3 smoke configuration. Does NOT touch training.yaml.
+# Requires an explicit split; split=test is rejected at config parse time.
+root: .
+split: train
+
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+
+model:
+  hidden_dim: 32
+  num_heads: 4
+  num_layers: 2
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder:
+    type: transformer
+    num_layers: 2
+    num_heads: 4
+    max_target_len: 128
+    dropout: 0.1
+
+fusion:
+  modalities: [rgb, motion, landmark]
+  num_heads: 4
+  num_layers: 2
+  dropout: 0.1
+
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+
+device: cpu

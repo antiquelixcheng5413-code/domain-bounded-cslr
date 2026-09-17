@@ -31,6 +31,11 @@ data/ce-csl/**
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
+data/alignment/
+data/isolated/
+data/artifacts/
+data/manifests/
+!data/manifests/*.yaml
 
 # Models and runtime output
 artifacts/checkpoints/**
