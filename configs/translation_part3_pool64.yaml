@@ -1,0 +1,39 @@
+# Part 3 spaMo token-density sweep (K=64): identical to translation_part3_pool.yaml,
+# only num_pool_tokens raised 32 -> 64 to test whether visual-context density was
+# the constraint behind the mT5/decoder collapse gap.
+root: .
+split: train
+
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+
+model:
+  hidden_dim: 256
+  num_heads: 8
+  num_layers: 3
+  feedforward_dim: 1024
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder:
+    type: transformer
+    hidden_dim: 256
+    num_layers: 3
+    num_heads: 8
+    max_target_len: 128
+    dropout: 0.1
+
+fusion:
+  modalities: [rgb, motion, landmark]
+  num_heads: 8
+  num_layers: 2
+  dropout: 0.1
+  num_pool_tokens: 64
+
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+
+device: cuda

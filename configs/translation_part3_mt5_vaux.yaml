@@ -1,0 +1,45 @@
+# Part 3 mT5 mitigation (B): visual<->text alignment aux on top of the plain
+# mT5 run. Identical to translation_part3_mt5.yaml (mt5_freeze="none"), plus
+# mt5_visual_aux_weight=1.0 so the pooled visual repr is pulled toward the mean
+# target embedding, forcing the visual path to be used.
+root: .
+split: train
+
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+
+model:
+  hidden_dim: 256
+  num_heads: 8
+  num_layers: 3
+  feedforward_dim: 1024
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder_backbone: mt5
+  mt5_path: /mnt/d/part3_models/mt5-small-saved
+  mt5_max_target_tokens: 64
+  mt5_freeze: none
+  mt5_visual_aux_weight: 1.0
+  decoder:
+    type: transformer
+    hidden_dim: 256
+    num_layers: 3
+    num_heads: 8
+    max_target_len: 128
+    dropout: 0.1
+
+fusion:
+  modalities: [rgb, motion, landmark]
+  num_heads: 8
+  num_layers: 2
+  dropout: 0.1
+  num_pool_tokens: 32
+
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+
+device: cuda

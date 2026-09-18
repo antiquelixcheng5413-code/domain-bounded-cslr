@@ -1,0 +1,43 @@
+# Part 3 mT5-decoder-adapter mitigation (A): freeze LM path, train only visual
+# projection + decoder cross-attention. Identical frozen settings and fusion as
+# translation_part3_mt5.yaml, only mt5_freeze="cross_only".
+root: .
+split: train
+
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+
+model:
+  hidden_dim: 256
+  num_heads: 8
+  num_layers: 3
+  feedforward_dim: 1024
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder_backbone: mt5
+  mt5_path: /mnt/d/part3_models/mt5-small-saved
+  mt5_max_target_tokens: 64
+  mt5_freeze: cross_only
+  decoder:
+    type: transformer
+    hidden_dim: 256
+    num_layers: 3
+    num_heads: 8
+    max_target_len: 128
+    dropout: 0.1
+
+fusion:
+  modalities: [rgb, motion, landmark]
+  num_heads: 8
+  num_layers: 2
+  dropout: 0.1
+  num_pool_tokens: 32
+
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+
+device: cuda

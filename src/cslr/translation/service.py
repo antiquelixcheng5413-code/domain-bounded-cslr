@@ -301,8 +301,10 @@ def run_real_train(
     eval_batches = build_real_eval_batch(eval_ds, eval_root)
     records: list[dict] = []
     done_rows = 0
+    if device.startswith("cuda"):
+        torch.cuda.empty_cache()
     for eval_batch in eval_batches:
-        for bi, batch in enumerate(_chunk_batch(eval_batch, chunk=32)):
+        for bi, batch in enumerate(_chunk_batch(eval_batch, chunk=8)):
             model.eval()
             batch = _to_device(batch, device)
             with torch.no_grad():

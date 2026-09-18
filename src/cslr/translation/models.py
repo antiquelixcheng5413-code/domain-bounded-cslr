@@ -10,6 +10,7 @@ from torch import nn
 from cslr.translation.dataset import collate_part3
 from cslr.translation.decoder import TinyTransformerChineseDecoder
 from cslr.translation.fusion import LightSpaMoFusion
+from cslr.translation.mt5_decoder import MT5ChineseDecoder
 from cslr.translation.text import build_vocab
 
 
@@ -47,12 +48,20 @@ class Part3SpaMoModel(nn.Module):
         fusion_align_frames: bool = False,
         label_smoothing: float = 0.0,
         beam_size: int = 1,
+        decoder_backbone: str = "tiny",
+        mt5_model=None,
+        mt5_tokenizer=None,
+        mt5_max_target_tokens: int = 64,
+        mt5_freeze: str = "none",
+        mt5_visual_aux_weight: float = 0.0,
         device: str = "cpu",
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
         self.vocab = vocab
         self.vocab_size = len(vocab)
+        self.decoder_backbone = decoder_backbone
+        self.mt5_visual_aux_weight = mt5_visual_aux_weight
         self.gloss_aux_weight = gloss_aux_weight
         self.device_device = torch.device(device)
         if feature_dim is None:
@@ -69,16 +78,29 @@ class Part3SpaMoModel(nn.Module):
             num_pool_tokens=fusion_num_pool_tokens,
             align_frames=fusion_align_frames,
         )
-        self.decoder = TinyTransformerChineseDecoder(
-            vocab_size=self.vocab_size,
-            hidden_dim=hidden_dim,
-            num_layers=decoder_layers,
-            num_heads=decoder_heads,
-            feedforward_dim=decoder_ff or hidden_dim * 4,
-            max_target_len=max_target_len,
-            dropout=dropout,
-            gloss_vocab_size=gloss_vocab_size,
-        ).to(self.device_device)
+        if decoder_backbone == "mt5":
+            self.decoder = MT5ChineseDecoder(
+                t5_model=mt5_model,
+                tokenizer=mt5_tokenizer,
+                visual_dim=hidden_dim,
+                max_target_tokens=mt5_max_target_tokens,
+                dropout=dropout,
+                device=device,
+                freeze=mt5_freeze,
+            )
+            self.effective_vocab = self.decoder.vocab_size
+        else:
+            self.decoder = TinyTransformerChineseDecoder(
+                vocab_size=self.vocab_size,
+                hidden_dim=hidden_dim,
+                num_layers=decoder_layers,
+                num_heads=decoder_heads,
+                feedforward_dim=decoder_ff or hidden_dim * 4,
+                max_target_len=max_target_len,
+                dropout=dropout,
+                gloss_vocab_size=gloss_vocab_size,
+            ).to(self.device_device)
+            self.effective_vocab = self.vocab_size
         self.to(self.device_device)
         self.label_smoothing = label_smoothing
         self.beam_size = beam_size
@@ -88,6 +110,9 @@ class Part3SpaMoModel(nn.Module):
 
     def label_to_target_ids(self, texts: list[str]) -> torch.Tensor:
         import torch as _t
+
+        if self.decoder_backbone == "mt5":
+            return self.decoder._encode_targets(texts)
 
         unk = self.vocab["<unk>"]
         bos, eos = self.vocab["<bos>"], self.vocab["<eos>"]
@@ -133,13 +158,21 @@ class Part3SpaMoModel(nn.Module):
             logits = dec_meta[0]
             if logits is not None:
                 trg = target_ids[:, 1:].contiguous()
-                logg = logits[:, :-1, :].reshape(-1, self.vocab_size)
+                logg = logits[:, :-1, :].reshape(-1, self.effective_vocab)
                 translation_loss = self.cross_entropy(logg, trg.reshape(-1))
                 loss = translation_loss
                 # optional gloss aux head: accept an empty heuristic (weight 0 by default)
                 if self.gloss_head_enabled and self.gloss_aux_weight > 0:
                     gloss_aux_loss = torch.tensor(0.0, device=self.device_device)
                     loss = translation_loss + self.gloss_aux_weight * gloss_aux_loss
+                # optional visual<->text alignment aux (mT5 backbone): a direct
+                # conditioning signal so the visual path can't be ignored by the LM
+                if (
+                    self.decoder_backbone == "mt5"
+                    and self.mt5_visual_aux_weight > 0
+                ):
+                    vau = self.decoder.visual_text_align(visual_tokens, visual_mask, target_ids)
+                    loss = loss + self.mt5_visual_aux_weight * vau
 
         if generate:
             bz = beam_size if beam_size is not None else self.beam_size
@@ -165,6 +198,14 @@ def build_model_from_config(
     cfg, vocab: dict[str, int], *, gloss_vocab_size: int | None = None,
     feature_dim: dict[str, int] | None = None,
 ) -> Part3SpaMoModel:
+    mt5_model = None
+    mt5_tokenizer = None
+    if cfg.model.decoder_backbone == "mt5":
+        from transformers import T5Model, T5Tokenizer
+
+        mt5_id = cfg.model.mt5_path or "google/mt5-small"
+        mt5_model = T5Model.from_pretrained(mt5_id)
+        mt5_tokenizer = T5Tokenizer.from_pretrained(mt5_id)
     return Part3SpaMoModel(
         modalities=cfg.fusion.modalities,
         hidden_dim=cfg.model.hidden_dim,
@@ -182,8 +223,14 @@ def build_model_from_config(
         feature_dim=feature_dim,
         fusion_num_pool_tokens=getattr(cfg.fusion, "num_pool_tokens", None),
         fusion_align_frames=getattr(cfg.fusion, "align_frames", False),
-        label_smoothing=getattr(cfg.model, "label_smoothing", 0.0),
-        beam_size=getattr(cfg.model, "beam_size", 1),
+        label_smoothing=cfg.model.label_smoothing,
+        beam_size=cfg.model.beam_size,
+        decoder_backbone=cfg.model.decoder_backbone,
+        mt5_model=mt5_model,
+        mt5_tokenizer=mt5_tokenizer,
+        mt5_max_target_tokens=cfg.model.mt5_max_target_tokens,
+        mt5_freeze=cfg.model.mt5_freeze,
+        mt5_visual_aux_weight=cfg.model.mt5_visual_aux_weight,
         device=cfg.device,
     )
 

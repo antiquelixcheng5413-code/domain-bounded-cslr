@@ -251,3 +251,99 @@ rgb/motion 在同一帧索引上配对成一个 frame token，landmark 保留为
    在此粒度上不增质量（或需 length-penalty/长度归一，本次未做）。
 3. → **pool-alone（§10）仍是最优配置**；提升绝对水平应转向解码器容量或数据，而非训练/解码小技巧。
 4. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。
+
+## 13. 改进路线④：预训练 mT5 解码器 adapter（负结果 · 退化坍缩）
+
+针对 §12 结论「应转向解码器容量或数据」，尝试把轻量 transformer 解码器替换为预训练 **mT5-small**
+解码器作中文语言先验，验证能否借助其强语言模型提升译文质量。
+
+### 13.1 改动与入口
+- 代码：新增 `src/cslr/translation/mt5_decoder.py`（`MT5ChineseDecoder`）：融合输出经 `visual_proj`
+  （LayerNorm→Linear，D→d_model=512）作交叉注意力 memory；目标侧用 mT5 词表子词编码（decoder_start=<pad>）；
+  LM head 为共享 embedding 转置（tied）。训练更新 visual_proj + 全部 mT5 解码层（未冻结）。
+- 配置/组装：`config.py` 新增 `model.decoder_backbone="tiny"|"mt5"`、`mt5_path`、`mt5_max_target_tokens`；
+  `models.py` 据 backbone 选择 `MT5ChineseDecoder` / 原 tiny 解码器，均走同一 `decode_from_visual` 契约。
+- 权重：mT5-small 经 `hf-mirror.com` 下载缓存于 D 盘（直连 huggingface.co 不通），
+  落地 `/mnt/d/part3_models/mt5-small-saved`（safetensors 688MB + tokenizer）。
+- 配置：`configs/translation_part3_mt5.yaml`（tri + `num_pool_tokens: 32` + `decoder_backbone: mt5`，其余与 §10 冻结一致）。
+- 复现：`bash scripts/run_part3_mt5.sh`。
+- 单测：`tests/test_translation_mt5.py` 用合成 fake T5 覆盖 teacher-forcing/编码/生成/参数更新，4/4 通过。
+
+### 13.2 结果（validation 514，tri+pool 基线上换解码器）
+| 配置 | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF | EM |
+|---|---|---|---|---|---|---|
+| tri + pooling（§10最优，tiny 解码器） | 4.682 | **0.2171** | **0.0542** | **0.2306** | **0.1469** | 0.0 |
+| **tri + pool + mT5 解码器** | 10.587 | 0.0221 | 0.0000 | 0.1770 | 0.0679 | 0.0 |
+
+收据：后处理标准化日志 `/home/su127/mt5_train.log`（含逐样本 per_sample 数组），记为 `tri-pool-mt5`。
+评估改为 `chunk=8` + `torch.cuda.empty_cache()`（`service.py`），规避生成阶段显存峰值 OOM。
+
+### 13.3 观察与结论（负结果 · 强退化）
+1. **train_loss 收敛到约 10.6**，但**生成完全退化**：514 条验证预测 100% 坍缩为同一字符串「我。」，
+   EM=0、BLEU-2=0 —— mT5 解码器自学成一个近似「中文 LM」，其强劲语言先验在贪心 argmax 下压过视觉
+   交叉注意力，所有样本输出最频繁短句后随即 EOS。
+2. **对照 §9.4-2「融合-解码落差」显著增强**：预训练解码器比 tiny 解码器更依赖语言先验、更易忽略
+   视觉上下文，在 4973 小样本上负迁移更严重（BLEU-1 0.217→0.022，−90%）。
+3. → **pool-alone（§10）仍是全局最优**；简单「装个大预训练解码器」在此数据规模下不成立，需
+   「冻结解码器仅训投影/交叉注意力」或加入视觉条件强化（如 pooling 显式监督）才可能避免坍缩。
+   作为有意义的负结果记录，不再往该方向无脑加容量。
+4. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。
+
+### 13.4 缓解实验：冻结语言路径（A）与视觉对齐监督（B，均为负结果）
+
+针对 §13 的坍缩，尝试两种机制不同的缓解，验证是否能让 mT5 不再退化为纯语言模型：
+
+- **A · 冻结语言路径（`mt5_freeze: cross_only`）**：冻结 mT5 的共享 embedding / self-attn / FF / LN，
+  仅训 `visual_proj` + 解码器交叉注意力，强制视觉条件化。
+- **B · 视觉↔文本对齐 aux（`mt5_visual_aux_weight: 1.0`）**：新增 `visual_text_align`
+  cosine 损失，把池化视觉表示拉向目标 token 平均嵌入，给视觉路径一条绕过 LM 主导的直接监督。
+
+| 配置 | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF | 预测形态 |
+|---|---|---|---|---|---|---|
+| tri + pool（§10最优，tiny 解码器） | 4.682 | **0.2171** | **0.0542** | **0.2306** | **0.1469** | 正常成句 |
+| mt5 全程可训（§13） | 10.587 | 0.0221 | 0.0 | 0.1770 | 0.0679 | 全 514 条 =「我。」 |
+| mt5 + A 冻结语言路径 | 12.544 | 0.0156 | 0.0 | 0.0271 | 0.0245 | 全 514 条 =「。。。」 |
+| mt5 + B 视觉对齐 aux | 9.271 | 0.0017 | 0.0 | 0.1956 | 0.0701 | 全 514 条 =「。」 |
+
+收据：`/home/su127/mt5_cross_train.log`（A）、`/home/su127/mt5_vaux_train.log`（B，均含 per_sample）。
+
+结论（三种策略全部坍缩，方向性负结果）：
+1. **坍缩对可训练参数策略鲁棒**：全程可训→「我。」；冻结语言路径→「。。。」；加视觉对齐 aux→「。」。
+   本质同一：mT5 解码器在小数据上自学成近似中文 LM，贪心 argmax 下视觉交叉注意力（32 池化 token）
+   信号始终压不过其 250k 词表的语言先验。
+2. **B 的 aux 确实让视觉路径在学（ROUGE-L 0.196，三种里最高）**，但仅学会了输出置信度最高的
+   句末标点「。」，未产生任何内容词 →「拟合-解码落差」在 mT5 上被放大到极值。
+3. → **pool-alone（tiny 解码器）仍是全局最优，mT5 预训练解码器方向在本数据规模下为死路**（有意义的负结果）。
+   若未来数据量大幅增大或改用「mT5 作先验 + logit 混合（product-of-experts）而非微调」或视觉
+   token 密度显著提高，才值得复验；当前以 tiny 解码器 + pool 定稿。
+4. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。
+
+## 14. 改进路线⑤：视觉 token 密度扫描（K=64/128，负结果）
+
+针对 §13 与 §12 共同指向的「视觉信号弱 / 解码坍缩」假设，在最优 tiny 解码器 + pool 基线上把
+`num_pool_tokens` 从 32 提到 64/128，验证"视觉上下文太少"是否是坍缩根因。其余冻结设置与 §10 完全一致。
+
+- 配置：`configs/translation_part3_pool64.yaml` / `translation_part3_pool128.yaml`（仅 `num_pool_tokens`）。
+- 复现：`bash scripts/run_part3_pool64.sh` / `run_part3_pool128.sh`。
+
+| K（pool tokens） | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF | 预测形态 |
+|---|---|---|---|---|---|---|
+| 8 | 4.759 | 0.1517 | 0.0 | 0.1895 | 0.0939 | 全 514 条 =「那里有的的了。」|
+| 16 | 4.833 | 0.1390 | 0.0 | 0.2016 | 0.0915 | 全 514 条 =「今天的的了。」|
+| **32（§10最优）** | 4.682 | **0.2171** | **0.0542** | **0.2306** | **0.1469** | 正常成句（Per 样本多样）|
+| 64 | 1.205 | 0.0455 | 0.0208 | 0.0505 | 0.0318 | 全 514 条 =「你需要一些水果吗？」|
+| 128 | 4.307 | 0.1456 | 0.0171 | 0.2016 | 0.1034 | 全 514 条 =「非常是我的。」|
+
+收据：`/home/su127/pool8.log`、`/home/su127/pool16.log`、`/home/su127/pool64.log`、`/home/su127/pool128.log`。
+
+结论（负结果，双向完整扫描）：
+1. **`num_pool_tokens=32` 是极其尖锐的甜点，双侧都是句子级重复坍缩**：降低（8/16）与提高（64/128）
+   均退化为 514 条全部输出同一条病句（8/16/64/128 分别坍缩成「那里有的的了。」/「今天的的了。」/
+   「你需要一些水果吗？」/「非常是我的。」，BLEU-2 全部 =0）。只有 K=32 正常成句且 BLEU-2>0。
+   → 更多、更少视觉 token 都不行；32 个池化 token 是负载关键，而非"多多益善/少即是精"可微调的方向。
+2. 与 mT5 坍缩互为镜像：mT5 是 **词/token 级**坍缩（全「我。」），tiny 解码器在 K≠32 时是 **句子级**坍缩
+   （全一条训练样本的病句）。共同点：小数据（4973）下解码器极易沉到「重复输出」，K=32 + tiny 解码器
+   凑巧是唯一规避该病态的组合。
+3. → 提升方向应转向数据量或更强的视觉→文本监督，而非调视觉 token 密度。**pool-alone（§10，K=32）**
+   维持全局最优定稿。
+4. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。

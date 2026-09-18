@@ -49,6 +49,20 @@ class ModelConfig:
     dropout: float
     gloss_aux_weight: float
     decoder: DecoderConfig
+    label_smoothing: float = 0.0
+    beam_size: int = 1
+    decoder_backbone: str = "tiny"  # "tiny" | "mt5"
+    mt5_path: str | None = None  # local dir / HF id; required when backbone=="mt5"
+    mt5_max_target_tokens: int = 64
+    # mT5 trainable-parameter policy: "none" (all trainable, may degenerate to a
+    # pure LM) | "cross_only" (freeze LM path: embeddings/self-attn/FF/LN; train
+    # only visual_proj + decoder cross-attention, forcing visual conditioning).
+    mt5_freeze: str = "none"
+    # Auxiliary visual<->text alignment weight (backbone=="mt5" only): pulls the
+    # pooled visual representation toward the mean target-token embedding via
+    # cosine loss, giving the visual path a direct signal that bypasses the
+    # decoder's LM dominance (counteracts degenerate pure-LM collapse).
+    mt5_visual_aux_weight: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -190,6 +204,25 @@ def load_config(path: str | Path) -> Part3Config:
         dropout=_require_float(model_block, "dropout", 0.0, 1.0),
         gloss_aux_weight=_require_float(model_block, "gloss_aux_weight", 0.0, 1.0),
         decoder=_load_decoder(model_block, hdim),
+        label_smoothing=(
+            _require_float(model_block, "label_smoothing", 0.0, 1.0)
+            if "label_smoothing" in model_block else 0.0
+        ),
+        beam_size=(
+            _require_positive_int(model_block, "beam_size")
+            if "beam_size" in model_block else 1
+        ),
+        decoder_backbone=str(model_block.get("decoder_backbone", "tiny")),
+        mt5_path=None if model_block.get("mt5_path") is None else str(model_block["mt5_path"]),
+        mt5_max_target_tokens=(
+            _require_positive_int(model_block, "mt5_max_target_tokens")
+            if "mt5_max_target_tokens" in model_block else 64
+        ),
+        mt5_freeze=str(model_block.get("mt5_freeze", "none")),
+        mt5_visual_aux_weight=(
+            _require_float(model_block, "mt5_visual_aux_weight", 0.0, 10.0)
+            if "mt5_visual_aux_weight" in model_block else 0.0
+        ),
     )
 
     fusion_block = raw.get("fusion", {})
