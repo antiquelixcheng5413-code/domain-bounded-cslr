@@ -94,6 +94,33 @@ class FusionTest(unittest.TestCase):
         self.assertEqual(tokens.shape[1], 3)
         self.assertEqual(count, 3)
 
+    def test_align_frames_pairs_rgb_and_motion(self) -> None:
+        # align_frames pairs rgb[frame] with motion[frame] into one token and
+        # keeps landmark as global context: tokens = min(rgb, motion) + landmark.
+        fusion = LightSpaMoFusion(
+            modalities=("rgb", "motion", "landmark"),
+            hidden_dim=16, num_heads=4, num_layers=1, feedforward_dim=32, dropout=0.0,
+            align_frames=True,
+        )
+        features = {"rgb": torch.randn(2, 4, 16), "motion": torch.randn(2, 3, 16), "landmark": torch.randn(2, 4, 368)}
+        masks = {k: torch.ones(v.shape[:2], dtype=torch.bool) for k, v in features.items()}
+        tokens, out_mask, count = fusion(features, masks)
+        # 3 paired frames (min of 4,3) + 4 landmark tokens = 7
+        self.assertEqual(tokens.shape[1], 7)
+        self.assertEqual(int(out_mask.sum().item()), 14)  # 2 samples × 7 tokens
+        self.assertEqual(count, 7)
+
+    def test_align_frames_off_still_concats(self) -> None:
+        # Without align_frames the previous concat semantics are preserved.
+        fusion = LightSpaMoFusion(
+            modalities=("rgb", "motion", "landmark"),
+            hidden_dim=16, num_heads=4, num_layers=1, feedforward_dim=32, dropout=0.0,
+        )
+        features = {"rgb": torch.randn(2, 4, 16), "motion": torch.randn(2, 3, 16), "landmark": torch.randn(2, 4, 368)}
+        masks = {k: torch.ones(v.shape[:2], dtype=torch.bool) for k, v in features.items()}
+        tokens, _, count = fusion(features, masks)
+        self.assertEqual(tokens.shape[1], 11)  # 4+3+4 concat unchanged
+
 
 if __name__ == "__main__":
     unittest.main()

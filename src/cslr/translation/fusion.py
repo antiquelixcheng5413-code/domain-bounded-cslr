@@ -107,12 +107,14 @@ class LightSpaMoFusion(nn.Module):
         encoders: dict[str, BaseSequenceEncoder] | None = None,
         max_seq_len: int = 2048,
         num_pool_tokens: int | None = None,
+        align_frames: bool = False,
     ) -> None:
         super().__init__()
         self.modalities = list(modalities)
         self.hidden_dim = hidden_dim
         self.dropout = dropout
         self.num_pool_tokens = num_pool_tokens or 0
+        self.align_frames = align_frames
 
         self.encoders = nn.ModuleDict()
         self.projectors = nn.ModuleDict()
@@ -141,6 +143,16 @@ class LightSpaMoFusion(nn.Module):
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         self.output_norm = nn.LayerNorm(hidden_dim)
+        # Cross-modal temporal alignment: pair rgb and motion at the same frame
+        # index into one frame token, dropping the unpaired trailing rgb frame
+        # (motion = frame difference, so length is T-1).
+        self.frame_proj: nn.Module | None = None
+        if align_frames and {"rgb", "motion"} <= set(self.modalities):
+            self.frame_proj = nn.Sequential(
+                nn.Linear(2 * hidden_dim, hidden_dim),
+                nn.GELU(),
+                nn.Dropout(dropout),
+            )
         self.pooling: TokenPooling | None = None
         if self.num_pool_tokens > 0:
             self.pooling = TokenPooling(
@@ -161,8 +173,8 @@ class LightSpaMoFusion(nn.Module):
             mod: features[mod].new_ones(features[mod].shape[:2], dtype=torch.bool)
             for mod in features
         }
-        parts: list[torch.Tensor] = []
-        part_masks: list[torch.Tensor] = []
+        tokens: dict[str, torch.Tensor] = {}
+        mask: dict[str, torch.Tensor] = {}
 
         for mod in self.modalities:
             if mod not in features:
@@ -173,14 +185,38 @@ class LightSpaMoFusion(nn.Module):
             mod_mask = encoded.new_ones(encoded.shape[:2], dtype=torch.bool)
             if masks is not None and mod in masks:
                 mod_mask = masks[mod][:, : encoded.shape[1]]
-            parts.append(proj)
-            part_masks.append(mod_mask)
+            tokens[mod] = proj
+            mask[mod] = mod_mask
 
-        if not parts:
+        if not tokens:
             raise ValueError("no active modalities provided to fusion")
 
-        concat = torch.cat(parts, dim=1)
-        concat_mask = torch.cat(part_masks, dim=1)
+        aligned: list[torch.Tensor] = []
+        aligned_mask: list[torch.Tensor] = []
+        if self.align_frames and "rgb" in tokens and "motion" in tokens:
+            # Pair rgb and motion at the same frame index; drop the unpaired
+            # trailing rgb frame so both share one common time grid.
+            length = min(tokens["rgb"].shape[1], tokens["motion"].shape[1])
+            paired = torch.cat(
+                [tokens["rgb"][:, :length], tokens["motion"][:, :length]], dim=-1
+            )
+            aligned.append(self.frame_proj(paired))
+            frame_valid = torch.logical_and(
+                mask["rgb"][:, :length], mask["motion"][:, :length]
+            )
+            aligned_mask.append(frame_valid)
+            handled = {"rgb", "motion"}
+        else:
+            handled = set()
+
+        for mod in self.modalities:
+            if mod in handled or mod not in tokens:
+                continue
+            aligned.append(tokens[mod])
+            aligned_mask.append(mask[mod])
+
+        concat = torch.cat(aligned, dim=1)
+        concat_mask = torch.cat(aligned_mask, dim=1)
         concat = self.positional(concat)
 
         key_padding = ~concat_mask

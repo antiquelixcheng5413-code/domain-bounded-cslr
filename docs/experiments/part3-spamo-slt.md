@@ -190,3 +190,34 @@ PYTHONPATH=src venv/bin/python -m cslr.translation train-real \
 2. **train_loss 不降反高于 concat**（4.68 vs 1.21）但解码泛化更强——印证「融合度高、解码用不上」的
    症结在视觉上下文密度：固定少 token 减轻解码注意力过载，泛化更好。
 3. 与 §9 一致：Test 500 仍冻结，本实验未读取（`test_split_read=false`）。
+
+## 11. 改进路线②：跨模态时间对齐（align_frames）
+
+针对特征观测：`rgb=(T,512)` 与 `motion=(T-1,512)` 本就是同一帧时间线（motion = 相邻帧差，长度差 1），
+而 `landmark=(48,368)` 是无时间轴的固定 48 个全局语义 token。因此「跨模态时间对齐」的正确实现是把
+rgb/motion 在同一帧索引上配对成一个 frame token，landmark 保留为全局上下文，再进融合 + 池化。
+
+### 11.1 改动与入口
+- 代码：`src/cslr/translation/fusion.py` 新增 `align_frames`（默认 False，关闭时走原 concat，向后兼容）；
+  开启且在次含 rgb+motion 时，用 `frame_proj`（Linear(2D→D)）把逐帧 `[rgb_i, motion_i]` 并为一个 token，
+  丢弃未配对的 rgb 末帧；landmark 等余下模态照旧接续。
+- 配置：`configs/translation_part3_align.yaml`（tri + `align_frames: true` + `num_pool_tokens: 32`）。
+- 复现：`bash scripts/run_part3_align.sh`（其余与冻结配置一致）。
+- 单测：fusion 新增对齐 2 例 + concat 回归 1 例；fusion 套件 9/9 通过。
+
+### 11.2 结果（validation 514，frozen 配置）
+| 配置 | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF |
+|---|---|---|---|---|---|
+| concat tri（§9.3 基线） | 1.21 | 0.1356 | 0.0147 | 0.1487 | 0.0847 |
+| tri + pooling（§10） | 4.682 | **0.2171** | **0.0542** | 0.2306 | **0.1469** |
+| **tri + align + pooling（§11）** | 4.195 | 0.1586 | 0.0286 | 0.1928 | 0.1045 |
+
+收据：完整 stdout 日志 `/home/su127/part3_align.log`（含逐样本 per_sample 数组）。
+
+### 11.3 观察与结论
+1. **帧对齐优于 concat**（BLEU-1 +17%、ROUGE-L +30%），印证 rgb/motion 共享时间网格的配对确实比
+   并行序列硬拼更有意义。
+2. **但不如纯 token 压缩**：显式把 rgb/motion 折成单个 frame token（线性压 2D→D）的信息重整，在
+   pool 已提供「少而浓缩 token」时不再额外加分，反而略降。→ 有意义的负结果：后续不必在折叠帧上再下功夫，
+   方向（若有）是提升解码器容量或数据，而非继续压缩视觉上下文。
+3. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。

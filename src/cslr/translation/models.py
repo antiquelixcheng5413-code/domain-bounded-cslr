@@ -44,6 +44,7 @@ class Part3SpaMoModel(nn.Module):
         gloss_aux_weight: float = 0.0,
         feature_dim: dict[str, int] | None = None,
         fusion_num_pool_tokens: int | None = None,
+        fusion_align_frames: bool = False,
         device: str = "cpu",
     ) -> None:
         super().__init__()
@@ -64,6 +65,7 @@ class Part3SpaMoModel(nn.Module):
             dropout=dropout,
             feature_dim=feature_dim,
             num_pool_tokens=fusion_num_pool_tokens,
+            align_frames=fusion_align_frames,
         )
         self.decoder = TinyTransformerChineseDecoder(
             vocab_size=self.vocab_size,
@@ -169,6 +171,7 @@ def build_model_from_config(
         gloss_aux_weight=cfg.model.gloss_aux_weight,
         feature_dim=feature_dim,
         fusion_num_pool_tokens=getattr(cfg.fusion, "num_pool_tokens", None),
+        fusion_align_frames=getattr(cfg.fusion, "align_frames", False),
         device=cfg.device,
     )
 

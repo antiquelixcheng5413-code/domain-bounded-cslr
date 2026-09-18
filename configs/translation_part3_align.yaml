@@ -1,0 +1,40 @@
+# Part 3 SpaMo improvement #2: cross-modal temporal alignment + pooling.
+# rgb/motion are paired at the same frame index (one frame token), landmark kept
+# as global context; then pooled to a fixed 32 tokens. Same frozen training config.
+root: .
+split: train
+
+data:
+  manifest: manifests/ce-csl.csv
+  label_dir: raw/CE-CSL/label
+
+model:
+  hidden_dim: 256
+  num_heads: 8
+  num_layers: 3
+  feedforward_dim: 1024
+  dropout: 0.1
+  gloss_aux_weight: 0.0
+  decoder:
+    type: transformer
+    hidden_dim: 256
+    num_layers: 3
+    num_heads: 8
+    max_target_len: 128
+    dropout: 0.1
+
+fusion:
+  modalities: [rgb, motion, landmark]
+  num_heads: 8
+  num_layers: 2
+  dropout: 0.1
+  num_pool_tokens: 32
+  align_frames: true
+
+smoke:
+  train_steps: 15
+  dev_limit: 3
+  synthetic_features: true
+  seed: 0
+
+device: cuda
