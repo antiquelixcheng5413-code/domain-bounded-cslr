@@ -221,3 +221,33 @@ rgb/motion 在同一帧索引上配对成一个 frame token，landmark 保留为
    pool 已提供「少而浓缩 token」时不再额外加分，反而略降。→ 有意义的负结果：后续不必在折叠帧上再下功夫，
    方向（若有）是提升解码器容量或数据，而非继续压缩视觉上下文。
 3. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。
+
+## 12. 改进路线③：标签平滑与 beam search（无效）
+
+在最优 pool 配置（§10）上叠加训练/解码侧技巧，验证能否再提升译文质量。
+
+### 12.1 改动与入口
+- 代码：`src/cslr/translation/models.py` 新增 `label_smoothing`（接到
+  `CrossEntropyLoss(label_smoothing=…)`）；`decoder.py` 新增 `generate_beam`
+  （按样本、逐前缀 batch 解码；`beam_size=1` 退化为贪心），`Part3SpaMoModel.forward`
+  新增 `beam_size` 路由。两者默认关闭，向后兼容。
+- 由 config 驱动：`model.label_smoothing` / `model.beam_size`。
+- 复现：`bash scripts/run_part3_smooth.sh`（A：平滑 0.1）；`scripts/run_part3_smooth_beam.sh`
+  （B：平滑 0.1 + beam 4）。
+- 单测：翻译套件 57/57 通过。
+
+### 12.2 结果（validation 514，pool 最优基线上叠加）
+| 配置 | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF |
+|---|---|---|---|---|---|
+| tri + pooling（§10最优） | 4.682 | **0.2171** | **0.0542** | **0.2306** | **0.1469** |
+| + label_smoothing=0.1 | 4.551 | 0.1636 | 0.0210 | 0.1926 | 0.1065 |
+| + label_smoothing + beam=4 | 1.540 | 0.1336 | 0.0000 | 0.1456 | 0.0775 |
+
+收据：stdout 日志 `/home/su127/part3_smooth.log`、`/home/su127/part3_smooth_beam.log`。
+
+### 12.3 观察与结论（负结果）
+1. **标签平滑不助**：BLEU-1 −25%、chrF −27%。小数据 + 轻量解码器下软化收益为零。
+2. **beam search 更差**：叠加后 BLEU-1 0.134、BLEU-2 归零。beam 挑选高累计概率的短/简单成句，
+   在此粒度上不增质量（或需 length-penalty/长度归一，本次未做）。
+3. → **pool-alone（§10）仍是最优配置**；提升绝对水平应转向解码器容量或数据，而非训练/解码小技巧。
+4. Test 500 仍冻结，本实验未读取（`test_split_read=false`）。

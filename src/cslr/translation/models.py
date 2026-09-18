@@ -45,6 +45,8 @@ class Part3SpaMoModel(nn.Module):
         feature_dim: dict[str, int] | None = None,
         fusion_num_pool_tokens: int | None = None,
         fusion_align_frames: bool = False,
+        label_smoothing: float = 0.0,
+        beam_size: int = 1,
         device: str = "cpu",
     ) -> None:
         super().__init__()
@@ -78,7 +80,11 @@ class Part3SpaMoModel(nn.Module):
             gloss_vocab_size=gloss_vocab_size,
         ).to(self.device_device)
         self.to(self.device_device)
-        self.cross_entropy = nn.CrossEntropyLoss(ignore_index=self.decoder.pad_id)
+        self.label_smoothing = label_smoothing
+        self.beam_size = beam_size
+        self.cross_entropy = nn.CrossEntropyLoss(
+            ignore_index=self.decoder.pad_id, label_smoothing=label_smoothing
+        )
 
     def label_to_target_ids(self, texts: list[str]) -> torch.Tensor:
         import torch as _t
@@ -106,6 +112,7 @@ class Part3SpaMoModel(nn.Module):
         target_texts: list[str] | None = None,
         generate: bool = False,
         max_gen_len: int | None = None,
+        beam_size: int | None = None,
     ) -> TranslationModelOutput:
         active = {k: v for k, v in features.items() if v is not None}
         if not active:
@@ -135,7 +142,10 @@ class Part3SpaMoModel(nn.Module):
                     loss = translation_loss + self.gloss_aux_weight * gloss_aux_loss
 
         if generate:
-            generated_texts = self.decoder.generate(visual_tokens, visual_mask, self.vocab, max_len=max_gen_len)
+            bz = beam_size if beam_size is not None else self.beam_size
+            generated_texts = self.decoder.generate(
+                visual_tokens, visual_mask, self.vocab, max_len=max_gen_len, beam_size=bz
+            )
 
         return TranslationModelOutput(
             loss=loss,
@@ -172,6 +182,8 @@ def build_model_from_config(
         feature_dim=feature_dim,
         fusion_num_pool_tokens=getattr(cfg.fusion, "num_pool_tokens", None),
         fusion_align_frames=getattr(cfg.fusion, "align_frames", False),
+        label_smoothing=getattr(cfg.model, "label_smoothing", 0.0),
+        beam_size=getattr(cfg.model, "beam_size", 1),
         device=cfg.device,
     )
 

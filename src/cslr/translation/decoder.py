@@ -100,7 +100,10 @@ class TinyTransformerChineseDecoder(ChineseDecoder):
         visual_mask: torch.Tensor | None,
         vocab: dict[str, int],
         max_len: int | None = None,
+        beam_size: int = 1,
     ) -> list[str]:
+        if beam_size > 1:
+            return self.generate_beam(visual_tokens, visual_mask, vocab, max_len=max_len, beam_size=beam_size)
         max_len = max_len or self.max_target_len
         batch_size = visual_tokens.shape[0]
         device = visual_tokens.device
@@ -142,6 +145,86 @@ class TinyTransformerChineseDecoder(ChineseDecoder):
                 chars.append(id_to_char.get(token, ""))
             texts.append("".join(chars))
         return texts
+
+    def generate_beam(
+        self,
+        visual_tokens: torch.Tensor,
+        visual_mask: torch.Tensor | None,
+        vocab: dict[str, int],
+        max_len: int | None = None,
+        beam_size: int = 4,
+    ) -> list[str]:
+        """Beam-search decoding, per sample. beam_size=1 degenerates to greedy."""
+        max_len = max_len or self.max_target_len
+        id_to_char = {v: k for k, v in vocab.items()}
+        device = visual_tokens.device
+        outputs: list[str] = []
+        for si in range(visual_tokens.shape[0]):
+            visual = visual_tokens[si : si + 1]
+            mem_key = (
+                ~visual_mask[si : si + 1].bool()
+                if visual_mask is not None else None
+            )
+            beams: list[tuple[list[int], float]] = [([self.bos_id], 0.0)]
+            completed: list[tuple[list[int], float]] = []
+            for _ in range(max_len):
+                if not beams:
+                    break
+                lengths = [len(seq) for seq, _ in beams]
+                width = max(lengths)
+                ids = torch.full(
+                    (len(beams), width), self.pad_id, dtype=torch.long, device=device
+                )
+                for i, (seq, _sc) in enumerate(beams):
+                    ids[i, : len(seq)] = torch.tensor(seq, device=device)
+                emb = self._embed_tokens(ids)
+                tgt_mask = self._causal_mask(width, device)
+                decoded = self.decoder(
+                    emb, visual, tgt_mask=tgt_mask, memory_key_padding_mask=mem_key
+                )
+                logp = torch.log_softmax(self.output_proj(decoded[:, -1]), dim=-1)
+
+                candidates: list[tuple[list[int], float]] = []
+                for i, (seq, score) in enumerate(beams):
+                    if seq[-1] == self.eos_id:
+                        candidates.append((seq, score))
+                        continue
+                    topk = torch.topk(logp[i], min(beam_size, logp.shape[1]))
+                    for tok, delta in zip(
+                        topk.indices.tolist(), topk.values.tolist()
+                    ):
+                        candidates.append((seq + [tok], score + delta))
+
+                candidates.sort(key=lambda x: -x[1])
+                beams = []
+                seen: set[tuple[int, ...]] = set()
+                for seq, sc in candidates:
+                    key = tuple(seq)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    beams.append((seq, sc))
+                    if len(beams) >= beam_size:
+                        break
+
+                completed += [b for b in beams if b[0][-1] == self.eos_id]
+                beams = [b for b in beams if b[0][-1] != self.eos_id]
+
+            if not completed:
+                completed = [max(beams, key=lambda x: x[1])] if beams else []
+            if not completed:  # empty decode fallback
+                best_seq: list[int] = [self.bos_id]
+            else:
+                best_seq = sorted(completed, key=lambda x: -x[1])[0][0]
+            chars: list[str] = []
+            for token in best_seq:
+                if token == self.bos_id or token == self.pad_id:
+                    continue
+                if token == self.eos_id:
+                    break
+                chars.append(id_to_char.get(token, ""))
+            outputs.append("".join(chars))
+        return outputs
 
     def decode_from_visual(
         self,
