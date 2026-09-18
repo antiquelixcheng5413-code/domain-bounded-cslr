@@ -59,6 +59,7 @@ class FusionConfig:
     num_layers: int
     feedforward_dim: int
     dropout: float
+    num_pool_tokens: int | None = None  # >0: SpaMo-style learnable-query pool; None/0: concat-as-is
 
 
 @dataclass(frozen=True)
@@ -204,6 +205,10 @@ def load_config(path: str | Path) -> Part3Config:
         num_layers=_require_positive_int(fusion_block, "num_layers") if "num_layers" in fusion_block else model.num_layers,
         feedforward_dim=fusion_block.get("feedforward_dim", hdim * 4),
         dropout=_require_float(fusion_block, "dropout", 0.0, 1.0) if "dropout" in fusion_block else model.dropout,
+        num_pool_tokens=(
+            _require_nonneg_int(fusion_block, "num_pool_tokens")
+            if "num_pool_tokens" in fusion_block else None
+        ),
     )
 
     smoke_block = raw.get("smoke", {})

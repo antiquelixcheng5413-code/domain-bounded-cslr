@@ -66,6 +66,34 @@ class FusionTest(unittest.TestCase):
         tokens, out_mask, count = fusion(features, {"rgb": mask})
         self.assertEqual(count, 2)
 
+    def test_token_pooling(self) -> None:
+        # SpaMo-style fixed pooling compresses variable-length tokens to a constant count.
+        fusion = LightSpaMoFusion(
+            modalities=("rgb", "motion", "landmark"),
+            hidden_dim=16, num_heads=4, num_layers=1, feedforward_dim=32, dropout=0.0,
+            num_pool_tokens=5,
+        )
+        features = {"rgb": torch.randn(2, 4, 16), "motion": torch.randn(2, 3, 16), "landmark": torch.randn(2, 4, 368)}
+        masks = {k: torch.ones(v.shape[:2], dtype=torch.bool) for k, v in features.items()}
+        tokens, mask, count = fusion(features, masks)
+        self.assertEqual(tokens.shape, (2, 5, 16))  # fixed 5 pooled tokens, hidden 16
+        self.assertEqual(int(mask.sum().item()), 10)  # 2 samples × 5 pooled tokens
+        self.assertEqual(count, 5)
+
+    def test_token_pooling_constant_across_lengths(self) -> None:
+        # Different input lengths still produce the same pooled token count.
+        fusion = LightSpaMoFusion(
+            modalities=("rgb",),
+            hidden_dim=16, num_heads=4, num_layers=1, feedforward_dim=32, dropout=0.0,
+            num_pool_tokens=3,
+        )
+        features = {"rgb": torch.randn(1, 9, 16)}
+        features["rgb"] = torch.randn(1, 2, 16)
+        mask = {k: torch.ones(v.shape[:2], dtype=torch.bool) for k, v in features.items()}
+        tokens, _, count = fusion(features, mask)
+        self.assertEqual(tokens.shape[1], 3)
+        self.assertEqual(count, 3)
+
 
 if __name__ == "__main__":
     unittest.main()

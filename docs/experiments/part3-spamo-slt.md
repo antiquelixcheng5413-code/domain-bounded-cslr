@@ -161,3 +161,32 @@ PYTHONPATH=src venv/bin/python -m cslr.translation train-real \
 - 轻量 Transformer 解码器在长句上存在重复坍缩趋势（已用 bigram 抑制缓解）；更长训练/beam/标签平滑未展开。
 - 融合增益与解码增益的落差，值得下一步验证：是否需要更大容量解码器、视觉感知 token 密度、或双侧 loss 加权。
 - Test 500 仍冻结，未在任一实验中读取。最终 Test 评估需先冻结最终协议再解锁。
+
+## 10. 改进路线①：SpaMo 式 token 压缩（tri + pooling，K=32）
+
+针对 §9.4-2「融合-解码落差」，引入 SpaMo 式固定容量池化：融合 Transformer 输出后，用 `num_pool_tokens`
+个可学习 query 做交叉注意力，把变长三路 token 压成固定 K 个视觉 token 再喂解码器，以减轻解码器对
+视觉上下文的注意负担、聚焦跨模态语义。
+
+### 10.1 改动与入口
+- 代码：`src/cslr/translation/fusion.py` 新增 `TokenPooling`；`LightSpaMoFusion` 支持 `num_pool_tokens`
+  （默认 None/0 = 保持原 concat 行为，向后兼容，既有融合单测不受影响）。
+- 配置：`configs/translation_part3_pool.yaml`（tri + `num_pool_tokens: 32`）。
+- 复现：`bash scripts/run_part3_pool.sh`（其余与 §9.2 冻结配置一致：15 ep / lr 5e-4 / hidden 256）。
+- 单测：`tests/test_translation_fusion.py` 新增池化 2 例（固定 token 数、跨长度恒定）；翻译套件 55/55 通过。
+
+### 10.2 结果（validation 514，frozen 配置）
+| 配置 | train_loss_end | BLEU-1 | BLEU-2 | ROUGE-L | chrF |
+|---|---|---|---|---|---|
+| concat tri（§9.3 基线） | 1.21 | 0.1356 | 0.0147 | 0.1487 | 0.0847 |
+| motion 单路（原最高） | 4.587 | 0.1530 | 0.0365 | 0.2347 | 0.1226 |
+| **tri + pooling (K=32)** | 4.682 | **0.2171** | **0.0542** | 0.2306 | **0.1469** |
+
+收据：完整 stdout 日志 `/home/su127/part3_pool.log`（含逐样本 per_sample 数组）。
+
+### 10.3 观察与结论
+1. **token 压缩让融合首次反超单路**：BLEU-1 +60%（0.136→0.217）、BLEU-2 3.7×、chrF +20%，全面优于
+   原 concat tri，且 BLEU-1/2/chrF 超过 motion 单路，ROUGE-L（0.231）与之持平。
+2. **train_loss 不降反高于 concat**（4.68 vs 1.21）但解码泛化更强——印证「融合度高、解码用不上」的
+   症结在视觉上下文密度：固定少 token 减轻解码注意力过载，泛化更好。
+3. 与 §9 一致：Test 500 仍冻结，本实验未读取（`test_split_read=false`）。

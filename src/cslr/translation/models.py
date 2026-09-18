@@ -43,6 +43,7 @@ class Part3SpaMoModel(nn.Module):
         decoder_ff: int | None = None,
         gloss_aux_weight: float = 0.0,
         feature_dim: dict[str, int] | None = None,
+        fusion_num_pool_tokens: int | None = None,
         device: str = "cpu",
     ) -> None:
         super().__init__()
@@ -62,6 +63,7 @@ class Part3SpaMoModel(nn.Module):
             feedforward_dim=fusion_ff,
             dropout=dropout,
             feature_dim=feature_dim,
+            num_pool_tokens=fusion_num_pool_tokens,
         )
         self.decoder = TinyTransformerChineseDecoder(
             vocab_size=self.vocab_size,
@@ -166,6 +168,7 @@ def build_model_from_config(
         decoder_ff=cfg.model.decoder.feedforward_dim,
         gloss_aux_weight=cfg.model.gloss_aux_weight,
         feature_dim=feature_dim,
+        fusion_num_pool_tokens=getattr(cfg.fusion, "num_pool_tokens", None),
         device=cfg.device,
     )
 

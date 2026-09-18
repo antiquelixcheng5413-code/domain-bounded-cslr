@@ -46,6 +46,47 @@ class ModalityProjection(nn.Module):
         return self.proj(x)
 
 
+class TokenPooling(nn.Module):
+    """SpaMo-style fixed-size pooling: compress variable-length fused tokens to a
+    fixed number of learnable-query tokens via cross-attention.
+
+    ``num_queries`` is the constant output token count; the Decoder therefore sees a
+    fixed-length visual context regardless of input video length.
+    """
+
+    def __init__(
+        self,
+        hidden_dim: int,
+        num_queries: int,
+        num_heads: int,
+        dropout: float = 0.0,
+    ) -> None:
+        super().__init__()
+        self.num_queries = num_queries
+        self.queries = nn.Parameter(torch.zeros(1, num_queries, hidden_dim))
+        nn.init.trunc_normal_(self.queries, std=0.02)
+        layer = nn.TransformerDecoderLayer(
+            d_model=hidden_dim,
+            nhead=num_heads,
+            dim_feedforward=hidden_dim * 4,
+            dropout=dropout,
+            batch_first=True,
+        )
+        self.pool = nn.TransformerDecoder(layer, num_layers=1)
+        self.norm = nn.LayerNorm(hidden_dim)
+
+    def forward(
+        self,
+        memory: torch.Tensor,
+        memory_mask: torch.Tensor | None,
+    ) -> torch.Tensor:
+        batch = memory.shape[0]
+        queries = self.queries.expand(batch, -1, -1)
+        memory_key_padding = None if memory_mask is None else ~memory_mask
+        pooled = self.pool(queries, memory, memory_key_padding_mask=memory_key_padding)
+        return self.norm(pooled)
+
+
 class LightSpaMoFusion(nn.Module):
     """SpaMo-style multimodal fusion with configurable modality participation.
 
@@ -65,11 +106,13 @@ class LightSpaMoFusion(nn.Module):
         feature_dim: dict[str, int] | None = None,
         encoders: dict[str, BaseSequenceEncoder] | None = None,
         max_seq_len: int = 2048,
+        num_pool_tokens: int | None = None,
     ) -> None:
         super().__init__()
         self.modalities = list(modalities)
         self.hidden_dim = hidden_dim
         self.dropout = dropout
+        self.num_pool_tokens = num_pool_tokens or 0
 
         self.encoders = nn.ModuleDict()
         self.projectors = nn.ModuleDict()
@@ -98,6 +141,14 @@ class LightSpaMoFusion(nn.Module):
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         self.output_norm = nn.LayerNorm(hidden_dim)
+        self.pooling: TokenPooling | None = None
+        if self.num_pool_tokens > 0:
+            self.pooling = TokenPooling(
+                hidden_dim=hidden_dim,
+                num_queries=self.num_pool_tokens,
+                num_heads=num_heads,
+                dropout=dropout,
+            )
 
     def forward(
         self,
@@ -138,6 +189,13 @@ class LightSpaMoFusion(nn.Module):
             src_key_padding_mask=key_padding if key_padding.any() else None,
         )
         attended = self.output_norm(attended)
+
+        # SpaMo-style fixed-size pooling: compress variable-length fused tokens
+        # to ``num_pool_tokens`` learnable-query tokens (constant across samples).
+        if self.pooling is not None:
+            pooled = self.pooling(attended, concat_mask)
+            pooled_mask = pooled.new_ones(pooled.shape[:2], dtype=torch.bool)
+            return pooled, pooled_mask, int(pooled.shape[1])
 
         # Per-sample actual token count (max across batch) for reporting; the
         # full batch mask is still returned for the decoder.
