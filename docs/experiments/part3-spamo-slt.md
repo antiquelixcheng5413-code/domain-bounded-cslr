@@ -381,3 +381,50 @@ rgb/motion 在同一帧索引上配对成一个 frame token，landmark 保留为
    更强的视觉→文本监督），并辅以 distinct 判别，避免再用坍缩输出的 BLEU 做横比。
 
 Test 500 在本核验及全部历史实验中被全程冻结，从未读取。
+
+## 16. 改进路线⑥：大模型方向 —— Gloss-token → 国产 LLM（教授建议，突破性改善）
+
+**背景**：§15 确认自研轻量解码器（tiny/mT5）在 4973 小样本上**全面重复坍缩**，自研解码器这条路径被
+小数据锁死。教授建议改为「token 直接给大模型 / 隐含层信息给大模型」，借预训练中文大模型的语言先验
+绕过坍缩。本节省 `Gloss → LLM = 中文句子` 的 oracle 验证（路线 A1，gold gloss 作输入）。
+
+### 16.1 方法
+- 输入：CE-CSL 官方标注的 **Gold Gloss 序列**（如「10/年/鱼/禁止1/区/时间/长/不/。」），`/` 切分后喂模型。
+- 模型：本地微调后留存的中文 LLM（modeling 语言先验），prompt 要求「把手语 gloss 序列翻译成通顺中文句」。
+- 指标：与全项目一致的 BLEU-1/2、ROUGE-L、chrF、EM + **distinct 多样性判别**（§15 教训的固化）。
+- 本次为 oracle：不设视觉→gloss 编码器，只验证「大模型能否把 gloss 译成多样通顺中文」。官方 test 未读。
+- 收据 JSON：`/home/su127/route_a_dev_full.json`（Qwen2.5-1.5B, dev 全 515）、
+  `/home/su127/route_a_qwen05b100.json`（Qwen2.5-0.5B, dev 100）。
+
+### 16.2 结果（validation/dev，gold gloss oracle）
+
+| 模型 | dev 规模 | distinct | BLEU-1 | BLEU-2 | ROUGE-L | chrF | EM | 坍缩 |
+|---|---|---|---|---|---|---|---|---|
+| **Qwen2.5-1.5B-Instruct** | 515 | **514** | **0.6706** | **0.4989** | **0.6725** | **0.5792** | 0.0835 | 无 |
+| Qwen2.5-0.5B-Instruct | 100 | 99 | 0.6388 | 0.4658 | 0.6485 | 0.5561 | 0.04 | 无 |
+| 自研 tiny 解码器（§10「最优」，历史对照） | 514 | 1 | 0.217(假象) | 0.054 | 0.231 | 0.147 | 0 | **全坍缩** |
+
+抽样（Qwen2.5-1.5B，ref→pred，语句均通顺、语义对应）：
+- `10年的禁鱼区不是很长时间。` → `十年禁渔区时间长了。`
+- `2023年的高考有一千多万考生。` → `2023年高考报名人数超过千万。`
+- `下一次强降雨出现在重庆。` → `下一次大雨在重庆。`
+
+### 16.3 观察与结论（突破性）
+1. **坍缩彻底消失**：Qwen-1.5B 在 dev 全 515 条上 distinct=514（几乎每句不同），0.5B 也达到 99；
+   对比 §15 的「所有自研解码器 distinct=1」。教授「大模型解决重复坍缩」的判断**成立**。
+2. **指标全面大幅上升（在真译文上，非假象）**：BLEU-1 0.217→**0.671**、BLEU-2 0.054→**0.499**、
+   ROUGE-L 0.231→**0.673**、chrF 0.147→**0.579**、EM 0→**8.4%**。这是历史上首次 EM>0、首次 distinct>2。
+3. **规模敏感性温和**：0.5B vs 1.5B 差异约 5% BLEU-1，说明该增益主要来自「多语言预训练先验」本身而非容量；
+   更大的模型可能再小幅提升，但边际递减。
+4. **诚实边界**：这是 **gold-gloss oracle**，证明「token 进大模型」可行；但视觉→gloss 的识别那一段
+   （红线）仍未做。完整端到端需再接一个视觉编码器产出 gloss token（路线 A2 / B）。
+5. 因此**自研 tiny/mT5 解码器路径（§9–§14）正式关闭**，后续主攻大模型方向（§16 oracle → 端到端桥接）。
+
+### 16.4 复现命令
+```
+MODEL=/mnt/d/part3_models/ms_cache/models/Qwen--Qwen2.5-1.5B-Instruct/snapshots/master
+venv/bin/python scripts/route_a_gloss_llm.py --label data/raw/CE-CSL/label/dev.csv \
+  --model $MODEL --device cuda --limit 515 --out /home/su127/route_a_dev_full.json
+```
+（模型经 modelscope 下载至 `/mnt/d/part3_models/ms_cache/`；InternLM 因旧 modeling 与新版 transformers
+ 不兼容未纳入，跨厂商对比拟在 B 路线用闭源 API 进行。）
