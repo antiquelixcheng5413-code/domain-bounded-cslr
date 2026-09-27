@@ -1,0 +1,241 @@
+{
+  "summary": {
+    "samples": 20,
+    "distinct": 2,
+    "collapsed": true,
+    "top_prediction_share": 0.9,
+    "top_prediction": "要",
+    "bleu_1": 0.0011,
+    "bleu_2": 0.0,
+    "rouge_l": 0.0585,
+    "chrf": 0.0221,
+    "exact_match": 0.0,
+    "uses_external_weights": true,
+    "gloss_source": "ctc_predicted",
+    "checkpoint": "artifacts/checkpoints/ctc-vl48-cap300.pt",
+    "test_split_read": false,
+    "prompt": "你是一位中文手语翻译。请把下面的手语手势记号序列(Gloss)翻译成一个通顺、完整、符合中文语法的句子。只输出翻译结果本身，不要解释、不要加引号。\nGloss: {gloss}\n中文翻译："
+  },
+  "per_sample": [
+    {
+      "sample_id": "dev-00001",
+      "gloss": "要",
+      "reference": "10年的禁鱼区不是很长时间。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00002",
+      "gloss": "要",
+      "reference": "2023年的高考有一千多万考生。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00003",
+      "gloss": "",
+      "reference": "一本书看几分钟才会被吸引。",
+      "prediction": "你好！",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00004",
+      "gloss": "要",
+      "reference": "上班的时间都是固定的。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00005",
+      "gloss": "要",
+      "reference": "上课的时间还很长。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00006",
+      "gloss": "要",
+      "reference": "上车请买票。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00007",
+      "gloss": "要",
+      "reference": "上车请投币。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00008",
+      "gloss": "",
+      "reference": "上车需要系安全带。",
+      "prediction": "你好！",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00009",
+      "gloss": "要",
+      "reference": "下一次强降雨出现在重庆。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00010",
+      "gloss": "要",
+      "reference": "下午的公交车人很少。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00011",
+      "gloss": "要",
+      "reference": "下雨了，你要去哪里？",
+      "prediction": "要",
+      "bleu_1": 0.0001,
+      "bleu_2": 0.0,
+      "rouge_l": 0.1818,
+      "chrf": 0.0649,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00012",
+      "gloss": "要",
+      "reference": "不容易的事情太多了。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00013",
+      "gloss": "要",
+      "reference": "不清楚的事不要答应。",
+      "prediction": "要",
+      "bleu_1": 0.0001,
+      "bleu_2": 0.0,
+      "rouge_l": 0.1818,
+      "chrf": 0.0649,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00014",
+      "gloss": "要",
+      "reference": "不要做无益的事。",
+      "prediction": "要",
+      "bleu_1": 0.0009,
+      "bleu_2": 0.0,
+      "rouge_l": 0.2222,
+      "chrf": 0.082,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00015",
+      "gloss": "要",
+      "reference": "不要喝太多酒。",
+      "prediction": "要",
+      "bleu_1": 0.0025,
+      "bleu_2": 0.0,
+      "rouge_l": 0.25,
+      "chrf": 0.0943,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00016",
+      "gloss": "要",
+      "reference": "不要哭了。",
+      "prediction": "要",
+      "bleu_1": 0.0183,
+      "bleu_2": 0.0,
+      "rouge_l": 0.3333,
+      "chrf": 0.1351,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00017",
+      "gloss": "要",
+      "reference": "中国不是粮食出口国。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00018",
+      "gloss": "要",
+      "reference": "中国有千万军队。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00019",
+      "gloss": "要",
+      "reference": "中国的教育是失败的。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00020",
+      "gloss": "要",
+      "reference": "中文是中国人的。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    }
+  ]
+}

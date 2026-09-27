@@ -1,0 +1,238 @@
+{
+  "probe": "discrim-power",
+  "protocol": "mean-pool + linear OneVsRest on train, ROC-AUC on dev",
+  "results": {
+    "landmark": {
+      "macro_auc": 0.6821,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "房子",
+          "auc": 0.9883
+        },
+        {
+          "gloss": "休息",
+          "auc": 0.9739
+        },
+        {
+          "gloss": "怎么样",
+          "auc": 0.9717
+        },
+        {
+          "gloss": "希望",
+          "auc": 0.9668
+        },
+        {
+          "gloss": "睡觉",
+          "auc": 0.959
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "了",
+          "auc": 0.0214
+        },
+        {
+          "gloss": "相信",
+          "auc": 0.0487
+        },
+        {
+          "gloss": "又",
+          "auc": 0.117
+        },
+        {
+          "gloss": "决定",
+          "auc": 0.1738
+        },
+        {
+          "gloss": "行李",
+          "auc": 0.1969
+        }
+      ],
+      "feature": "landmark",
+      "feature_dim": 368,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "skipped_missing_train": 0,
+      "skipped_missing_eval": 1,
+      "test_split_read": false
+    },
+    "rgb": {
+      "macro_auc": 0.6265,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "告诉（我）",
+          "auc": 0.9981
+        },
+        {
+          "gloss": "行李",
+          "auc": 0.9883
+        },
+        {
+          "gloss": "这",
+          "auc": 0.9419
+        },
+        {
+          "gloss": "汽车1",
+          "auc": 0.9343
+        },
+        {
+          "gloss": "这里",
+          "auc": 0.929
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "知道",
+          "auc": 0.1287
+        },
+        {
+          "gloss": "决定",
+          "auc": 0.1768
+        },
+        {
+          "gloss": "学校",
+          "auc": 0.2378
+        },
+        {
+          "gloss": "相信",
+          "auc": 0.2437
+        },
+        {
+          "gloss": "走",
+          "auc": 0.252
+        }
+      ],
+      "feature": "rgb",
+      "feature_dim": 512,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "skipped_missing_train": 0,
+      "skipped_missing_eval": 1,
+      "test_split_read": false
+    },
+    "motion": {
+      "macro_auc": 0.5354,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "卖",
+          "auc": 0.9513
+        },
+        {
+          "gloss": "票",
+          "auc": 0.9478
+        },
+        {
+          "gloss": "东西2",
+          "auc": 0.9351
+        },
+        {
+          "gloss": "上",
+          "auc": 0.9088
+        },
+        {
+          "gloss": "了",
+          "auc": 0.8967
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "房子",
+          "auc": 0.0604
+        },
+        {
+          "gloss": "走",
+          "auc": 0.0801
+        },
+        {
+          "gloss": "前",
+          "auc": 0.1248
+        },
+        {
+          "gloss": "不行",
+          "auc": 0.1265
+        },
+        {
+          "gloss": "天气",
+          "auc": 0.1404
+        }
+      ],
+      "feature": "motion",
+      "feature_dim": 512,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "skipped_missing_train": 0,
+      "skipped_missing_eval": 1,
+      "test_split_read": false
+    },
+    "vl48": {
+      "macro_auc": 0.6459,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "行李",
+          "auc": 1.0
+        },
+        {
+          "gloss": "房子",
+          "auc": 0.9981
+        },
+        {
+          "gloss": "告诉（我）",
+          "auc": 0.9669
+        },
+        {
+          "gloss": "休息",
+          "auc": 0.9629
+        },
+        {
+          "gloss": "又",
+          "auc": 0.9553
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "了",
+          "auc": 0.0467
+        },
+        {
+          "gloss": "好不好",
+          "auc": 0.1296
+        },
+        {
+          "gloss": "别人",
+          "auc": 0.1732
+        },
+        {
+          "gloss": "决定",
+          "auc": 0.2388
+        },
+        {
+          "gloss": "走",
+          "auc": 0.2476
+        }
+      ],
+      "feature": "vl48",
+      "feature_dim": 2048,
+      "n_train": 4973,
+      "n_eval": 515,
+      "n_labels": 200,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "skipped_missing_train": 0,
+      "skipped_missing_eval": 0,
+      "test_split_read": false
+    }
+  }
+}
