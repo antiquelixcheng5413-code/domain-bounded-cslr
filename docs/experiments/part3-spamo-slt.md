@@ -464,3 +464,60 @@ venv/bin/python scripts/route_a_gloss_llm.py --label data/raw/CE-CSL/label/dev.c
 5. **因此 B1「冻结投影」路线关闭**。后续主攻两阶段「视觉→gloss→LLM」（复用 §16 已通的 A 通道），
    并以「原生多模态 VL 零样本」作并行验证。详见仓库外团队计划
    `中文手语SLT大模型方向-团队执行计划.txt`（阶段 P0–P3）。
+
+## 18. 改进路线⑦：冻结 Qwen2.5-VL 视觉塔 48 帧编码器（全量 · 帧数不是杠杆）
+
+**背景**：P4 交接 §9.1 建议「换表征、留识别头」——用冻结的 Qwen2.5-VL 视觉塔替代 landmark
+作为 CTC 输入，且 16 帧缓存信息量不足，明确指出的下一步是「同编码器在 48–96 帧采样」。
+本仓库在 2026-09-28 把该方向推进到**全量**：模型（`/mnt/d/cslr-tools/models/Qwen2.5-VL-3B-Instruct`，
+7.1 GB）下载到 D 盘，按 48 帧对**全部 4973 train + 515 dev** 提取 `[T,2048]` 特征（0 失败），
+再用同一 CTC 头训练并 dev 评测。
+
+### 18.1 方法与复现
+
+```bash
+# 1) 提取（train + dev，T=48；dtype float32，feature_size 2048）
+PYTHONPATH=src ./venv/bin/python3 -m cslr.recognition.qwen_vl_features \
+  --data-root data/raw/CE-CSL --output data/processed/ce-csl-qwenvl48 \
+  --split train --frames 48 --model /mnt/d/cslr-tools/models/Qwen2.5-VL-3B-Instruct --device cuda
+PYTHONPATH=src ./venv/bin/python3 -m cslr.recognition.qwen_vl_features \
+  --data-root data/raw/CE-CSL --output data/processed/ce-csl-qwenvl48 \
+  --split dev   --frames 48 --model /mnt/d/cslr-tools/models/Qwen2.5-VL-3B-Instruct --device cuda
+# 2) 训练 + 评测（一键脚本：scripts/run_vl_frames.py）
+python3 scripts/run_vl_frames.py --frames 48 --vocab-cap 300 --skip-extract
+```
+
+收据：`artifacts/metrics/part4-vl48-cap300-train.json`（训练）、
+`artifacts/metrics/part4-eval-vl48-cap300.json`（dev 评测），均 `test_split_read: false`。
+
+**性能修复（本轮顺带完成）**：原 `sample_frames` 每帧 `set(CAP_PROP_POS_FRAMES)` 随机 seek
+（实测 70 ms/帧，MP4 关键帧 seek 极慢），改为顺序 `grab()+retrieve()` 后 3.6 s → 0.32 s/条，
+端到端单条从 5.7 s 降到 2.3 s，全量 5488 条提取约 3.5 h。单元测试 `test_clip_features.py` 6/6 通过。
+
+### 18.2 结果（dev 515，全量训练 4973，与历史横向对比）
+
+| 表征 | 帧数 | 训练样本 | WER | CER | seq EM | distinct | kinds | 平均假设长度 | blank_ratio |
+|---|---|---|---|---|---|---|---|---|---|
+| MediaPipe landmarks | 96 | 4803 | 0.8234 | **0.6710** | 0.000 | 0.0039 | 2 | 1.03 | — |
+| frozen Qwen2.5-VL（run 1） | 16 | 1293 | **0.8014** | 0.7791 | 0.000 | **0.0719** | **36** | **1.95** | — |
+| frozen Qwen2.5-VL（run 2） | 16 | 1396 | 0.8129 | 0.7918 | **0.0020** | 0.0379 | 19 | 1.75 | — |
+| **frozen Qwen2.5-VL（本轮）** | **48** | **4973** | 0.8529 | 0.7107 | 0.000 | 0.0214 | 9 | 1.67 | **0.965** |
+
+### 18.3 观察与结论（负结果 · 帧数不是杠杆）
+
+1. **「16→48 帧」未兑现 §9.1 预期，反而更接近 landmark 的坍缩特征**：distinct 从 36（16 帧、
+   1396 样本）掉到 11、输出仅 9 种 token、425/515 条输出 `<unk>`、blank_ratio 0.965。CER 0.7107
+   比 16 帧（0.779）略好，但来自「输出更少 token」（平均长度 1.67 vs 1.95），是**更深的坍缩**，
+   不是信号变好。
+2. **训练内部信号同样反常**：train_loss 在第 36 epoch 后**转负**（-0.13 → -2.3），val_loss 从
+   8.7 一路升至 15，第 47 epoch early stop（best_epoch=7）。负 CTC 训练损失 +「训练越好、验证越差」
+   的过拟合特征，说明模型在**记忆训练分布**，没有学到可泛化的 gloss 判别。
+3. **与 §5/§8.2 结论汇合**：把通用视觉塔从 16 帧加到 48 帧、数据从 1293 补全到 4973，模型依然
+   坍缩，只是坍缩程度波动。**帧数不是杠杆；瓶颈仍在表征本身**——冻结通用视觉塔（无论是 landmark
+   坐标还是 VL patch embedding 的逐帧均值池化）对「正在打哪个 gloss」区分度不足。
+4. **值得注意的信号**：全量训练（4973）首次让 vocab_utilization 爬升到 20–29%（训练中段），但
+   最终评测仍回落到 2.99%——表明模型学到了「多说什么 token」的分布，却没有学到「对哪段视频说
+   哪个 token」的对应关系。这与 B1（§17）的「续写常见中文」是同一病理。
+5. **方向性结论**：继续在「冻结编码器 + 逐帧池化 + CTC」这条线上加帧数、调词表或调 LR 属于低
+   边际收益。真正未验证的杠杆是 **CLIP RGB/运动/landmark 三路融合 + 更强的时序建模**（SpaMo
+   主线）以及**视觉信号压过语言先验的判别式预训练**，需在 P2 之后的团队计划中决策。

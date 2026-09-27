@@ -1,0 +1,7394 @@
+{
+  "checkpoint": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/ctc-vl48-cap300.pt",
+  "manifest": "data/manifests/ce-csl.csv",
+  "feature_root": "/home/su127/FYP/domain-bounded-cslr/data/processed/ce-csl-qwenvl48",
+  "feature_view": "full",
+  "split": "validation",
+  "samples": 515,
+  "beam_width": 1,
+  "device": "cuda",
+  "skipped_without_features": 0,
+  "elapsed_seconds": 0.61,
+  "latency_ms_per_sample": 1.19,
+  "test_split_read": false,
+  "metrics": {
+    "samples": 515,
+    "wer": 0.8529204785362421,
+    "cer": 0.7106772044010538,
+    "sequence_exact_match": 0.0,
+    "total_edit_distance": 2424,
+    "mean_edit_distance": 4.706796116504854,
+    "empty_hypotheses": 0,
+    "empty_hypothesis_rate": 0.0,
+    "empty_references": 0,
+    "reference_length": {
+      "mean": 5.518446601941748,
+      "max": 13
+    },
+    "hypothesis_length": {
+      "mean": 1.6699029126213591,
+      "max": 3
+    },
+    "distinct": {
+      "count": 515,
+      "unique": 11,
+      "distinct_ratio": 0.021359223300970873,
+      "most_common_count": 156,
+      "most_common": [
+        "<unk>"
+      ]
+    },
+    "blank_ratio": 0.9652103559870551,
+    "top_predicted": [
+      [
+        "<unk>",
+        424
+      ],
+      [
+        "？",
+        143
+      ],
+      [
+        "我",
+        92
+      ],
+      [
+        "。",
+        91
+      ],
+      [
+        "要",
+        53
+      ],
+      [
+        "你",
+        26
+      ],
+      [
+        "什么",
+        20
+      ],
+      [
+        "做",
+        10
+      ],
+      [
+        "有",
+        1
+      ]
+    ],
+    "vocabulary_size": 301,
+    "predicted_token_kinds": 9,
+    "vocabulary_utilization": 0.029900332225913623,
+    "loss": 8.52901447814645
+  },
+  "predictions": [
+    {
+      "sample_id": "dev-00001",
+      "reference": [
+        "<unk>",
+        "年",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "时间",
+        "长",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00002",
+      "reference": [
+        "2",
+        "<unk>",
+        "2",
+        "<unk>",
+        "年",
+        "高",
+        "考试",
+        "<unk>",
+        "一",
+        "<unk>",
+        "多",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00003",
+      "reference": [
+        "书",
+        "看",
+        "多少",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00004",
+      "reference": [
+        "<unk>",
+        "时间",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00005",
+      "reference": [
+        "<unk>",
+        "时间",
+        "还",
+        "长",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00006",
+      "reference": [
+        "上",
+        "汽车",
+        "票",
+        "买",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00007",
+      "reference": [
+        "上",
+        "<unk>",
+        "<unk>",
+        "钱",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00008",
+      "reference": [
+        "上",
+        "汽车",
+        "<unk>",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00009",
+      "reference": [
+        "下",
+        "次",
+        "大",
+        "雨",
+        "在",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00010",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "人",
+        "少",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00011",
+      "reference": [
+        "雨",
+        "你",
+        "去",
+        "哪",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00012",
+      "reference": [
+        "不",
+        "<unk>",
+        "事情",
+        "多",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00013",
+      "reference": [
+        "不",
+        "<unk>",
+        "事情",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00014",
+      "reference": [
+        "<unk>",
+        "没有",
+        "事情",
+        "做",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00015",
+      "reference": [
+        "<unk>",
+        "喝",
+        "多",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00016",
+      "reference": [
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00017",
+      "reference": [
+        "中国",
+        "<unk>",
+        "<unk>",
+        "国家",
+        "不是",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00018",
+      "reference": [
+        "中国",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00019",
+      "reference": [
+        "中国",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00020",
+      "reference": [
+        "中国",
+        "文化",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00021",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "早上",
+        "为什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00022",
+      "reference": [
+        "<unk>",
+        "买",
+        "<unk>",
+        "衣服",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00023",
+      "reference": [
+        "<unk>",
+        "买",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00024",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "买",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00025",
+      "reference": [
+        "<unk>",
+        "我",
+        "<unk>",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00026",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "衣服",
+        "买",
+        "多少",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00027",
+      "reference": [
+        "<unk>",
+        "时间",
+        "长",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00028",
+      "reference": [
+        "人",
+        "<unk>",
+        "吃饭",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00029",
+      "reference": [
+        "最",
+        "重要",
+        "东西",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00030",
+      "reference": [
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00031",
+      "reference": [
+        "今天",
+        "<unk>",
+        "<unk>",
+        "雨",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00032",
+      "reference": [
+        "今天",
+        "<unk>",
+        "好",
+        "考试",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00033",
+      "reference": [
+        "今天",
+        "<unk>",
+        "<unk>",
+        "雨",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00034",
+      "reference": [
+        "今天",
+        "妈妈",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00035",
+      "reference": [
+        "今天",
+        "我",
+        "想",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00036",
+      "reference": [
+        "今天",
+        "我",
+        "做",
+        "家",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00037",
+      "reference": [
+        "今天",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00038",
+      "reference": [
+        "今天",
+        "我",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00039",
+      "reference": [
+        "今天",
+        "<unk>",
+        "明天",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00040",
+      "reference": [
+        "今天",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00041",
+      "reference": [
+        "今天",
+        "作业",
+        "写字",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00042",
+      "reference": [
+        "今天",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00043",
+      "reference": [
+        "他",
+        "给",
+        "<unk>",
+        "为什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00044",
+      "reference": [
+        "他",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00045",
+      "reference": [
+        "他",
+        "<unk>",
+        "会",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00046",
+      "reference": [
+        "他",
+        "我",
+        "最",
+        "<unk>",
+        "朋友",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00047",
+      "reference": [
+        "他",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00048",
+      "reference": [
+        "他",
+        "样子",
+        "可以",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00049",
+      "reference": [
+        "他",
+        "<unk>",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00050",
+      "reference": [
+        "休息",
+        "完了",
+        "去",
+        "玩",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00051",
+      "reference": [
+        "休息",
+        "完了",
+        "继续",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00052",
+      "reference": [
+        "一直",
+        "高",
+        "<unk>",
+        "工作",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00053",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00054",
+      "reference": [
+        "你",
+        "<unk>",
+        "不",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00055",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "为什么",
+        "？"
+      ],
+      "prediction": [
+        "要",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00056",
+      "reference": [
+        "这里",
+        "样子",
+        "生活",
+        "你",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00057",
+      "reference": [
+        "你",
+        "今天",
+        "<unk>",
+        "没有",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00058",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00059",
+      "reference": [
+        "你们",
+        "去",
+        "做",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00060",
+      "reference": [
+        "你们",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00061",
+      "reference": [
+        "你们",
+        "吃饭",
+        "<unk>",
+        "要",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00062",
+      "reference": [
+        "你们",
+        "<unk>",
+        "喝",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00063",
+      "reference": [
+        "你们",
+        "国家",
+        "<unk>",
+        "是",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00064",
+      "reference": [
+        "你们",
+        "学校",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00065",
+      "reference": [
+        "你们",
+        "一直",
+        "<unk>",
+        "我",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00066",
+      "reference": [
+        "你们",
+        "<unk>",
+        "吃",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00067",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "你",
+        "会",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00068",
+      "reference": [
+        "你",
+        "<unk>",
+        "会",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00069",
+      "reference": [
+        "你",
+        "<unk>",
+        "说",
+        "会",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "有",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00070",
+      "reference": [
+        "你",
+        "<unk>",
+        "帮助",
+        "没有",
+        "为什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00071",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00072",
+      "reference": [
+        "你",
+        "去",
+        "<unk>",
+        "玩",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00073",
+      "reference": [
+        "你",
+        "再",
+        "说",
+        "1",
+        "可以",
+        "我",
+        "听",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00074",
+      "reference": [
+        "你",
+        "参加",
+        "我们",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00075",
+      "reference": [
+        "你",
+        "帮助",
+        "完成",
+        "1",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00076",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "走",
+        "<unk>",
+        "到",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00077",
+      "reference": [
+        "你",
+        "现在",
+        "<unk>",
+        "是",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00078",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "时候",
+        "做",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00079",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00080",
+      "reference": [
+        "你",
+        "应该",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00081",
+      "reference": [
+        "你",
+        "应该",
+        "学习",
+        "会",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "和",
+        "<unk>",
+        "事情",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00082",
+      "reference": [
+        "你",
+        "应该",
+        "注意",
+        "你",
+        "吃",
+        "喝",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00083",
+      "reference": [
+        "你",
+        "应该",
+        "用",
+        "多",
+        "时间",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00084",
+      "reference": [
+        "你",
+        "<unk>",
+        "样子",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00085",
+      "reference": [
+        "这里",
+        "事情",
+        "你",
+        "必须",
+        "做",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00086",
+      "reference": [
+        "<unk>",
+        "看",
+        "你",
+        "不",
+        "去",
+        "为什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00087",
+      "reference": [
+        "我",
+        "<unk>",
+        "你",
+        "怎么",
+        "决定",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00088",
+      "reference": [
+        "你",
+        "怎么",
+        "穿",
+        "这里",
+        "样子",
+        "去",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00089",
+      "reference": [
+        "<unk>",
+        "你",
+        "想",
+        "学习",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00090",
+      "reference": [
+        "<unk>",
+        "礼物",
+        "你",
+        "想",
+        "要",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00091",
+      "reference": [
+        "新",
+        "事情",
+        "你",
+        "愿意",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00092",
+      "reference": [
+        "你",
+        "昨天",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00093",
+      "reference": [
+        "你",
+        "晚上",
+        "去",
+        "玩",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00094",
+      "reference": [
+        "你",
+        "<unk>",
+        "一样",
+        "<unk>",
+        "不行",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00095",
+      "reference": [
+        "你",
+        "最近",
+        "生活",
+        "怎么样",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00096",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00097",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00098",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "到",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00099",
+      "reference": [
+        "你",
+        "朋友",
+        "游戏",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00100",
+      "reference": [
+        "你",
+        "<unk>",
+        "去",
+        "做",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00101",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "会",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00102",
+      "reference": [
+        "你",
+        "<unk>",
+        "礼物",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00103",
+      "reference": [
+        "你",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00104",
+      "reference": [
+        "你",
+        "家",
+        "<unk>",
+        "有",
+        "哪些",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00105",
+      "reference": [
+        "你",
+        "小",
+        "<unk>",
+        "是",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00106",
+      "reference": [
+        "你",
+        "想",
+        "法",
+        "是",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00107",
+      "reference": [
+        "你",
+        "房",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00108",
+      "reference": [
+        "你",
+        "房",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00109",
+      "reference": [
+        "你",
+        "手",
+        "开始",
+        "<unk>",
+        "时间",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00110",
+      "reference": [
+        "你",
+        "电话",
+        "<unk>",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00111",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "大",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00112",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "好",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00113",
+      "reference": [
+        "你",
+        "想",
+        "要",
+        "幸福",
+        "真",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00114",
+      "reference": [
+        "你",
+        "自己",
+        "来",
+        "真",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00115",
+      "reference": [
+        "你",
+        "穿",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00116",
+      "reference": [
+        "你",
+        "再",
+        "<unk>",
+        "时间",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00117",
+      "reference": [
+        "你",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00118",
+      "reference": [
+        "你",
+        "告诉",
+        "<unk>",
+        "站",
+        "在",
+        "哪",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00119",
+      "reference": [
+        "你",
+        "帮助",
+        "妈妈",
+        "时间",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00120",
+      "reference": [
+        "你",
+        "帮助",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00121",
+      "reference": [
+        "你",
+        "成功",
+        "我",
+        "高兴",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00122",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00123",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00124",
+      "reference": [
+        "你",
+        "给",
+        "<unk>",
+        "小",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00125",
+      "reference": [
+        "你",
+        "送",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00126",
+      "reference": [
+        "你",
+        "<unk>",
+        "喝",
+        "完",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00127",
+      "reference": [
+        "你",
+        "<unk>",
+        "好",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00128",
+      "reference": [
+        "你",
+        "如果",
+        "<unk>",
+        "看",
+        "我",
+        "<unk>",
+        "你",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00129",
+      "reference": [
+        "你",
+        "如果",
+        "<unk>",
+        "你",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00130",
+      "reference": [
+        "你",
+        "见",
+        "<unk>",
+        "事情",
+        "最",
+        "好",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00131",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "像",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00132",
+      "reference": [
+        "你",
+        "说话",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00133",
+      "reference": [
+        "你",
+        "走",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00134",
+      "reference": [
+        "你",
+        "还是",
+        "坐",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00135",
+      "reference": [
+        "你",
+        "还是",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00136",
+      "reference": [
+        "你",
+        "又",
+        "要",
+        "<unk>",
+        "时间",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00137",
+      "reference": [
+        "你",
+        "妈妈",
+        "说",
+        "什么",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00138",
+      "reference": [
+        "你",
+        "做",
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00139",
+      "reference": [
+        "你",
+        "<unk>",
+        "做",
+        "以后",
+        "<unk>",
+        "会",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00140",
+      "reference": [
+        "你",
+        "样子",
+        "<unk>",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00141",
+      "reference": [
+        "你",
+        "要",
+        "<unk>",
+        "多",
+        "<unk>",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00142",
+      "reference": [
+        "你",
+        "帮助",
+        "要",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00143",
+      "reference": [
+        "<unk>",
+        "我",
+        "<unk>",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00144",
+      "reference": [
+        "健康",
+        "最",
+        "重要",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00145",
+      "reference": [
+        "健康",
+        "最",
+        "大",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00146",
+      "reference": [
+        "<unk>",
+        "今天",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00147",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "好",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00148",
+      "reference": [
+        "我",
+        "<unk>",
+        "不行",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00149",
+      "reference": [
+        "你",
+        "<unk>",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00150",
+      "reference": [
+        "准备",
+        "<unk>",
+        "玩",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00151",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "比赛",
+        "你",
+        "参加",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00152",
+      "reference": [
+        "<unk>",
+        "人",
+        "<unk>",
+        "重要",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00153",
+      "reference": [
+        "前",
+        "<unk>",
+        "是",
+        "到",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00154",
+      "reference": [
+        "<unk>",
+        "东西",
+        "你",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00155",
+      "reference": [
+        "<unk>",
+        "人",
+        "你",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00156",
+      "reference": [
+        "找",
+        "<unk>",
+        "去",
+        "哪",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00157",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00158",
+      "reference": [
+        "空",
+        "房间",
+        "借",
+        "给",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00159",
+      "reference": [
+        "<unk>",
+        "中国",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00160",
+      "reference": [
+        "<unk>",
+        "应该",
+        "<unk>",
+        "喝",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00161",
+      "reference": [
+        "全部",
+        "国",
+        "<unk>",
+        "参加",
+        "高",
+        "<unk>",
+        "时间",
+        "一样",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00162",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00163",
+      "reference": [
+        "这",
+        "事",
+        "听",
+        "完",
+        "你",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00164",
+      "reference": [
+        "和",
+        "你",
+        "<unk>",
+        "一",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00165",
+      "reference": [
+        "那",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00166",
+      "reference": [
+        "因为",
+        "人",
+        "<unk>",
+        "多",
+        "<unk>",
+        "消费",
+        "<unk>",
+        "<unk>",
+        "大",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00167",
+      "reference": [
+        "国家",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00168",
+      "reference": [
+        "在",
+        "<unk>",
+        "我",
+        "感觉",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00169",
+      "reference": [
+        "在",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00170",
+      "reference": [
+        "在",
+        "这",
+        "明天",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00171",
+      "reference": [
+        "<unk>",
+        "找",
+        "到",
+        "这",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00172",
+      "reference": [
+        "<unk>",
+        "没有",
+        "这",
+        "地方",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00173",
+      "reference": [
+        "<unk>",
+        "门",
+        "关",
+        "快",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00174",
+      "reference": [
+        "坐",
+        "那",
+        "学习",
+        "很",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00175",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "以后",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00176",
+      "reference": [
+        "<unk>",
+        "还",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00177",
+      "reference": [
+        "大家",
+        "请",
+        "坐",
+        "不",
+        "用",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00178",
+      "reference": [
+        "大家",
+        "都",
+        "很",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00179",
+      "reference": [
+        "<unk>",
+        "学",
+        "<unk>",
+        "学",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00180",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "不是",
+        "好",
+        "事",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00181",
+      "reference": [
+        "<unk>",
+        "在",
+        "工作",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00182",
+      "reference": [
+        "如何",
+        "可以",
+        "让",
+        "事情",
+        "<unk>",
+        "更",
+        "好",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00183",
+      "reference": [
+        "妈妈",
+        "喜欢",
+        "睡觉",
+        "<unk>",
+        "给",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00184",
+      "reference": [
+        "妈妈",
+        "<unk>",
+        "我",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00185",
+      "reference": [
+        "妈妈",
+        "我",
+        "行李",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00186",
+      "reference": [
+        "学习",
+        "<unk>",
+        "重要",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00187",
+      "reference": [
+        "<unk>",
+        "地方",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00188",
+      "reference": [
+        "帮助",
+        "给",
+        "爸爸",
+        "妈妈",
+        "问",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00189",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00190",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "慢",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00191",
+      "reference": [
+        "想",
+        "去",
+        "哪里",
+        "玩",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00192",
+      "reference": [
+        "想",
+        "学",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00193",
+      "reference": [
+        "<unk>",
+        "好",
+        "慢",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00194",
+      "reference": [
+        "我",
+        "一定",
+        "可以",
+        "成功",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00195",
+      "reference": [
+        "我",
+        "不会",
+        "让",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00196",
+      "reference": [
+        "我",
+        "不会",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00197",
+      "reference": [
+        "我",
+        "不",
+        "同意",
+        "你",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00198",
+      "reference": [
+        "我",
+        "不",
+        "喜欢",
+        "吃",
+        "<unk>",
+        "食物",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00199",
+      "reference": [
+        "我",
+        "不",
+        "喜欢",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00200",
+      "reference": [
+        "我",
+        "不",
+        "喜欢",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00201",
+      "reference": [
+        "我",
+        "不",
+        "喜欢",
+        "吃",
+        "<unk>",
+        "食物",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00202",
+      "reference": [
+        "我",
+        "不",
+        "喜欢",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00203",
+      "reference": [
+        "我",
+        "<unk>",
+        "你",
+        "可以",
+        "完成",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00204",
+      "reference": [
+        "我",
+        "不知道",
+        "怎么",
+        "去",
+        "<unk>",
+        "自己",
+        "时间",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00205",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00206",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "你",
+        "问题",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00207",
+      "reference": [
+        "我",
+        "今天",
+        "<unk>",
+        "怎么样",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00208",
+      "reference": [
+        "我",
+        "今天",
+        "早上",
+        "和",
+        "爸爸",
+        "一起",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00209",
+      "reference": [
+        "我们",
+        "一起",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00210",
+      "reference": [
+        "我们",
+        "上",
+        "去",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00211",
+      "reference": [
+        "我们",
+        "去",
+        "<unk>",
+        "时间",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00212",
+      "reference": [
+        "我们",
+        "再",
+        "新",
+        "开始",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00213",
+      "reference": [
+        "我们",
+        "<unk>",
+        "<unk>",
+        "发展",
+        "好",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00214",
+      "reference": [
+        "我们",
+        "去",
+        "吃饭",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00215",
+      "reference": [
+        "我们",
+        "去",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00216",
+      "reference": [
+        "我们",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00217",
+      "reference": [
+        "我们",
+        "<unk>",
+        "<unk>",
+        "课",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00218",
+      "reference": [
+        "我们",
+        "<unk>",
+        "咖啡",
+        "喝",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00219",
+      "reference": [
+        "我们",
+        "国家",
+        "要",
+        "发展",
+        "<unk>",
+        "经济",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00220",
+      "reference": [
+        "我们",
+        "应该",
+        "在",
+        "学习",
+        "<unk>",
+        "自己",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00221",
+      "reference": [
+        "我们",
+        "应该",
+        "有",
+        "自己",
+        "兴趣",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00222",
+      "reference": [
+        "我们",
+        "应该",
+        "<unk>",
+        "水果",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00223",
+      "reference": [
+        "我们",
+        "应该",
+        "<unk>",
+        "<unk>",
+        "安全",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00224",
+      "reference": [
+        "我们",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00225",
+      "reference": [
+        "我们",
+        "明天",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00226",
+      "reference": [
+        "我们",
+        "晚上",
+        "去",
+        "吃",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00227",
+      "reference": [
+        "我们",
+        "有",
+        "机会",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00228",
+      "reference": [
+        "我们",
+        "以后",
+        "再",
+        "见",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00229",
+      "reference": [
+        "我们",
+        "来",
+        "<unk>",
+        "家",
+        "<unk>",
+        "事",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00230",
+      "reference": [
+        "我们",
+        "<unk>",
+        "时间",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00231",
+      "reference": [
+        "我们",
+        "<unk>",
+        "继续",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00232",
+      "reference": [
+        "我们",
+        "<unk>",
+        "老师",
+        "漂亮",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00233",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "别人",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00234",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "文化",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00235",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00236",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00237",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "自己",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00238",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "学习",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00239",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "新",
+        "<unk>",
+        "<unk>",
+        "国",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00240",
+      "reference": [
+        "我们",
+        "要",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00241",
+      "reference": [
+        "我们",
+        "要",
+        "有",
+        "好",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00242",
+      "reference": [
+        "我们",
+        "还是",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00243",
+      "reference": [
+        "我",
+        "<unk>",
+        "会",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00244",
+      "reference": [
+        "我",
+        "会",
+        "给",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00245",
+      "reference": [
+        "我",
+        "城市",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00246",
+      "reference": [
+        "我",
+        "<unk>",
+        "做",
+        "自己",
+        "作业",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00247",
+      "reference": [
+        "我",
+        "准备",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00248",
+      "reference": [
+        "我",
+        "<unk>",
+        "买",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00249",
+      "reference": [
+        "我",
+        "<unk>",
+        "飞机",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00250",
+      "reference": [
+        "我",
+        "<unk>",
+        "说话",
+        "影响",
+        "你",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00251",
+      "reference": [
+        "我",
+        "<unk>",
+        "这个",
+        "意思",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00252",
+      "reference": [
+        "我",
+        "去",
+        "找",
+        "<unk>",
+        "问",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00253",
+      "reference": [
+        "我",
+        "去",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00254",
+      "reference": [
+        "我",
+        "书",
+        "看",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00255",
+      "reference": [
+        "我",
+        "同意",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00256",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00257",
+      "reference": [
+        "我",
+        "<unk>",
+        "心",
+        "菜",
+        "喜欢",
+        "吃",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00258",
+      "reference": [
+        "我",
+        "<unk>",
+        "吃",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00259",
+      "reference": [
+        "我",
+        "<unk>",
+        "喜欢",
+        "吃",
+        "。"
+      ],
+      "prediction": [
+        "什么",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00260",
+      "reference": [
+        "<unk>",
+        "我",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00261",
+      "reference": [
+        "<unk>",
+        "我",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00262",
+      "reference": [
+        "<unk>",
+        "我",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00263",
+      "reference": [
+        "我",
+        "想",
+        "小孩",
+        "时候",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00264",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "我",
+        "国",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00265",
+      "reference": [
+        "我",
+        "国",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00266",
+      "reference": [
+        "我",
+        "国",
+        "<unk>",
+        "<unk>",
+        "在",
+        "东",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00267",
+      "reference": [
+        "我",
+        "国",
+        "经济",
+        "<unk>",
+        "继续",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00268",
+      "reference": [
+        "我",
+        "国",
+        "重要",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "东",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00269",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "我",
+        "国",
+        "要",
+        "一定",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00270",
+      "reference": [
+        "我",
+        "<unk>",
+        "新",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00271",
+      "reference": [
+        "我",
+        "房间",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00272",
+      "reference": [
+        "我",
+        "看",
+        "你",
+        "时间",
+        "长",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00273",
+      "reference": [
+        "我",
+        "工作",
+        "事情",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00274",
+      "reference": [
+        "我",
+        "生活",
+        "钱",
+        "我",
+        "妈妈",
+        "给",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00275",
+      "reference": [
+        "我",
+        "学",
+        "东西",
+        "多",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00276",
+      "reference": [
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00277",
+      "reference": [
+        "中国",
+        "外",
+        "文化",
+        "我",
+        "兴趣",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00278",
+      "reference": [
+        "我",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00279",
+      "reference": [
+        "我",
+        "以前",
+        "来",
+        "一些",
+        "完了",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00280",
+      "reference": [
+        "我",
+        "帮助",
+        "<unk>",
+        "好不好",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00281",
+      "reference": [
+        "<unk>",
+        "我",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00282",
+      "reference": [
+        "我",
+        "<unk>",
+        "时间",
+        "<unk>",
+        "我",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00283",
+      "reference": [
+        "我",
+        "找",
+        "你",
+        "<unk>",
+        "好不好",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00284",
+      "reference": [
+        "我",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00285",
+      "reference": [
+        "我",
+        "健康",
+        "担心",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00286",
+      "reference": [
+        "我",
+        "用",
+        "<unk>",
+        "少",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00287",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00288",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "事情",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00289",
+      "reference": [
+        "我",
+        "去",
+        "<unk>",
+        "找",
+        "老师",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00290",
+      "reference": [
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00291",
+      "reference": [
+        "今天",
+        "晚上",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00292",
+      "reference": [
+        "我",
+        "买",
+        "书",
+        "一",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00293",
+      "reference": [
+        "我",
+        "想",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00294",
+      "reference": [
+        "新",
+        "东西",
+        "我",
+        "<unk>",
+        "想",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00295",
+      "reference": [
+        "我",
+        "想",
+        "等",
+        "吃饭",
+        "完了",
+        "去",
+        "书",
+        "看",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00296",
+      "reference": [
+        "我",
+        "<unk>",
+        "家",
+        "<unk>",
+        "<unk>",
+        "想",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00297",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "我",
+        "想",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00298",
+      "reference": [
+        "希望",
+        "我",
+        "<unk>",
+        "人",
+        "工作",
+        "以后",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00299",
+      "reference": [
+        "希望",
+        "我",
+        "运动",
+        "<unk>",
+        "工作",
+        "以后",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00300",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "我",
+        "告诉",
+        "你",
+        "想",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00301",
+      "reference": [
+        "我",
+        "感觉",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "大",
+        "现在",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00302",
+      "reference": [
+        "你",
+        "<unk>",
+        "我",
+        "知道",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00303",
+      "reference": [
+        "我",
+        "手机",
+        "<unk>",
+        "没有",
+        "关",
+        "了",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00304",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "怎么",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00305",
+      "reference": [
+        "我",
+        "门",
+        "<unk>",
+        "早上",
+        "<unk>",
+        "必须",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00306",
+      "reference": [
+        "早上",
+        "我",
+        "起床",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00307",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00308",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00309",
+      "reference": [
+        "我",
+        "游泳",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00310",
+      "reference": [
+        "我",
+        "最",
+        "想",
+        "做",
+        "<unk>",
+        "是",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00311",
+      "reference": [
+        "我",
+        "最",
+        "<unk>",
+        "什么",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00312",
+      "reference": [
+        "我",
+        "有",
+        "<unk>",
+        "一",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00313",
+      "reference": [
+        "我",
+        "有",
+        "<unk>",
+        "一",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00314",
+      "reference": [
+        "我",
+        "有",
+        "问题",
+        "想",
+        "问",
+        "你",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00315",
+      "reference": [
+        "你",
+        "电话",
+        "<unk>",
+        "我",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00316",
+      "reference": [
+        "我",
+        "<unk>",
+        "多",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00317",
+      "reference": [
+        "我",
+        "<unk>",
+        "多",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00318",
+      "reference": [
+        "我",
+        "有",
+        "事情",
+        "你",
+        "等",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00319",
+      "reference": [
+        "我",
+        "<unk>",
+        "和",
+        "你们",
+        "再",
+        "见面",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00320",
+      "reference": [
+        "我",
+        "妈妈",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00321",
+      "reference": [
+        "房子",
+        "<unk>",
+        "<unk>",
+        "我",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00322",
+      "reference": [
+        "<unk>",
+        "服务",
+        "我",
+        "参加",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00323",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00324",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00325",
+      "reference": [
+        "<unk>",
+        "玩",
+        "游戏",
+        "要",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00326",
+      "reference": [
+        "我",
+        "现在",
+        "在",
+        "<unk>",
+        "旅游",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00327",
+      "reference": [
+        "我",
+        "现在",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00328",
+      "reference": [
+        "我",
+        "现在",
+        "想",
+        "吃",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00329",
+      "reference": [
+        "我",
+        "现在",
+        "生活",
+        "幸福",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00330",
+      "reference": [
+        "我",
+        "现在",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00331",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "技术",
+        "都",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00332",
+      "reference": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00333",
+      "reference": [
+        "我",
+        "自己",
+        "<unk>",
+        "你们",
+        "听",
+        "要",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00334",
+      "reference": [
+        "我",
+        "文化",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00335",
+      "reference": [
+        "我",
+        "说",
+        "<unk>",
+        "你",
+        "同意",
+        "？"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00336",
+      "reference": [
+        "妈妈",
+        "是",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00337",
+      "reference": [
+        "我",
+        "<unk>",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00338",
+      "reference": [
+        "我",
+        "爸爸",
+        "工作",
+        "在",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00339",
+      "reference": [
+        "我们",
+        "<unk>",
+        "悠久",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00340",
+      "reference": [
+        "我",
+        "睡觉",
+        "坏",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00341",
+      "reference": [
+        "这个",
+        "<unk>",
+        "我",
+        "<unk>",
+        "做",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00342",
+      "reference": [
+        "我",
+        "<unk>",
+        "大",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00343",
+      "reference": [
+        "我",
+        "看",
+        "你",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00344",
+      "reference": [
+        "<unk>",
+        "我",
+        "害怕",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00345",
+      "reference": [
+        "<unk>",
+        "喜欢",
+        "<unk>",
+        "我",
+        "买",
+        "给",
+        "她",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00346",
+      "reference": [
+        "我",
+        "<unk>",
+        "找",
+        "吃饭",
+        "地方",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00347",
+      "reference": [
+        "你",
+        "全部",
+        "<unk>",
+        "我",
+        "<unk>",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00348",
+      "reference": [
+        "你",
+        "<unk>",
+        "我",
+        "借",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00349",
+      "reference": [
+        "我",
+        "<unk>",
+        "要",
+        "一",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00350",
+      "reference": [
+        "我",
+        "<unk>",
+        "去",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00351",
+      "reference": [
+        "我",
+        "感觉",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00352",
+      "reference": [
+        "我",
+        "在",
+        "哪里",
+        "等",
+        "你",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00353",
+      "reference": [
+        "他",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00354",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00355",
+      "reference": [
+        "我",
+        "准备",
+        "去",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00356",
+      "reference": [
+        "你",
+        "说",
+        "什么",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00357",
+      "reference": [
+        "我",
+        "吃饭",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00358",
+      "reference": [
+        "我",
+        "生活",
+        "钱",
+        "给",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00359",
+      "reference": [
+        "我",
+        "他",
+        "朋友",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00360",
+      "reference": [
+        "我",
+        "现在",
+        "<unk>",
+        "时间",
+        "有",
+        "想",
+        "旅游",
+        "。"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00361",
+      "reference": [
+        "我",
+        "穿",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00362",
+      "reference": [
+        "我",
+        "送",
+        "你",
+        "去",
+        "<unk>",
+        "做",
+        "身体",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "我",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00363",
+      "reference": [
+        "我",
+        "给",
+        "书",
+        "你",
+        "喜欢",
+        "？"
+      ],
+      "prediction": [
+        "？",
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00364",
+      "reference": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00365",
+      "reference": [
+        "机会",
+        "我",
+        "需要",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00366",
+      "reference": [
+        "新",
+        "<unk>",
+        "1",
+        "我",
+        "需要",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00367",
+      "reference": [
+        "房",
+        "<unk>",
+        "好",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00368",
+      "reference": [
+        "手机",
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00369",
+      "reference": [
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00370",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00371",
+      "reference": [
+        "明天",
+        "天气",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00372",
+      "reference": [
+        "明天",
+        "休息",
+        "你",
+        "舒服",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00373",
+      "reference": [
+        "明天",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00374",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00375",
+      "reference": [
+        "晚上",
+        "来",
+        "我",
+        "家",
+        "和",
+        "吃饭",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00376",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "美",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00377",
+      "reference": [
+        "最近",
+        "不",
+        "<unk>",
+        "心",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00378",
+      "reference": [
+        "最近",
+        "<unk>",
+        "价格",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00379",
+      "reference": [
+        "高",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "在",
+        "哪",
+        "？"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00380",
+      "reference": [
+        "你们",
+        "<unk>",
+        "我",
+        "高兴",
+        "。"
+      ],
+      "prediction": [
+        "。"
+      ]
+    },
+    {
+      "sample_id": "dev-00381",
+      "reference": [
+        "<unk>",
+        "不",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00382",
+      "reference": [
+        "旅游",
+        "去",
+        "想",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00383",
+      "reference": [
+        "<unk>",
+        "下",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00384",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "我",
+        "喜欢",
+        "更",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00385",
+      "reference": [
+        "书",
+        "看",
+        "时间",
+        "没有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00386",
+      "reference": [
+        "<unk>",
+        "人",
+        "法",
+        "说",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00387",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "美",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00388",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00389",
+      "reference": [
+        "漂亮",
+        "<unk>",
+        "相信",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00390",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "我",
+        "爱",
+        "最",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00391",
+      "reference": [
+        "<unk>",
+        "现在",
+        "你",
+        "喜欢",
+        "是",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00392",
+      "reference": [
+        "生活",
+        "全",
+        "心",
+        "<unk>",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00393",
+      "reference": [
+        "生活",
+        "<unk>",
+        "<unk>",
+        "怎么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00394",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "我们",
+        "生活",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00395",
+      "reference": [
+        "衣服",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00396",
+      "reference": [
+        "看",
+        "我",
+        "<unk>",
+        "真",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00397",
+      "reference": [
+        "看",
+        "我们",
+        "和",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00398",
+      "reference": [
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00399",
+      "reference": [
+        "票",
+        "价格",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00400",
+      "reference": [
+        "<unk>",
+        "东西",
+        "<unk>",
+        "最",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00401",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00402",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "我",
+        "要",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00403",
+      "reference": [
+        "<unk>",
+        "人",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00404",
+      "reference": [
+        "<unk>",
+        "美",
+        "<unk>",
+        "应该",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00405",
+      "reference": [
+        "<unk>",
+        "美",
+        "现在",
+        "开始",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00406",
+      "reference": [
+        "老师",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00407",
+      "reference": [
+        "<unk>",
+        "老师",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00408",
+      "reference": [
+        "帮助",
+        "我",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00409",
+      "reference": [
+        "帮助",
+        "你",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00410",
+      "reference": [
+        "<unk>",
+        "家",
+        "<unk>",
+        "哪里",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00411",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "是",
+        "中国",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00412",
+      "reference": [
+        "这里",
+        "<unk>",
+        "看",
+        "大",
+        "<unk>",
+        "好",
+        "想",
+        "吃",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00413",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "很",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00414",
+      "reference": [
+        "等",
+        "<unk>",
+        "雨",
+        "我们",
+        "<unk>",
+        "需要",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00415",
+      "reference": [
+        "见面",
+        "你",
+        "高兴",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00416",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "人",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00417",
+      "reference": [
+        "问题",
+        "解决",
+        "最",
+        "重要",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00418",
+      "reference": [
+        "<unk>",
+        "在",
+        "这里",
+        "<unk>",
+        "做",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00419",
+      "reference": [
+        "每",
+        "<unk>",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00420",
+      "reference": [
+        "大家",
+        "坐",
+        "好",
+        "等",
+        "汽车",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00421",
+      "reference": [
+        "大家",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "做",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00422",
+      "reference": [
+        "<unk>",
+        "在",
+        "哪",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00423",
+      "reference": [
+        "你",
+        "<unk>",
+        "大",
+        "是不是",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00424",
+      "reference": [
+        "和",
+        "你",
+        "<unk>",
+        "<unk>",
+        "不一样",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00425",
+      "reference": [
+        "<unk>",
+        "好",
+        "身体",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00426",
+      "reference": [
+        "汽车",
+        "准备",
+        "关",
+        "<unk>",
+        "快",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00427",
+      "reference": [
+        "汽车",
+        "准备",
+        "关",
+        "<unk>",
+        "快",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00428",
+      "reference": [
+        "运动",
+        "以前",
+        "<unk>",
+        "身体",
+        "热",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00429",
+      "reference": [
+        "担心",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00430",
+      "reference": [
+        "<unk>",
+        "做",
+        "什么",
+        "<unk>",
+        "<unk>",
+        "快",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00431",
+      "reference": [
+        "这里",
+        "<unk>",
+        "<unk>",
+        "看",
+        "第一次",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00432",
+      "reference": [
+        "等",
+        "<unk>",
+        "<unk>",
+        "到",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00433",
+      "reference": [
+        "等",
+        "<unk>",
+        "雨",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00434",
+      "reference": [
+        "<unk>",
+        "这里",
+        "你",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00435",
+      "reference": [
+        "这里",
+        "东西",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00436",
+      "reference": [
+        "这里",
+        "东西",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00437",
+      "reference": [
+        "这里",
+        "东西",
+        "<unk>",
+        "是",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00438",
+      "reference": [
+        "这里",
+        "事情",
+        "必须",
+        "告诉",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00439",
+      "reference": [
+        "这里",
+        "人",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00440",
+      "reference": [
+        "这里",
+        "人",
+        "问题",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00441",
+      "reference": [
+        "这里",
+        "<unk>",
+        "解决",
+        "我",
+        "时间",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00442",
+      "reference": [
+        "这里",
+        "<unk>",
+        "我",
+        "做",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00443",
+      "reference": [
+        "这里",
+        "<unk>",
+        "感觉",
+        "困难",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00444",
+      "reference": [
+        "这里",
+        "房",
+        "<unk>",
+        "可以",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00445",
+      "reference": [
+        "这里",
+        "<unk>",
+        "钱",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00446",
+      "reference": [
+        "这里",
+        "房",
+        "舒服",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00447",
+      "reference": [
+        "这里",
+        "方法",
+        "<unk>",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00448",
+      "reference": [
+        "这里",
+        "我",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00449",
+      "reference": [
+        "这里",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00450",
+      "reference": [
+        "这里",
+        "<unk>",
+        "是不是",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00451",
+      "reference": [
+        "这里",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00452",
+      "reference": [
+        "<unk>",
+        "这里",
+        "便宜",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00453",
+      "reference": [
+        "<unk>",
+        "这里",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00454",
+      "reference": [
+        "这里",
+        "<unk>",
+        "好",
+        "看",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00455",
+      "reference": [
+        "这里",
+        "电话",
+        "<unk>",
+        "是",
+        "谁",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00456",
+      "reference": [
+        "这里",
+        "<unk>",
+        "真",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00457",
+      "reference": [
+        "这里",
+        "<unk>",
+        "我",
+        "喜欢",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00458",
+      "reference": [
+        "这里",
+        "船",
+        "<unk>",
+        "<unk>",
+        "多少",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00459",
+      "reference": [
+        "这里",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "需要",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00460",
+      "reference": [
+        "这里",
+        "<unk>",
+        "菜",
+        "好不好",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00461",
+      "reference": [
+        "<unk>",
+        "这里",
+        "做",
+        "困难",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00462",
+      "reference": [
+        "这里",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00463",
+      "reference": [
+        "这里",
+        "一些",
+        "事情",
+        "让",
+        "决定",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00464",
+      "reference": [
+        "这",
+        "水果",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00465",
+      "reference": [
+        "大家",
+        "衣服",
+        "穿",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00466",
+      "reference": [
+        "这",
+        "事",
+        "<unk>",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00467",
+      "reference": [
+        "这",
+        "事",
+        "我们",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00468",
+      "reference": [
+        "这",
+        "<unk>",
+        "<unk>",
+        "很",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00469",
+      "reference": [
+        "<unk>",
+        "合适",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00470",
+      "reference": [
+        "这",
+        "<unk>",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00471",
+      "reference": [
+        "这",
+        "工作",
+        "人",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00472",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "我",
+        "和",
+        "有",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00473",
+      "reference": [
+        "这",
+        "<unk>",
+        "钱",
+        "便宜",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00474",
+      "reference": [
+        "这",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00475",
+      "reference": [
+        "游戏",
+        "你",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00476",
+      "reference": [
+        "这",
+        "东西",
+        "大家",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00477",
+      "reference": [
+        "这",
+        "<unk>",
+        "<unk>",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00478",
+      "reference": [
+        "这",
+        "礼物",
+        "钱",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00479",
+      "reference": [
+        "这",
+        "你",
+        "妈妈",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00480",
+      "reference": [
+        "我",
+        "朋友",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00481",
+      "reference": [
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00482",
+      "reference": [
+        "这",
+        "问题",
+        "我",
+        "<unk>",
+        "他",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00483",
+      "reference": [
+        "这",
+        "汽车",
+        "人",
+        "卖",
+        "票",
+        "没有",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00484",
+      "reference": [
+        "这",
+        "<unk>",
+        "我们",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00485",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00486",
+      "reference": [
+        "这",
+        "<unk>",
+        "<unk>",
+        "钱",
+        "<unk>",
+        "<unk>",
+        "需要",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00487",
+      "reference": [
+        "这",
+        "<unk>",
+        "我",
+        "请",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00488",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "漂亮",
+        "漂亮",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00489",
+      "reference": [
+        "这",
+        "东西",
+        "高兴",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00490",
+      "reference": [
+        "这",
+        "事",
+        "<unk>",
+        "他",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00491",
+      "reference": [
+        "电影",
+        "种类",
+        "这",
+        "你",
+        "喜欢",
+        "看",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00492",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "不行",
+        "？"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00493",
+      "reference": [
+        "这",
+        "船",
+        "人",
+        "多",
+        "坐",
+        "可以",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00494",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00495",
+      "reference": [
+        "菜",
+        "看",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00496",
+      "reference": [
+        "这",
+        "外",
+        "人",
+        "进",
+        "不行",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00497",
+      "reference": [
+        "这",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00498",
+      "reference": [
+        "<unk>",
+        "吃",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00499",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "不",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00500",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "怎么",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00501",
+      "reference": [
+        "这",
+        "<unk>",
+        "我",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00502",
+      "reference": [
+        "这",
+        "人",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00503",
+      "reference": [
+        "那",
+        "坐",
+        "有",
+        "我们",
+        "去",
+        "快",
+        "快",
+        "。"
+      ],
+      "prediction": [
+        "你",
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00504",
+      "reference": [
+        "那",
+        "<unk>",
+        "好",
+        "好",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00505",
+      "reference": [
+        "那",
+        "<unk>",
+        "<unk>",
+        "会",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00506",
+      "reference": [
+        "那",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00507",
+      "reference": [
+        "那",
+        "<unk>",
+        "你",
+        "以前",
+        "吃",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00508",
+      "reference": [
+        "那",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00509",
+      "reference": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00510",
+      "reference": [
+        "现在",
+        "<unk>",
+        "你",
+        "<unk>",
+        "吃",
+        "没有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00511",
+      "reference": [
+        "现在",
+        "晚上",
+        "他",
+        "<unk>",
+        "没有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00512",
+      "reference": [
+        "今天",
+        "<unk>",
+        "工作",
+        "有",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00513",
+      "reference": [
+        "飞机",
+        "<unk>",
+        "是",
+        "？"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00514",
+      "reference": [
+        "<unk>",
+        "身体",
+        "<unk>",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    },
+    {
+      "sample_id": "dev-00515",
+      "reference": [
+        "高兴",
+        "事",
+        "多",
+        "多",
+        "。"
+      ],
+      "prediction": [
+        "<unk>"
+      ]
+    }
+  ]
+}
