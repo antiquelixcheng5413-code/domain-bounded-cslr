@@ -1,0 +1,75 @@
+{
+  "probe": "llm-noise-window",
+  "protocol": "corrupt gold dev gloss -> route_a Qwen2.5-1.5B -> metrics; limit=40",
+  "model": "/mnt/d/part3_models/ms_cache/models/Qwen--Qwen2.5-1.5B-Instruct/snapshots/master",
+  "seed": 7,
+  "prompt": "你是一位中文手语翻译。请把下面的手语手势记号序列(Gloss)翻译成一个通顺、完整、符合中文语法的句子。只输出翻译结果本身，不要解释、不要加引号。\nGloss: {gloss}\n中文翻译：",
+  "results": {
+    "clean": {
+      "samples": 40,
+      "distinct": 40,
+      "collapsed": false,
+      "top_prediction_share": 0.025,
+      "top_prediction": "十年禁渔区时间长了。",
+      "bleu_1": 0.66,
+      "bleu_2": 0.4482,
+      "rouge_l": 0.6387,
+      "chrf": 0.555,
+      "exact_match": 0.05,
+      "noise_level": "clean"
+    },
+    "replace30": {
+      "samples": 40,
+      "distinct": 40,
+      "collapsed": false,
+      "top_prediction_share": 0.025,
+      "top_prediction": "我不能在禁止区域的老家里钓鱼。",
+      "bleu_1": 0.4481,
+      "bleu_2": 0.2683,
+      "rouge_l": 0.4414,
+      "chrf": 0.3698,
+      "exact_match": 0.0,
+      "noise_level": "replace30"
+    },
+    "replace50": {
+      "samples": 40,
+      "distinct": 40,
+      "collapsed": false,
+      "top_prediction_share": 0.025,
+      "top_prediction": "鱼满屋，长见识了。",
+      "bleu_1": 0.3278,
+      "bleu_2": 0.1646,
+      "rouge_l": 0.3275,
+      "chrf": 0.2589,
+      "exact_match": 0.0,
+      "noise_level": "replace50"
+    },
+    "noisy_realistic": {
+      "samples": 40,
+      "distinct": 40,
+      "collapsed": false,
+      "top_prediction_share": 0.025,
+      "top_prediction": "我老家养鱼事不长。",
+      "bleu_1": 0.3739,
+      "bleu_2": 0.2108,
+      "rouge_l": 0.4305,
+      "chrf": 0.3122,
+      "exact_match": 0.0,
+      "noise_level": "noisy_realistic"
+    },
+    "shuffle": {
+      "samples": 40,
+      "distinct": 40,
+      "collapsed": false,
+      "top_prediction_share": 0.025,
+      "top_prediction": "禁止在鱼区10公里范围内活动一年。",
+      "bleu_1": 0.6103,
+      "bleu_2": 0.3602,
+      "rouge_l": 0.5366,
+      "chrf": 0.4871,
+      "exact_match": 0.0,
+      "noise_level": "shuffle"
+    }
+  },
+  "test_split_read": false
+}

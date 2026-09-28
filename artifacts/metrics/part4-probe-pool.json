@@ -1,0 +1,291 @@
+{
+  "probe": "pool-strategy",
+  "protocol": "per-gloss ROC-AUC OneVsRest, train->dev, pooling/temporal aggregation only",
+  "results": {
+    "mean": {
+      "macro_auc": 0.6803,
+      "n_labels_with_positive_in_eval": 59,
+      "top_auc": [
+        {
+          "gloss": "这里",
+          "auc": 0.9526
+        },
+        {
+          "gloss": "这",
+          "auc": 0.8786
+        },
+        {
+          "gloss": "我",
+          "auc": 0.8405
+        },
+        {
+          "gloss": "你们",
+          "auc": 0.8323
+        },
+        {
+          "gloss": "今天",
+          "auc": 0.8258
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "要",
+          "auc": 0.3532
+        },
+        {
+          "gloss": "她",
+          "auc": 0.3567
+        },
+        {
+          "gloss": "一",
+          "auc": 0.3845
+        },
+        {
+          "gloss": "来",
+          "auc": 0.3853
+        },
+        {
+          "gloss": "为什么",
+          "auc": 0.4668
+        }
+      ],
+      "feature_family": "landmark",
+      "strategy": "mean",
+      "feature_dim": 368,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 60,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    },
+    "max": {
+      "macro_auc": 0.6708,
+      "n_labels_with_positive_in_eval": 59,
+      "top_auc": [
+        {
+          "gloss": "都",
+          "auc": 0.998
+        },
+        {
+          "gloss": "这里",
+          "auc": 0.9369
+        },
+        {
+          "gloss": "这",
+          "auc": 0.8987
+        },
+        {
+          "gloss": "今天",
+          "auc": 0.8635
+        },
+        {
+          "gloss": "多少",
+          "auc": 0.8343
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "她",
+          "auc": 0.2534
+        },
+        {
+          "gloss": "感觉",
+          "auc": 0.3833
+        },
+        {
+          "gloss": "为什么",
+          "auc": 0.3992
+        },
+        {
+          "gloss": "一",
+          "auc": 0.4301
+        },
+        {
+          "gloss": "你们",
+          "auc": 0.4374
+        }
+      ],
+      "feature_family": "landmark",
+      "strategy": "max",
+      "feature_dim": 368,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 60,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    },
+    "meanstd": {
+      "macro_auc": 0.7132,
+      "n_labels_with_positive_in_eval": 59,
+      "top_auc": [
+        {
+          "gloss": "这里",
+          "auc": 0.9596
+        },
+        {
+          "gloss": "这",
+          "auc": 0.9125
+        },
+        {
+          "gloss": "怎么",
+          "auc": 0.8934
+        },
+        {
+          "gloss": "多少",
+          "auc": 0.8741
+        },
+        {
+          "gloss": "时间",
+          "auc": 0.8687
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "一",
+          "auc": 0.3904
+        },
+        {
+          "gloss": "要",
+          "auc": 0.4025
+        },
+        {
+          "gloss": "她",
+          "auc": 0.4074
+        },
+        {
+          "gloss": "为什么",
+          "auc": 0.4173
+        },
+        {
+          "gloss": "来",
+          "auc": 0.4877
+        }
+      ],
+      "feature_family": "landmark",
+      "strategy": "meanstd",
+      "feature_dim": 736,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 60,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    },
+    "sample4": {
+      "macro_auc": 0.6494,
+      "n_labels_with_positive_in_eval": 59,
+      "top_auc": [
+        {
+          "gloss": "不行2",
+          "auc": 0.9338
+        },
+        {
+          "gloss": "这里",
+          "auc": 0.9224
+        },
+        {
+          "gloss": "这",
+          "auc": 0.8854
+        },
+        {
+          "gloss": "帮助（我）",
+          "auc": 0.8604
+        },
+        {
+          "gloss": "怎么",
+          "auc": 0.8258
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "都",
+          "auc": 0.1299
+        },
+        {
+          "gloss": "知道",
+          "auc": 0.2086
+        },
+        {
+          "gloss": "买",
+          "auc": 0.373
+        },
+        {
+          "gloss": "来",
+          "auc": 0.423
+        },
+        {
+          "gloss": "要",
+          "auc": 0.4704
+        }
+      ],
+      "feature_family": "landmark",
+      "strategy": "sample4",
+      "feature_dim": 1472,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 60,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    },
+    "sample8": {
+      "macro_auc": 0.6867,
+      "n_labels_with_positive_in_eval": 59,
+      "top_auc": [
+        {
+          "gloss": "这里",
+          "auc": 0.9583
+        },
+        {
+          "gloss": "今天",
+          "auc": 0.9077
+        },
+        {
+          "gloss": "这",
+          "auc": 0.8534
+        },
+        {
+          "gloss": "哪",
+          "auc": 0.8436
+        },
+        {
+          "gloss": "感觉",
+          "auc": 0.8338
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "来",
+          "auc": 0.224
+        },
+        {
+          "gloss": "都",
+          "auc": 0.2705
+        },
+        {
+          "gloss": "知道",
+          "auc": 0.3879
+        },
+        {
+          "gloss": "自己",
+          "auc": 0.4212
+        },
+        {
+          "gloss": "要",
+          "auc": 0.4825
+        }
+      ],
+      "feature_family": "landmark",
+      "strategy": "sample8",
+      "feature_dim": 2944,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 60,
+      "min_freq": 5,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    }
+  }
+}
