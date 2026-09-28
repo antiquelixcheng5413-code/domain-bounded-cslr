@@ -1,0 +1,52 @@
+{
+  "checkpoint": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/ctc-vl48-cap300.pt",
+  "split": "validation",
+  "samples": 515,
+  "test_split_read": false,
+  "buckets": {
+    "all": {
+      "wer": 0.9567078972407231,
+      "reference_tokens": 2102,
+      "matched_tokens": 92,
+      "token_recall": 0.04376784015223597,
+      "covered_samples": 515,
+      "distinct_tokens": 240
+    },
+    "content": {
+      "wer": 0.953315649867374,
+      "reference_tokens": 1885,
+      "matched_tokens": 89,
+      "token_recall": 0.047214854111405836,
+      "covered_samples": 515,
+      "distinct_tokens": 214
+    },
+    "function": {
+      "wer": 0.9861751152073732,
+      "reference_tokens": 217,
+      "matched_tokens": 3,
+      "token_recall": 0.013824884792626729,
+      "covered_samples": 193,
+      "distinct_tokens": 26
+    },
+    "probe_strong_content": {
+      "wer": 1.0,
+      "reference_tokens": 10,
+      "matched_tokens": 0,
+      "token_recall": 0.0,
+      "covered_samples": 10,
+      "distinct_tokens": 5
+    },
+    "probe_weak_content": {
+      "wer": 1.0,
+      "reference_tokens": 4,
+      "matched_tokens": 0,
+      "token_recall": 0.0,
+      "covered_samples": 4,
+      "distinct_tokens": 3
+    }
+  },
+  "probe_bucket_sizes": {
+    "strong": 5,
+    "weak": 3
+  }
+}
