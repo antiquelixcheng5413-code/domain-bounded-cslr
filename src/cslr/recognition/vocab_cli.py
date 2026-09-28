@@ -259,6 +259,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="train only on records whose feature file already exists (useful mid-extraction)",
     )
     train.add_argument(
+        "--init-frontend",
+        type=Path,
+        help="contrastive-pretrain checkpoint whose normalize/projection warm-start the frontend",
+    )
+    train.add_argument(
         "--vocab-present-only",
         action="store_true",
         help="build the vocabulary from extracted train records only (keeps it honest mid-extraction)",
@@ -368,6 +373,7 @@ def train_command(args: argparse.Namespace) -> int:
         limit_train=args.limit_train,
         limit_validation=args.limit_validation,
         present_only=args.present_only,
+        init_frontend=args.init_frontend,
     )
     payload = result.as_dict()
     payload["test_split_read"] = False

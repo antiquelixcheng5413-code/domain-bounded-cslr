@@ -417,12 +417,17 @@ def train_ctc(
     limit_train: int | None = None,
     limit_validation: int | None = None,
     present_only: bool = False,
+    init_frontend: Path | None = None,
 ) -> TrainResult:
     """Train the CTC gloss recognizer. Nothing here touches the test split.
 
     ``present_only`` skips records whose feature file has not been extracted yet, which is what
     makes iterative training possible while the (hours long) extraction is still running. The
     dropped ids are reported in the result so a run can never silently pretend to use everything.
+
+    ``init_frontend`` points at a contrastive-pretraining checkpoint whose ``normalize.*`` /
+    ``projection.*`` weights warm-start the recognizer's frontend (section 22); the LSTM and
+    classifier stay randomly initialised.
     """
 
     records = load_records(manifest_path)
@@ -450,6 +455,29 @@ def train_ctc(
 
     device = resolve_device(training_config.device)
     model = CTCRecognizer(model_config).to(device)
+    if init_frontend is not None:
+        from cslr.recognition.contrastive_pretrain import copy_frontend_weights
+
+        payload = torch.load(init_frontend, map_location="cpu", weights_only=False)
+        copied_missing, copied_unexpected, copied_skipped = copy_frontend_weights(
+            payload["state_dict"], model
+        )
+        print(
+            json.dumps(
+                {
+                    "init_frontend": str(init_frontend),
+                    "copied_keys": len(payload["state_dict"])
+                    - len(copied_missing)
+                    - len(copied_unexpected)
+                    - len(copied_skipped),
+                    "missing_keys": copied_missing,
+                    "unexpected_keys": copied_unexpected,
+                    "skipped_shape_mismatch": copied_skipped,
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=training_config.learning_rate,

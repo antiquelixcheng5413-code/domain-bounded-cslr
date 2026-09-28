@@ -1,0 +1,61 @@
+{
+  "probe": "discrim-power-of-contrastive-encoder",
+  "results": {
+    "contrastive_encoder": {
+      "macro_auc": 0.6435,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "告诉（我）",
+          "auc": 0.9981
+        },
+        {
+          "gloss": "新1",
+          "auc": 0.9864
+        },
+        {
+          "gloss": "最近",
+          "auc": 0.9824
+        },
+        {
+          "gloss": "都",
+          "auc": 0.9708
+        },
+        {
+          "gloss": "这里",
+          "auc": 0.9599
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "天气",
+          "auc": 0.072
+        },
+        {
+          "gloss": "学校",
+          "auc": 0.1051
+        },
+        {
+          "gloss": "别人",
+          "auc": 0.1556
+        },
+        {
+          "gloss": "再",
+          "auc": 0.1624
+        },
+        {
+          "gloss": "很",
+          "auc": 0.2257
+        }
+      ],
+      "feature": "contrastive-encoder",
+      "checkpoint": "artifacts/checkpoints/contrastive-vl48.pt",
+      "feature_dim": 256,
+      "n_train": 4973,
+      "n_eval": 515,
+      "n_labels": 200,
+      "baseline_macro_auc": 0.5,
+      "test_split_read": false
+    }
+  }
+}

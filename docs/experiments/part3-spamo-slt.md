@@ -642,3 +642,56 @@ python3 scripts/run_vl_frames.py --frames 48 --vocab-cap 300 --skip-extract
    - 虚词问题退居次位：等实词识别上来了，再通过 LLM/语言模型补虚词。
    - 三路融合（SpaMo 主线）的意义重新确认：它本质是把 rgb/landmark/VL 的互补判别信号
      对齐进一个表征——前提是时序编码器能把信号榨出来，否则仍会重演「信息在、提取不出」。
+
+## 22. 对比预训练（InfoNCE 视频↔gloss 对齐）被诊断性否定：信息上限在特征材质，不在对齐
+
+**动机**：§21 结论「特征里有强实词信息（AUC 0.93–1.0）、CTC 却没榨出来」指向判别式预训练。
+方案 A 把它具体化为：视频→gloss 词 InfoNCE 对齐，把前端权重热启动到 CTC。目标是让编码器
+学到更易被时序头利用的表征。结果否定，且诊断完整。
+
+**做法**（`src/cslr/recognition/contrastive_pretrain.py`，2026-09-28）：
+- `ContrastiveEncoder`：LayerNorm → projection(256) → 长度感知均值池化 → L2 归一。其
+  `normalize.*` / `projection.*` 子图与 `CTCRecognizer` 前端**结构完全一致**，可热启动。
+- `GlossEmbedding`：词表 300 词的可学习嵌入（index 0 = `<unk>`）。
+- Loss：multi-label InfoNCE，每样本对其含有的每个实词 token 打正，词表其余 token 为负
+  （`temperature=0.07`，in-batch 无额外负采样）。
+- 数据：train 4973 全量，VL48 特征 + 训练集 z-score 标准化（test 冻结，未读）。
+- 预训练：40 epoch，cosine decay，AdamW，loss 5.9 → 2.84 稳定收敛，4973 样本共 145 s。
+  收据 `artifacts/checkpoints/contrastive-vl48*.receipt.json`。
+- 热启动：`CTCRecognizer` 载入 `copy_frontend_weights`（严格跳过形状不匹配），LSTM/classifier
+  随机初始化，`--init-frontend` 接入 CTC 训练。
+
+**结果 1 · 热启动 CTC 无改善**（`ctc-vl48-warm.pt` vs 基线 `ctc-vl48-cap300.pt`）：
+
+| 模型 | best WER | blank_ratio | distinct(unique) | best_epoch |
+|---|---|---|---|---|
+| 基线 VL48（无预训练） | 0.8526 | 0.9652 | 24 | 7 |
+| 热启动 VL48（预训练前端） | 0.8543 | 0.9635 | 24 | 11 |
+
+WER / blank / distinct 在噪声内持平，坍缩依旧（hypothesis 平均长 1.74，dev 423/515 条
+预测为 `<unk>`）。
+
+**结果 2 · 预训练 encoder 的表征判别力探针**（`scripts/probe_contrastive_encoder.py`）：
+用与 §20 完全相同的 per-gloss ROC-AUC 机制，测 `ContrastiveEncoder` 输出的 clip 表征
+（train 4973 fit，dev 515 eval）：
+
+| 表征 | macro-AUC |
+|---|---|
+| VL48 原始特征（池化，§20） | 0.6459 |
+| **对比预训练 encoder（压缩到 256）** | **0.6435** |
+| landmark（§20，最强族） | 0.6821 |
+
+**结论（把瓶颈定位到特征材质，修正 §21 的方向预期）**：
+1. **对比预训练没有提升判别力**：encoder AUC 0.6435 ≈ 原始 VL48 0.646（探针噪声内，甚至略低）。
+   InfoNCE 只是把 2048 维的特征压缩投影到 256 维，**改变的只是维度，不是信息量**——clip 表征
+   的线性判别力被原始池化特征的信息上限锁死。
+2. **§21「特征是强的、只是没榨出来」需要再修正**：强实词（房子/休息/行李/告诉（我））在
+   **单 gloss** 上确有 0.93–1.0 AUC，但**所有 gloss 的宏平均**只有 ~0.64。即大部分实词并不被
+   特征明显区分，只有少数高频实词信息充分。模型无法靠这些少数词把序列整体识别出来。
+3. **真正的瓶颈是 VL48 冻结编码器的逐帧特征材质信息不足**（均值池化线性上限 0.646，低于
+   landmark 的 0.682）。下游无论用 CTC、池化+对齐还是预训练，都无法超越输入特征的信息上限。
+4. **判别式预训练的价值被否定**（在本特征材质下）：它不能凭空造信息。若坚持两阶段，改变输入
+   材质（更大的 VL 塔、更密帧、复合 rgb+landmark+VL 的融合特征）才是前提；在 VL48 上再堆
+   对齐/预训练是无意义的。
+5. **下一步的有效顺序**：先解决「输入特征信息上限」（提升 clip 判别力宏平均），再谈时序建模。
+   §23 记录据此设计的三路融合或更密 VL 表征方案。
