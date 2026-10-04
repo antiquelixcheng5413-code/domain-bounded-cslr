@@ -1,0 +1,654 @@
+{
+  "experiment": "P30 capacity control - is overfitting caused by excess capacity?",
+  "single_factor": "hidden/layers/dropout/weight_decay only; features, vocab, seed identical",
+  "criterion": "smaller config dev_WER <= base - 0.02",
+  "dev_freq_structure": {
+    "100+": 0.481,
+    "11-100": 0.231,
+    "3-10": 0.16,
+    "1-2": 0.067,
+    "OOV": 0.062,
+    "note": "share of dev tokens by training frequency; nearly half are high-frequency"
+  },
+  "reference_used": "folded tokens (same space as the training target)",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "results": [
+    {
+      "config": "base",
+      "hidden": 256,
+      "layers": 2,
+      "dropout": 0.3,
+      "wd": 0.0001,
+      "params_M": 2.8798,
+      "final_train_wer": 0.145,
+      "final_dev_wer": 0.5402,
+      "final_gap": 0.3952,
+      "dev_by_freq": {
+        "100+": {
+          "n_tokens": 1419,
+          "wer": 0.4003
+        },
+        "11-100": {
+          "n_tokens": 681,
+          "wer": 0.9178
+        },
+        "OOV": {
+          "n_tokens": 738,
+          "wer": 0.1707
+        }
+      },
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.0819,
+          "train_wer": 0.4944,
+          "dev_wer": 0.5617,
+          "gap": 0.0673,
+          "dev_n_distinct": 201,
+          "dev_len": 3.492
+        },
+        {
+          "epoch": 20,
+          "train_loss": 5.8106,
+          "train_wer": 0.2427,
+          "dev_wer": 0.5395,
+          "gap": 0.2968,
+          "dev_n_distinct": 374,
+          "dev_len": 4.068
+        },
+        {
+          "epoch": 30,
+          "train_loss": 3.8218,
+          "train_wer": 0.145,
+          "dev_wer": 0.5402,
+          "gap": 0.3952,
+          "dev_n_distinct": 402,
+          "dev_len": 4.206
+        }
+      ],
+      "minutes": 2.3,
+      "samples": [
+        {
+          "sid": "dev-00001",
+          "ref": [
+            "<unk>",
+            "年",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "时间",
+            "长",
+            "不",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "这里",
+            "但是",
+            "<unk>",
+            "时间",
+            "可以",
+            "。"
+          ],
+          "edit": 5,
+          "n_ref": 9
+        },
+        {
+          "sid": "dev-00002",
+          "ref": [
+            "2",
+            "<unk>",
+            "2",
+            "<unk>",
+            "年",
+            "高",
+            "考试",
+            "<unk>",
+            "一",
+            "<unk>",
+            "多",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "？"
+          ],
+          "edit": 8,
+          "n_ref": 13
+        },
+        {
+          "sid": "dev-00003",
+          "ref": [
+            "书",
+            "看",
+            "多少",
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 3,
+          "n_ref": 6
+        },
+        {
+          "sid": "dev-00004",
+          "ref": [
+            "<unk>",
+            "时间",
+            "<unk>",
+            "是",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "时间",
+            "看",
+            "。"
+          ],
+          "edit": 2,
+          "n_ref": 5
+        },
+        {
+          "sid": "dev-00005",
+          "ref": [
+            "<unk>",
+            "时间",
+            "还",
+            "长",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "时间",
+            "怎么",
+            "。"
+          ],
+          "edit": 2,
+          "n_ref": 5
+        }
+      ]
+    },
+    {
+      "config": "small",
+      "hidden": 128,
+      "layers": 2,
+      "dropout": 0.3,
+      "wd": 0.0001,
+      "params_M": 0.9633,
+      "final_train_wer": 0.4084,
+      "final_dev_wer": 0.5564,
+      "final_gap": 0.148,
+      "dev_by_freq": {
+        "100+": {
+          "n_tokens": 1419,
+          "wer": 0.3939
+        },
+        "11-100": {
+          "n_tokens": 681,
+          "wer": 0.9457
+        },
+        "OOV": {
+          "n_tokens": 738,
+          "wer": 0.2656
+        }
+      },
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 14.024,
+          "train_wer": 0.6292,
+          "dev_wer": 0.6572,
+          "gap": 0.028,
+          "dev_n_distinct": 112,
+          "dev_len": 2.716
+        },
+        {
+          "epoch": 20,
+          "train_loss": 10.0056,
+          "train_wer": 0.4618,
+          "dev_wer": 0.5712,
+          "gap": 0.1094,
+          "dev_n_distinct": 260,
+          "dev_len": 3.444
+        },
+        {
+          "epoch": 30,
+          "train_loss": 8.6952,
+          "train_wer": 0.4084,
+          "dev_wer": 0.5564,
+          "gap": 0.148,
+          "dev_n_distinct": 300,
+          "dev_len": 3.605
+        }
+      ],
+      "minutes": 1.2,
+      "samples": [
+        {
+          "sid": "dev-00001",
+          "ref": [
+            "<unk>",
+            "年",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "时间",
+            "长",
+            "不",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "他",
+            "<unk>",
+            "<unk>",
+            "不",
+            "。"
+          ],
+          "edit": 4,
+          "n_ref": 9
+        },
+        {
+          "sid": "dev-00002",
+          "ref": [
+            "2",
+            "<unk>",
+            "2",
+            "<unk>",
+            "年",
+            "高",
+            "考试",
+            "<unk>",
+            "一",
+            "<unk>",
+            "多",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 7,
+          "n_ref": 13
+        },
+        {
+          "sid": "dev-00003",
+          "ref": [
+            "书",
+            "看",
+            "多少",
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 3,
+          "n_ref": 6
+        },
+        {
+          "sid": "dev-00004",
+          "ref": [
+            "<unk>",
+            "时间",
+            "<unk>",
+            "是",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 2,
+          "n_ref": 5
+        },
+        {
+          "sid": "dev-00005",
+          "ref": [
+            "<unk>",
+            "时间",
+            "还",
+            "长",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "。"
+          ],
+          "edit": 3,
+          "n_ref": 5
+        }
+      ]
+    },
+    {
+      "config": "tiny",
+      "hidden": 64,
+      "layers": 1,
+      "dropout": 0.5,
+      "wd": 0.001,
+      "params_M": 0.299,
+      "final_train_wer": 0.6626,
+      "final_dev_wer": 0.6878,
+      "final_gap": 0.0252,
+      "dev_by_freq": {
+        "100+": {
+          "n_tokens": 1419,
+          "wer": 0.4553
+        },
+        "11-100": {
+          "n_tokens": 681,
+          "wer": 0.978
+        },
+        "OOV": {
+          "n_tokens": 738,
+          "wer": 0.7629
+        }
+      },
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 14.2709,
+          "train_wer": 0.7361,
+          "dev_wer": 0.7445,
+          "gap": 0.0084,
+          "dev_n_distinct": 45,
+          "dev_len": 1.698
+        },
+        {
+          "epoch": 20,
+          "train_loss": 11.9001,
+          "train_wer": 0.6832,
+          "dev_wer": 0.7079,
+          "gap": 0.0247,
+          "dev_n_distinct": 84,
+          "dev_len": 1.951
+        },
+        {
+          "epoch": 30,
+          "train_loss": 11.258,
+          "train_wer": 0.6626,
+          "dev_wer": 0.6878,
+          "gap": 0.0252,
+          "dev_n_distinct": 110,
+          "dev_len": 2.072
+        }
+      ],
+      "minutes": 0.98,
+      "samples": [
+        {
+          "sid": "dev-00001",
+          "ref": [
+            "<unk>",
+            "年",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "时间",
+            "长",
+            "不",
+            "。"
+          ],
+          "hyp": [
+            "他",
+            "不",
+            "。"
+          ],
+          "edit": 7,
+          "n_ref": 9
+        },
+        {
+          "sid": "dev-00002",
+          "ref": [
+            "2",
+            "<unk>",
+            "2",
+            "<unk>",
+            "年",
+            "高",
+            "考试",
+            "<unk>",
+            "一",
+            "<unk>",
+            "多",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 10,
+          "n_ref": 13
+        },
+        {
+          "sid": "dev-00003",
+          "ref": [
+            "书",
+            "看",
+            "多少",
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "。"
+          ],
+          "edit": 5,
+          "n_ref": 6
+        },
+        {
+          "sid": "dev-00004",
+          "ref": [
+            "<unk>",
+            "时间",
+            "<unk>",
+            "是",
+            "。"
+          ],
+          "hyp": [
+            "。"
+          ],
+          "edit": 4,
+          "n_ref": 5
+        },
+        {
+          "sid": "dev-00005",
+          "ref": [
+            "<unk>",
+            "时间",
+            "还",
+            "长",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "。"
+          ],
+          "edit": 3,
+          "n_ref": 5
+        }
+      ]
+    },
+    {
+      "config": "heavy_reg",
+      "hidden": 128,
+      "layers": 2,
+      "dropout": 0.5,
+      "wd": 0.001,
+      "params_M": 0.9633,
+      "final_train_wer": 0.4851,
+      "final_dev_wer": 0.5803,
+      "final_gap": 0.0952,
+      "dev_by_freq": {
+        "100+": {
+          "n_tokens": 1419,
+          "wer": 0.4327
+        },
+        "11-100": {
+          "n_tokens": 681,
+          "wer": 0.9604
+        },
+        "OOV": {
+          "n_tokens": 738,
+          "wer": 0.248
+        }
+      },
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 14.9259,
+          "train_wer": 0.5907,
+          "dev_wer": 0.6177,
+          "gap": 0.027,
+          "dev_n_distinct": 87,
+          "dev_len": 3.051
+        },
+        {
+          "epoch": 20,
+          "train_loss": 11.7788,
+          "train_wer": 0.5164,
+          "dev_wer": 0.5881,
+          "gap": 0.0717,
+          "dev_n_distinct": 193,
+          "dev_len": 3.298
+        },
+        {
+          "epoch": 30,
+          "train_loss": 10.7609,
+          "train_wer": 0.4851,
+          "dev_wer": 0.5803,
+          "gap": 0.0952,
+          "dev_n_distinct": 230,
+          "dev_len": 3.414
+        }
+      ],
+      "minutes": 1.19,
+      "samples": [
+        {
+          "sid": "dev-00001",
+          "ref": [
+            "<unk>",
+            "年",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "时间",
+            "长",
+            "不",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "他",
+            "<unk>",
+            "不",
+            "。"
+          ],
+          "edit": 5,
+          "n_ref": 9
+        },
+        {
+          "sid": "dev-00002",
+          "ref": [
+            "2",
+            "<unk>",
+            "2",
+            "<unk>",
+            "年",
+            "高",
+            "考试",
+            "<unk>",
+            "一",
+            "<unk>",
+            "多",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "<unk>",
+            "是",
+            "。"
+          ],
+          "edit": 8,
+          "n_ref": 13
+        },
+        {
+          "sid": "dev-00003",
+          "ref": [
+            "书",
+            "看",
+            "多少",
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 3,
+          "n_ref": 6
+        },
+        {
+          "sid": "dev-00004",
+          "ref": [
+            "<unk>",
+            "时间",
+            "<unk>",
+            "是",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "。"
+          ],
+          "edit": 2,
+          "n_ref": 5
+        },
+        {
+          "sid": "dev-00005",
+          "ref": [
+            "<unk>",
+            "时间",
+            "还",
+            "长",
+            "。"
+          ],
+          "hyp": [
+            "<unk>",
+            "<unk>",
+            "？"
+          ],
+          "edit": 4,
+          "n_ref": 5
+        }
+      ]
+    }
+  ],
+  "verdict": "容量不是瓶颈：最好的非 base 配置 +0.0162（阈值 -0.02），容量方向无效"
+}

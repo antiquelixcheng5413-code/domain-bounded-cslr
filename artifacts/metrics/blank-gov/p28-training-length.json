@@ -1,0 +1,159 @@
+{
+  "experiment": "P28 training length vs generalisation",
+  "single_factor": "number of epochs only; vocab/model/lr/batch/seed identical",
+  "criterion": {
+    "undertrained": "dev_WER drops >= 0.03 from first to last mark",
+    "feature_capped": "dev plateau (<0.01 change) while gap keeps widening"
+  },
+  "train_eval_subset": {
+    "n": 1500,
+    "seed": 12345
+  },
+  "all_data_real": true,
+  "reads_test_split": false,
+  "marks": [
+    30,
+    60,
+    100,
+    150
+  ],
+  "history": [
+    {
+      "epoch": 10,
+      "train_loss": 12.0995,
+      "train_wer": 0.668,
+      "dev_wer": 0.7188,
+      "gap": 0.0508,
+      "dev_n_distinct": 240,
+      "dev_len": 3.615
+    },
+    {
+      "epoch": 20,
+      "train_loss": 5.905,
+      "train_wer": 0.463,
+      "dev_wer": 0.6959,
+      "gap": 0.2329,
+      "dev_n_distinct": 381,
+      "dev_len": 4.15
+    },
+    {
+      "epoch": 30,
+      "train_loss": 2.7525,
+      "train_wer": 0.3532,
+      "dev_wer": 0.7061,
+      "gap": 0.3529,
+      "dev_n_distinct": 439,
+      "dev_len": 4.677
+    },
+    {
+      "epoch": 40,
+      "train_loss": 1.5847,
+      "train_wer": 0.3352,
+      "dev_wer": 0.7033,
+      "gap": 0.3681,
+      "dev_n_distinct": 411,
+      "dev_len": 4.512
+    },
+    {
+      "epoch": 50,
+      "train_loss": 1.0374,
+      "train_wer": 0.3292,
+      "dev_wer": 0.7167,
+      "gap": 0.3875,
+      "dev_n_distinct": 434,
+      "dev_len": 4.825
+    },
+    {
+      "epoch": 60,
+      "train_loss": 0.7287,
+      "train_wer": 0.3262,
+      "dev_wer": 0.6998,
+      "gap": 0.3736,
+      "dev_n_distinct": 443,
+      "dev_len": 4.599
+    },
+    {
+      "epoch": 70,
+      "train_loss": 0.5111,
+      "train_wer": 0.3254,
+      "dev_wer": 0.7132,
+      "gap": 0.3878,
+      "dev_n_distinct": 449,
+      "dev_len": 4.784
+    },
+    {
+      "epoch": 80,
+      "train_loss": 0.3384,
+      "train_wer": 0.3238,
+      "dev_wer": 0.7192,
+      "gap": 0.3954,
+      "dev_n_distinct": 446,
+      "dev_len": 4.86
+    },
+    {
+      "epoch": 90,
+      "train_loss": 0.24,
+      "train_wer": 0.3229,
+      "dev_wer": 0.7079,
+      "gap": 0.385,
+      "dev_n_distinct": 431,
+      "dev_len": 4.792
+    },
+    {
+      "epoch": 100,
+      "train_loss": 0.1696,
+      "train_wer": 0.3228,
+      "dev_wer": 0.7068,
+      "gap": 0.384,
+      "dev_n_distinct": 428,
+      "dev_len": 4.648
+    },
+    {
+      "epoch": 110,
+      "train_loss": 0.1199,
+      "train_wer": 0.3227,
+      "dev_wer": 0.7086,
+      "gap": 0.3859,
+      "dev_n_distinct": 434,
+      "dev_len": 4.755
+    },
+    {
+      "epoch": 120,
+      "train_loss": 0.0854,
+      "train_wer": 0.3227,
+      "dev_wer": 0.7044,
+      "gap": 0.3817,
+      "dev_n_distinct": 426,
+      "dev_len": 4.636
+    },
+    {
+      "epoch": 130,
+      "train_loss": 0.0641,
+      "train_wer": 0.3226,
+      "dev_wer": 0.7054,
+      "gap": 0.3828,
+      "dev_n_distinct": 429,
+      "dev_len": 4.644
+    },
+    {
+      "epoch": 140,
+      "train_loss": 0.0497,
+      "train_wer": 0.3226,
+      "dev_wer": 0.6998,
+      "gap": 0.3772,
+      "dev_n_distinct": 433,
+      "dev_len": 4.648
+    },
+    {
+      "epoch": 150,
+      "train_loss": 0.047,
+      "train_wer": 0.3226,
+      "dev_wer": 0.6998,
+      "gap": 0.3772,
+      "dev_n_distinct": 427,
+      "dev_len": 4.656
+    }
+  ],
+  "verdict": "中间态，需看曲线形状判断",
+  "minutes": 10.14
+}

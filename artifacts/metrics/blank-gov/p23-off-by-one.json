@@ -1,0 +1,18 @@
+{
+  "experiment": "P23 CTC target off-by-one verification",
+  "bug": "collate_samples passes vocabulary indices as CTC class indices; class 0 is blank so vocabulary index i must be sent as class i+1",
+  "criterion": "WER<0.05 and 8/8 perfect with +1",
+  "all_data_real": true,
+  "reads_dev": false,
+  "reads_test_split": false,
+  "runs": [
+    {
+      "plus_one": false,
+      "tag": "target 原样（现状 off-by-one）"
+    },
+    {
+      "plus_one": true,
+      "tag": "target+1（修复）"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "experiment": "P35 feature-space data augmentation",
+  "paper_basis": {
+    "ref07_SignBT_Sec5.2": "random shift + random discard or copy of 20% frames",
+    "ref12_CCLSLR_Sec3.2": "spatial-temporal augmentation to generate two views per sample for contrastive learning; its MPM masking needs RGB+generative model so NOT transferred",
+    "ref03_Wojcicka_Sec4.1.2": "scale and translation normalization for signer positioning/distance variation"
+  },
+  "augmentations": {
+    "shift": "circular time shift +-2 frames + gaussian noise sigma=0.01",
+    "mask": "drop 20% frames, nearest-neighbour replacement (not zeroing: measured detection rate is 100%, zeroing would fabricate absence)",
+    "scale": "random scale 0.9-1.1 + translation +-0.05 on the three blocks",
+    "combo": "random subset of the above"
+  },
+  "criterion": "dev WER <= base - 0.02 AND train must improve too",
+  "results": [
+    {
+      "config": "base",
+      "aug": "aug_identity",
+      "final_train_wer": 0.145,
+      "final_dev_wer": 0.5402,
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.0819,
+          "train_wer": 0.4944,
+          "dev_wer": 0.5617,
+          "dev_n_distinct": 201
+        },
+        {
+          "epoch": 20,
+          "train_loss": 5.8106,
+          "train_wer": 0.2427,
+          "dev_wer": 0.5395,
+          "dev_n_distinct": 374
+        },
+        {
+          "epoch": 30,
+          "train_loss": 3.8218,
+          "train_wer": 0.145,
+          "dev_wer": 0.5402,
+          "dev_n_distinct": 402
+        }
+      ],
+      "minutes": 2.65
+    },
+    {
+      "config": "shift",
+      "aug": "aug_shift",
+      "final_train_wer": 0.1923,
+      "final_dev_wer": 0.5366,
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.3961,
+          "train_wer": 0.5151,
+          "dev_wer": 0.5687,
+          "dev_n_distinct": 210
+        },
+        {
+          "epoch": 20,
+          "train_loss": 6.1011,
+          "train_wer": 0.2887,
+          "dev_wer": 0.5377,
+          "dev_n_distinct": 331
+        },
+        {
+          "epoch": 30,
+          "train_loss": 4.0721,
+          "train_wer": 0.1923,
+          "dev_wer": 0.5366,
+          "dev_n_distinct": 360
+        }
+      ],
+      "minutes": 2.81
+    },
+    {
+      "config": "mask",
+      "aug": "aug_mask",
+      "final_train_wer": 0.2289,
+      "final_dev_wer": 0.5409,
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.6299,
+          "train_wer": 0.5291,
+          "dev_wer": 0.5793,
+          "dev_n_distinct": 161
+        },
+        {
+          "epoch": 20,
+          "train_loss": 6.221,
+          "train_wer": 0.3136,
+          "dev_wer": 0.5511,
+          "dev_n_distinct": 337
+        },
+        {
+          "epoch": 30,
+          "train_loss": 4.1317,
+          "train_wer": 0.2289,
+          "dev_wer": 0.5409,
+          "dev_n_distinct": 371
+        }
+      ],
+      "minutes": 4.03
+    },
+    {
+      "config": "scale",
+      "aug": "aug_scale",
+      "final_train_wer": 0.1626,
+      "final_dev_wer": 0.5398,
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.286,
+          "train_wer": 0.506,
+          "dev_wer": 0.5729,
+          "dev_n_distinct": 193
+        },
+        {
+          "epoch": 20,
+          "train_loss": 6.1517,
+          "train_wer": 0.2547,
+          "dev_wer": 0.5444,
+          "dev_n_distinct": 352
+        },
+        {
+          "epoch": 30,
+          "train_loss": 4.1682,
+          "train_wer": 0.1626,
+          "dev_wer": 0.5398,
+          "dev_n_distinct": 394
+        }
+      ],
+      "minutes": 4.95
+    },
+    {
+      "config": "combo",
+      "aug": "aug_combo",
+      "final_train_wer": 0.2015,
+      "final_dev_wer": 0.5342,
+      "history": [
+        {
+          "epoch": 10,
+          "train_loss": 12.6077,
+          "train_wer": 0.5153,
+          "dev_wer": 0.5694,
+          "dev_n_distinct": 183
+        },
+        {
+          "epoch": 20,
+          "train_loss": 6.315,
+          "train_wer": 0.2912,
+          "dev_wer": 0.5409,
+          "dev_n_distinct": 359
+        },
+        {
+          "epoch": 30,
+          "train_loss": 4.2554,
+          "train_wer": 0.2015,
+          "dev_wer": 0.5342,
+          "dev_n_distinct": 372
+        }
+      ],
+      "minutes": 5.38
+    }
+  ],
+  "verdict": "数据增强无效：所有配置 dev WER 变化 >-0.01，landmark 表征局限无法靠扰动弥补",
+  "all_data_real": true,
+  "reads_test_split": false
+}

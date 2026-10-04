@@ -1,0 +1,109 @@
+{
+  "question": "OOV 折叠是否使 WER 虚高？虚高是否推翻已有结论？",
+  "note": "credit 上界 = sum over sentences of min(1, oov_count)。k 个不同 OOV 折叠成同一符号，模型吐 1 个 <unk> 即可匹配 min(1,k) 个。",
+  "train_side_oov": {
+    "max_tokens=300,min_frequency=2": {
+      "vocab_size": 301,
+      "n_tokens": 28272,
+      "n_oov_tokens": 9170,
+      "oov_rate": 0.3243491794001132,
+      "n_sent_with_oov": 4361
+    },
+    "max_tokens=1828,min_frequency=2": {
+      "vocab_size": 1828,
+      "n_tokens": 28272,
+      "n_oov_tokens": 3319,
+      "oov_rate": 0.11739530277306169,
+      "n_sent_with_oov": 2506
+    },
+    "max_tokens=3517,min_frequency=1": {
+      "vocab_size": 3517,
+      "n_tokens": 28272,
+      "n_oov_tokens": 1701,
+      "oov_rate": 0.06016553480475382,
+      "n_sent_with_oov": 1449
+    }
+  },
+  "dev_side": {
+    "max_tokens=300,min_frequency=2": {
+      "n_tokens": 2842,
+      "n_oov_tokens": 864,
+      "oov_rate": 0.3040112596762843,
+      "n_sent_with_oov": 469,
+      "credit_upper_bound": 469,
+      "wer_inflation_upper_bound": 0.16502463054187191,
+      "vocab_size": 301
+    },
+    "max_tokens=1828,min_frequency=2": {
+      "n_tokens": 2842,
+      "n_oov_tokens": 282,
+      "oov_rate": 0.0992258972554539,
+      "n_sent_with_oov": 233,
+      "credit_upper_bound": 233,
+      "wer_inflation_upper_bound": 0.08198451794510908,
+      "vocab_size": 1828
+    },
+    "max_tokens=3517,min_frequency=1": {
+      "n_tokens": 2842,
+      "n_oov_tokens": 176,
+      "oov_rate": 0.06192821956368754,
+      "n_sent_with_oov": 149,
+      "credit_upper_bound": 149,
+      "wer_inflation_upper_bound": 0.05242786769880366,
+      "vocab_size": 3517
+    }
+  },
+  "sensitivity": {
+    "max_tokens=300,min_frequency=2": {
+      "vocab_size": 301,
+      "wer_loose": 0.8506,
+      "inflation_upper_bound": 0.16502463054187191,
+      "wer_strict_range": [
+        0.8506,
+        1.015624630541872
+      ]
+    },
+    "max_tokens=1828,min_frequency=2": {
+      "vocab_size": 1828,
+      "wer_loose": 0.9257,
+      "inflation_upper_bound": 0.08198451794510908,
+      "wer_strict_range": [
+        0.9257,
+        1.007684517945109
+      ]
+    },
+    "max_tokens=3517,min_frequency=1": {
+      "vocab_size": 3517,
+      "wer_loose": 0.9553,
+      "inflation_upper_bound": 0.05242786769880366,
+      "wer_strict_range": [
+        0.9553,
+        1.0077278676988037
+      ]
+    }
+  },
+  "conclusion_overlap": true,
+  "verdict": "P6 的「词表越大 WER 越差」对 OOV 折叠口径敏感，严格口径下区间重叠，不足以判定优劣；「词表裁剪设下界」（OOV 30.4%）不受影响。",
+  "unaffected": [
+    {
+      "conclusion": "词表裁剪设下界（OOV 30.4%）",
+      "reason": "客观计数，与评估口径无关"
+    },
+    {
+      "conclusion": "P8 错误归因",
+      "reason": "已用严格口径（原始 CSV ref）重算"
+    },
+    {
+      "conclusion": "P7 signer 分析",
+      "reason": "相对比较，两侧同口径偏差抵消"
+    },
+    {
+      "conclusion": "A1/A2 的 macro-AUC",
+      "reason": "不涉及 gloss 序列，不用 WER"
+    },
+    {
+      "conclusion": "P0-P5 的 blank/peaky 诊断",
+      "reason": "基于 argmax 与 blank 率，不受 ref 口径影响"
+    }
+  ]
+}

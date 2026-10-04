@@ -1,0 +1,48 @@
+{
+  "experiment": "P34 face feature probe, corrected evaluation",
+  "fixes_over_p33": [
+    "50 videos -> 500 videos (3 evaluable classes is degenerate)",
+    "first-word-only labels -> all in-sentence glosses as queries",
+    "LOO within same batch -> video-level 80/20 heldout",
+    "mean-pool only -> mean+std pooling (P31: time-std/sample-std = 2.03)",
+    "added hands as an upper reference"
+  ],
+  "paper_basis": "ref02 EMNLP2023 Sec E2 + footnote 8: 128 contour keypoints",
+  "n_videos": 500,
+  "sampling": "random.Random(20261004)",
+  "n_points": 128,
+  "detection_note": "face detected on 473 videos with >=2 frames",
+  "heldout": {
+    "hands": {
+      "heldout_acc": 0.0028,
+      "majority_baseline": 0.1823,
+      "n_classes": 236,
+      "n_test": 362,
+      "lift_over_baseline": -0.1796
+    },
+    "face8": {
+      "heldout_acc": 0.0063,
+      "majority_baseline": 0.2194,
+      "n_classes": 230,
+      "n_test": 319,
+      "lift_over_baseline": -0.2132
+    },
+    "face128": {
+      "heldout_acc": 0.0031,
+      "majority_baseline": 0.2194,
+      "n_classes": 230,
+      "n_test": 319,
+      "lift_over_baseline": -0.2163
+    },
+    "face478": {
+      "heldout_acc": 0.0031,
+      "majority_baseline": 0.2194,
+      "n_classes": 230,
+      "n_test": 319,
+      "lift_over_baseline": -0.2163
+    }
+  },
+  "criterion": "face128 lift >= face8 lift * 1.5 and > 0.02",
+  "verdict": "面部扩容收益不足（1.01x，阈值 1.5x）-> 面部不是瓶颈 ⚠️ 但 hands 的 lift 也很低（-0.1796），说明单模态探针本身就不足以区分 gloss（P31 已测 1-NN 0.0098）——此判据可能过于苛刻",
+  "reads_test_split": false
+}

@@ -59,3 +59,13 @@ docs/ethics/consent-forms/
 build/
 dist/
 *.egg-info/
+
+# blank-governance experiment scratch: large derived caches and link farms
+# (JSON receipts under artifacts/metrics/blank-gov/ ARE tracked on purpose)
+artifacts/metrics/blank-gov/*.npz
+.vocab_link/
+.p15_feats/
+.p4_frames/
+.a2_cache/
+.venv_mp/
+models/*.task

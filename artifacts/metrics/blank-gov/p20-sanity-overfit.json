@@ -1,0 +1,96 @@
+{
+  "experiment": "P20 sanity check - can CTC overfit 8 real samples",
+  "criterion": "WER<0.05 and all samples decoded perfectly => pipeline self-consistent",
+  "all_data_real": true,
+  "reads_dev": false,
+  "reads_test_split": false,
+  "n_samples": 8,
+  "epochs": 400,
+  "lr": 0.003,
+  "dropout": 0.0,
+  "weight_decay": 0.0,
+  "history": [
+    {
+      "epoch": 50,
+      "train_loss": -6.106393814086914,
+      "loss_per_token": -1.2614,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 4.122846
+    },
+    {
+      "epoch": 100,
+      "train_loss": -8.802704811096191,
+      "loss_per_token": -1.8103,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 6.793817
+    },
+    {
+      "epoch": 150,
+      "train_loss": -9.194694519042969,
+      "loss_per_token": -1.8792,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.031583
+    },
+    {
+      "epoch": 200,
+      "train_loss": -9.241405487060547,
+      "loss_per_token": -1.8879,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.169299
+    },
+    {
+      "epoch": 250,
+      "train_loss": -9.265932083129883,
+      "loss_per_token": -1.8925,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.27225
+    },
+    {
+      "epoch": 300,
+      "train_loss": -9.268777847290039,
+      "loss_per_token": -1.8931,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.280858
+    },
+    {
+      "epoch": 350,
+      "train_loss": -9.269803047180176,
+      "loss_per_token": -1.8933,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.283605
+    },
+    {
+      "epoch": 400,
+      "train_loss": -9.270387649536133,
+      "loss_per_token": -1.8934,
+      "wer": 1.0,
+      "n_perfect": 0,
+      "n": 8,
+      "p_target_median": 8.285101
+    }
+  ],
+  "final": {
+    "epoch": 400,
+    "train_loss": -9.270387649536133,
+    "loss_per_token": -1.8934,
+    "wer": 1.0,
+    "n_perfect": 0,
+    "n": 8,
+    "p_target_median": 8.285101
+  },
+  "verdict": "管线有 bug：连 8 条样本都拟合不了 -> P0~P19b 的 WER 结论全部不可信"
+}

@@ -215,10 +215,15 @@ def collate_samples(samples: list[SequenceSample]) -> dict[str, Any]:
         features[row, :length] = sample.features
         mask[row, :length] = True
 
+    # CTC class space: 0 is reserved for the blank, so vocabulary index i must be
+    # sent as class i + 1 (``classes_to_token_ids`` reverses this with ``index - 1``).
+    # Passing the raw vocabulary index shifts every target by one AND turns
+    # vocabulary index 0 (``<unk>``) into the CTC blank, which silently stops
+    # training the model to ever emit ``<unk>`` at all.
     target_lengths = [len(sample.token_ids) for sample in samples]
     flattened: list[int] = []
     for sample in samples:
-        flattened.extend(sample.token_ids)
+        flattened.extend(token_id + 1 for token_id in sample.token_ids)
 
     return {
         "sample_ids": [sample.sample_id for sample in samples],

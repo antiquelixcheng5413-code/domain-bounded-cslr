@@ -1,0 +1,39 @@
+{
+  "experiment": "A2 video-specialist model (r3d_18, Kinetics) discriminability probe",
+  "arch": "r3d_18",
+  "pretrained": "Kinetics-400 (torchvision DEFAULT)",
+  "frames": 16,
+  "input_size": 112,
+  "feature_dim": 512,
+  "n_train_ids": 600,
+  "n_dev_ids": 515,
+  "literature_basis": {
+    "signshift": "Sec 4.2: 'Video features (1024-D) are extracted with an I3D network pretrained on Kinetics' -- r3d_18 is the same Kinetics pretraining family, closest available match",
+    "hands_on_counter": "Table III: MS-TCN+I3D 68.68 vs MS-TCN+HaMeR 76.22; structured features beat I3D despite 4x smaller dim",
+    "smart_counter": "Table 3: HS-I3D F1@50 only 8.43 vs ASFormer 89.39",
+    "expectation": "prior evidence is unfavorable; recorded to avoid post-hoc rationalisation"
+  },
+  "probe_results": {
+    "video_only": {
+      "macro_auc": 0.5169515034852512,
+      "dim": 512,
+      "n_classes": 86
+    },
+    "landmark_pooled": {
+      "macro_auc": 0.5239326824473026,
+      "dim": 736,
+      "n_classes": 86
+    },
+    "fused": {
+      "macro_auc": 0.5133236332497982,
+      "dim": 1248,
+      "n_classes": 86
+    }
+  },
+  "baseline_landmark_framewise": 0.6821,
+  "best_macro_auc": 0.5239326824473026,
+  "fusion_gain_over_landmark": -0.010609049197504383,
+  "verdict": "红灯：不优于现有 landmark，与 A1 同结论；且融合增益≤0.01 → 视频塔与 landmark 无互补信息",
+  "test_split_read": false,
+  "minutes": 4.970389008522034
+}

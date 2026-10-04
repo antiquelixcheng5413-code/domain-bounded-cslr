@@ -1,0 +1,154 @@
+{
+  "experiment": "P26 blank ratio after off-by-one fix",
+  "question": "is the high blank ratio problem solved?",
+  "T_frames": 48,
+  "mean_ref_len": 5.52,
+  "min_nonblank_frames_single_peak": 10.04,
+  "theoretical_healthy_blank_ratio": 0.7908,
+  "note": "CTC needs blank to separate symbols; healthy blank is ~77%, not ~0%",
+  "before_fix_off_by_one_model": {
+    "blank_ratio": 0.9698,
+    "peak_frames_per_token": 0.26,
+    "wer": 0.9926,
+    "source": "P0 diag_peaky"
+  },
+  "after_fix": {
+    "dev": [
+      {
+        "epoch": 1,
+        "train_loss": 30.0505,
+        "dev": {
+          "blank_ratio": 0.9778,
+          "peak_frames_per_token": 1.0,
+          "n_nonblank_runs_mean": 1.0661,
+          "run_len_mean": 1.0,
+          "run_len_median": 1.0,
+          "run_len_p90": 1.0,
+          "nonblank_ratio": 0.0222,
+          "mean_pred_len": 1.0661,
+          "wer": 0.8753
+        }
+      },
+      {
+        "epoch": 2,
+        "train_loss": 19.3954,
+        "dev": {
+          "blank_ratio": 0.9402,
+          "peak_frames_per_token": 1.0,
+          "n_nonblank_runs_mean": 1.9358,
+          "run_len_mean": 1.4834,
+          "run_len_median": 1.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0598,
+          "mean_pred_len": 2.8716,
+          "wer": 0.7886
+        }
+      },
+      {
+        "epoch": 5,
+        "train_loss": 16.1821,
+        "dev": {
+          "blank_ratio": 0.9322,
+          "peak_frames_per_token": 1.0284,
+          "n_nonblank_runs_mean": 2.07,
+          "run_len_mean": 1.5724,
+          "run_len_median": 2.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0678,
+          "mean_pred_len": 3.1634,
+          "wer": 0.7484
+        }
+      },
+      {
+        "epoch": 10,
+        "train_loss": 12.0819,
+        "dev": {
+          "blank_ratio": 0.9262,
+          "peak_frames_per_token": 1.0131,
+          "n_nonblank_runs_mean": 2.3191,
+          "run_len_mean": 1.5285,
+          "run_len_median": 2.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0738,
+          "mean_pred_len": 3.4922,
+          "wer": 0.7163
+        }
+      },
+      {
+        "epoch": 15,
+        "train_loss": 8.4691,
+        "dev": {
+          "blank_ratio": 0.9139,
+          "peak_frames_per_token": 1.0435,
+          "n_nonblank_runs_mean": 2.7704,
+          "run_len_mean": 1.4916,
+          "run_len_median": 1.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0861,
+          "mean_pred_len": 3.9416,
+          "wer": 0.703
+        }
+      },
+      {
+        "epoch": 20,
+        "train_loss": 5.8106,
+        "dev": {
+          "blank_ratio": 0.9099,
+          "peak_frames_per_token": 1.0567,
+          "n_nonblank_runs_mean": 2.8755,
+          "run_len_mean": 1.5047,
+          "run_len_median": 1.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0901,
+          "mean_pred_len": 4.0681,
+          "wer": 0.6973
+        }
+      },
+      {
+        "epoch": 25,
+        "train_loss": 4.3499,
+        "dev": {
+          "blank_ratio": 0.9024,
+          "peak_frames_per_token": 1.0891,
+          "n_nonblank_runs_mean": 3.0642,
+          "run_len_mean": 1.5289,
+          "run_len_median": 1.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0976,
+          "mean_pred_len": 4.2704,
+          "wer": 0.7026
+        }
+      },
+      {
+        "epoch": 30,
+        "train_loss": 3.8218,
+        "dev": {
+          "blank_ratio": 0.9047,
+          "peak_frames_per_token": 1.079,
+          "n_nonblank_runs_mean": 2.9942,
+          "run_len_mean": 1.5276,
+          "run_len_median": 1.0,
+          "run_len_p90": 2.0,
+          "nonblank_ratio": 0.0953,
+          "mean_pred_len": 4.2062,
+          "wer": 0.7019
+        }
+      }
+    ],
+    "train": {
+      "blank_ratio": 0.8755,
+      "peak_frames_per_token": 1.1684,
+      "n_nonblank_runs_mean": 3.674,
+      "run_len_mean": 1.6269,
+      "run_len_median": 2.0,
+      "run_len_p90": 2.0,
+      "nonblank_ratio": 0.1245,
+      "mean_pred_len": 5.0382,
+      "wer": 0.4036
+    }
+  },
+  "verdict": "blank 率**未解决**：blank_ratio 0.9047，peak_frames_per_token 1.0790，非 blank 帧仍不成有效单调序列",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "minutes": 2.04
+}

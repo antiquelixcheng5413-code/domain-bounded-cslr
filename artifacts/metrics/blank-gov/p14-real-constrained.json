@@ -1,0 +1,591 @@
+{
+  "ckpt": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+  "n_samples": 514,
+  "threshold": 0.05,
+  "min_gap": 1,
+  "m_const": 2,
+  "note": "全部指标为真实特征实测解码，无公式推算",
+  "design_differences_vs_p12": [
+    "排序用 conf（帧内非blank最大概率）而非 onset 分数",
+    "M 截断到候选段数，不强行产生无效段",
+    "先阈值筛候选段，再在候选里选"
+  ],
+  "groups": {
+    "baseline": {
+      "wer_strict": 0.992600422832981,
+      "wer_loose": 0.8509513742071881,
+      "avg_out_tokens": 1.482490272373541,
+      "avg_candidates": 1.0252918287937742
+    },
+    "M_const": {
+      "wer_strict": 0.9704016913319239,
+      "wer_loose": 0.9704016913319239,
+      "avg_out_tokens": 1.0233463035019454,
+      "avg_candidates": 1.0252918287937742
+    },
+    "M_rand": {
+      "wer_strict": 0.9704016913319239,
+      "wer_loose": 0.9704016913319239,
+      "avg_out_tokens": 1.0077821011673151,
+      "avg_candidates": 1.0252918287937742
+    },
+    "M_clip": {
+      "wer_strict": 0.9704016913319239,
+      "wer_loose": 0.9704016913319239,
+      "avg_out_tokens": 1.0252918287937742,
+      "avg_candidates": 1.0252918287937742
+    }
+  },
+  "verdict": "约束解码使严格 WER 改善 0.0222（仅强制段数），但受候选段 1.03 个（参考 M 5.52）的硬上限约束",
+  "candidate_segments": {
+    "mean": 1.0252918287937742,
+    "median": 1.0,
+    "hist": {
+      "1": 502,
+      "2": 11,
+      "3": 1
+    }
+  },
+  "per_sample": [
+    {
+      "id": "dev-00001",
+      "T": 48,
+      "M": 9,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 9
+    },
+    {
+      "id": "dev-00002",
+      "T": 48,
+      "M": 13,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 13
+    },
+    {
+      "id": "dev-00003",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00004",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00005",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00006",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00007",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00008",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00009",
+      "T": 48,
+      "M": 7,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 7
+    },
+    {
+      "id": "dev-00010",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00011",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00012",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00013",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00014",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00015",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00016",
+      "T": 48,
+      "M": 3,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 3
+    },
+    {
+      "id": "dev-00017",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 2,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00018",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00019",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00020",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 2,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00021",
+      "T": 48,
+      "M": 10,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 10
+    },
+    {
+      "id": "dev-00022",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00023",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00024",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00025",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 2,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00026",
+      "T": 48,
+      "M": 8,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 8
+    },
+    {
+      "id": "dev-00027",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00028",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00029",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00030",
+      "T": 48,
+      "M": 3,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 3
+    },
+    {
+      "id": "dev-00031",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00032",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00033",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00034",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00035",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00036",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00037",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00038",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00039",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00040",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00041",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00042",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00043",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00044",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00045",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00046",
+      "T": 48,
+      "M": 7,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 7
+    },
+    {
+      "id": "dev-00047",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00048",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00049",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00050",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00051",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00052",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00053",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00054",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00055",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00056",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 2,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00057",
+      "T": 48,
+      "M": 6,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00058",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 2,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00059",
+      "T": 48,
+      "M": 5,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00060",
+      "T": 48,
+      "M": 4,
+      "n_cand": 1,
+      "M_rand": 1,
+      "baseline_segs": 1,
+      "baseline_dstrict": 4
+    }
+  ]
+}

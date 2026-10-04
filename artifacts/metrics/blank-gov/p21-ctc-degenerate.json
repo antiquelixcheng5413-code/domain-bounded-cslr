@@ -1,0 +1,237 @@
+{
+  "experiment": "P21 mechanism of the CTC degenerate solution",
+  "hypotheses": {
+    "H-A": "multi-path union -> beam search should fix it (REFUTED: beam made WER worse)",
+    "H-B": "per-frame label probability too low -> no single path is good"
+  },
+  "criterion": "label_p_max > 0.5 => info exists (fix supervision); else feature is the hard limit",
+  "all_data_real": true,
+  "reads_dev": false,
+  "reads_test_split": false,
+  "n_samples": 8,
+  "median": {
+    "p_target": 82000.99325,
+    "blank_p_mean": 0.937473,
+    "n_frames_label_top1": 17.0,
+    "label_p_max": 0.999999,
+    "label_p_mean": 0.3541435
+  },
+  "per_sample": [
+    {
+      "sid": "train-00004",
+      "L": 4,
+      "T": 48,
+      "nll_per_token": -1.7352,
+      "p_target": 1033.6344,
+      "blank_p_mean": 0.937496,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 45,
+      "label_p_max_over_frames": 0.999999,
+      "label_p_mean_over_frames": 0.312466,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 15,
+      "ref": [
+        "美",
+        "女",
+        "一",
+        "。"
+      ],
+      "hyp": [
+        "网",
+        "吃",
+        "<unk>"
+      ],
+      "edit": 4
+    },
+    {
+      "sid": "train-00005",
+      "L": 5,
+      "T": 48,
+      "nll_per_token": -2.4003,
+      "p_target": 162968.3521,
+      "blank_p_mean": 0.937497,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 45,
+      "label_p_max_over_frames": 0.999999,
+      "label_p_mean_over_frames": 0.395821,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 19,
+      "ref": [
+        "困难",
+        "挑战",
+        "忽视",
+        "不行",
+        "。"
+      ],
+      "hyp": [
+        "玩",
+        "多少",
+        "<unk>"
+      ],
+      "edit": 5
+    },
+    {
+      "sid": "train-00006",
+      "L": 6,
+      "T": 48,
+      "nll_per_token": -2.3888,
+      "p_target": 1677181.7099,
+      "blank_p_mean": 0.937473,
+      "blank_p_max": 0.999996,
+      "n_frames_blank_top1": 45,
+      "label_p_max_over_frames": 0.999996,
+      "label_p_mean_over_frames": 0.479185,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 23,
+      "ref": [
+        "学生",
+        "这",
+        "贫困",
+        "学校",
+        "退1",
+        "。"
+      ],
+      "hyp": [
+        "你",
+        "坐",
+        "<unk>"
+      ],
+      "edit": 6
+    },
+    {
+      "sid": "train-00007",
+      "L": 5,
+      "T": 48,
+      "nll_per_token": -1.3792,
+      "p_target": 988.173,
+      "blank_p_mean": 0.91664,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 44,
+      "label_p_max_over_frames": 0.999998,
+      "label_p_mean_over_frames": 0.208315,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 10,
+      "ref": [
+        "这",
+        "方面",
+        "帮助",
+        "给",
+        "。"
+      ],
+      "hyp": [
+        "你",
+        "不行",
+        "时间",
+        "<unk>"
+      ],
+      "edit": 5
+    },
+    {
+      "sid": "train-00008",
+      "L": 4,
+      "T": 48,
+      "nll_per_token": -1.7127,
+      "p_target": 944.6652,
+      "blank_p_mean": 0.937326,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 45,
+      "label_p_max_over_frames": 0.999999,
+      "label_p_mean_over_frames": 0.291517,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 14,
+      "ref": [
+        "一会儿",
+        "去",
+        "可以",
+        "。"
+      ],
+      "hyp": [
+        "不",
+        "这",
+        "<unk>"
+      ],
+      "edit": 4
+    },
+    {
+      "sid": "train-00009",
+      "L": 4,
+      "T": 48,
+      "nll_per_token": 0.0005,
+      "p_target": 0.998,
+      "blank_p_mean": 0.87532,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 42,
+      "label_p_max_over_frames": 0.99985,
+      "label_p_mean_over_frames": 0.062561,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 3,
+      "ref": [
+        "开始",
+        "一直",
+        "要",
+        "。"
+      ],
+      "hyp": [
+        "困难",
+        "汽车",
+        "好",
+        "<unk>"
+      ],
+      "edit": 4
+    },
+    {
+      "sid": "train-00010",
+      "L": 6,
+      "T": 48,
+      "nll_per_token": -2.5088,
+      "p_target": 3447196.9335,
+      "blank_p_mean": 0.937473,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 45,
+      "label_p_max_over_frames": 0.999999,
+      "label_p_mean_over_frames": 0.541616,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 26,
+      "ref": [
+        "分钟",
+        "后2",
+        "去",
+        "上班2",
+        "要",
+        "。"
+      ],
+      "hyp": [
+        "不",
+        "好",
+        "<unk>"
+      ],
+      "edit": 6
+    },
+    {
+      "sid": "train-00011",
+      "L": 4,
+      "T": 48,
+      "nll_per_token": -3.0227,
+      "p_target": 178196.6383,
+      "blank_p_mean": 0.958331,
+      "blank_p_max": 0.999999,
+      "n_frames_blank_top1": 46,
+      "label_p_max_over_frames": 0.999999,
+      "label_p_mean_over_frames": 0.541643,
+      "label_rank_min": 0,
+      "n_frames_label_is_top1": 26,
+      "ref": [
+        "都",
+        "辛苦",
+        "价值",
+        "。"
+      ],
+      "hyp": [
+        "用",
+        "<unk>"
+      ],
+      "edit": 4
+    }
+  ],
+  "verdict": "H-B 强版本：label 在个别帧上概率 > 0.5，**信息存在**。束搜索失效说明概率被 blank 的连乘压制 -> 解法是密集监督/缩短 T/特征增强，让 label 概率抬到可解码区间"
+}

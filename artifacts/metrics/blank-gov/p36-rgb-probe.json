@@ -1,0 +1,117 @@
+{
+  "experiment": "P36 RGB (CLIP ViT-B-32 frame-wise) discriminability probe",
+  "n_videos": 500,
+  "seed": 20261004,
+  "n_queries": 9280,
+  "views": [
+    "hands",
+    "upper",
+    "full368",
+    "rgb",
+    "rgb+hands"
+  ],
+  "results": {
+    "hands": {
+      "heldout_acc": 0.0139,
+      "train_acc_same_batch": 0.115,
+      "linear_acc": 0.0,
+      "majority_baseline": 0.1833,
+      "n_classes": 236,
+      "n_train": 1496,
+      "n_test": 360
+    },
+    "upper": {
+      "heldout_acc": 0.0222,
+      "train_acc_same_batch": 0.1076,
+      "linear_acc": 0.0,
+      "majority_baseline": 0.1833,
+      "n_classes": 236,
+      "n_train": 1496,
+      "n_test": 360
+    },
+    "full368": {
+      "heldout_acc": 0.0111,
+      "train_acc_same_batch": 0.1484,
+      "linear_acc": 0.0,
+      "majority_baseline": 0.1833,
+      "n_classes": 236,
+      "n_train": 1496,
+      "n_test": 360
+    },
+    "rgb": {
+      "heldout_acc": 0.0222,
+      "train_acc_same_batch": 0.119,
+      "linear_acc": 0.0,
+      "majority_baseline": 0.1833,
+      "n_classes": 236,
+      "n_train": 1496,
+      "n_test": 360
+    },
+    "rgb+hands": {
+      "heldout_acc": 0.0167,
+      "train_acc_same_batch": 0.1785,
+      "linear_acc": 0.0,
+      "majority_baseline": 0.1833,
+      "n_classes": 236,
+      "n_train": 1496,
+      "n_test": 360
+    }
+  },
+  "self_check_similarity": {
+    "hands": {
+      "same": 0.3774,
+      "diff": 0.3827,
+      "cohens_d": -0.0171
+    },
+    "upper": {
+      "same": 0.9093,
+      "diff": 0.8884,
+      "cohens_d": 0.3041
+    },
+    "full368": {
+      "same": 0.718,
+      "diff": 0.7115,
+      "cohens_d": 0.041
+    },
+    "rgb": {
+      "same": 0.7875,
+      "diff": 0.781,
+      "cohens_d": 0.1006
+    },
+    "rgb+hands": {
+      "same": 0.6155,
+      "diff": 0.6066,
+      "cohens_d": 0.0634
+    }
+  },
+  "verdict": "RGB 无增益（1.60x，阈值 1.5x）-> 小数据集上 CLIP 亦无法提供语义先验",
+  "minutes": 0.14,
+  "literature_basis": {
+    "emnp2023": "pose pre-training 'inevitably suffers from insufficient semantic cues compared to raw RGB' -> 跨模态方向的理论依据",
+    "ccl_slr": "RGB 与 pose 跨模态对比预训练对齐特征空间",
+    "signformer_gcn": "RGB(I3D)+骨架(ST-GCN) 双流相加融合；'most works rely solely on RGB features'（反向证据）"
+  },
+  "method_notes": {
+    "pooling": "mean+std（P31 实测 时间std/样本std=2.03，纯 mean 会抹掉时间信息）",
+    "split": "视频级 80/20，所有视图共用同一切分",
+    "queries": "句内全部 gloss（非仅首词）",
+    "why_four_metrics": "区分「特征没信息」与「评估器失效」：train同批 acc 低 => 评估器没工作，P34 结论需重新审视"
+  },
+  "notes": "只读 train 特征，未训练任何深度模型；A1/A2 旧结论在 off-by-one 模型上已作废，本探针为重做的第一步。",
+  "zscore_effect": {
+    "hands": {
+      "raw_d": -0.0171,
+      "zs_d": 0.0672
+    },
+    "upper": {
+      "raw_d": 0.3041,
+      "zs_d": 0.1432
+    },
+    "rgb": {
+      "raw_d": 0.1006,
+      "zs_d": 0.1448
+    }
+  },
+  "linear_probe_note": "acc 0.0000 非 bug：训练 loss 降到 0.207、预测覆盖 147/236 类，说明在学；但测试集 0 命中 = 对噪声纯过拟合（类权重下稀有类权重达 1503）。1-NN 更正则故得 0.0139。两者均约等于随机。",
+  "critical_finding": "P19/P31/P34 的探针用【整句池化】——一句 3.77 个 gloss 共用 1 个混合向量，却要求模型指出「这是第几个 gloss」。该任务本身不可解，与特征无关。P36 改为【片段池化】（按 gloss 数等分时间轴，每段对应 1 个 gloss）后任务良定义。"
+}

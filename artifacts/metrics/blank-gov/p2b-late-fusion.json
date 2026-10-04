@@ -1,0 +1,151 @@
+{
+  "experiment": "P2-b SMART-style late fusion on CTC blank rate",
+  "alpha_scan": {
+    "0.9": {
+      "blank_ratio": 0.9682638888888888,
+      "peak_frames_per_token": 0.267407840842598,
+      "peak_len_median": 1.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.7": {
+      "blank_ratio": 0.9666666666666665,
+      "peak_frames_per_token": 0.280866003510825,
+      "peak_len_median": 1.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.5": {
+      "blank_ratio": 0.9531944444444446,
+      "peak_frames_per_token": 0.3943826799297835,
+      "peak_len_median": 1.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.3": {
+      "blank_ratio": 0.5011111111111111,
+      "peak_frames_per_token": 4.203627852545348,
+      "peak_len_median": 4.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.1": {
+      "blank_ratio": 0.0,
+      "peak_frames_per_token": 8.42598010532475,
+      "peak_len_median": 48.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.05": {
+      "blank_ratio": 0.0,
+      "peak_frames_per_token": 8.42598010532475,
+      "peak_len_median": 48.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    },
+    "0.0": {
+      "blank_ratio": 0.0,
+      "peak_frames_per_token": 8.42598010532475,
+      "peak_len_median": 48.0,
+      "rec_blank_ratio_same_batch": 0.9682638888888888,
+      "rec_pfpt_same_batch": 0.267407840842598,
+      "mean_p_blank_rec": 0.8959558963775635,
+      "mean_p_blank_spot": 0.0008959505248640198
+    }
+  },
+  "best_alpha": 0.1,
+  "baseline": {
+    "blank_ratio": 0.9682638888888888,
+    "peak_frames_per_token": 0.267407840842598
+  },
+  "fused_best": {
+    "blank_ratio": 0.0,
+    "peak_frames_per_token": 8.42598010532475,
+    "peak_len_median": 48.0,
+    "rec_blank_ratio_same_batch": 0.9682638888888888,
+    "rec_pfpt_same_batch": 0.267407840842598,
+    "mean_p_blank_rec": 0.8959558963775635,
+    "mean_p_blank_spot": 0.0008959505248640198
+  },
+  "blank_abs_change": -0.9682638888888888,
+  "blank_rel_change": -1.0,
+  "spot_params_M": 0.352303,
+  "weak_supervision_note": "P_spot 用 TFD 伪边界切段 + gloss 均分做帧级标签，属弱监督；CE-CSL 无 sign-level 边界标注，无法得到人工帧级 GT。",
+  "config": {
+    "ckpt": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+    "train_feats": "artifacts/part3_features/train",
+    "val_feats": "artifacts/part3_features/validation",
+    "train_labels": "data/raw/CE-CSL/label/train.csv",
+    "val_labels": "data/raw/CE-CSL/label/dev.csv",
+    "epochs": 12,
+    "batch": 32,
+    "lr": 0.0005,
+    "train_limit": 4973,
+    "val_limit": 300,
+    "alphas": "0.9,0.7,0.5,0.3,0.1,0.05,0.0",
+    "out": "artifacts/metrics/blank-gov/p2b-late-fusion.json"
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "spot_loss": 3.7622700883791995
+    },
+    {
+      "epoch": 2,
+      "spot_loss": 3.447045081701034
+    },
+    {
+      "epoch": 3,
+      "spot_loss": 3.3677824903757143
+    },
+    {
+      "epoch": 4,
+      "spot_loss": 3.314937854424501
+    },
+    {
+      "epoch": 5,
+      "spot_loss": 3.2588699490596085
+    },
+    {
+      "epoch": 6,
+      "spot_loss": 3.212844675932175
+    },
+    {
+      "epoch": 7,
+      "spot_loss": 3.1666963543647375
+    },
+    {
+      "epoch": 8,
+      "spot_loss": 3.1235512235225777
+    },
+    {
+      "epoch": 9,
+      "spot_loss": 3.092256873081892
+    },
+    {
+      "epoch": 10,
+      "spot_loss": 3.0564904717298655
+    },
+    {
+      "epoch": 11,
+      "spot_loss": 3.0299895833700132
+    },
+    {
+      "epoch": 12,
+      "spot_loss": 3.018538163258479
+    }
+  ],
+  "minutes": 0.5676325122515361
+}

@@ -1,0 +1,516 @@
+{
+  "experiment": "P19 overfit vs feature separability",
+  "criterion": {
+    "overfit": "train_WER<0.3 and dev_WER>0.9",
+    "weak_feature": "train_WER>0.7",
+    "no_gloss_identity": "1NN(train proto -> dev) < 0.15"
+  },
+  "all_data_real": true,
+  "reads_test_split": false,
+  "vocab_size": 301,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 20.135782388142122,
+      "dev_wer": 0.9507,
+      "dev_n_distinct": 3,
+      "train_wer": 0.9704,
+      "gap": -0.0197,
+      "train_n_distinct": 3
+    },
+    {
+      "epoch": 2,
+      "train_loss": 9.400950650442013,
+      "dev_wer": 0.9926,
+      "dev_n_distinct": 6
+    },
+    {
+      "epoch": 3,
+      "train_loss": 8.654706212420974,
+      "dev_wer": 0.956,
+      "dev_n_distinct": 14
+    },
+    {
+      "epoch": 4,
+      "train_loss": 7.8643364368394995,
+      "dev_wer": 0.9662,
+      "dev_n_distinct": 25
+    },
+    {
+      "epoch": 5,
+      "train_loss": 7.206981928564763,
+      "dev_wer": 0.9782,
+      "dev_n_distinct": 37,
+      "train_wer": 0.9879,
+      "gap": -0.0097,
+      "train_n_distinct": 65
+    },
+    {
+      "epoch": 6,
+      "train_loss": 6.587152812650164,
+      "dev_wer": 0.9789,
+      "dev_n_distinct": 31
+    },
+    {
+      "epoch": 7,
+      "train_loss": 5.988304295722997,
+      "dev_wer": 0.981,
+      "dev_n_distinct": 49
+    },
+    {
+      "epoch": 8,
+      "train_loss": 5.418153025364219,
+      "dev_wer": 0.97,
+      "dev_n_distinct": 44
+    },
+    {
+      "epoch": 9,
+      "train_loss": 4.830899224832891,
+      "dev_wer": 0.9736,
+      "dev_n_distinct": 51
+    },
+    {
+      "epoch": 10,
+      "train_loss": 4.22394800732703,
+      "dev_wer": 0.9718,
+      "dev_n_distinct": 66,
+      "train_wer": 0.9872,
+      "gap": -0.0154,
+      "train_n_distinct": 292
+    },
+    {
+      "epoch": 11,
+      "train_loss": 3.5661817702541354,
+      "dev_wer": 0.9799,
+      "dev_n_distinct": 73
+    },
+    {
+      "epoch": 12,
+      "train_loss": 2.9646691543437957,
+      "dev_wer": 0.975,
+      "dev_n_distinct": 88
+    },
+    {
+      "epoch": 13,
+      "train_loss": 2.3288448099732375,
+      "dev_wer": 0.9774,
+      "dev_n_distinct": 108
+    },
+    {
+      "epoch": 14,
+      "train_loss": 1.6686532391452846,
+      "dev_wer": 0.9753,
+      "dev_n_distinct": 120
+    },
+    {
+      "epoch": 15,
+      "train_loss": 1.033645067309293,
+      "dev_wer": 0.9792,
+      "dev_n_distinct": 128
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.48417479113844014,
+      "dev_wer": 0.9785,
+      "dev_n_distinct": 137
+    },
+    {
+      "epoch": 17,
+      "train_loss": -0.07760565069487414,
+      "dev_wer": 0.9792,
+      "dev_n_distinct": 143
+    },
+    {
+      "epoch": 18,
+      "train_loss": -0.6167775630541168,
+      "dev_wer": 0.9746,
+      "dev_n_distinct": 163
+    },
+    {
+      "epoch": 19,
+      "train_loss": -1.1314771091005535,
+      "dev_wer": 0.9796,
+      "dev_n_distinct": 170
+    },
+    {
+      "epoch": 20,
+      "train_loss": -1.5768496635788143,
+      "dev_wer": 0.9782,
+      "dev_n_distinct": 176,
+      "train_wer": 0.9926,
+      "gap": -0.0145,
+      "train_n_distinct": 1837
+    },
+    {
+      "epoch": 21,
+      "train_loss": -1.9518643712796078,
+      "dev_wer": 0.9767,
+      "dev_n_distinct": 179
+    },
+    {
+      "epoch": 22,
+      "train_loss": -2.3156152920370103,
+      "dev_wer": 0.9746,
+      "dev_n_distinct": 193
+    },
+    {
+      "epoch": 23,
+      "train_loss": -2.605506137897377,
+      "dev_wer": 0.976,
+      "dev_n_distinct": 178
+    },
+    {
+      "epoch": 24,
+      "train_loss": -2.8513708292970517,
+      "dev_wer": 0.9778,
+      "dev_n_distinct": 198
+    },
+    {
+      "epoch": 25,
+      "train_loss": -3.048540239096311,
+      "dev_wer": 0.9764,
+      "dev_n_distinct": 182
+    },
+    {
+      "epoch": 26,
+      "train_loss": -3.244984487928233,
+      "dev_wer": 0.9764,
+      "dev_n_distinct": 186
+    },
+    {
+      "epoch": 27,
+      "train_loss": -3.3785442192262503,
+      "dev_wer": 0.9746,
+      "dev_n_distinct": 204
+    },
+    {
+      "epoch": 28,
+      "train_loss": -3.478483328655311,
+      "dev_wer": 0.9764,
+      "dev_n_distinct": 190
+    },
+    {
+      "epoch": 29,
+      "train_loss": -3.572729835106577,
+      "dev_wer": 0.9771,
+      "dev_n_distinct": 196
+    },
+    {
+      "epoch": 30,
+      "train_loss": -3.6251783509046382,
+      "dev_wer": 0.976,
+      "dev_n_distinct": 203,
+      "train_wer": 0.9935,
+      "gap": -0.0175,
+      "train_n_distinct": 2603
+    }
+  ],
+  "final": {
+    "epoch": 30,
+    "train_loss": -3.6251783509046382,
+    "dev_wer": 0.976,
+    "dev_n_distinct": 203,
+    "train_wer": 0.9935,
+    "gap": -0.0175,
+    "train_n_distinct": 2603
+  },
+  "verdict_overfit": "特征判别力不足确认：train 也学不好 -> 换模型无用，必须换特征",
+  "one_nn_in_sample": {
+    "n": 3619,
+    "acc": 0.08704061895551257,
+    "top_confusions": [
+      [
+        [
+          "我",
+          "国"
+        ],
+        301
+      ],
+      [
+        [
+          "你",
+          "你们"
+        ],
+        145
+      ],
+      [
+        [
+          "你",
+          "经常"
+        ],
+        106
+      ],
+      [
+        [
+          "你",
+          "商品"
+        ],
+        75
+      ],
+      [
+        [
+          "他",
+          "国"
+        ],
+        67
+      ],
+      [
+        [
+          "我",
+          "应该"
+        ],
+        51
+      ],
+      [
+        [
+          "我",
+          "相信"
+        ],
+        51
+      ],
+      [
+        [
+          "你",
+          "学"
+        ],
+        41
+      ],
+      [
+        [
+          "我们",
+          "国"
+        ],
+        36
+      ],
+      [
+        [
+          "你",
+          "悠久"
+        ],
+        33
+      ],
+      [
+        [
+          "你",
+          "这里"
+        ],
+        29
+      ],
+      [
+        [
+          "我",
+          "昨天"
+        ],
+        29
+      ],
+      [
+        [
+          "你",
+          "应该"
+        ],
+        28
+      ],
+      [
+        [
+          "我",
+          "经过"
+        ],
+        26
+      ],
+      [
+        [
+          "我",
+          "喜欢"
+        ],
+        25
+      ],
+      [
+        [
+          "这里",
+          "谢谢"
+        ],
+        25
+      ],
+      [
+        [
+          "你",
+          "真"
+        ],
+        24
+      ],
+      [
+        [
+          "今天",
+          "谢谢"
+        ],
+        23
+      ],
+      [
+        [
+          "我",
+          "不知道"
+        ],
+        22
+      ],
+      [
+        [
+          "你",
+          "谢谢"
+        ],
+        21
+      ]
+    ],
+    "nn_dist_mean": 0.1547817438840866,
+    "nn_dist_p90": 0.34269702434539795
+  },
+  "one_nn_cross_split": {
+    "n": 407,
+    "acc": 0.07616707616707617,
+    "top_confusions": [
+      [
+        [
+          "我",
+          "国"
+        ],
+        30
+      ],
+      [
+        [
+          "你",
+          "商品"
+        ],
+        16
+      ],
+      [
+        [
+          "你",
+          "经过"
+        ],
+        14
+      ],
+      [
+        [
+          "你",
+          "经常"
+        ],
+        14
+      ],
+      [
+        [
+          "我",
+          "累"
+        ],
+        13
+      ],
+      [
+        [
+          "我们",
+          "你们"
+        ],
+        12
+      ],
+      [
+        [
+          "我",
+          "不会"
+        ],
+        11
+      ],
+      [
+        [
+          "你",
+          "指"
+        ],
+        10
+      ],
+      [
+        [
+          "我",
+          "最"
+        ],
+        10
+      ],
+      [
+        [
+          "今天",
+          "国"
+        ],
+        8
+      ],
+      [
+        [
+          "他",
+          "国"
+        ],
+        5
+      ],
+      [
+        [
+          "你",
+          "对待"
+        ],
+        5
+      ],
+      [
+        [
+          "你",
+          "应该"
+        ],
+        5
+      ],
+      [
+        [
+          "我们",
+          "指"
+        ],
+        5
+      ],
+      [
+        [
+          "我们",
+          "写字"
+        ],
+        5
+      ],
+      [
+        [
+          "我",
+          "经过"
+        ],
+        5
+      ],
+      [
+        [
+          "我",
+          "怎么样"
+        ],
+        4
+      ],
+      [
+        [
+          "我",
+          "还是"
+        ],
+        4
+      ],
+      [
+        [
+          "我",
+          "或者"
+        ],
+        4
+      ],
+      [
+        [
+          "我",
+          "指"
+        ],
+        4
+      ]
+    ],
+    "nn_dist_mean": 0.18417513370513916,
+    "nn_dist_p90": 0.45205962657928467
+  },
+  "verdict_feature": "特征不含 gloss 身份信息（跨集合 1-NN acc=0.0762 < 0.15）：这是硬上限，任何序列模型都救不了",
+  "minutes": 2.08
+}

@@ -1,0 +1,82 @@
+{
+  "experiment": "P17 root-cause diagnosis for output degeneracy",
+  "single_factor": "checkpoint selection (stored epoch-2 vs later epoch)",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "target_composition": {
+    "train": {
+      "n_tokens": 28272,
+      "n_unk": 8002,
+      "unk_rate": 0.2830362195812111,
+      "n_sent_all_unk": 0,
+      "n_sent": 4973,
+      "all_unk_rate": 0.0
+    },
+    "dev": {
+      "n_tokens": 2838,
+      "n_unk": 738,
+      "unk_rate": 0.26004228329809725,
+      "n_sent_all_unk": 0,
+      "n_sent": 514,
+      "all_unk_rate": 0.0
+    }
+  },
+  "ctc_capacity": {
+    "T": 48,
+    "ref_len_mean": 5.521400778210117,
+    "ref_len_max": 13,
+    "need_2L_minus_1_mean": 10.042801556420233,
+    "n_infeasible": 0,
+    "infeasible_rate": 0.0
+  },
+  "stored_checkpoint": {
+    "tag": "saved_best_epoch2",
+    "n_samples": 514,
+    "n_distinct_outputs": 6,
+    "distinct_ratio": 0.011673151750972763,
+    "out_len_mean": 1.482490272373541,
+    "out_len_max": 2,
+    "wer": 0.992600422832981,
+    "nonblank_mass_mean": -42.17479059390057,
+    "top5": [
+      [
+        [
+          "<unk>"
+        ],
+        247
+      ],
+      [
+        [
+          "？",
+          "<unk>"
+        ],
+        206
+      ],
+      [
+        [
+          "我",
+          "<unk>"
+        ],
+        30
+      ],
+      [
+        [
+          "。"
+        ],
+        19
+      ],
+      [
+        [
+          "我",
+          "。"
+        ],
+        10
+      ]
+    ],
+    "token_kinds": 4
+  },
+  "checkpoint_meta": {
+    "best_epoch": 2,
+    "best_wer": 0.8505990133897111
+  }
+}

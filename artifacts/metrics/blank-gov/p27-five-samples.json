@@ -1,0 +1,130 @@
+{
+  "experiment": "P27 five random dev samples",
+  "sample_seed": 20261004,
+  "n_shown": 5,
+  "sampling": "random.Random(20261004).sample(sorted(dev_ids), 5) -- drawn before inspecting any result",
+  "config": {
+    "vocab": 301,
+    "epochs": 30,
+    "train_seed": 42,
+    "batch": 16,
+    "lr": 0.001
+  },
+  "five_samples": [
+    {
+      "sid": "dev-00056",
+      "ref": [
+        "这里",
+        "样子",
+        "生活",
+        "你",
+        "习惯",
+        "？"
+      ],
+      "hyp": [
+        "他",
+        "<unk>",
+        "我",
+        "？"
+      ],
+      "n_ref": 6,
+      "hits": 1,
+      "edit_strict": 5
+    },
+    {
+      "sid": "dev-00179",
+      "ref": [
+        "天文",
+        "学",
+        "难",
+        "学",
+        "很1",
+        "。"
+      ],
+      "hyp": [
+        "我",
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "n_ref": 6,
+      "hits": 1,
+      "edit_strict": 5
+    },
+    {
+      "sid": "dev-00282",
+      "ref": [
+        "我",
+        "开会",
+        "时间",
+        "叫2",
+        "我",
+        "不行1",
+        "。"
+      ],
+      "hyp": [
+        "我",
+        "<unk>",
+        "门",
+        "时间",
+        "去",
+        "。"
+      ],
+      "n_ref": 7,
+      "hits": 2,
+      "edit_strict": 5
+    },
+    {
+      "sid": "dev-00311",
+      "ref": [
+        "我",
+        "最2",
+        "擅长",
+        "什么",
+        "画画",
+        "。"
+      ],
+      "hyp": [
+        "我",
+        "<unk>",
+        "什么",
+        "<unk>",
+        "。"
+      ],
+      "n_ref": 6,
+      "hits": 3,
+      "edit_strict": 3
+    },
+    {
+      "sid": "dev-00404",
+      "ref": [
+        "一天",
+        "美",
+        "太阳",
+        "应该",
+        "。"
+      ],
+      "hyp": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "n_ref": 5,
+      "hits": 1,
+      "edit_strict": 4
+    }
+  ],
+  "subset_metrics": {
+    "wer_strict": 0.7333,
+    "wer_loose": 0.5333
+  },
+  "full_dev_metrics": {
+    "wer_strict": 0.7019,
+    "wer_loose": 0.5402,
+    "n": 514
+  },
+  "all_data_real": true,
+  "reads_test_split": false
+}

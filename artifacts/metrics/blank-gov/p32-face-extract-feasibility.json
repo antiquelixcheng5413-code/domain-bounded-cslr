@@ -1,0 +1,45 @@
+{
+  "experiment": "P32 face feature re-extraction feasibility",
+  "paper_basis": "ref02 EMNLP2023 Sec E2 + footnote 8: reduce MediaPipe FACE_LANDMARKS to FACEMESH_CONTOURS -> 128 contour keypoints; our current code uses only 8",
+  "reverse_evidence": "memory records dense-128 face points REGRESSED (IoU 0.66->0.58) in EMNLP's own frame-level segmentation task; our task is word-level CTC, so it must be re-tested rather than assumed either way",
+  "mediapipe_version_issue": {
+    "pinned": "0.10.21 (requirements.txt)",
+    "available_for_py314": [
+      "0.10.30",
+      "0.10.31",
+      "0.10.32",
+      "0.10.33",
+      "0.10.35",
+      "1.0.0",
+      "1.0.1"
+    ],
+    "installed": "0.10.35",
+    "root_cause_of_earlier_failure": "0.10.21 has no wheel for Python 3.14, so re-extraction could never run",
+    "api_change": "0.10.35 dropped solutions.holistic; only modules/ and tasks/ remain, so the extractor must be rewritten on the new tasks API"
+  },
+  "contours_points": null,
+  "probe": [
+    {
+      "sample_id": "dev-00001",
+      "video": "A/dev-00001.mp4",
+      "frames_probed": 0,
+      "seconds": 0.0,
+      "error": "视频不存在: /home/su127/FYP/domain-bounded-cslr/data/raw/CE-CSL/video/A/dev-00001.mp4"
+    },
+    {
+      "sample_id": "dev-00002",
+      "video": "A/dev-00002.mp4",
+      "frames_probed": 0,
+      "seconds": 0.0,
+      "error": "视频不存在: /home/su127/FYP/domain-bounded-cslr/data/raw/CE-CSL/video/A/dev-00002.mp4"
+    },
+    {
+      "sample_id": "dev-00003",
+      "video": "A/dev-00003.mp4",
+      "frames_probed": 0,
+      "seconds": 0.0,
+      "error": "视频不存在: /home/su127/FYP/domain-bounded-cslr/data/raw/CE-CSL/video/A/dev-00003.mp4"
+    }
+  ],
+  "videos_readable": false
+}

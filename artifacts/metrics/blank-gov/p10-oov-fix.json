@@ -1,0 +1,117 @@
+{
+  "layer1_eval_fix": {
+    "action": "评估时 ref 用原始 CSV gloss，保留真实 OOV；vset 排除 <unk>",
+    "already_verified": {
+      "loose_wer": 0.851,
+      "strict_wer": 0.9926,
+      "delta": 0.1416
+    },
+    "code_ref": "blank_governance/deploy/p8_error_attribution.py",
+    "cost": "零（不训练、不改模型）"
+  },
+  "layer2_target_fix": {
+    "action": "把 OOV 从 CTC 目标序列中删除（而非替换为 <unk>）",
+    "n_train_tokens": 28272,
+    "n_in_vocab": 19102,
+    "n_oov_deleted": 9170,
+    "train_signal_loss_ratio": 0.3243491794001132,
+    "n_sent_affected": 4361,
+    "n_sent_total": 4973,
+    "n_hyp_unk_observed": 483,
+    "gain_ceiling_note": "模型当前输出 <unk> 483 次，删除 OOV 目标后无法再学会输出该符号",
+    "tradeoff_note": "删除 OOV 使那 32.4% 的词永久不可输出，与 cap300 的下界同源，两全不可得。",
+    "cost": "需重训（~15 分钟），零额外依赖"
+  },
+  "layer3_vocab_expansion": {
+    "action": "cap300 -> 3517 全量词表",
+    "measured_loose_wer": {
+      "cap300": 0.8506,
+      "cap1828": 0.9257,
+      "cap3517": 0.9553
+    },
+    "verdict": "不建议。宽松口径下越扩越差；P9 敏感性分析显示三配置严格区间高度重叠 [0.851,1.016]/[0.926,1.008]/[0.955,1.008]，真实优劣无法判定，但**没有任何证据支持扩容能改善**。",
+    "cost": "已投入并证伪"
+  },
+  "literature_comparison": {
+    "source": "SMART (arXiv) Table 1 + Table 3/4 的 WER 数字，逐条核实",
+    "rows": [
+      {
+        "dataset": "PHOENIX14-T",
+        "language": "German",
+        "videos": 8257,
+        "glosses": 1066,
+        "signers": 9,
+        "approx_train": 6605,
+        "samples_per_gloss": 6.2,
+        "dev_wer": 17.58,
+        "test_wer": 19.5
+      },
+      {
+        "dataset": "CSL-Daily",
+        "language": "Chinese",
+        "videos": 20654,
+        "glosses": 2000,
+        "signers": 10,
+        "approx_train": 16523,
+        "samples_per_gloss": 8.3,
+        "dev_wer": null,
+        "test_wer": null
+      },
+      {
+        "dataset": "Large-scale KSL",
+        "language": "Korean",
+        "videos": 35987,
+        "glosses": 440,
+        "signers": 18,
+        "approx_train": 28789,
+        "samples_per_gloss": 65.4,
+        "dev_wer": 0.64,
+        "test_wer": 0.48
+      },
+      {
+        "dataset": "DS KSL",
+        "language": "Korean",
+        "videos": 28250,
+        "glosses": 2496,
+        "signers": 20,
+        "approx_train": 22600,
+        "samples_per_gloss": 9.1,
+        "dev_wer": 27.05,
+        "test_wer": 22.93
+      },
+      {
+        "dataset": "CE-CSL (真实全量词表)",
+        "language": "Chinese",
+        "videos": 5988,
+        "glosses": 3841,
+        "signers": 12,
+        "approx_train": 4973,
+        "samples_per_gloss": 1.3,
+        "wer_loose": 0.8505990133897111,
+        "wer_strict": 0.992600422832981,
+        "note": "分母用真实全量词表 3841，不是裁剪后的 cap300"
+      },
+      {
+        "dataset": "CE-CSL (cap300 裁剪后)",
+        "language": "Chinese",
+        "videos": 5988,
+        "glosses": 300,
+        "signers": 12,
+        "approx_train": 4973,
+        "samples_per_gloss": 16.6,
+        "wer_loose": null,
+        "wer_strict": null,
+        "note": "分母被人为裁剪，该比值无物理意义，仅列出以说明口径差异"
+      }
+    ],
+    "key_finding": "CE-CSL 的**每词训练样本数**是真正的瓶颈：4973 train / 3841 真实词表 = 1.2，而 SMART 四个数据集最低的 PHOENIX14-T 也有 6.2（差 5 倍），CSL-Daily 8.3、DS KSL 9.1、LS KSL 65.4。这解释了 WER 85~99% 与论文 0.48~22.93% 的量级差异。",
+    "caliber_trap": "**不要用 cap300 做分母**。4973/300 = 16.6 看似样本充足，但那是分母被人为裁剪后的假象，无物理意义。必须用真实全量词表 3841 -> 1.2。",
+    "no_paper_evidence": "6 篇参考文献**没有任何一篇讨论过 OOV 折叠 / UNK 处理**（grep: unknown token / OOV / out-of-vocabulary / subword 在 6 篇中命中 0 次有实质论述）。这是本项目发现的、文献里未讨论的问题。"
+  },
+  "conclusion": {
+    "must_do": "层1 评估口径修复（零成本）",
+    "recommended": "层2 训练目标修复，但需明确接受「永久放弃 30.4% 的词」",
+    "not_recommended": "层3 词表扩容；blank 率方向；特征侧免费路线",
+    "real_solution": "绝对样本量。CSL-Daily 需全职人员签协议，学生身份不可得。"
+  }
+}

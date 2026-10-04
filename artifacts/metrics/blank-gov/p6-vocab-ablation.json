@@ -1,0 +1,233 @@
+{
+  "experiment": "P6 vocabulary-size ablation (cap300 vs full)",
+  "single_factor": "vocabulary size only; features/model/seed/schedule identical",
+  "motivation": {
+    "vocab_builder": "build_ordered_vocabulary(min_frequency, max_tokens) applies TWO independent human-imposed cuts",
+    "train_gloss_classes": 3841,
+    "dev_token_coverage_cap300": 0.696,
+    "dev_sample_full_coverage_cap300": 0.089,
+    "implication": "91.1% of dev samples cannot be fully expressed by the model regardless of training quality; WER has a hard lower bound around 0.30 from vocabulary truncation"
+  },
+  "config": {
+    "feature_view": "full",
+    "epochs": 14,
+    "batch": 16,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "warmup": 2,
+    "hidden": 256,
+    "layers": 2,
+    "dropout": 0.3,
+    "patience": 4,
+    "seed": 42,
+    "train_limit": null,
+    "val_limit": 515,
+    "configs": "300:2,1828:2",
+    "out": "artifacts/metrics/blank-gov/p6-vocab-ablation.json"
+  },
+  "results": [
+    {
+      "max_tokens": 300,
+      "min_frequency": 2,
+      "vocab_size": 301,
+      "dev_token_coverage": 0.6962649753347427,
+      "dev_sample_full_coverage": 0.08949416342412451,
+      "best": {
+        "epoch": 2,
+        "train_loss": 9.400950650442013,
+        "wer": 0.8505990133897111,
+        "cer": 0.6764477565595405,
+        "blank_ratio": 0.9691958495460441,
+        "vocab_util": 0.013289036544850499,
+        "empty_hyp": 0.0,
+        "lr": 0.001
+      },
+      "buckets": {
+        "in_vocab": {
+          "wer": 0.8509513742071881,
+          "n": 514
+        },
+        "has_oov": null
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 20.135782388142122,
+          "wer": 0.8565891472868217,
+          "cer": 0.7692904828442788,
+          "blank_ratio": 0.978112840466926,
+          "vocab_util": 0.009966777408637873,
+          "empty_hyp": 0.0,
+          "lr": 0.0005
+        },
+        {
+          "epoch": 2,
+          "train_loss": 9.400950650442013,
+          "wer": 0.8505990133897111,
+          "cer": 0.6764477565595405,
+          "blank_ratio": 0.9691958495460441,
+          "vocab_util": 0.013289036544850499,
+          "empty_hyp": 0.0,
+          "lr": 0.001
+        },
+        {
+          "epoch": 3,
+          "train_loss": 8.657164541260231,
+          "wer": 0.8601127554615927,
+          "cer": 0.7545412203074057,
+          "blank_ratio": 0.9672503242542153,
+          "vocab_util": 0.026578073089700997,
+          "empty_hyp": 0.0,
+          "lr": 0.0009838147674873074
+        },
+        {
+          "epoch": 4,
+          "train_loss": 7.855340959751076,
+          "wer": 0.8594080338266384,
+          "cer": 0.7265952491849091,
+          "blank_ratio": 0.9634403372243839,
+          "vocab_util": 0.029900332225913623,
+          "empty_hyp": 0.0,
+          "lr": 0.0009363620667976085
+        },
+        {
+          "epoch": 5,
+          "train_loss": 7.151140613237569,
+          "wer": 0.8520084566596194,
+          "cer": 0.7048594938674119,
+          "blank_ratio": 0.9614948119325551,
+          "vocab_util": 0.04318936877076412,
+          "empty_hyp": 0.0,
+          "lr": 0.0008608757210636101
+        },
+        {
+          "epoch": 6,
+          "train_loss": 6.521559279952134,
+          "wer": 0.8583509513742071,
+          "cer": 0.6997360658282875,
+          "blank_ratio": 0.9597114137483788,
+          "vocab_util": 0.036544850498338874,
+          "empty_hyp": 0.0,
+          "lr": 0.0007624999999999999
+        }
+      ],
+      "minutes": 0.46557770172754925
+    },
+    {
+      "max_tokens": 1828,
+      "min_frequency": 2,
+      "vocab_size": 1828,
+      "dev_token_coverage": 0.9006342494714588,
+      "dev_sample_full_coverage": 0.546692607003891,
+      "best": {
+        "epoch": 4,
+        "train_loss": 24.91467631110094,
+        "wer": 0.9277660324171952,
+        "cer": 0.9072444143534191,
+        "blank_ratio": 0.9508754863813229,
+        "vocab_util": 0.006017505470459519,
+        "empty_hyp": 0.0,
+        "lr": 0.0009363620667976085
+      },
+      "buckets": {
+        "in_vocab": {
+          "wer": 0.9274136715997181,
+          "n": 514
+        },
+        "has_oov": null
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 42.251414100145304,
+          "wer": 0.9619450317124736,
+          "cer": 0.8830963665086888,
+          "blank_ratio": 0.9791261348897535,
+          "vocab_util": 0.0010940919037199124,
+          "empty_hyp": 0.0,
+          "lr": 0.0005
+        },
+        {
+          "epoch": 2,
+          "train_loss": 26.94662063394589,
+          "wer": 0.9517265680056378,
+          "cer": 0.8842247799593771,
+          "blank_ratio": 0.9608463035019456,
+          "vocab_util": 0.002188183807439825,
+          "empty_hyp": 0.0,
+          "lr": 0.001
+        },
+        {
+          "epoch": 3,
+          "train_loss": 25.942960451096567,
+          "wer": 0.9337561663143058,
+          "cer": 0.9002482509591514,
+          "blank_ratio": 0.9557798313878081,
+          "vocab_util": 0.004923413566739606,
+          "empty_hyp": 0.0,
+          "lr": 0.0009838147674873074
+        },
+        {
+          "epoch": 4,
+          "train_loss": 24.91467631110094,
+          "wer": 0.9277660324171952,
+          "cer": 0.9072444143534191,
+          "blank_ratio": 0.9508754863813229,
+          "vocab_util": 0.006017505470459519,
+          "empty_hyp": 0.0,
+          "lr": 0.0009363620667976085
+        },
+        {
+          "epoch": 5,
+          "train_loss": 23.923823580808044,
+          "wer": 0.9443269908386187,
+          "cer": 0.9027307605506658,
+          "blank_ratio": 0.9549691958495461,
+          "vocab_util": 0.007658643326039387,
+          "empty_hyp": 0.0,
+          "lr": 0.0008608757210636101
+        },
+        {
+          "epoch": 6,
+          "train_loss": 23.01417777228111,
+          "wer": 0.9552501761804087,
+          "cer": 0.9108553373956217,
+          "blank_ratio": 0.9528615434500648,
+          "vocab_util": 0.009299781181619256,
+          "empty_hyp": 0.0,
+          "lr": 0.0007624999999999999
+        },
+        {
+          "epoch": 7,
+          "train_loss": 22.134495699307386,
+          "wer": 0.9464411557434813,
+          "cer": 0.9029564432408035,
+          "blank_ratio": 0.9556987678339819,
+          "vocab_util": 0.01312910284463895,
+          "empty_hyp": 0.0,
+          "lr": 0.0006479390464236974
+        },
+        {
+          "epoch": 8,
+          "train_loss": 21.24916647829186,
+          "wer": 0.9446793516560958,
+          "cer": 0.9101782893252087,
+          "blank_ratio": 0.944836251621271,
+          "vocab_util": 0.016958424507658644,
+          "empty_hyp": 0.0,
+          "lr": 0.0005250000000000001
+        }
+      ],
+      "minutes": 0.5947576840718587
+    }
+  ],
+  "best_config": {
+    "max_tokens": 300,
+    "min_frequency": 2,
+    "wer": 0.8505990133897111
+  },
+  "wer_gain_vs_cap301": 0.0,
+  "verdict": "词表裁剪影响有限：说明主因仍在特征判别力（AUC 0.68）",
+  "total_minutes": 1.1008257349332173,
+  "test_split_read": false
+}

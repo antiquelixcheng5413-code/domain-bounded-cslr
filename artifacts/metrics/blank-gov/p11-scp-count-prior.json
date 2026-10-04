@@ -1,0 +1,621 @@
+{
+  "ckpt": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+  "n_samples": 514,
+  "min_gap": 1,
+  "paper": {
+    "source": "SignShift Sec 3.4 + Table 2 (MS-TCN backbone)",
+    "module": "Segment Count Prediction (SCP), 式(10)-(12)",
+    "loss": "KL 散度 vs 高斯平滑后的目标分布 q_k = exp(-(k-M)^2/2σ^2)/Σ",
+    "trained_with": "ground-truth 句子数，独立训练，仅推理期用于引导边界选择",
+    "ablation": {
+      "F1@50": [
+        51.71,
+        61.82
+      ],
+      "SER": [
+        0.43,
+        0.26
+      ],
+      "count_MAE_How2Sign": [
+        1.734,
+        1.177
+      ],
+      "count_MAE_OpenASL": [
+        1.97,
+        1.275
+      ],
+      "count_MAE_PHOENIX14T": [
+        1.337,
+        0.798
+      ]
+    }
+  },
+  "our_label_source": {
+    "M_definition": "gloss 词数（来自 Gloss 标注，无需人工边界）",
+    "M_hist": {
+      "2": 48,
+      "3": 346,
+      "4": 936,
+      "5": 1196,
+      "6": 1046,
+      "7": 673,
+      "8": 389,
+      "9": 175,
+      "10": 99,
+      "11": 41,
+      "12": 16,
+      "13": 7,
+      "16": 1
+    },
+    "M_max": 16,
+    "entropy_bits": 2.813186824900513,
+    "advantage": "论文需人工句子边界；我们天然有 M 标签，条件更优"
+  },
+  "level1_count_constrained_decoding": {
+    "baseline_blank": 0.9691147859922179,
+    "constrained_blank": 0.8849708171206225,
+    "baseline_pfpt": 0.26849894291754756,
+    "constrained_pfpt": 1.0,
+    "baseline_seg_mae": 4.038910505836576,
+    "constrained_seg_mae": 0.0,
+    "n_zero_segment_after_constraint": 0
+  },
+  "verdict": "计数先验能把 pfpt 从 0.27 提到 1.00，段数 MAE 降 100.0%，blank 率降 8.4pp —— 结构性有效",
+  "caveats": [
+    "无法直接对标论文的 F1@50/SER —— 任务层级不同（我们无句子边界真值）",
+    "本级实现是「约束选点」的最小版本，未训练 SCP 分类器（级 2）",
+    "con_blank 是理论下界（假设段不重叠且各占 min_gap 帧），非实测解码结果"
+  ],
+  "per_sample": [
+    {
+      "id": "dev-00001",
+      "T": 48,
+      "M": 9,
+      "base_segments": 1,
+      "con_segments": 9,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8125,
+      "pfpt_base": 0.1111111111111111,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00002",
+      "T": 48,
+      "M": 13,
+      "base_segments": 1,
+      "con_segments": 13,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.7291666666666667,
+      "pfpt_base": 0.07692307692307693,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00003",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00004",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00005",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00006",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00007",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00008",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00009",
+      "T": 48,
+      "M": 7,
+      "base_segments": 1,
+      "con_segments": 7,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8541666666666666,
+      "pfpt_base": 0.14285714285714285,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00010",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00011",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00012",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00013",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00014",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00015",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00016",
+      "T": 48,
+      "M": 3,
+      "base_segments": 1,
+      "con_segments": 3,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9375,
+      "pfpt_base": 0.3333333333333333,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00017",
+      "T": 48,
+      "M": 6,
+      "base_segments": 2,
+      "con_segments": 6,
+      "base_blank_frame": 0.9583333333333334,
+      "con_blank": 0.875,
+      "pfpt_base": 0.3333333333333333,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00018",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00019",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00020",
+      "T": 48,
+      "M": 5,
+      "base_segments": 2,
+      "con_segments": 5,
+      "base_blank_frame": 0.9583333333333334,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.4,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00021",
+      "T": 48,
+      "M": 10,
+      "base_segments": 1,
+      "con_segments": 10,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.7916666666666666,
+      "pfpt_base": 0.1,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00022",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00023",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00024",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00025",
+      "T": 48,
+      "M": 5,
+      "base_segments": 2,
+      "con_segments": 5,
+      "base_blank_frame": 0.9583333333333334,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.4,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00026",
+      "T": 48,
+      "M": 8,
+      "base_segments": 1,
+      "con_segments": 8,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8333333333333334,
+      "pfpt_base": 0.125,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00027",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00028",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00029",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00030",
+      "T": 48,
+      "M": 3,
+      "base_segments": 1,
+      "con_segments": 3,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9375,
+      "pfpt_base": 0.3333333333333333,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00031",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00032",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00033",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00034",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00035",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00036",
+      "T": 48,
+      "M": 6,
+      "base_segments": 1,
+      "con_segments": 6,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.875,
+      "pfpt_base": 0.16666666666666666,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00037",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00038",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00039",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00040",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00041",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00042",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00043",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00044",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00045",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00046",
+      "T": 48,
+      "M": 7,
+      "base_segments": 1,
+      "con_segments": 7,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8541666666666666,
+      "pfpt_base": 0.14285714285714285,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00047",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00048",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00049",
+      "T": 48,
+      "M": 4,
+      "base_segments": 1,
+      "con_segments": 4,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.9166666666666666,
+      "pfpt_base": 0.25,
+      "pfpt_con": 1.0
+    },
+    {
+      "id": "dev-00050",
+      "T": 48,
+      "M": 5,
+      "base_segments": 1,
+      "con_segments": 5,
+      "base_blank_frame": 0.9791666666666666,
+      "con_blank": 0.8958333333333334,
+      "pfpt_base": 0.2,
+      "pfpt_con": 1.0
+    }
+  ]
+}

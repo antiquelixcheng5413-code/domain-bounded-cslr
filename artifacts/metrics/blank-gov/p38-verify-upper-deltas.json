@@ -1,0 +1,140 @@
+{
+  "experiment": "P38 verify P37 findings: 5-fold stability + classification transfer",
+  "n_videos": 500,
+  "n_segments": 1865,
+  "n_classes": 250,
+  "seed": 20261004,
+  "verify1_stability": {
+    "full368": {
+      "d_full": 0.041,
+      "d_folds": [
+        0.2366,
+        0.0479,
+        -0.0049,
+        0.0924,
+        0.0639
+      ],
+      "d_mean": 0.0872,
+      "d_std": 0.0811,
+      "cv": 0.9306
+    },
+    "upper": {
+      "d_full": 0.3041,
+      "d_folds": [
+        0.3404,
+        0.3342,
+        0.3919,
+        0.2234,
+        0.2665
+      ],
+      "d_mean": 0.3113,
+      "d_std": 0.0593,
+      "cv": 0.1906
+    },
+    "body_deltas": {
+      "d_full": 0.2518,
+      "d_folds": [
+        0.2439,
+        0.0906,
+        0.1671,
+        0.1538,
+        0.2188
+      ],
+      "d_mean": 0.1748,
+      "d_std": 0.0535,
+      "cv": 0.3058
+    },
+    "deltas_bn": {
+      "d_full": 0.3256,
+      "d_folds": [
+        0.3543,
+        0.2708,
+        0.3076,
+        0.3686,
+        0.2683
+      ],
+      "d_mean": 0.3139,
+      "d_std": 0.0415,
+      "cv": 0.132
+    },
+    "cand_bn": {
+      "d_full": 0.3124,
+      "d_folds": [
+        0.3505,
+        0.2863,
+        0.3281,
+        0.3476,
+        0.2679
+      ],
+      "d_mean": 0.3161,
+      "d_std": 0.0333,
+      "cv": 0.1052
+    },
+    "hands": {
+      "d_full": -0.0171,
+      "d_folds": [
+        0.0343,
+        0.0549,
+        -0.0894,
+        0.044,
+        -0.1762
+      ],
+      "d_mean": -0.0265,
+      "d_std": 0.0913,
+      "cv": 3.4473
+    }
+  },
+  "verify2_classification": {
+    "full368": {
+      "heldout_acc": 0.026,
+      "balanced_acc": 0.0219,
+      "macro_auc": 0.6091,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    },
+    "upper": {
+      "heldout_acc": 0.0087,
+      "balanced_acc": 0.0025,
+      "macro_auc": 0.6027,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    },
+    "body_deltas": {
+      "heldout_acc": 0.0145,
+      "balanced_acc": 0.0055,
+      "macro_auc": 0.5302,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    },
+    "deltas_bn": {
+      "heldout_acc": 0.0723,
+      "balanced_acc": 0.0287,
+      "macro_auc": 0.6094,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    },
+    "cand_bn": {
+      "heldout_acc": 0.0954,
+      "balanced_acc": 0.0412,
+      "macro_auc": 0.6421,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    },
+    "hands": {
+      "heldout_acc": 0.0202,
+      "balanced_acc": 0.051,
+      "macro_auc": 0.5771,
+      "majority_baseline": 0.1647,
+      "n_classes": 150,
+      "n_test": 346
+    }
+  },
+  "verdict": "验证不通过：统计量（d）好看但分类无提升（cand_bn macroAUC 0.6421 vs 基线 0.6091）-> 与 P34 face128 同样结局，不投 CTC",
+  "minutes": 0.02,
+  "notes": "Cohen's d 不涉及训练/测试切分，故无过拟合；但 5 折按视频切分验证采样稳定性。P36 教训：d 高不等于分类好，故两问分别验证。"
+}

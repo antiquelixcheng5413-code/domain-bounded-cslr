@@ -1,0 +1,566 @@
+{
+  "experiment": "P18 fix output degeneracy by removing the <unk> collapse loop",
+  "hypothesis": "28.3% of training targets are the single symbol <unk>; with weak features (macro AUC 0.68-0.71) CTC collapses onto it",
+  "criterion": "n_distinct_outputs > 50 (pre-registered in P16)",
+  "single_factor": "target unit / vocabulary size only; model, features, seed identical",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "configs": [
+    {
+      "name": "A",
+      "max_tokens": 300,
+      "min_frequency": 2,
+      "target_unit": "token",
+      "vocab_size": 301,
+      "metric": "WER",
+      "train_target": {
+        "n_tokens": 28272,
+        "n_unk": 8002,
+        "unk_rate": 0.2830362195812111,
+        "target_len_mean": 5.685099537502514,
+        "target_len_max": 16,
+        "vocab_size": 301
+      },
+      "dev_target": {
+        "n_tokens": 2838,
+        "n_unk": 738,
+        "unk_rate": 0.26004228329809725,
+        "target_len_mean": 5.521400778210117,
+        "target_len_max": 13,
+        "vocab_size": 301
+      },
+      "dev_ctc_infeasible": 0,
+      "dev_ref_len_mean": 5.52,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 30.050516298448635,
+          "n_distinct_outputs": 3,
+          "token_kinds": 3,
+          "out_len_mean": 1.066,
+          "wer": 0.8753
+        },
+        {
+          "epoch": 2,
+          "train_loss": 19.39536945685136,
+          "n_distinct_outputs": 17,
+          "token_kinds": 8,
+          "out_len_mean": 2.872,
+          "wer": 0.7886
+        },
+        {
+          "epoch": 3,
+          "train_loss": 18.212275255956136,
+          "n_distinct_outputs": 26,
+          "token_kinds": 11,
+          "out_len_mean": 3.0,
+          "wer": 0.7815
+        },
+        {
+          "epoch": 4,
+          "train_loss": 17.07819413553894,
+          "n_distinct_outputs": 56,
+          "token_kinds": 18,
+          "out_len_mean": 3.033,
+          "wer": 0.771
+        },
+        {
+          "epoch": 5,
+          "train_loss": 16.18211185690049,
+          "n_distinct_outputs": 86,
+          "token_kinds": 22,
+          "out_len_mean": 3.163,
+          "wer": 0.7484
+        },
+        {
+          "epoch": 6,
+          "train_loss": 15.345025686773765,
+          "n_distinct_outputs": 93,
+          "token_kinds": 26,
+          "out_len_mean": 3.2,
+          "wer": 0.7449
+        },
+        {
+          "epoch": 7,
+          "train_loss": 14.521270028786859,
+          "n_distinct_outputs": 125,
+          "token_kinds": 29,
+          "out_len_mean": 3.261,
+          "wer": 0.7431
+        },
+        {
+          "epoch": 8,
+          "train_loss": 13.744194327622335,
+          "n_distinct_outputs": 122,
+          "token_kinds": 31,
+          "out_len_mean": 3.2,
+          "wer": 0.7382
+        },
+        {
+          "epoch": 9,
+          "train_loss": 12.902319652128574,
+          "n_distinct_outputs": 193,
+          "token_kinds": 45,
+          "out_len_mean": 3.391,
+          "wer": 0.7223
+        },
+        {
+          "epoch": 10,
+          "train_loss": 12.081888849721357,
+          "n_distinct_outputs": 201,
+          "token_kinds": 52,
+          "out_len_mean": 3.492,
+          "wer": 0.7163
+        },
+        {
+          "epoch": 11,
+          "train_loss": 11.311391739161614,
+          "n_distinct_outputs": 230,
+          "token_kinds": 59,
+          "out_len_mean": 3.58,
+          "wer": 0.716
+        },
+        {
+          "epoch": 12,
+          "train_loss": 10.550493477001147,
+          "n_distinct_outputs": 253,
+          "token_kinds": 70,
+          "out_len_mean": 3.646,
+          "wer": 0.7054
+        },
+        {
+          "epoch": 13,
+          "train_loss": 9.86694434641737,
+          "n_distinct_outputs": 294,
+          "token_kinds": 74,
+          "out_len_mean": 3.704,
+          "wer": 0.6984
+        },
+        {
+          "epoch": 14,
+          "train_loss": 9.155867358364379,
+          "n_distinct_outputs": 325,
+          "token_kinds": 94,
+          "out_len_mean": 3.712,
+          "wer": 0.7037
+        },
+        {
+          "epoch": 15,
+          "train_loss": 8.469138925952402,
+          "n_distinct_outputs": 327,
+          "token_kinds": 92,
+          "out_len_mean": 3.942,
+          "wer": 0.703
+        },
+        {
+          "epoch": 16,
+          "train_loss": 7.88020580394537,
+          "n_distinct_outputs": 316,
+          "token_kinds": 97,
+          "out_len_mean": 3.907,
+          "wer": 0.7019
+        },
+        {
+          "epoch": 17,
+          "train_loss": 7.313136903711807,
+          "n_distinct_outputs": 325,
+          "token_kinds": 100,
+          "out_len_mean": 4.016,
+          "wer": 0.7047
+        },
+        {
+          "epoch": 18,
+          "train_loss": 6.77450591650571,
+          "n_distinct_outputs": 362,
+          "token_kinds": 107,
+          "out_len_mean": 3.961,
+          "wer": 0.7054
+        },
+        {
+          "epoch": 19,
+          "train_loss": 6.253170186308771,
+          "n_distinct_outputs": 365,
+          "token_kinds": 117,
+          "out_len_mean": 4.082,
+          "wer": 0.7008
+        },
+        {
+          "epoch": 20,
+          "train_loss": 5.810625814226535,
+          "n_distinct_outputs": 374,
+          "token_kinds": 124,
+          "out_len_mean": 4.068,
+          "wer": 0.6973
+        },
+        {
+          "epoch": 21,
+          "train_loss": 5.439158481442183,
+          "n_distinct_outputs": 375,
+          "token_kinds": 123,
+          "out_len_mean": 4.175,
+          "wer": 0.6977
+        },
+        {
+          "epoch": 22,
+          "train_loss": 5.1006464205492,
+          "n_distinct_outputs": 372,
+          "token_kinds": 119,
+          "out_len_mean": 4.068,
+          "wer": 0.6984
+        },
+        {
+          "epoch": 23,
+          "train_loss": 4.80498501292278,
+          "n_distinct_outputs": 375,
+          "token_kinds": 124,
+          "out_len_mean": 4.28,
+          "wer": 0.7037
+        },
+        {
+          "epoch": 24,
+          "train_loss": 4.556984380771523,
+          "n_distinct_outputs": 398,
+          "token_kinds": 135,
+          "out_len_mean": 4.175,
+          "wer": 0.7012
+        },
+        {
+          "epoch": 25,
+          "train_loss": 4.349861560010728,
+          "n_distinct_outputs": 402,
+          "token_kinds": 136,
+          "out_len_mean": 4.27,
+          "wer": 0.7026
+        },
+        {
+          "epoch": 26,
+          "train_loss": 4.1903183901787,
+          "n_distinct_outputs": 383,
+          "token_kinds": 135,
+          "out_len_mean": 4.115,
+          "wer": 0.7005
+        },
+        {
+          "epoch": 27,
+          "train_loss": 4.07683000520468,
+          "n_distinct_outputs": 393,
+          "token_kinds": 137,
+          "out_len_mean": 4.191,
+          "wer": 0.7008
+        },
+        {
+          "epoch": 28,
+          "train_loss": 3.955337430063014,
+          "n_distinct_outputs": 388,
+          "token_kinds": 134,
+          "out_len_mean": 4.181,
+          "wer": 0.7023
+        },
+        {
+          "epoch": 29,
+          "train_loss": 3.8964970797905614,
+          "n_distinct_outputs": 392,
+          "token_kinds": 138,
+          "out_len_mean": 4.218,
+          "wer": 0.7008
+        },
+        {
+          "epoch": 30,
+          "train_loss": 3.8217567013898366,
+          "n_distinct_outputs": 402,
+          "token_kinds": 143,
+          "out_len_mean": 4.206,
+          "wer": 0.7019
+        }
+      ],
+      "final": {
+        "epoch": 30,
+        "train_loss": 3.8217567013898366,
+        "n_distinct_outputs": 402,
+        "token_kinds": 143,
+        "out_len_mean": 4.206,
+        "wer": 0.7019
+      },
+      "verdict": "PASS 坍缩已解除",
+      "minutes": 2.39
+    },
+    {
+      "name": "B",
+      "max_tokens": null,
+      "min_frequency": 1,
+      "target_unit": "token",
+      "vocab_size": 3517,
+      "metric": "WER",
+      "train_target": {
+        "n_tokens": 28272,
+        "n_unk": 0,
+        "unk_rate": 0.0,
+        "target_len_mean": 5.685099537502514,
+        "target_len_max": 16,
+        "vocab_size": 3517
+      },
+      "dev_target": {
+        "n_tokens": 2838,
+        "n_unk": 0,
+        "unk_rate": 0.0,
+        "target_len_mean": 5.521400778210117,
+        "target_len_max": 13,
+        "vocab_size": 3517
+      },
+      "dev_ctc_infeasible": 0,
+      "dev_ref_len_mean": 5.52,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 49.546078748873676,
+          "n_distinct_outputs": 5,
+          "token_kinds": 4,
+          "out_len_mean": 1.934,
+          "wer": 0.8122
+        },
+        {
+          "epoch": 2,
+          "train_loss": 32.39814084035972,
+          "n_distinct_outputs": 4,
+          "token_kinds": 4,
+          "out_len_mean": 2.004,
+          "wer": 0.7932
+        },
+        {
+          "epoch": 3,
+          "train_loss": 31.18799982199409,
+          "n_distinct_outputs": 8,
+          "token_kinds": 6,
+          "out_len_mean": 1.998,
+          "wer": 0.796
+        },
+        {
+          "epoch": 4,
+          "train_loss": 30.027218367045204,
+          "n_distinct_outputs": 21,
+          "token_kinds": 9,
+          "out_len_mean": 2.062,
+          "wer": 0.7759
+        },
+        {
+          "epoch": 5,
+          "train_loss": 28.936619912981147,
+          "n_distinct_outputs": 32,
+          "token_kinds": 12,
+          "out_len_mean": 2.251,
+          "wer": 0.7615
+        },
+        {
+          "epoch": 6,
+          "train_loss": 27.919148077121953,
+          "n_distinct_outputs": 38,
+          "token_kinds": 18,
+          "out_len_mean": 2.407,
+          "wer": 0.7512
+        },
+        {
+          "epoch": 7,
+          "train_loss": 26.88876245699249,
+          "n_distinct_outputs": 69,
+          "token_kinds": 31,
+          "out_len_mean": 2.519,
+          "wer": 0.7565
+        },
+        {
+          "epoch": 8,
+          "train_loss": 25.864252821482957,
+          "n_distinct_outputs": 77,
+          "token_kinds": 35,
+          "out_len_mean": 2.658,
+          "wer": 0.7505
+        },
+        {
+          "epoch": 9,
+          "train_loss": 24.82272243557287,
+          "n_distinct_outputs": 109,
+          "token_kinds": 51,
+          "out_len_mean": 2.648,
+          "wer": 0.753
+        },
+        {
+          "epoch": 10,
+          "train_loss": 23.812504416472855,
+          "n_distinct_outputs": 153,
+          "token_kinds": 74,
+          "out_len_mean": 2.862,
+          "wer": 0.753
+        },
+        {
+          "epoch": 11,
+          "train_loss": 22.71854701829393,
+          "n_distinct_outputs": 182,
+          "token_kinds": 87,
+          "out_len_mean": 3.014,
+          "wer": 0.7519
+        },
+        {
+          "epoch": 12,
+          "train_loss": 21.658470294568083,
+          "n_distinct_outputs": 222,
+          "token_kinds": 117,
+          "out_len_mean": 3.148,
+          "wer": 0.7463
+        },
+        {
+          "epoch": 13,
+          "train_loss": 20.59145848534847,
+          "n_distinct_outputs": 278,
+          "token_kinds": 173,
+          "out_len_mean": 3.222,
+          "wer": 0.7449
+        },
+        {
+          "epoch": 14,
+          "train_loss": 19.527631187400612,
+          "n_distinct_outputs": 324,
+          "token_kinds": 213,
+          "out_len_mean": 3.364,
+          "wer": 0.747
+        },
+        {
+          "epoch": 15,
+          "train_loss": 18.500530882666055,
+          "n_distinct_outputs": 357,
+          "token_kinds": 267,
+          "out_len_mean": 3.496,
+          "wer": 0.7495
+        },
+        {
+          "epoch": 16,
+          "train_loss": 17.527222027175508,
+          "n_distinct_outputs": 377,
+          "token_kinds": 268,
+          "out_len_mean": 3.482,
+          "wer": 0.7414
+        },
+        {
+          "epoch": 17,
+          "train_loss": 16.656962312061303,
+          "n_distinct_outputs": 388,
+          "token_kinds": 300,
+          "out_len_mean": 3.591,
+          "wer": 0.7442
+        },
+        {
+          "epoch": 18,
+          "train_loss": 15.783783235517326,
+          "n_distinct_outputs": 417,
+          "token_kinds": 323,
+          "out_len_mean": 3.72,
+          "wer": 0.741
+        },
+        {
+          "epoch": 19,
+          "train_loss": 15.048449960244918,
+          "n_distinct_outputs": 424,
+          "token_kinds": 352,
+          "out_len_mean": 3.671,
+          "wer": 0.7456
+        },
+        {
+          "epoch": 20,
+          "train_loss": 14.387709666516205,
+          "n_distinct_outputs": 415,
+          "token_kinds": 376,
+          "out_len_mean": 3.747,
+          "wer": 0.7431
+        },
+        {
+          "epoch": 21,
+          "train_loss": 13.780471925257965,
+          "n_distinct_outputs": 439,
+          "token_kinds": 401,
+          "out_len_mean": 3.8,
+          "wer": 0.741
+        },
+        {
+          "epoch": 22,
+          "train_loss": 13.243692407084499,
+          "n_distinct_outputs": 446,
+          "token_kinds": 401,
+          "out_len_mean": 3.798,
+          "wer": 0.747
+        },
+        {
+          "epoch": 23,
+          "train_loss": 12.817835351578456,
+          "n_distinct_outputs": 454,
+          "token_kinds": 390,
+          "out_len_mean": 3.868,
+          "wer": 0.741
+        },
+        {
+          "epoch": 24,
+          "train_loss": 12.43282416627701,
+          "n_distinct_outputs": 449,
+          "token_kinds": 399,
+          "out_len_mean": 3.897,
+          "wer": 0.7452
+        },
+        {
+          "epoch": 25,
+          "train_loss": 12.103665027200348,
+          "n_distinct_outputs": 454,
+          "token_kinds": 398,
+          "out_len_mean": 3.891,
+          "wer": 0.7431
+        },
+        {
+          "epoch": 26,
+          "train_loss": 11.876764671245907,
+          "n_distinct_outputs": 458,
+          "token_kinds": 411,
+          "out_len_mean": 3.924,
+          "wer": 0.7414
+        },
+        {
+          "epoch": 27,
+          "train_loss": 11.658704441844542,
+          "n_distinct_outputs": 466,
+          "token_kinds": 413,
+          "out_len_mean": 3.918,
+          "wer": 0.7424
+        },
+        {
+          "epoch": 28,
+          "train_loss": 11.498198527626268,
+          "n_distinct_outputs": 459,
+          "token_kinds": 415,
+          "out_len_mean": 3.932,
+          "wer": 0.7445
+        },
+        {
+          "epoch": 29,
+          "train_loss": 11.371474826213653,
+          "n_distinct_outputs": 463,
+          "token_kinds": 407,
+          "out_len_mean": 3.92,
+          "wer": 0.7424
+        },
+        {
+          "epoch": 30,
+          "train_loss": 11.264220665763519,
+          "n_distinct_outputs": 465,
+          "token_kinds": 420,
+          "out_len_mean": 3.934,
+          "wer": 0.741
+        }
+      ],
+      "final": {
+        "epoch": 30,
+        "train_loss": 11.264220665763519,
+        "n_distinct_outputs": 465,
+        "token_kinds": 420,
+        "out_len_mean": 3.934,
+        "wer": 0.741
+      },
+      "verdict": "PASS 坍缩已解除",
+      "minutes": 2.78
+    }
+  ]
+}

@@ -1,0 +1,1295 @@
+{
+  "experiment": "P25 readable output after off-by-one fix",
+  "bug_fixed": "collate_samples now sends token_id + 1 (CTC class space)",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "config": {
+    "max_tokens": 300,
+    "min_frequency": 2,
+    "vocab_size": 301,
+    "epochs": 30,
+    "seed": 42,
+    "batch": 16,
+    "lr": 0.001
+  },
+  "metrics": {
+    "wer_loose": 0.5402,
+    "wer_strict": 0.7019,
+    "n_distinct_outputs": 402,
+    "token_kinds": 143,
+    "hyp_len_mean": 4.21,
+    "ref_len_mean": 5.52,
+    "token_recall": 0.2988,
+    "n_exact": 0,
+    "n_partial": 473,
+    "n_zero": 41,
+    "n_samples": 514
+  },
+  "buckets": {
+    "in_vocab": {
+      "n": 46,
+      "wer_loose": 0.6531,
+      "wer_strict": 0.6531,
+      "token_recall": 0.3469
+    },
+    "has_oov": {
+      "n": 468,
+      "wer_loose": 0.5295,
+      "wer_strict": 0.7065,
+      "token_recall": 0.2943
+    }
+  },
+  "top_confusions": [
+    [
+      [
+        "？",
+        "。"
+      ],
+      55
+    ],
+    [
+      [
+        "我",
+        "<unk>"
+      ],
+      45
+    ],
+    [
+      [
+        "？",
+        "<unk>"
+      ],
+      41
+    ],
+    [
+      [
+        "我",
+        "。"
+      ],
+      40
+    ],
+    [
+      [
+        "你",
+        "<unk>"
+      ],
+      36
+    ],
+    [
+      [
+        "。",
+        "？"
+      ],
+      35
+    ],
+    [
+      [
+        "你",
+        "。"
+      ],
+      31
+    ],
+    [
+      [
+        "。",
+        "<unk>"
+      ],
+      25
+    ],
+    [
+      [
+        "要",
+        "<unk>"
+      ],
+      24
+    ],
+    [
+      [
+        "是",
+        "<unk>"
+      ],
+      22
+    ],
+    [
+      [
+        "好",
+        "。"
+      ],
+      21
+    ],
+    [
+      [
+        "？",
+        "你"
+      ],
+      21
+    ],
+    [
+      [
+        "是",
+        "。"
+      ],
+      20
+    ],
+    [
+      [
+        "要",
+        "。"
+      ],
+      20
+    ],
+    [
+      [
+        "去",
+        "。"
+      ],
+      20
+    ],
+    [
+      [
+        "好",
+        "<unk>"
+      ],
+      20
+    ],
+    [
+      [
+        "可以",
+        "<unk>"
+      ],
+      19
+    ],
+    [
+      [
+        "去",
+        "<unk>"
+      ],
+      18
+    ],
+    [
+      [
+        "不",
+        "<unk>"
+      ],
+      16
+    ],
+    [
+      [
+        "有",
+        "。"
+      ],
+      16
+    ]
+  ],
+  "samples": [
+    {
+      "sid": "dev-00002",
+      "hyp": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "？"
+      ],
+      "ref_loose": [
+        "2",
+        "<unk>",
+        "2",
+        "<unk>",
+        "年",
+        "高",
+        "考试",
+        "<unk>",
+        "一",
+        "<unk>",
+        "多",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "2",
+        "0",
+        "2",
+        "3",
+        "年",
+        "高",
+        "考试1",
+        "学生",
+        "一",
+        "千",
+        "多",
+        "万",
+        "。"
+      ],
+      "edit_loose": 8,
+      "edit_strict": 13,
+      "n_ref": 13,
+      "n_hyp": 7,
+      "hits": 0,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00081",
+      "hyp": [
+        "你",
+        "应该",
+        "和",
+        "事情",
+        "。"
+      ],
+      "ref_loose": [
+        "你",
+        "应该",
+        "学习",
+        "会",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "和",
+        "<unk>",
+        "事情",
+        "。"
+      ],
+      "ref_strict": [
+        "你",
+        "应该",
+        "学习",
+        "会",
+        "处理",
+        "着急",
+        "情况",
+        "和",
+        "突发",
+        "事情",
+        "。"
+      ],
+      "edit_loose": 6,
+      "edit_strict": 6,
+      "n_ref": 11,
+      "n_hyp": 5,
+      "hits": 5,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00268",
+      "hyp": [
+        "我们",
+        "国",
+        "新",
+        "什么",
+        "是",
+        "。"
+      ],
+      "ref_loose": [
+        "我",
+        "国",
+        "重要",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "东",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "国",
+        "重要",
+        "农业",
+        "生产1",
+        "基础",
+        "地",
+        "东1",
+        "北1",
+        "是",
+        "。"
+      ],
+      "edit_loose": 8,
+      "edit_strict": 8,
+      "n_ref": 11,
+      "n_hyp": 6,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00021",
+      "hyp": [
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "ref_loose": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "早上",
+        "为什么",
+        "？"
+      ],
+      "ref_strict": [
+        "北",
+        "方",
+        "夏天",
+        "比",
+        "南2",
+        "方",
+        "亮",
+        "早上1",
+        "为什么",
+        "？"
+      ],
+      "edit_loose": 9,
+      "edit_strict": 10,
+      "n_ref": 10,
+      "n_hyp": 3,
+      "hits": 0,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00073",
+      "hyp": [
+        "你",
+        "<unk>",
+        "我",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "ref_loose": [
+        "你",
+        "再",
+        "说",
+        "1",
+        "可以",
+        "我",
+        "听",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "ref_strict": [
+        "你",
+        "再",
+        "说",
+        "1",
+        "可以",
+        "我",
+        "听",
+        "清楚",
+        "没有2",
+        "。"
+      ],
+      "edit_loose": 6,
+      "edit_strict": 7,
+      "n_ref": 10,
+      "n_hyp": 6,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00166",
+      "hyp": [
+        "你",
+        "喜欢",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "因为",
+        "人",
+        "<unk>",
+        "多",
+        "<unk>",
+        "消费",
+        "<unk>",
+        "<unk>",
+        "大",
+        "。"
+      ],
+      "ref_strict": [
+        "因为",
+        "人",
+        "口",
+        "多",
+        "所以",
+        "消费2",
+        "市场",
+        "规模",
+        "大",
+        "。"
+      ],
+      "edit_loose": 8,
+      "edit_strict": 9,
+      "n_ref": 10,
+      "n_hyp": 4,
+      "hits": 1,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00169",
+      "hyp": [
+        "都",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "在",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "有",
+        "。"
+      ],
+      "ref_strict": [
+        "在",
+        "所有",
+        "职业",
+        "中",
+        "建筑1",
+        "工人",
+        "危险",
+        "性",
+        "有",
+        "。"
+      ],
+      "edit_loose": 8,
+      "edit_strict": 9,
+      "n_ref": 10,
+      "n_hyp": 3,
+      "hits": 1,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00001",
+      "hyp": [
+        "<unk>",
+        "这里",
+        "但是",
+        "<unk>",
+        "时间",
+        "可以",
+        "。"
+      ],
+      "ref_loose": [
+        "<unk>",
+        "年",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "时间",
+        "长",
+        "不",
+        "。"
+      ],
+      "ref_strict": [
+        "10",
+        "年",
+        "鱼",
+        "禁止1",
+        "区",
+        "时间",
+        "长",
+        "不",
+        "。"
+      ],
+      "edit_loose": 5,
+      "edit_strict": 7,
+      "n_ref": 9,
+      "n_hyp": 7,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00130",
+      "hyp": [
+        "你",
+        "<unk>",
+        "最",
+        "可以",
+        "？"
+      ],
+      "ref_loose": [
+        "你",
+        "见",
+        "<unk>",
+        "事情",
+        "最",
+        "好",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "ref_strict": [
+        "你",
+        "见",
+        "过",
+        "事情",
+        "最2",
+        "好",
+        "笑",
+        "什么",
+        "？"
+      ],
+      "edit_loose": 5,
+      "edit_strict": 7,
+      "n_ref": 9,
+      "n_hyp": 5,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00161",
+      "hyp": [
+        "<unk>",
+        "晚上",
+        "<unk>",
+        "时间",
+        "一样",
+        "。"
+      ],
+      "ref_loose": [
+        "全部",
+        "国",
+        "<unk>",
+        "参加",
+        "高",
+        "<unk>",
+        "时间",
+        "一样",
+        "。"
+      ],
+      "ref_strict": [
+        "全部",
+        "国",
+        "学生",
+        "参加",
+        "高",
+        "考",
+        "时间",
+        "一样",
+        "。"
+      ],
+      "edit_loose": 4,
+      "edit_strict": 6,
+      "n_ref": 9,
+      "n_hyp": 6,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00265",
+      "hyp": [
+        "我",
+        "国",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "ref_loose": [
+        "我",
+        "国",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "国",
+        "粮食",
+        "生产",
+        "基本",
+        "地",
+        "黑龙江",
+        "是",
+        "。"
+      ],
+      "edit_loose": 2,
+      "edit_strict": 6,
+      "n_ref": 9,
+      "n_hyp": 8,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00295",
+      "hyp": [
+        "我",
+        "想",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "我",
+        "想",
+        "等",
+        "吃饭",
+        "完了",
+        "去",
+        "书",
+        "看",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "想",
+        "等",
+        "吃饭",
+        "完了",
+        "去",
+        "书",
+        "看",
+        "。"
+      ],
+      "edit_loose": 6,
+      "edit_strict": 6,
+      "n_ref": 9,
+      "n_hyp": 6,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00362",
+      "hyp": [
+        "我",
+        "去",
+        "可以",
+        "？"
+      ],
+      "ref_loose": [
+        "我",
+        "送",
+        "你",
+        "去",
+        "<unk>",
+        "做",
+        "身体",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "送",
+        "你",
+        "去",
+        "医院",
+        "做",
+        "身体",
+        "检查",
+        "。"
+      ],
+      "edit_loose": 7,
+      "edit_strict": 7,
+      "n_ref": 9,
+      "n_hyp": 4,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00412",
+      "hyp": [
+        "这里",
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "这里",
+        "<unk>",
+        "看",
+        "大",
+        "<unk>",
+        "好",
+        "想",
+        "吃",
+        "。"
+      ],
+      "ref_strict": [
+        "这里",
+        "西瓜1",
+        "看1",
+        "大",
+        "圆",
+        "好",
+        "想",
+        "吃",
+        "。"
+      ],
+      "edit_loose": 5,
+      "edit_strict": 7,
+      "n_ref": 9,
+      "n_hyp": 5,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00026",
+      "hyp": [
+        "他",
+        "我",
+        "可以",
+        "。"
+      ],
+      "ref_loose": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "衣服",
+        "买",
+        "多少",
+        "可以",
+        "？"
+      ],
+      "ref_strict": [
+        "五",
+        "百",
+        "万",
+        "衣服",
+        "买",
+        "多少",
+        "可以",
+        "？"
+      ],
+      "edit_loose": 7,
+      "edit_strict": 7,
+      "n_ref": 8,
+      "n_hyp": 4,
+      "hits": 1,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00076",
+      "hyp": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "好",
+        "可以",
+        "。"
+      ],
+      "ref_loose": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "走",
+        "<unk>",
+        "到",
+        "可以",
+        "。"
+      ],
+      "ref_strict": [
+        "你",
+        "向",
+        "右",
+        "走",
+        "车站",
+        "到",
+        "可以",
+        "。"
+      ],
+      "edit_loose": 3,
+      "edit_strict": 5,
+      "n_ref": 8,
+      "n_hyp": 6,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00083",
+      "hyp": [
+        "你",
+        "<unk>",
+        "喜欢",
+        "。"
+      ],
+      "ref_loose": [
+        "你",
+        "应该",
+        "用",
+        "多",
+        "时间",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "你",
+        "应该",
+        "用",
+        "多",
+        "时间",
+        "练习",
+        "发音",
+        "。"
+      ],
+      "edit_loose": 5,
+      "edit_strict": 6,
+      "n_ref": 8,
+      "n_hyp": 4,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00128",
+      "hyp": [
+        "你",
+        "<unk>",
+        "<unk>",
+        "是",
+        "。"
+      ],
+      "ref_loose": [
+        "你",
+        "如果",
+        "<unk>",
+        "看",
+        "我",
+        "<unk>",
+        "你",
+        "。"
+      ],
+      "ref_strict": [
+        "你",
+        "如果",
+        "乱",
+        "看",
+        "我",
+        "收拾",
+        "你",
+        "。"
+      ],
+      "edit_loose": 4,
+      "edit_strict": 6,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00151",
+      "hyp": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "有",
+        "？"
+      ],
+      "ref_loose": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "比赛",
+        "你",
+        "参加",
+        "有",
+        "？"
+      ],
+      "ref_strict": [
+        "创新",
+        "创",
+        "业",
+        "比赛",
+        "你",
+        "参加",
+        "有",
+        "？"
+      ],
+      "edit_loose": 3,
+      "edit_strict": 6,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00163",
+      "hyp": [
+        "<unk>",
+        "<unk>",
+        "<unk>",
+        "没有",
+        "。"
+      ],
+      "ref_loose": [
+        "这",
+        "事",
+        "听",
+        "完",
+        "你",
+        "<unk>",
+        "什么",
+        "？"
+      ],
+      "ref_strict": [
+        "这",
+        "事",
+        "听",
+        "完",
+        "你",
+        "感想",
+        "什么",
+        "？"
+      ],
+      "edit_loose": 7,
+      "edit_strict": 8,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 0,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00182",
+      "hyp": [
+        "我",
+        "现在",
+        "<unk>",
+        "<unk>",
+        "不行",
+        "。"
+      ],
+      "ref_loose": [
+        "如何",
+        "可以",
+        "让",
+        "事情",
+        "<unk>",
+        "更",
+        "好",
+        "？"
+      ],
+      "ref_strict": [
+        "如何",
+        "可以",
+        "让",
+        "事情",
+        "变",
+        "更",
+        "好",
+        "？"
+      ],
+      "edit_loose": 7,
+      "edit_strict": 8,
+      "n_ref": 8,
+      "n_hyp": 6,
+      "hits": 0,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00183",
+      "hyp": [
+        "爸爸",
+        "妈妈",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "妈妈",
+        "喜欢",
+        "睡觉",
+        "<unk>",
+        "给",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "妈妈",
+        "喜欢",
+        "睡觉",
+        "之前",
+        "给（我）",
+        "讲",
+        "故事",
+        "。"
+      ],
+      "edit_loose": 5,
+      "edit_strict": 7,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 1,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00204",
+      "hyp": [
+        "我",
+        "去",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "我",
+        "不知道",
+        "怎么",
+        "去",
+        "<unk>",
+        "自己",
+        "时间",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "不知道1",
+        "怎么",
+        "去",
+        "管理",
+        "自己",
+        "时间",
+        "。"
+      ],
+      "edit_loose": 4,
+      "edit_strict": 5,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 3,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00208",
+      "hyp": [
+        "我",
+        "今天",
+        "和",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "我",
+        "今天",
+        "早上",
+        "和",
+        "爸爸",
+        "一起",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "我",
+        "今天",
+        "早上1",
+        "和",
+        "爸爸",
+        "一起",
+        "出门",
+        "。"
+      ],
+      "edit_loose": 3,
+      "edit_strict": 4,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 4,
+      "blank_ratio_this_batch": 0.0
+    },
+    {
+      "sid": "dev-00220",
+      "hyp": [
+        "我们",
+        "我",
+        "<unk>",
+        "<unk>",
+        "。"
+      ],
+      "ref_loose": [
+        "我们",
+        "应该",
+        "在",
+        "学习",
+        "<unk>",
+        "自己",
+        "<unk>",
+        "。"
+      ],
+      "ref_strict": [
+        "我们",
+        "应该",
+        "在",
+        "学习",
+        "中",
+        "自己",
+        "提升",
+        "。"
+      ],
+      "edit_loose": 4,
+      "edit_strict": 6,
+      "n_ref": 8,
+      "n_hyp": 5,
+      "hits": 2,
+      "blank_ratio_this_batch": 0.0
+    }
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 30.050516298448635
+    },
+    {
+      "epoch": 2,
+      "train_loss": 19.39536945685136
+    },
+    {
+      "epoch": 3,
+      "train_loss": 18.212275255956136
+    },
+    {
+      "epoch": 4,
+      "train_loss": 17.07819413553894
+    },
+    {
+      "epoch": 5,
+      "train_loss": 16.18211185690049,
+      "wer_loose": 0.6219,
+      "wer_strict": 0.7484,
+      "n_distinct": 86,
+      "hyp_len_mean": 3.16
+    },
+    {
+      "epoch": 6,
+      "train_loss": 15.345025686773765
+    },
+    {
+      "epoch": 7,
+      "train_loss": 14.521270028786859
+    },
+    {
+      "epoch": 8,
+      "train_loss": 13.744194327622335
+    },
+    {
+      "epoch": 9,
+      "train_loss": 12.902319652128574
+    },
+    {
+      "epoch": 10,
+      "train_loss": 12.081888849721357,
+      "wer_loose": 0.5617,
+      "wer_strict": 0.7163,
+      "n_distinct": 201,
+      "hyp_len_mean": 3.49
+    },
+    {
+      "epoch": 11,
+      "train_loss": 11.311391739161614
+    },
+    {
+      "epoch": 12,
+      "train_loss": 10.550493477001147
+    },
+    {
+      "epoch": 13,
+      "train_loss": 9.86694434641737
+    },
+    {
+      "epoch": 14,
+      "train_loss": 9.155867358364379
+    },
+    {
+      "epoch": 15,
+      "train_loss": 8.469138925952402,
+      "wer_loose": 0.5314,
+      "wer_strict": 0.703,
+      "n_distinct": 327,
+      "hyp_len_mean": 3.94
+    },
+    {
+      "epoch": 16,
+      "train_loss": 7.88020580394537
+    },
+    {
+      "epoch": 17,
+      "train_loss": 7.313136903711807
+    },
+    {
+      "epoch": 18,
+      "train_loss": 6.77450591650571
+    },
+    {
+      "epoch": 19,
+      "train_loss": 6.253170186308771
+    },
+    {
+      "epoch": 20,
+      "train_loss": 5.810625814226535,
+      "wer_loose": 0.5395,
+      "wer_strict": 0.6973,
+      "n_distinct": 374,
+      "hyp_len_mean": 4.07
+    },
+    {
+      "epoch": 21,
+      "train_loss": 5.439158481442183
+    },
+    {
+      "epoch": 22,
+      "train_loss": 5.1006464205492
+    },
+    {
+      "epoch": 23,
+      "train_loss": 4.80498501292278
+    },
+    {
+      "epoch": 24,
+      "train_loss": 4.556984380771523
+    },
+    {
+      "epoch": 25,
+      "train_loss": 4.349861560010728,
+      "wer_loose": 0.537,
+      "wer_strict": 0.7026,
+      "n_distinct": 402,
+      "hyp_len_mean": 4.27
+    },
+    {
+      "epoch": 26,
+      "train_loss": 4.1903183901787
+    },
+    {
+      "epoch": 27,
+      "train_loss": 4.07683000520468
+    },
+    {
+      "epoch": 28,
+      "train_loss": 3.955337430063014
+    },
+    {
+      "epoch": 29,
+      "train_loss": 3.8964970797905614
+    },
+    {
+      "epoch": 30,
+      "train_loss": 3.8217567013898366,
+      "wer_loose": 0.5402,
+      "wer_strict": 0.7019,
+      "n_distinct": 402,
+      "hyp_len_mean": 4.21
+    }
+  ],
+  "minutes": 2.34,
+  "comparison_before_fix": {
+    "wer_loose": 0.976,
+    "n_distinct": 6,
+    "hyp_len": 1.48
+  }
+}

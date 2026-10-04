@@ -1,0 +1,1263 @@
+{
+  "ckpt": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+  "n_samples": 514,
+  "min_gap": 1,
+  "m_mode_train": 5,
+  "m_hist_train": {
+    "2": 48,
+    "3": 346,
+    "4": 936,
+    "5": 1196,
+    "6": 1046,
+    "7": 673,
+    "8": 389,
+    "9": 175,
+    "10": 99,
+    "11": 41,
+    "12": 16,
+    "13": 7,
+    "16": 1
+  },
+  "groups": {
+    "baseline": {
+      "wer_loose": 0.8509513742071881,
+      "wer_strict": 0.992600422832981,
+      "avg_segments": 1.482490272373541,
+      "seg_mae_vs_M": 0.0
+    },
+    "const_M": {
+      "wer_loose": 0.8509513742071881,
+      "wer_strict": 0.992600422832981,
+      "avg_segments": 1.482490272373541,
+      "seg_mae_vs_M": 4.038910505836576
+    },
+    "random_M": {
+      "wer_loose": 0.8505990133897111,
+      "wer_strict": 0.992600422832981,
+      "avg_segments": 1.4708171206225682,
+      "seg_mae_vs_M": 4.0505836575875485
+    },
+    "oracle_M": {
+      "wer_loose": 0.8505990133897111,
+      "wer_strict": 0.992600422832981,
+      "avg_segments": 1.4785992217898833,
+      "seg_mae_vs_M": 4.042801556420233
+    }
+  },
+  "verdict": "oracle_M 与无信息对照差异 < 0.02 -> 收益几乎全部来自「知道答案长度」，**SCP 机制本身无额外价值**",
+  "gain_oracle_vs_const": 0.0,
+  "gain_oracle_vs_random": 0.0,
+  "caveats": [
+    "oracle_M 用真值 M，有信息泄漏，是上界探针",
+    "const_M 用 train 众数 M=5，零信息对照",
+    "random_M 从 train 的 M 经验分布采样，取值错误但分布正确",
+    "本脚本不训练 SCP 分类器（级 2）；只判定「计数信息」是否有价值"
+  ],
+  "per_sample": [
+    {
+      "id": "dev-00001",
+      "M_true": 9,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 8,
+      "oracle_M_dstrict": 9,
+      "const_M_segs": 1,
+      "const_M_dloose": 8,
+      "const_M_dstrict": 9,
+      "random_M_segs": 1,
+      "random_M_dloose": 8,
+      "random_M_dstrict": 9,
+      "baseline_dloose": 8,
+      "baseline_dstrict": 9
+    },
+    {
+      "id": "dev-00002",
+      "M_true": 13,
+      "M_const": 5,
+      "M_rand": 3,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 12,
+      "oracle_M_dstrict": 13,
+      "const_M_segs": 1,
+      "const_M_dloose": 12,
+      "const_M_dstrict": 13,
+      "random_M_segs": 1,
+      "random_M_dloose": 12,
+      "random_M_dstrict": 13,
+      "baseline_dloose": 12,
+      "baseline_dstrict": 13
+    },
+    {
+      "id": "dev-00003",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00004",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00005",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00006",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 6,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 6,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 6,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 6,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00007",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 8,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00008",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00009",
+      "M_true": 7,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 6,
+      "oracle_M_dstrict": 7,
+      "const_M_segs": 1,
+      "const_M_dloose": 6,
+      "const_M_dstrict": 7,
+      "random_M_segs": 1,
+      "random_M_dloose": 6,
+      "random_M_dstrict": 7,
+      "baseline_dloose": 6,
+      "baseline_dstrict": 7
+    },
+    {
+      "id": "dev-00010",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 3,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00011",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00012",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00013",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 3,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00014",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00015",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00016",
+      "M_true": 3,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 2,
+      "oracle_M_dstrict": 3,
+      "const_M_segs": 1,
+      "const_M_dloose": 2,
+      "const_M_dstrict": 3,
+      "random_M_segs": 1,
+      "random_M_dloose": 2,
+      "random_M_dstrict": 3,
+      "baseline_dloose": 2,
+      "baseline_dstrict": 3
+    },
+    {
+      "id": "dev-00017",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 2,
+      "oracle_M_hyp": [
+        "？",
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 2,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 2,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00018",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00019",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00020",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 2,
+      "oracle_M_segs": 2,
+      "oracle_M_hyp": [
+        "？",
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 2,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00021",
+      "M_true": 10,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 9,
+      "oracle_M_dstrict": 10,
+      "const_M_segs": 1,
+      "const_M_dloose": 9,
+      "const_M_dstrict": 10,
+      "random_M_segs": 1,
+      "random_M_dloose": 9,
+      "random_M_dstrict": 10,
+      "baseline_dloose": 9,
+      "baseline_dstrict": 10
+    },
+    {
+      "id": "dev-00022",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00023",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00024",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00025",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 9,
+      "oracle_M_segs": 2,
+      "oracle_M_hyp": [
+        "？",
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 2,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 2,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00026",
+      "M_true": 8,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 7,
+      "oracle_M_dstrict": 8,
+      "const_M_segs": 1,
+      "const_M_dloose": 7,
+      "const_M_dstrict": 8,
+      "random_M_segs": 1,
+      "random_M_dloose": 7,
+      "random_M_dstrict": 8,
+      "baseline_dloose": 7,
+      "baseline_dstrict": 8
+    },
+    {
+      "id": "dev-00027",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00028",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00029",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00030",
+      "M_true": 3,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 2,
+      "oracle_M_dstrict": 3,
+      "const_M_segs": 1,
+      "const_M_dloose": 2,
+      "const_M_dstrict": 3,
+      "random_M_segs": 1,
+      "random_M_dloose": 2,
+      "random_M_dstrict": 3,
+      "baseline_dloose": 2,
+      "baseline_dstrict": 3
+    },
+    {
+      "id": "dev-00031",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00032",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00033",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00034",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 10,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00035",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00036",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00037",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00038",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00039",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 8,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00040",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00041",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00042",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 3,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00043",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00044",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00045",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00046",
+      "M_true": 7,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 6,
+      "oracle_M_dstrict": 7,
+      "const_M_segs": 1,
+      "const_M_dloose": 6,
+      "const_M_dstrict": 7,
+      "random_M_segs": 1,
+      "random_M_dloose": 6,
+      "random_M_dstrict": 7,
+      "baseline_dloose": 6,
+      "baseline_dstrict": 7
+    },
+    {
+      "id": "dev-00047",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00048",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00049",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00050",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00051",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00052",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00053",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00054",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 9,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 4,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 4,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 4,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 4,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00055",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00056",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 6,
+      "oracle_M_segs": 2,
+      "oracle_M_hyp": [
+        "我",
+        "。"
+      ],
+      "oracle_M_dloose": 6,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 2,
+      "const_M_dloose": 6,
+      "const_M_dstrict": 6,
+      "random_M_segs": 2,
+      "random_M_dloose": 6,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 6,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00057",
+      "M_true": 6,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 6,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 6,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 6,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 6
+    },
+    {
+      "id": "dev-00058",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 7,
+      "oracle_M_segs": 2,
+      "oracle_M_hyp": [
+        "我",
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 2,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 2,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    },
+    {
+      "id": "dev-00059",
+      "M_true": 5,
+      "M_const": 5,
+      "M_rand": 4,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 5,
+      "oracle_M_dstrict": 5,
+      "const_M_segs": 1,
+      "const_M_dloose": 5,
+      "const_M_dstrict": 5,
+      "random_M_segs": 1,
+      "random_M_dloose": 5,
+      "random_M_dstrict": 5,
+      "baseline_dloose": 5,
+      "baseline_dstrict": 5
+    },
+    {
+      "id": "dev-00060",
+      "M_true": 4,
+      "M_const": 5,
+      "M_rand": 5,
+      "oracle_M_segs": 1,
+      "oracle_M_hyp": [
+        "<unk>"
+      ],
+      "oracle_M_dloose": 3,
+      "oracle_M_dstrict": 4,
+      "const_M_segs": 1,
+      "const_M_dloose": 3,
+      "const_M_dstrict": 4,
+      "random_M_segs": 1,
+      "random_M_dloose": 3,
+      "random_M_dstrict": 4,
+      "baseline_dloose": 3,
+      "baseline_dstrict": 4
+    }
+  ]
+}

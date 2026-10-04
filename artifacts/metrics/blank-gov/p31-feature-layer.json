@@ -1,0 +1,38 @@
+{
+  "experiment": "P31 what is missing in the raw landmark features",
+  "purpose": "quantify the gap before spending cost on re-extraction",
+  "criterion": {
+    "detection_bottleneck": ">30% of dev tokens fall in sentences with both hands missing",
+    "separability_gain": "1-NN acc ratio complete/missing >= 2"
+  },
+  "all_data_real": true,
+  "reads_test_split": false,
+  "q1_detection": {
+    "mean_frac_both_hands_missing": 0.0,
+    "median": 0.0,
+    "p90": 0.0,
+    "sentences_with_no_missing": 514,
+    "n_sentences": 514,
+    "token_weighted_frac": 0.0,
+    "sentence_distribution": {
+      "0": 514
+    }
+  },
+  "q2_motion": {
+    "mean_frame_displacement": 0.26407,
+    "median_frame_displacement": 0.17877,
+    "frac_static_lt_1e-3": 0.0,
+    "n_pairs": 42563,
+    "note": "extractor.py normalises by shoulder distance; very small values mean motion information is compressed"
+  },
+  "q3_separability": {
+    "by_group": {
+      "hand_complete": {
+        "n": 407,
+        "acc": 0.0098
+      }
+    },
+    "acc_ratio_complete_over_missing": Infinity
+  },
+  "verdict": "检出率不是主要瓶颈（0.0% <= 30%） | 检出状态对可分性影响不大（infx < 2）-> 重提特征收益不确定"
+}

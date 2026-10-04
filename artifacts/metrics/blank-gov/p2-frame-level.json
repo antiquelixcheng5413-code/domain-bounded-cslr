@@ -1,0 +1,213 @@
+{
+  "experiment": "P2-a frame-level BIO supervision with frozen CTC",
+  "single_factor": true,
+  "ctc_frozen": true,
+  "checkpoint": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+  "config": {
+    "ckpt": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+    "train_feats": "artifacts/part3_features/train",
+    "val_feats": "artifacts/part3_features/validation",
+    "train_labels": "data/raw/CE-CSL/label/train.csv",
+    "val_labels": "data/raw/CE-CSL/label/dev.csv",
+    "epochs": 10,
+    "batch": 32,
+    "lr": 0.0005,
+    "train_limit": 4973,
+    "val_limit": 300,
+    "device": "cuda",
+    "seed": 42,
+    "out": "artifacts/metrics/blank-gov/p2-frame-level.json"
+  },
+  "class_weights": {
+    "O": 0.9313376545906067,
+    "I": 1.0,
+    "B": 3.727699041366577
+  },
+  "frame_head_params_M": 4.460067,
+  "baseline": {
+    "frame_macro_f1": 0.1308626816245279,
+    "frame_f1_per_class": {
+      "O": 0.39258804487358373,
+      "I": 0.0,
+      "B": 0.0
+    },
+    "pred_O_fraction": 0.2442361111111111,
+    "peak_frames_per_token": 0.0,
+    "peak_count_ratio": 0.17554125219426564,
+    "peak_len_median": 48.0,
+    "peak_len_p90": 48.0,
+    "confusion": [
+      [
+        3517,
+        0,
+        0
+      ],
+      [
+        8051,
+        0,
+        0
+      ],
+      [
+        2832,
+        0,
+        0
+      ]
+    ]
+  },
+  "best": {
+    "frame_macro_f1": 0.701623724362649,
+    "frame_f1_per_class": {
+      "O": 0.8211332312404288,
+      "I": 0.7585429437046431,
+      "B": 0.5251949981428748
+    },
+    "pred_O_fraction": 0.18618055555555554,
+    "peak_frames_per_token": 6.66296079578701,
+    "peak_count_ratio": 1.3311878291398478,
+    "peak_len_median": 5.0,
+    "peak_len_p90": 12.0,
+    "confusion": [
+      [
+        2681,
+        221,
+        615
+      ],
+      [
+        159,
+        5383,
+        2509
+      ],
+      [
+        173,
+        538,
+        2121
+      ]
+    ],
+    "epoch": 7
+  },
+  "pfpt_gain": 6.66296079578701,
+  "verdict": "脱离 peaky",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.1672019335703971,
+      "train_ce": 1.1656146909181888,
+      "train_smooth": 0.01058164333853011,
+      "val_frame_macro_f1": 0.6365275043073443,
+      "val_peak_frames_per_token": 6.835576360444705,
+      "val_peak_count_ratio": 0.946752486834406,
+      "val_pred_O_fraction": 0.17125,
+      "f1_B": 0.44404293761292385,
+      "f1_I": 0.67452113104287
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.005815891501231,
+      "train_ce": 1.0048059951036403,
+      "train_smooth": 0.006732635764190211,
+      "val_frame_macro_f1": 0.632107704084789,
+      "val_peak_frames_per_token": 6.726155646576945,
+      "val_peak_count_ratio": 0.8472791105909889,
+      "val_pred_O_fraction": 0.18145833333333333,
+      "f1_B": 0.44576098059244124,
+      "f1_I": 0.6367969494756911
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.9629061424579376,
+      "train_ce": 0.9616771359474231,
+      "train_smooth": 0.008193389351408068,
+      "val_frame_macro_f1": 0.5965217008084782,
+      "val_peak_frames_per_token": 7.119368051492101,
+      "val_peak_count_ratio": 0.8543007606787595,
+      "val_pred_O_fraction": 0.1511111111111111,
+      "f1_B": 0.45662260351921563,
+      "f1_I": 0.5760729336888277
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.9293692677448957,
+      "train_ce": 0.9278941471607257,
+      "train_smooth": 0.009834140977965524,
+      "val_frame_macro_f1": 0.5997883689948385,
+      "val_peak_frames_per_token": 7.1234640140433,
+      "val_peak_count_ratio": 1.0169689877121124,
+      "val_pred_O_fraction": 0.15097222222222223,
+      "f1_B": 0.4603553434102361,
+      "f1_I": 0.5819141689373297
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.9013223304198339,
+      "train_ce": 0.8996250587396133,
+      "train_smooth": 0.01131514982224848,
+      "val_frame_macro_f1": 0.6640278167902497,
+      "val_peak_frames_per_token": 6.903452311293154,
+      "val_peak_count_ratio": 1.1772966647162084,
+      "val_pred_O_fraction": 0.17201388888888888,
+      "f1_B": 0.493751323872061,
+      "f1_I": 0.6887227131958608
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.8786023400532894,
+      "train_ce": 0.8766639202069013,
+      "train_smooth": 0.012922807924974805,
+      "val_frame_macro_f1": 0.6852787583791694,
+      "val_peak_frames_per_token": 6.878876535985957,
+      "val_peak_count_ratio": 1.3019309537741368,
+      "val_pred_O_fraction": 0.17055555555555554,
+      "f1_B": 0.5079102715466352,
+      "f1_I": 0.7506528336509282
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.8500980734825134,
+      "train_ce": 0.847948995920328,
+      "train_smooth": 0.014327172840682741,
+      "val_frame_macro_f1": 0.701623724362649,
+      "val_peak_frames_per_token": 6.66296079578701,
+      "val_peak_count_ratio": 1.3311878291398478,
+      "val_pred_O_fraction": 0.18618055555555554,
+      "f1_B": 0.5251949981428748,
+      "f1_I": 0.7585429437046431
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.8266591651317401,
+      "train_ce": 0.8242988246373641,
+      "train_smooth": 0.015735608065882936,
+      "val_frame_macro_f1": 0.685175793487761,
+      "val_peak_frames_per_token": 6.841427735517847,
+      "val_peak_count_ratio": 1.3077823288472792,
+      "val_pred_O_fraction": 0.1726388888888889,
+      "f1_B": 0.5200690051753881,
+      "f1_I": 0.7367435158501442
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.8044513265291849,
+      "train_ce": 0.8019283872384292,
+      "train_smooth": 0.016819592965289187,
+      "val_frame_macro_f1": 0.6843810693086865,
+      "val_peak_frames_per_token": 6.783499122293739,
+      "val_peak_count_ratio": 1.3171445289643067,
+      "val_pred_O_fraction": 0.17673611111111112,
+      "f1_B": 0.5192831215970962,
+      "f1_I": 0.7289897510980966
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.7897851803363898,
+      "train_ce": 0.7871012569237978,
+      "train_smooth": 0.017892806981809627,
+      "val_frame_macro_f1": 0.6979143442803508,
+      "val_peak_frames_per_token": 6.691047396138092,
+      "val_peak_count_ratio": 1.366296079578701,
+      "val_pred_O_fraction": 0.18458333333333332,
+      "f1_B": 0.5288427087065568,
+      "f1_I": 0.7447830763714592
+    }
+  ],
+  "minutes": 1.916540471712748
+}

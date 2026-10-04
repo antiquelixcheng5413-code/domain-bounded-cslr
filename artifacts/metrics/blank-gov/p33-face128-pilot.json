@@ -1,0 +1,29 @@
+{
+  "experiment": "P33 face-128 pilot re-extraction",
+  "paper_basis": "ref02 EMNLP2023 Sec E2 + footnote 8: reduce MediaPipe FACE_LANDMARKS to FACEMESH_CONTOURS -> 128 contour keypoints",
+  "why_pilot": "full extraction is ~3.5h; verify value first",
+  "n_videos": 50,
+  "sampling": "random.Random(20261004).sample(sorted(available train ids), 50)",
+  "n_points_selected": 128,
+  "contour_union_size": 468,
+  "face8_covered_by_selection": 1,
+  "detection": {
+    "overall": 0.9208,
+    "per_video_mean": 0.9174,
+    "videos_below_50pct": 3
+  },
+  "motion": {
+    "mean_frame_displacement": 0.03338,
+    "reference": "existing hands 0.5447 / pose 1.1780"
+  },
+  "separability_1nn": {
+    "face128": 1.0,
+    "face8": 1.0,
+    "face478": 1.0
+  },
+  "ratio_128_over_8": 1.0,
+  "criterion": "acc128 >= acc8 * 1.5",
+  "verdict": "面部扩容收益不足（1.00x < 1.5x）-> 128 点也解决不了，应回到数据增强方向",
+  "seconds": 168.8,
+  "reads_test_split": false
+}
