@@ -1,0 +1,15 @@
+{
+  "verdict": "文档正确，P50 的 2.8774 是除错分母",
+  "edit_total": 1479,
+  "ref_token_total": 2838,
+  "n_sentences": 514,
+  "official_corpus_wer": 0.5211,
+  "per_sentence_mean_ed_over_len": 0.5128,
+  "wrong_ed_div_n": 2.8774,
+  "gap_pp": 0.84,
+  "retracted": "『token 级与逐句等权差 5.5 倍』不成立",
+  "still_valid": [
+    "只看 token 级 0.5211 会掩盖样本级真相 —— 但靠 exact 率 3.5%",
+    "短句 unk 占比高（P44: >=50% unk 的 129/514）"
+  ]
+}
