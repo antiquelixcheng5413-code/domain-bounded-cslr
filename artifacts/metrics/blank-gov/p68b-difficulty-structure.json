@@ -1,0 +1,31 @@
+{
+  "ce_csl": {
+    "videos": 5988,
+    "train_videos": 4973,
+    "signers": 12,
+    "vocab": 3516,
+    "tokens": 28272,
+    "tokens_per_word": 8.04,
+    "videos_per_word": 1.41,
+    "types_freq_eq_1": 1689,
+    "types_freq_eq_1_ratio": 0.4804,
+    "gloss_per_sentence": 5.69
+  },
+  "csl_daily": {
+    "videos_total": 20654,
+    "signers": 10,
+    "vocab": 2000,
+    "train_videos": 18401,
+    "dev": 1077,
+    "test": 1176
+  },
+  "key_comparison": {
+    "videos_per_word": {
+      "ce_csl": 1.41,
+      "csl_daily": 9.2,
+      "ratio": 6.5
+    }
+  },
+  "verdict": "CE-CSL 三项难度因子全部更不利：70+复杂背景、视频/词表比低 4.4倍、一半词只见过 1 次",
+  "but": "难不等于不可提升 —— 官方 42.1 vs 最差 baseline 54.4 差 12.3pp；我们真实能力差距约 6.7pp（P56 分解）"
+}

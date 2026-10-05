@@ -1,0 +1,304 @@
+{
+  "generated": "/home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p57.json",
+  "q1_q2": {
+    "vocab_logic": "candidates=[t for t,c in counts if c>=min_frequency] -> candidates[:max_tokens] -> tokens=('<unk>',*candidates)",
+    "unk_two_sources": [
+      "min_frequency 过滤掉低频词",
+      "max_tokens 截断长尾"
+    ],
+    "train_gloss_types": 3841,
+    "dev_tokens_total": 2842,
+    "settings": [
+      {
+        "min_frequency": 2,
+        "max_tokens": 300,
+        "vocab_size": 300,
+        "ctc_classes": 301,
+        "dev_unk_tokens": 864,
+        "dev_unk_ratio": 0.304
+      },
+      {
+        "min_frequency": 2,
+        "max_tokens": 1828,
+        "vocab_size": 1827,
+        "ctc_classes": 1828,
+        "dev_unk_tokens": 282,
+        "dev_unk_ratio": 0.0992
+      },
+      {
+        "min_frequency": 2,
+        "max_tokens": null,
+        "vocab_size": 1827,
+        "ctc_classes": 1828,
+        "dev_unk_tokens": 282,
+        "dev_unk_ratio": 0.0992
+      },
+      {
+        "min_frequency": 1,
+        "max_tokens": null,
+        "vocab_size": 3516,
+        "ctc_classes": 3517,
+        "dev_unk_tokens": 176,
+        "dev_unk_ratio": 0.0619
+      }
+    ],
+    "theoretical_ceiling": {
+      "min_frequency": 1,
+      "max_tokens": null,
+      "vocab_size": 3516,
+      "ctc_classes": 3517,
+      "dev_residual_unk_tokens": 176,
+      "dev_residual_unk_ratio": 0.0619,
+      "residual_types": 89,
+      "residual_train_freq_hist": {
+        "0": 11,
+        "1": 15,
+        "2": 11,
+        "3": 5,
+        "4": 10,
+        "5": 6,
+        "6": 4,
+        "7": 4,
+        "8": 1,
+        "10": 1,
+        "11": 2,
+        "13": 1,
+        "14": 1,
+        "15": 2,
+        "17": 1,
+        "19": 1,
+        "24": 1,
+        "25": 2,
+        "33": 1,
+        "34": 1,
+        "41": 1,
+        "50": 1,
+        "51": 1,
+        "61": 1,
+        "64": 1,
+        "73": 1,
+        "75": 1,
+        "76": 1
+      }
+    }
+  },
+  "q3": {
+    "n_train_segments": 3604,
+    "n_holdout_segments": 1504,
+    "n_vocab": 1488,
+    "feature": "segment-pooled (mean||std), blockwise z-score + L2, dim=736",
+    "n_binary_probes": 25,
+    "binary_auc_mean": 0.7082,
+    "binary_auc_median": 0.6973,
+    "binary_auc_above_half_ratio": 0.96,
+    "binary_ap_mean": 0.1024,
+    "base_rate_mean": 0.01699,
+    "joint_multiclass": {
+      "n_classes": 206,
+      "macro_auc": 0.6408
+    },
+    "verdict": "binary better",
+    "per_gloss": [
+      {
+        "gloss": "。",
+        "pos_tr": 467,
+        "pos_ho": 193,
+        "auc": 0.9389146441232616,
+        "ap": 0.6412293437144558,
+        "base_rate": 0.1283244680851064
+      },
+      {
+        "gloss": "我",
+        "pos_tr": 182,
+        "pos_ho": 71,
+        "auc": 0.8088025711842584,
+        "ap": 0.22335164070146907,
+        "base_rate": 0.04720744680851064
+      },
+      {
+        "gloss": "你",
+        "pos_tr": 163,
+        "pos_ho": 61,
+        "auc": 0.7701282619315406,
+        "ap": 0.2517480006929173,
+        "base_rate": 0.04055851063829787
+      },
+      {
+        "gloss": "？",
+        "pos_tr": 162,
+        "pos_ho": 76,
+        "auc": 0.8838087866725639,
+        "ap": 0.24809583311127248,
+        "base_rate": 0.05053191489361702
+      },
+      {
+        "gloss": "这",
+        "pos_tr": 66,
+        "pos_ho": 23,
+        "auc": 0.7789683821154919,
+        "ap": 0.1024863250224104,
+        "base_rate": 0.015292553191489361
+      },
+      {
+        "gloss": "可以",
+        "pos_tr": 48,
+        "pos_ho": 20,
+        "auc": 0.5705188679245283,
+        "ap": 0.03898866732454682,
+        "base_rate": 0.013297872340425532
+      },
+      {
+        "gloss": "有",
+        "pos_tr": 46,
+        "pos_ho": 22,
+        "auc": 0.6441234204392099,
+        "ap": 0.03451387334099772,
+        "base_rate": 0.014627659574468085
+      },
+      {
+        "gloss": "是",
+        "pos_tr": 38,
+        "pos_ho": 18,
+        "auc": 0.667676087931808,
+        "ap": 0.021846588096535724,
+        "base_rate": 0.011968085106382979
+      },
+      {
+        "gloss": "什么",
+        "pos_tr": 37,
+        "pos_ho": 16,
+        "auc": 0.7603326612903225,
+        "ap": 0.05587286933637428,
+        "base_rate": 0.010638297872340425
+      },
+      {
+        "gloss": "我们",
+        "pos_tr": 35,
+        "pos_ho": 21,
+        "auc": 0.749125004013743,
+        "ap": 0.329677423831987,
+        "base_rate": 0.013962765957446808
+      },
+      {
+        "gloss": "好",
+        "pos_tr": 27,
+        "pos_ho": 7,
+        "auc": 0.6174253268441645,
+        "ap": 0.007131624281875739,
+        "base_rate": 0.004654255319148936
+      },
+      {
+        "gloss": "喜欢",
+        "pos_tr": 26,
+        "pos_ho": 5,
+        "auc": 0.5843895930620413,
+        "ap": 0.005435247222494907,
+        "base_rate": 0.003324468085106383
+      },
+      {
+        "gloss": "要",
+        "pos_tr": 26,
+        "pos_ho": 15,
+        "auc": 0.48497873293037835,
+        "ap": 0.01191838404941159,
+        "base_rate": 0.00997340425531915
+      },
+      {
+        "gloss": "不",
+        "pos_tr": 26,
+        "pos_ho": 10,
+        "auc": 0.7752342704149934,
+        "ap": 0.030470501684775136,
+        "base_rate": 0.006648936170212766
+      },
+      {
+        "gloss": "想",
+        "pos_tr": 23,
+        "pos_ho": 6,
+        "auc": 0.9376947040498442,
+        "ap": 0.23065318901012952,
+        "base_rate": 0.003989361702127659
+      },
+      {
+        "gloss": "他",
+        "pos_tr": 23,
+        "pos_ho": 15,
+        "auc": 0.6972912469218715,
+        "ap": 0.06420869642449302,
+        "base_rate": 0.00997340425531915
+      },
+      {
+        "gloss": "做",
+        "pos_tr": 21,
+        "pos_ho": 8,
+        "auc": 0.6844084224598931,
+        "ap": 0.03838673316969942,
+        "base_rate": 0.005319148936170213
+      },
+      {
+        "gloss": "这里",
+        "pos_tr": 20,
+        "pos_ho": 8,
+        "auc": 0.9374164438502675,
+        "ap": 0.12094144231991845,
+        "base_rate": 0.005319148936170213
+      },
+      {
+        "gloss": "去",
+        "pos_tr": 20,
+        "pos_ho": 6,
+        "auc": 0.5054517133956387,
+        "ap": 0.004772894565352539,
+        "base_rate": 0.003989361702127659
+      },
+      {
+        "gloss": "时间",
+        "pos_tr": 19,
+        "pos_ho": 9,
+        "auc": 0.5790412486064659,
+        "ap": 0.04163790824902476,
+        "base_rate": 0.005984042553191489
+      },
+      {
+        "gloss": "今天",
+        "pos_tr": 18,
+        "pos_ho": 3,
+        "auc": 0.739062846990895,
+        "ap": 0.011853522213778696,
+        "base_rate": 0.0019946808510638296
+      },
+      {
+        "gloss": "在",
+        "pos_tr": 17,
+        "pos_ho": 7,
+        "auc": 0.5338295638896842,
+        "ap": 0.01621574965331436,
+        "base_rate": 0.004654255319148936
+      },
+      {
+        "gloss": "多",
+        "pos_tr": 16,
+        "pos_ho": 3,
+        "auc": 0.7297357317343993,
+        "ap": 0.004751372060375933,
+        "base_rate": 0.0019946808510638296
+      },
+      {
+        "gloss": "人",
+        "pos_tr": 16,
+        "pos_ho": 13,
+        "auc": 0.6453593355001805,
+        "ap": 0.015663243622469118,
+        "base_rate": 0.008643617021276596
+      },
+      {
+        "gloss": "和",
+        "pos_tr": 15,
+        "pos_ho": 3,
+        "auc": 0.6813235620697312,
+        "ap": 0.00903183580650637,
+        "base_rate": 0.0019946808510638296
+      }
+    ]
+  }
+}

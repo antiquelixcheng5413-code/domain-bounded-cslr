@@ -1,0 +1,25 @@
+{
+  "official_formula": "WER = 100% × (ins + del + sub) / sum",
+  "denominator": "sum = 该语料全部参考 gloss token 数（corpus-level 累加）",
+  "no_normalization": [
+    "不去标点（。是一个 token）",
+    "不合并重复 token",
+    "不做大小写/空格归一"
+  ],
+  "verified_by_table_viii": true,
+  "all_cases_match": false,
+  "our_primary_metric": "token 级 WER = 0.5211（与官方同口径）",
+  "our_supplementary": {
+    "excl_unk": 0.7919,
+    "per_sentence_avg": 2.8774,
+    "exact_rate": 0.035,
+    "note": "官方未报，作为附加分析放附录"
+  },
+  "dev_selection": "官方用 validation 选型，test 只做最终报告",
+  "our_split": {
+    "train": 4973,
+    "dev": 515,
+    "test": 500,
+    "test_features_extracted": 0
+  }
+}

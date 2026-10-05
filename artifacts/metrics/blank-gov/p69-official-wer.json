@@ -1,0 +1,21 @@
+{
+  "official_formula": "WER = 100% * (ins + del + subs) / sum  [arXiv:2409.11960v2 式 11]",
+  "official_denominator": "sum = 整个语料的参考 token 总数（corpus-level）",
+  "punctuation_included": true,
+  "punctuation_evidence": {
+    "case1_ref_tokens": 7,
+    "case1_edits": 4,
+    "computed": 57.1,
+    "official": 50.0
+  },
+  "our_dev_wer_official_formula": 0.5211,
+  "receipt_wer": 0.5211,
+  "match": true,
+  "supplementary_diagnostics": {
+    "per_sentence_average": 0.5128,
+    "exact_rate": 0.035,
+    "no_unk_wer": 0.5757,
+    "note": "官方未定义，仅作诊断，不作为判优依据"
+  },
+  "revised_rule": "官方判优只看 token 级 WER（corpus-level）；P50 的『四件套』降级为『主指标 + 补充诊断』"
+}

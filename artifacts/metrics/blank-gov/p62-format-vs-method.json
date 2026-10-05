@@ -1,0 +1,59 @@
+{
+  "layer_A_container": {
+    "ce_csl_resolutions": {
+      "(1920, 1080)": 30
+    },
+    "ce_csl_fps": {
+      "30.0": 30
+    },
+    "ce_csl_codec": {
+      "h264": 30
+    },
+    "ce_csl_frame_count_range": [
+      145,
+      309
+    ],
+    "ustc_rgb": "1280x720 @30fps（官方页面）",
+    "verdict": "无本质差别，都能 cv2 解码"
+  },
+  "layer_B_modality": {
+    "ce_csl_files": {
+      ".csv": 3,
+      ".mp4": 5988
+    },
+    "ce_csl_has_depth": false,
+    "ce_csl_has_3d_skeleton": false,
+    "ustc_modalities": [
+      "RGB 1280x720",
+      "depth 512x424",
+      "3D skeleton 25 joints/frame"
+    ],
+    "verdict": "本质差别：CE-CSL 缺两个模态，论文方法无法弥补"
+  },
+  "layer_C_protocol": {
+    "ce_csl": {
+      "task": "连续句",
+      "vocab": 3515,
+      "split": "4973/515/500",
+      "env": "70+ 复杂背景"
+    },
+    "ustc_slr500": {
+      "task": "孤立词",
+      "words": 500,
+      "instances": 125000,
+      "env": "实验室"
+    },
+    "ustc_continuous": {
+      "task": "连续句",
+      "sentences": 100,
+      "instances": 25000,
+      "env": "实验室"
+    },
+    "verdict": "本质差别：任务/词表/划分都不同，混用失去可比性"
+  },
+  "layer_D_method": {
+    "official": "TFNet: RGB → MAM-FSD CNN backbone → 时频双域(DFT)",
+    "note": "这是唯一能靠论文改变的一层；前三层由数据决定"
+  },
+  "answer_to_user": "容器层无差别（用户对）；模态层与协议层有本质差别（必须纠正）"
+}

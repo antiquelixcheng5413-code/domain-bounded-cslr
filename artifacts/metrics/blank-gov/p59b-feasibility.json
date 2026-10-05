@@ -1,0 +1,56 @@
+{
+  "device": "cuda",
+  "vocab_candidates_mf1_none": 3516,
+  "official_reported": 3515,
+  "diff": 1,
+  "probes": [
+    {
+      "vocab_size": 300,
+      "ctc_classes": 301,
+      "logits_MB": 0.92,
+      "peak_est_MB": 2.77,
+      "python_peak_MB": 0.0,
+      "step_s": 0.3745,
+      "params_M": 3.07,
+      "tokens_per_s": 128.2,
+      "T": 48,
+      "batch": 16
+    },
+    {
+      "vocab_size": 300,
+      "ctc_classes": 301,
+      "logits_MB": 1.85,
+      "peak_est_MB": 5.55,
+      "python_peak_MB": 0.0,
+      "step_s": 0.0163,
+      "params_M": 3.07,
+      "tokens_per_s": 5902.8,
+      "T": 48,
+      "batch": 32
+    },
+    {
+      "vocab_size": 3516,
+      "ctc_classes": 3517,
+      "logits_MB": 10.8,
+      "peak_est_MB": 32.41,
+      "python_peak_MB": 0.0,
+      "step_s": 0.2527,
+      "params_M": 3.89,
+      "tokens_per_s": 190.0,
+      "T": 48,
+      "batch": 16
+    },
+    {
+      "vocab_size": 3516,
+      "ctc_classes": 3517,
+      "logits_MB": 21.61,
+      "peak_est_MB": 64.83,
+      "python_peak_MB": 0.0,
+      "step_s": 0.0116,
+      "params_M": 3.89,
+      "tokens_per_s": 8297.5,
+      "T": 48,
+      "batch": 32
+    }
+  ]
+}

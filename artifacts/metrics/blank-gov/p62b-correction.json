@@ -1,0 +1,70 @@
+{
+  "generated": "2026-10-10",
+  "correction_of_p57_p58": {
+    "user_question": "所以数据集本身其实格式没有区别？只是论文方法有区别",
+    "p57_p58_error_found": "P57/P58 的 dev 覆盖率全部用**裸 split('/')** 计算，与训练实际口径（split_gloss_sequence）不一致，导致数字全部偏低。",
+    "root_cause": "我没有用 gloss_sequence.split_gloss_sequence，而是自己写了 t.strip() for t in g.split('/')。库里有 clean_token 做归一化（剥离变体编号、annotation、空格），裸 split 绕过了它。",
+    "corrected_numbers": {
+      "dev_token_coverage": {
+        "library_path_correct": 1.0,
+        "naive_split_what_i_reported": 0.938,
+        "note": "dev token 判 unk：库路径 0/2842 = 0.0%；裸 split 176/2842 = 6.2%"
+      },
+      "dev_sentence_full_coverage": {
+        "library_path_correct": 1.0,
+        "naive_split_what_i_reported": 0.711,
+        "note": "整句可表达率：库路径 515/515 = 100%；裸 split 366/515 = 71.1%"
+      },
+      "truly_unseen_words_in_dev": {
+        "library_path_correct": 0,
+        "naive_split_what_i_reported": 13
+      }
+    },
+    "p57_claim_retracted": {
+      "claim": "数字后缀不能合并，合并会让评估口径不对齐官方",
+      "verdict": "**错误，已撤回**",
+      "truth": "GlossSequenceConfig.strip_variant_numbering 默认 True，clean_token 已把 禁止1/禁止2 -> 禁止。我们48 轮实验一直用的是归一化后的词表。",
+      "evidence": {
+        "禁止1": "禁止",
+        "禁止2": "禁止",
+        "看1": "看",
+        "上班2": "上班",
+        "帮助（我）": "帮助",
+        "送(我)": "送"
+      },
+      "why_i_got_it_wrong": "我读了论文表 V 说『变体用 1/2 后缀标注』，就推断评估时也保留变体。但库的实现已经把变体归一化了，我没读 clean_token 就下了结论。"
+    },
+    "vocab_size_reconciliation": {
+      "naive_split_word_types": 3841,
+      "library_normalized_candidates": 3516,
+      "official_reported": 3515,
+      "diff_to_official": 1,
+      "explained_by": "432 个带数字后缀的变体被归一（一些1/一定2/上班1...）+ 107 个因空格处理差异只在库路径出现"
+    },
+    "corrected_conclusion": "扩词表到 3516（min_freq=1, max_tokens=None）后，**dev侧 unk 归零、整句可表达率 100%**。这比我之前说的『仍剩 6.2% 硬地板』要好得多——那个地板是我自己算错的。真正的瓶颈完全转移到模型侧（低频词样本量不足 + landmark 判别力）。",
+    "action_unchanged": "扩词表仍是对的，理由比之前更强：不是『从8.9% 提到 55%』，而是『从 8.9%（300词表）提到 100%（3516词表）』"
+  },
+  "three_layers_answer": {
+    "L-A_container": {
+      "ce_csl_measured": "1920x1080, 30fps, h264, 帧数 145~309",
+      "ustc_rgb": "1280x720, 30fps",
+      "verdict": "无本质差别，都能 cv2 解码 —— **用户在这一层是对的**"
+    },
+    "L-B_modality": {
+      "ce_csl": "只有 RGB（实测 5988 mp4 + 3 csv，零深度、零骨架）",
+      "ustc": "RGB + depth 512x424 + 3D skeleton 25 joints",
+      "verdict": "**本质差别：CE-CSL 缺两个模态**，论文方法无法弥补"
+    },
+    "L-C_protocol": {
+      "ce_csl": "连续句, 3515 词, 4973/515/500, 70+ 复杂背景, 平均 5.69 gloss/句",
+      "ustc_slr500": "孤立词, 500 词×50人×5 = 125000",
+      "ustc_continuous": "连续句, 100 句×50 人×5 = 25000",
+      "verdict": "**本质差别：任务/词表/划分全不同**，混用即失去可比性"
+    },
+    "L-D_method": {
+      "official": "TFNet: RGB -> MAM-FSD CNN backbone -> 时频双域(DFT)",
+      "verdict": "差异确实大，但这是**唯一能靠论文改变的一层**。前三层由数据决定。"
+    }
+  },
+  "final_answer": "在「能不能读成视频」这一层，没区别（用户对）；但在「有哪些数据通道」和「标签怎么定义」这两层，差别是本质的。论文方法只在第四层起作用。"
+}

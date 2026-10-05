@@ -85,7 +85,10 @@ class CtcLandmarkService:
             import torch
 
             from cslr.recognition.gloss_sequence import build_ordered_vocabulary
-            from cslr.recognition.dataset import FeatureNormalizer
+            # ⚠️ FeatureNormalizer **刻意不再使用**（2026-10-05 / P44b）。
+            # 保留 import 是为了让「万一有人重新启用」时立刻看到下面的实测依据。
+            # 若要启用，请先读 _preprocess 处的注释（WER 0.5211 → 1.2851）。
+            from cslr.recognition.dataset import FeatureNormalizer  # noqa: F401
             from tools.blank_gov.p40_rgb_main import DualInputCTC
         except Exception as exc:                                   # noqa: BLE001
             self.model_error = f"依赖导入失败: {type(exc).__name__}: {exc}"
@@ -96,17 +99,38 @@ class CtcLandmarkService:
 
             from cslr.recognition.gloss_sequence import build_ordered_vocabulary
 
-            # 词表：必须与训练时同参
+            # 🔴 词表参数必须与训练时一致（2026-10-06 修复）。
+            # 原实现硬编码 min_frequency=2 / max_tokens=300，
+            # 一旦重训用 3516 词表，服务端仍会构建 300 词表 →
+            #   虽有 vocab_size 校验会fail-fast，但线上直接不可用，
+            #   属于「定时炸弹」（P75 检出E1）。
+            # 现在：**优先从 checkpoint 的 vocab_params 读取**，
+            #读不到才回退到环境变量 / 300。
+            blob = torch.load(self.checkpoint, map_location="cpu",
+                              weights_only=False)
+            cfg = blob["config"]
+
+            vp = blob.get("vocab_params") or {}
+            min_freq = int(vp.get("min_frequency",
+                                  int(os.getenv("CSLR_VOCAB_MIN_FREQ", "2"))))
+            max_tok_raw = vp.get("max_tokens",
+                                 os.getenv("CSLR_VOCAB_MAX_TOKENS", "300"))
+            max_tokens = (None if str(max_tok_raw).lower()
+                          in ("none", "0", "-1")
+                          else int(max_tok_raw))
+            if vp:
+                print("[ctc_landmark] 词表参数来自 checkpoint: "
+                      "min_frequency=%s max_tokens=%s" % (min_freq, max_tokens))
+
             labels = {}
             with open(REPO / "data/raw/CE-CSL/label/train.csv",
                       newline="", encoding="utf-8") as f:
                 for row in csv.DictReader(f):
                     labels[row["Number"]] = row["Gloss"]
             self.voc, _ = build_ordered_vocabulary(
-                labels.values(), min_frequency=2, max_tokens=300)
+                labels.values(), min_frequency=min_freq,
+                max_tokens=max_tokens)
 
-            blob = torch.load(self.checkpoint, map_location="cpu",
-                              weights_only=False)
             cfg = blob["config"]
             if int(blob.get("vocab_size", -1)) != int(self.voc.size):
                 self.model_error = (
@@ -123,7 +147,11 @@ class CtcLandmarkService:
             self.model.load_state_dict(blob["model_state"])
             self.model.eval()
             self.epoch = blob.get("epoch")
-            self.train_dev_wer = blob.get("dev_wer")
+            # P42 老ckpt 只有 wer_official / dev_wer 缺失，做多键兜底。
+            # P75E8：`.get()` 返回 None 不报错，但会让 /health 的字段变 null，
+            # 排查时容易误判成「模型没训练好」。所以显式列出候选键。
+            self.train_dev_wer = blob.get("dev_wer",
+                                         blob.get("wer_official"))
 
             # 🔴 不要在这里 fit 归一化器（2026-10-05 移除）。
             # 原代码对推理输入套了 FeatureNormalizer，注释写「与训练一致」，

@@ -1,0 +1,166 @@
+{
+  "generated": "/home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p58.json",
+  "git_trace": {
+    "commits_touching_gloss_sequence": [
+      "e1f5f88 feat(recognition): VL48 full-corpus encoder swap + CTC rerun (negative result)"
+    ],
+    "first_max_tokens_commit": "e1f5f88 2026-09-28 feat(recognition): VL48 full-corpus encoder swap + CTC rerun (negative result)",
+    "max_tokens_300_literal_in_repo": "app/backend/ctc_landmark_service.py:22:   max_tokens=300)`。checkpoint 里存了 `vocab_size`，加载时校验。\napp/backend/ctc_landmark_service.py:106:                labels.values(), min_frequency=2, max_tokens=300)\ntools/blank_gov/p10_oov_fix.py:67:    v, _ = build_ordered_vocabulary(tr, min_frequency=2, max_tokens=300)\ntools/blank_gov/p15_modality_ablation.py:176:        min_frequency=2, max_tokens=300)\ntools/blank_gov/p19b_decode_vs_loss.py:296:        (g for g in tr_labels.values()), min_frequency=2, max_tokens=300)\ntools/blank_gov/p20_sanity_overfit.py:181:        (g for g in tr_labels.values()), min_frequency=2, max_tokens=300)\ntools/blank_gov/p20dbg.py:60:                                  min_frequency=2, max_tokens=300)\ntools/blank_gov/p20dbg2.py:80:                                  min_frequency=2, max_tokens=300)\ntools/blank_gov/p20dbg4.py:92:                                  min_frequency=2, max_tokens=300)\ntools/blank_gov/p21_ctc_degenerate.py:120:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p22_final_localize.py:105:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p23_off_by_one.py:212:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p27_five_samples.py:142:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p28_training_length.py:162:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p29_stgcn.py:216:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p29dbg.py:25:    (g for g in tr_labels.values()), min_frequency=2, max_tokens=300)\ntools/blank_gov/p30_capacity.py:190:                                           min_frequency=2, max_tokens=300)\ntools/blank_gov/p31_feature_layer.py:113:                                           min_frequency=2, max_tokens=300)\ntools/blank_gov/p33_face128_pilot.py:251:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p34_face_probe.py:115:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p35_augmentation.py:276:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p36_rgb_probe.py:92:    voc, _ = build_ordered_vocabulary(lab.values(), min_frequency=2, max_tokens=300)\ntools/blank_gov/p37_upper_block.py:118:    voc, _ = build_ordered_vocabulary(lab.values(), min_frequency=2, max_tokens=300)\ntools/blank_gov/p38_verify.py:122:    voc, _ = build_ordered_vocabulary(lab.values(), min_frequency=2, max_tokens=300)\ntools/blank_gov/p39_freq_calibration.py:115:        lab.values(), min_frequency=2, max_tokens=300)\ntools/blank_gov/p44_wer_audit.py:80:                                      max_tokens=300)\ntools/blank_gov/p44b_norm_mismatch.py:49:                                      max_tokens=300)\ntools/blank_gov/p44c_online_vs_offline.py:61:                                      max_tokens=300)\ntools/blank_gov/p45_vocab_bottleneck.py:12:只是被 `max_tokens=300` 人工截断了。\ntools/blank_gov/p45_vocab_bottleneck.py:89:                                         max_tokens=300)\ntools/blank_gov/p45c_error_attribution.py:45:                                      max_tokens=300)\ntools/blank_gov/p45d_output_collapse.py:25:                                  max_tokens=300)\ntools/blank_gov/p46_unk_attribution.py:2:\"\"\"P46 · max_tokens=300 到底该为多少 unk 负责？\ntools/blank_gov/p46_unk_attribution.py:12:   **这一侧 100% 由 max_tokens=300 造成。**\ntools/blank_gov/p46_unk_attribution.py:101:                                      max_tokens=300)\ntools/blank_gov/p47_controlled_decode.py:91:                                      max_tokens=300)\ntools/blank_gov/p47b_why_prior_fails.py:60:                                      max_tokens=300)\ntools/blank_gov/p47c_root_cause_test.py:61:                                      max_tokens=300)\ntools/blank_gov/p47c_root_cause_test.py:121:                                      max_tokens=300)\ntools/blank_gov/p48_overfit_offline_vs_realtime.py:137:                                      max_tokens=300)\ntools/blank_gov/p48b_domain_shift.py:78:                                      max_tokens=300)\ntools/blank_gov/p49_numbers_vs_feelings.py:92:                                      min_frequency=2, max_tokens=300)\ntools/blank_gov/p50_wer_audit.py:168:                                      max_tokens=300)\ntools/blank_gov/p50b_jiwer_crosscheck.py:41:                                      max_tokens=300)\ntools/blank_gov/p51_feature_source_decision.py:155:                                      max_tokens=300)\ntools/blank_gov/p51b_feature_source_streaming.py:107:                                      max_tokens=300)\ntools/blank_gov/p51c_feature_source_final.py:85:                                      max_tokens=300)\ntools/blank_gov/p53b_quality_check.py:52:                                      max_tokens=300)\ntools/blank_gov/p6_vocab_ablation.py:9:    max_tokens=300    只保留频次最高的 300 个\ntools/blank_gov/p9_wer_bias.py:164:        \"max_tokens=300,min_frequency=2\": 0.8506,",
+    "all_max_tokens_commits": [
+      "c37d2de 2026-10-05 feat(blank-gov): P40-P53 推理提速、train-serve skew 定位与特征源统一",
+      "9efa205 2026-10-04 fix(ctc): correct off-by-one in CTC target class space",
+      "d7543d4 2026-09-28 feat(recognition): contrastive pretraining + warm start, diagnostically refuted",
+      "e1f5f88 2026-09-28 feat(recognition): VL48 full-corpus encoder swap + CTC rerun (negative result)",
+      "a6a7100 2026-06-17 feat(training): add CE-CSL gloss token baseline"
+    ]
+  },
+  "capability_with_300": {
+    "vocab_size": 300,
+    "ctc_classes": 301,
+    "dev_token_coverage": 0.696,
+    "dev_sentence_full_coverage": 0.0893,
+    "median_sentence_coverage": 0.7143,
+    "sentences_le_50pct_coverage": 0.1845,
+    "sentences_zero_coverage": 0.0,
+    "train_token_coverage": 0.6757,
+    "train_target_unk_ratio": 0.3243,
+    "neg_to_pos_class_ratio": 144.0,
+    "top_cut_high_freq_tokens": [
+      {
+        "tok": "最2",
+        "train_freq": 76
+      },
+      {
+        "tok": "很1",
+        "train_freq": 75
+      },
+      {
+        "tok": "不行2",
+        "train_freq": 73
+      },
+      {
+        "tok": "帮助（我）",
+        "train_freq": 64
+      },
+      {
+        "tok": "没有2",
+        "train_freq": 61
+      },
+      {
+        "tok": "看1",
+        "train_freq": 51
+      },
+      {
+        "tok": "真2",
+        "train_freq": 50
+      },
+      {
+        "tok": "给（我）",
+        "train_freq": 41
+      },
+      {
+        "tok": "东西2",
+        "train_freq": 34
+      },
+      {
+        "tok": "事情2",
+        "train_freq": 33
+      },
+      {
+        "tok": "早上1",
+        "train_freq": 25
+      },
+      {
+        "tok": "新1",
+        "train_freq": 25
+      },
+      {
+        "tok": "汽车1",
+        "train_freq": 24
+      },
+      {
+        "tok": "谢谢（你）",
+        "train_freq": 20
+      },
+      {
+        "tok": "告诉（我）",
+        "train_freq": 19
+      },
+      {
+        "tok": "对不起2",
+        "train_freq": 19
+      },
+      {
+        "tok": "一定1",
+        "train_freq": 17
+      },
+      {
+        "tok": "给（你）",
+        "train_freq": 17
+      },
+      {
+        "tok": "事2",
+        "train_freq": 15
+      },
+      {
+        "tok": "困难1",
+        "train_freq": 15
+      },
+      {
+        "tok": "真1",
+        "train_freq": 14
+      },
+      {
+        "tok": "学习1",
+        "train_freq": 14
+      },
+      {
+        "tok": "工作2",
+        "train_freq": 13
+      },
+      {
+        "tok": "法1",
+        "train_freq": 13
+      },
+      {
+        "tok": "车2",
+        "train_freq": 12
+      }
+    ],
+    "cut_train_tokens": 9170
+  },
+  "vocab_scaling_table": [
+    {
+      "min_frequency": 2,
+      "max_tokens": 300,
+      "vocab": 300,
+      "ctc_classes": 301,
+      "dev_token_coverage": 0.696,
+      "dev_sentence_full_coverage": 0.0893
+    },
+    {
+      "min_frequency": 2,
+      "max_tokens": 1828,
+      "vocab": 1827,
+      "ctc_classes": 1828,
+      "dev_token_coverage": 0.9008,
+      "dev_sentence_full_coverage": 0.5476
+    },
+    {
+      "min_frequency": 2,
+      "max_tokens": null,
+      "vocab": 1827,
+      "ctc_classes": 1828,
+      "dev_token_coverage": 0.9008,
+      "dev_sentence_full_coverage": 0.5476
+    },
+    {
+      "min_frequency": 1,
+      "max_tokens": null,
+      "vocab": 3516,
+      "ctc_classes": 3517,
+      "dev_token_coverage": 0.9381,
+      "dev_sentence_full_coverage": 0.7107
+    }
+  ]
+}

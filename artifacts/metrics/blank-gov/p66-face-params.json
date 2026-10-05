@@ -1,0 +1,73 @@
+{
+  "samples": {
+    "n_videos": 4,
+    "n_frames": 160
+  },
+  "old_holistic_baseline": 0.998,
+  "current": {
+    "config": "当前（默认）",
+    "num_faces": 1,
+    "min_det_conf": null,
+    "detect_rate": 0.0,
+    "ms_per_frame": 10.7
+  },
+  "best": {
+    "config": "当前（默认）",
+    "num_faces": 1,
+    "min_det_conf": null,
+    "detect_rate": 0.0,
+    "ms_per_frame": 10.7
+  },
+  "gain": 0.0,
+  "all": [
+    {
+      "config": "当前（默认）",
+      "num_faces": 1,
+      "min_det_conf": null,
+      "detect_rate": 0.0,
+      "ms_per_frame": 10.7
+    },
+    {
+      "config": "置信度 0.3",
+      "num_faces": 1,
+      "min_det_conf": 0.3,
+      "detect_rate": 0.0,
+      "ms_per_frame": 8.7
+    },
+    {
+      "config": "置信度 0.1",
+      "num_faces": 1,
+      "min_det_conf": 0.1,
+      "detect_rate": 0.0,
+      "ms_per_frame": 8.6
+    },
+    {
+      "config": "num_faces=2",
+      "num_faces": 2,
+      "min_det_conf": null,
+      "detect_rate": 0.0,
+      "ms_per_frame": 10.1
+    },
+    {
+      "config": "num=2 + 置信0.2",
+      "num_faces": 2,
+      "min_det_conf": 0.2,
+      "detect_rate": 0.0,
+      "ms_per_frame": 9.4
+    },
+    {
+      "config": "num=3 + 置信0.1",
+      "num_faces": 3,
+      "min_det_conf": 0.1,
+      "detect_rate": 0.0,
+      "ms_per_frame": 9.5
+    },
+    {
+      "config": "IMAGE模式+置信0.1",
+      "num_faces": 1,
+      "min_det_conf": 0.1,
+      "detect_rate": 0.0,
+      "ms_per_frame": 8.7
+    }
+  ]
+}

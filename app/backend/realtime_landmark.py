@@ -68,9 +68,27 @@ from pathlib import Path
 
 import numpy as np
 
-REPO = Path(__file__).resolve().parents[2] if str(Path(__file__).resolve()).replace(
-    "\\", "/").endswith("app/backend/realtime_landmark.py") \
-    else Path("/home/su127/FYP/domain-bounded-cslr")
+def _find_repo() -> Path:
+    """向上查找含 models/ 与 src/ 的目录，避免任何硬编码绝对路径。
+
+    🔴 原实现（2026-10-06 前）：
+        REPO = Path(__file__).resolve().parents[2] if ...endswith(
+            "app/backend/realtime_landmark.py") else Path(
+            "/home/su127/FYP/domain-bounded-cslr")
+    问题：
+      1. Windows 副本的else 分支写死 WSL 路径，跨机器不可用（P75 E4）
+      2. 条件判断依赖路径字符串形态，换目录结构就失效
+    现在按**标记文件**探测，与 p57/p70 等脚本的做法一致。
+    """
+    here = Path(__file__).resolve()
+    for cand in here.parents:
+        if (cand / "models").is_dir() and (cand / "src").is_dir():
+            return cand
+    raise RuntimeError(
+        "repo root not found (looking for models/ and src/ next to %s)" % here)
+
+
+REPO = _find_repo()
 
 # 与训练特征一致的索引（src/cslr/features/extractor.py）
 POSE_INDICES = (11, 12, 13, 14, 15, 16, 23, 24)
@@ -370,10 +388,21 @@ class RealtimeLandmarkExtractor:
             "base 应为 {} 维，实际 {} —— 检查 pose visibility 是否被丢掉".format(
                 BASE_SIZE, base.shape[0]))
 
+        # 🔴🔴 presence 四位的语义顺序必须与训练特征一致 = [handL, handR, pose, face]
+        # 实证依据（git 最早提交 src/cslr/features/extractor.py:125）：
+        #     masks = np.asarray([left_present, right_present, pose_present, face_present])
+        # 且 base 顺序为 (left, right, pose_values, face_values) —— mask 与 base 一致。
+        #
+        # 我原先写成 [pose, handL, handR, face]，前三位整体错位。
+        # 后果不是数值噪声而是**语义错位**：presence 是「这帧哪些模态有效」的指示位，
+        # 模型会把 pose 当 handL 学，稳定收敛到错误映射。
+        # 实测症状（旧基准 vs 我的错位版）：
+        #     旧 [0.597, 0.601, 1.000, 0.998]  <- 第 3 位恒 1.0 = pose
+        #     新 [1.000, 0.599, 0.564, 0.751]  <- 第 1 位恒 1.0 = pose
         presence = np.array([
-            1.0 if p is not None else 0.0,
             1.0 if have_l else 0.0,
             1.0 if have_r else 0.0,
+            1.0 if p is not None else 0.0,
             1.0 if have_f else 0.0,
         ], dtype=np.float32)
         return base, presence

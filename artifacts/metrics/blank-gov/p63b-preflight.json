@@ -1,0 +1,98 @@
+{
+  "coverage": {
+    "train": {
+      "labeled": 4973,
+      "extracted": 4934,
+      "missing": 39,
+      "usable": 4934,
+      "coverage": 0.9922
+    },
+    "dev": {
+      "labeled": 515,
+      "extracted": 0,
+      "missing": 515,
+      "usable": 0,
+      "coverage": 0.0
+    }
+  },
+  "quality": {
+    "new": {
+      "n": 291,
+      "bad": 0,
+      "presence": [
+        1.0,
+        0.5088000297546387,
+        0.5625,
+        0.9024999737739563
+      ],
+      "stds": [
+        1.2724000215530396,
+        1.0917999744415283,
+        0.878600001335144,
+        0.40630000829696655,
+        0.38269999623298645
+      ]
+    },
+    "old": {
+      "n": 293,
+      "bad": 0,
+      "presence": [
+        0.582099974155426,
+        0.524399995803833,
+        1.0,
+        0.9994000196456909
+      ],
+      "stds": [
+        0.4406999945640564,
+        1.0662000179290771,
+        0.7218000292778015,
+        0.3691999912261963,
+        0.12449999898672104
+      ]
+    }
+  },
+  "ctc_feasibility": [
+    {
+      "vocab": 300,
+      "min_freq": 2,
+      "max_tokens": 300,
+      "dev_len_mean": 5.52,
+      "dev_len_max": 13,
+      "need_T_mean": 10.0,
+      "need_T_max": 25,
+      "feature_T": 48,
+      "sentences_over_T": 0,
+      "dev_unk_ratio": 0.2604
+    },
+    {
+      "vocab": 3516,
+      "min_freq": 1,
+      "max_tokens": null,
+      "dev_len_mean": 5.52,
+      "dev_len_max": 13,
+      "need_T_mean": 10.0,
+      "need_T_max": 25,
+      "feature_T": 48,
+      "sentences_over_T": 0,
+      "dev_unk_ratio": 0.0
+    }
+  ],
+  "gates": [
+    {
+      "name": "特征覆盖完整（train/dev 无缺失）",
+      "pass": false,
+      "detail": "train缺39 dev缺515"
+    },
+    {
+      "name": "新特征无 shape/NaN 异常",
+      "pass": true,
+      "detail": "异常 0 条"
+    },
+    {
+      "name": "可用样本量足够（train>100 且 dev>100）",
+      "pass": false,
+      "detail": "train 4934 dev 0"
+    }
+  ],
+  "all_pass": false
+}

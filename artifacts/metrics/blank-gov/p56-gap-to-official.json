@@ -1,0 +1,105 @@
+{
+  "experiment": "P56",
+  "date": "2026-10-05",
+  "question": "我和 CE-CSL 官方 TFNet 差距多少，有可以参考的地方吗",
+
+  "headline": "表面差距 10pp（52.11% vs 42.1%），但**口径对齐后真实差距是 37.1pp**。\n拆解后其中 30.4pp 是词表截断的硬下界，**真实模型能力差距仅 6.7pp**。",
+
+  "why_naive_comparison_is_wrong": {
+    "our_reported": "52.11%（folded 口径，含 unk 送分）",
+    "official": "42.1%（论文式 6：WER = (ins+del+sub)/sum，sum=标签 gloss 总数）",
+    "problem": "我们的 folded WER 把 ref 里的 OOV 折叠成 tokens[0]（<unk> 本身是可预测类），\n              官方 2000 词表覆盖全部 gloss，不存在这个问题",
+    "conclusion": "直接比 52.11 vs 42.1 是**拿两把不同的尺子量身高**"
+  },
+
+  "our_four_calibers_p56": {
+    "folded_reported": 0.5211,
+    "excl_unk_comparable": 0.7919,
+    "strict": 0.6966,
+    "per_sentence_avg": 2.8774,
+    "exact": "18/514 (3.5%)"
+  },
+
+  "official_benchmark_arxiv_2409_11960_table_vii": {
+    "MSTNet": {"dev": 54.4, "test": 53.0},
+    "CorrNet": {"dev": 47.2, "test": 46.5},
+    "SEN": {"dev": 46.5, "test": 45.3},
+    "VAC": {"dev": 45.1, "test": 43.3},
+    "MAM-FSD": {"dev": 44.9, "test": 44.7},
+    "TFNet": {"dev": 42.1, "test": 41.9}
+  },
+
+  "gap_decomposition_pp": {
+    "_summary": "37.1 pp 差距的三层拆解",
+    "surface_gap_folded_vs_tfnet": -10.1,
+    "caliber_correction": {
+      "value_pp": 27.1,
+      "explanation": "剔除 ref 的 unk 送分后，真实水平 79.19% 而非 52.11%",
+      "note": "**我之前一直报的 52.11% 是被送分美化过的数字**"
+    },
+    "vocab_truncation_floor_pp": 30.4,
+    "vocab_floor_reason": {
+      "our_vocab": 301,
+      "dev_token_coverage": 0.696,
+      "train_gloss_kinds": 3841,
+      "note": "词表外 token 无论模型多强都认不对 → WER 下界 30.4%"
+    },
+    "residual_real_gap_pp": 6.7,
+    "residual_meaning": "**真正的模型能力差距只有约 6.7pp**（79.19% - 72.5% 理论可达）"
+  },
+
+  "critical_comparison_note": {
+    "input_feature_mismatch": "官方 6 个模型**全部用 RGB 图像特征**（TFNet 用 MAM-FSD 的 CNN backbone，256x256 输入），\n                              没有任何一篇用 MediaPipe landmark",
+    "our_position": "我们用 368 维 landmark（hands 126 / pose 32 / face 24 / presence 4 / deltas 182）",
+    "implication": "**文献里没有 landmark 路线的直接对照** —— 这是 FYP 的立足点，但也意味着\n                   不能假设 42.1% 是 landmark 路线能达到的目标"
+  },
+
+  "actionable_references": [
+    {
+      "priority": 1,
+      "item": "扩词表 300 → 1828",
+      "evidence": "P45 实测：train 频次≥2 的 gloss 有 1828 种；扩表可使 token 覆盖 0.696→0.901、\n                  整句可表达 0.089→0.548",
+      "expected_gain_pp": "理论上最多降 30.4pp 的地板（P45 算过：频次≤5 的占 15.9% 学不动，\n                          净改善上限约 0.14 = 14pp）",
+      "cost": "重训 100 epoch ≈ 10 分钟（特征已用 Tasks API 提取）",
+      "why_first": "**这是唯一能一次性砍掉 30.4pp 地板的动作**，且成本最低"
+    },
+    {
+      "priority": 2,
+      "item": "beam search width=10",
+      "evidence": "论文明确用 beam 10；我们当前是 greedy",
+      "status": "P47b 实测 beam 在 301 类×48 帧上极慢，全量 dev 跑不完",
+      "note": "扩表到 1828 后类别数 6 倍，beam 会更慢 —— 需要先评估",
+      "our_finding": "P47 已验证：单纯调解码（词频先验校准）**无效**，但 beam 未测完"
+    },
+    {
+      "priority": 3,
+      "item": "时序增强 ±20%",
+      "evidence": "论文：random lengthening/shortening by ±20%",
+      "our_status": "P35 测过 landmark 扰动增强（4 种），最好 -0.0060 无效；\n                    但**没测过时序长度扰动**"
+    },
+    {
+      "priority": 4,
+      "item": "随机裁剪 256→224 + 翻转 0.5",
+      "evidence": "论文的基础增强",
+      "our_status": "P35 测过 shift/mask/scale/combo，**没有裁剪和翻转**",
+      "note": "翻转对 landmark 需左右手互换，语义不同于图像翻转"
+    },
+    {
+      "priority": 5,
+      "item": "时频双域（TFNet 核心创新）",
+      "evidence": "论文消融：时域 19.5→19.1 / 频域 19.7→20.0 / **时频融合 18.7→18.6**",
+      "our_finding": "P47b 实测：我们的 deltas 段方差比离线大 3.38 倍，\n                    说明**差分/频率信息目前是噪声** —— 直接上时频域可能放大噪声",
+      "advice": "先修 deltas 质量再考虑时频融合"
+    }
+  ],
+
+  "fyp_positioning": {
+    "writable": [
+      "CE-CSL 是 2024 新数据集，公开可比 SOTA 只有 6 个模型（54.4→41.9）",
+      "**官方全部用 RGB，landmark 路线无对照** —— 我们的 52.11%（可比口径 79.19%）填这个空白",
+      "train-serve feature skew（P48b：train exact 96.7% vs 3.3%）**文献未报道**",
+      "低算力约束：官方需 RTX3090Ti 24GB，我们 7GB 内存无独显"
+    ],
+    "honest_assessment": "在扩词表 + 修完 skew 之前，**不要把 52.11% 直接和 42.1% 比**。\n                       口径不对等，会被审稿人质疑。\n                       正确表述：「landmark-only 路线在 CE-CSL 上可达 X%，\n                       官方 RGB 路线最优 42.1%，差 Y pp，瓶颈在特征判别力而非架构」"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "sample": "train-00001.mp4",
+  "n_frames": 50,
+  "face_indices": [
+    10,
+    33,
+    61,
+    133,
+    152,
+    263,
+    291,
+    362
+  ],
+  "max_index": 362,
+  "old_baseline": 1.0,
+  "feature_presence_mean": 0.7219,
+  "runs": [
+    {
+      "label": "默认 num_faces=1",
+      "rate": 1.0,
+      "ms": 9.0
+    },
+    {
+      "label": "num_faces=2",
+      "rate": 0.96,
+      "ms": 10.0
+    },
+    {
+      "label": "置信度 0.3",
+      "rate": 1.0,
+      "ms": 8.9
+    },
+    {
+      "label": "置信度 0.1",
+      "rate": 1.0,
+      "ms": 8.4
+    },
+    {
+      "label": "裁上半身 0.05-0.75h/0.2-0.8w",
+      "rate": 1.0,
+      "ms": 7.8
+    },
+    {
+      "label": "裁上半身 + 放大1.5x",
+      "rate": 1.0,
+      "ms": 9.8
+    },
+    {
+      "label": "仅放大 2x（不裁）",
+      "rate": 1.0,
+      "ms": 14.4
+    }
+  ],
+  "best": {
+    "label": "默认 num_faces=1",
+    "rate": 1.0,
+    "ms": 9.0
+  }
+}

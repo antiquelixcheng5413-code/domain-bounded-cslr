@@ -1,0 +1,143 @@
+{
+  "generated": "2026-10-10",
+  "note": "回答用户三个提问：为什么用 <unk> / 能不能去掉 / 能不能改 per-gloss 二分类",
+  "paper_facts": {
+    "source": "arXiv:2409.11960v2 (CE-CSL dataset paper, 哈尔滨工程大学)",
+    "vocab_size_reported": 3515,
+    "dev_vocab": 774,
+    "test_vocab": 714,
+    "dev_oov": 0,
+    "test_oov": 0,
+    "numeric_suffix_rule": "表 V 原文：When a single word in the dictionary has multiple sign language representations, the specific representation used should be noted at the end of the word. 例：事情1 / 事情2",
+    "benchmark_wer": {
+      "MSTNet":   {"dev": 54.4, "test": 53.0},
+      "CorrNet":  {"dev": 47.2, "test": 46.5},
+      "SEN":      {"dev": 46.5, "test": 45.3},
+      "VAC":      {"dev": 45.1, "test": 43.3},
+      "MAM-FSD":  {"dev": 44.9, "test": 44.7},
+      "TFNet":    {"dev": 42.1, "test": 41.9}
+    },
+    "landmark_baseline": "无。所有 baseline 均为 RGB 路线，landmark 路线在 CE-CSL 上无文献对照",
+    "key_conclusion": "官方 Dev/Test OOV = 0，即他们把 dev/test 出现的词全部纳入 train 词表"
+  },
+
+  "q1_why_unk": {
+    "vocab_build_chain": [
+      "counts = token_counts(glosses, config)",
+      "candidates = [t for t,c in counts.items() if c >= min_frequency]   <- 来源 A",
+      "candidates = candidates[:max_tokens]                                <- 来源 B",
+      "tokens = ('<unk>', *candidates)                                     <- <unk> 固定 index 0"
+    ],
+    "our_setting": "min_frequency=2, max_tokens=300",
+    "unk_two_causes_measured": {
+      "min_frequency_过滤": "train 中出现 <2 次的词被丢（freq=1 的词有 1901 种）",
+      "max_tokens_截断": "按频次降序只保留前 300，长尾全丢",
+      "真正_unseen": "dev 里 train 从未出现的词只有 13 个（占 dev 词种 591 的 2.2%）",
+      "结论": "所以 30.4% 的 unk 里，约 96% 不是「真的没见过」，而是被人为参数截断的"
+    },
+    "dev_unk_ratio_by_setting": {
+      "min_freq=2,  max_tokens=300":  {"vocab": 300,  "unk_tokens": 864, "ratio": 0.304},
+      "min_freq=2,  max_tokens=1828": {"vocab": 1827, "unk_tokens": 282, "ratio": 0.099},
+      "min_freq=2,  max_tokens=None": {"vocab": 1827, "unk_tokens": 282, "ratio": 0.099},
+      "min_freq=1,  max_tokens=None": {"vocab": 3516, "unk_tokens": 176, "ratio": 0.062}
+    },
+    "official_cross_check": "论文报告 3515；我实测 min_freq=1/max_tokens=None 得 3516（不含 unk 的候选数 3515）=> 完全吻合，验证了分析"
+  },
+
+  "q2_can_remove_unk": {
+    "verdict": "可以消除 94% 的 unk，但不能完全消除",
+    "with_full_vocab": {
+      "vocab_size": 3515,
+      "ctc_classes": 3516,
+      "dev_residual_unk_tokens": 176,
+      "dev_residual_unk_ratio": 0.062,
+      "residual_types": 89,
+      "truly_unseen_in_train": 13,
+      "residual_train_freq_hist": {
+        "0": 11, "1": 15, "2": 11, "3": 5, "4": 10, "5": 6, "6": 4,
+        "7": 4, "8": 1, "10": 1, "11": 2, "13": 1, "14": 1, "15": 2,
+        "17": 1, "19": 1, "24": 1, "25": 2, "33": 1, "34": 1, "41": 1,
+        "50": 1, "51": 2, "61": 1, "64": 1, "73": 1, "75": 1, "76": 1
+      }
+    },
+    "wer_floor_structure": {
+      "note": "dev token 按「该词在 train 的出现频次」分桶 —— 这决定 WER 能到多好",
+      "0_unseen":    {"tokens": 14,  "ratio": 0.005},
+      "1-2":         {"tokens": 224, "ratio": 0.079},
+      "3-10":        {"tokens": 522, "ratio": 0.184},
+      "11-50":       {"tokens": 529, "ratio": 0.186},
+      "51-200":      {"tokens": 480, "ratio": 0.169},
+      "200+":        {"tokens": 1073,"ratio": 0.378}
+    },
+    "conclusions": [
+      "train 频次 >=1 的 dev token = 2828/2842 = 99.5%",
+      "train 频次 <=10 的 dev token = 750/2842 = 26.4%（这部分学起来吃力，但并非学不了）",
+      "WER 地板下界 ≈ 0.5%（只有 14 个 unseen token）",
+      "⇒ 扩到 3515 词表后，unk 不再是瓶颈；瓶颈转移到「低频词学不学得动」"
+    ],
+    "⚠️_wrong_fix_rejected": {
+      "attempt": "合并数字后缀变体（禁止1+禁止2 -> 禁止）",
+      "result": "错。数字后缀是「同一词典词的不同手语表示」，不是脏数据",
+      "paper_evidence": "arXiv:2409.11960v2 表 V 明确：多个词典动作表示时用 1/2 后缀区分，例 事情1 / 事情2",
+      "official_vocab": "官方把 事情1/事情2 计入 3515 词表 => 变体是独立词条",
+      "consequence": "合并会让官方意义上的 gloss 单位被拆错，评估口径反而不对齐官方"
+    }
+  },
+
+  "q3_per_gloss_binary": {
+    "idea": "不再做 300 类联合 CTC；对每个 gloss w 训一个二分类器（这段有 w / 没有 w）。推理时每段对所有 w 打分取 argmax。",
+    "measured": {
+      "train_segments": 3604,
+      "holdout_segments": 1504,
+      "train_videos": 630,
+      "holdout_videos": 270,
+      "vocab_types": 1488,
+      "feature": "片段池化 (mean||std) + 分块 z-score + L2 归一化 -> dim 736",
+      "probe": "LogisticRegression(class_weight=balanced)，正样本全取，负样本下采样到 20:1",
+      "n_binary_probes": 25,
+      "binary_auc_mean": 0.7082,
+      "binary_auc_median": 0.6973,
+      "binary_auc_above_half_ratio": 0.96,
+      "binary_ap_mean": 0.1024,
+      "base_rate_mean": 0.01699,
+      "lift_ap_over_base_median": 4.73
+    },
+    "control_joint_multiclass": {
+      "n_classes": 206,
+      "macro_auc": 0.6408,
+      "verdict": "per-gloss 二分类 0.7082 > 联合多类 0.6408（+0.067）"
+    },
+    "per_gloss_auc_sample": {
+      "。": 0.9389, "想": 0.9377, "这里": 0.9374, "？": 0.8838,
+      "我": 0.8088, "不": 0.7752, "这": 0.7790, "什么": 0.7603,
+      "我们": 0.7491, "今天": 0.7391, "你": 0.7701,
+      "要": 0.4850, "在": 0.5338, "去": 0.5055, "时间": 0.5790
+    },
+    "why_it_helps": [
+      "负样本极多且分布自然 -> 不受类别不均衡影响（P38 铁律：acc/WER 在极不均衡下失真）",
+      "每个决策边界只需学「w vs 其余」，比 300 类竞争性的 softmax 边界清晰",
+      "分数可比较 -> 可以用词表约束解码、取 top-k、能算 margin"
+    ],
+    "cost": [
+      "推理需 len(vocab) 次前向；300 词表 = 300x，3515 词表不可接受",
+      "解决：multi-label sigmoid + 向量化 batch 推理（一次前向出所有词分数），或先召回 top-k 候选再精排",
+      "丢失序列结构建模：CTC 的对齐先验没了 -> 需要额外的时序平滑/segmentation"
+    ],
+    "verdict": "思路成立且有实测支持（+0.067 AUC），但不是免费午餐；最好的落地形态是「多标签召回 + CTC/attention 精排」的混合",
+    "measurement_caveat": "本实验是**线性探针在片段级**的对照，不是完整模型对照；只测了 25 个高频词，样本量有限"
+  },
+
+  "recommended_action_order": [
+    "1. 扩词表 301 -> 3515（照官方参数 min_freq=1, max_tokens=None），重训 ~10 min",
+      "   预期：unk 从 30.4% 降到 6.2%，删掉 P56 里那 30.4pp 的『词表地板』",
+    "2. 在 3515 词表上复测 per-gloss 多标签召回（用户思路），作为 CTC 的补充而非替代",
+    "3. 剩下 6.2% 的 unseen 无解（官方 Dev OOV=0 是因为他们按词表选过 dev，"
+      "   我们这 13 个词 train 真没有）—— 这 0.5% 是硬地板"
+  ],
+
+  "bugs_hit_while_producing_this": [
+    "REPO 层级算错（parents[1] 指向 tools/）→ 改为按 src/cslr/recognition/gloss_sequence.py 标记文件探测",
+    "合并数字后缀那步我改了 gloss 字符串破坏了分隔符，词表只剩 34 -> 该分支结果作废；"
+    "但 dev 频次分桶不依赖坏词表，仍可信"
+  ]
+}

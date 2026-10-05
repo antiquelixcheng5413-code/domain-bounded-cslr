@@ -1,0 +1,100 @@
+{
+  "dataset": "CE-CSL (Complex Environment - Chinese Sign Language)",
+  "publisher": "哈尔滨工程大学 智能科学与工程学院 (Harbin Engineering University)",
+  "paper": {
+    "title": "A Chinese Continuous Sign Language Dataset Based on Complex Environments",
+    "authors": ["Qidan Zhu", "Jing Li", "Fei Yuan", "Jiaojiao Fan", "Quan Gan"],
+    "arxiv": "2409.11960",
+    "year": 2024,
+    "code": "https://github.com/woshisad159/TFNet"
+  },
+  "scale": {
+    "videos": 5988,
+    "complex_backgrounds": "70+",
+    "modality": "RGB video（真实生活场景）",
+    "note": "无帧级标注，只有整句 gloss"
+  },
+
+  "official_benchmark_ce_csl_wer_percent": {
+    "_note": "论文 Table VII。Dev = 验证集，Test = 测试集。越低越好。",
+    "MSTNet": {"dev": 54.4, "test": 53.0},
+    "CorrNet": {"dev": 47.2, "test": 46.5},
+    "SEN": {"dev": 46.5, "test": 45.3},
+    "VAC": {"dev": 45.1, "test": 43.3},
+    "MAM-FSD": {"dev": 44.9, "test": 44.7},
+    "TFNet_官方最佳": {"dev": 42.1, "test": 41.9}
+  },
+
+  "critical_insight_for_our_fyp": {
+    "our_dev_wer": 0.5211,
+    "official_best_dev_wer": 0.421,
+    "gap": "我们比官方最佳基线差 0.10（52.11% vs 42.1%）",
+    "but": "官方 TFNet 用的是 **MAM-FSD 的 CNN backbone + 时频双域**（RGB 图像特征），\n          不是 MediaPipe 关键点。我们用的是 368 维 landmark。",
+    "baseline_we_should_target": "SEN 46.5 / VAC 45.1（架构上与我们更接近：BiLSTM+CTC 系）",
+    "realistic_target": "修完 skew 后若能到 0.45~0.50，就已接近 SEN/VAC 级别；\n                        到 0.42 即达到官方 TFNet 水平"
+  },
+
+  "key_differences_ours_vs_official": {
+    "input_features": {
+      "official": "RGB 256x256 -> MAM-FSD CNN backbone（帧级视觉特征）",
+      "ours": "MediaPipe landmark 368 维（hands 126 / pose 32 / face 24 / presence 4 / deltas 182）"
+    },
+    "vocab": {
+      "official_csldaily": "2000 词 annotated vocabulary",
+      "ours": "301（max_tokens=300 截断，实际 CE-CSL 词表更大）"
+    },
+    "temporal_resolution": {
+      "official": "全帧 + 时频增强（±20% 长度扰动）",
+      "ours": "重采样到 48 帧（实测 48:5.52 词 = 8.7:1，P47b 指出定位能力不足）"
+    },
+    "decoding": {
+      "official": "beam search width=10",
+      "ours": "greedy（P47 已验证先验校准无效，beam 未能跑完全量）"
+    },
+    "training": {
+      "official": "55 epoch, Adam lr=1e-4, batch=2, RTX3090Ti 24GB, 随机裁剪+翻转+时序增强",
+      "ours": "100 epoch, BiLSTM+CTC, 单机（WSL 7GB 内存，无 24GB GPU）"
+    }
+  },
+
+  "paper_reported_ablations": {
+    "domain_features_on_rwth": {
+      "temporal_only": {"dev": 19.5, "test": 19.1},
+      "frequency_only": {"dev": 19.7, "test": 20.0},
+      "time_frequency": {"dev": 18.7, "test": 18.6},
+      "insight": "时频双域融合比单域好约 1pp"
+    },
+    "sequence_extractor_swap": {
+      "_note": "同一模型换特征提取器的增益（RWTH 数据集）",
+      "VAC": {"orig": "21.2/22.3", "time_freq": "19.9"},
+      "MSTNet": {"orig": "20.3/21.4", "time_freq": "19.7"},
+      "SEN": {"orig": "19.5/21.0", "time_freq": "19.4"},
+      "CorrNet": {"orig": "18.8/19.4", "time_freq": "19.2"},
+      "MAM-FSD": {"orig": "19.2/18.8", "time_freq": "18.7"},
+      "insight": "**换特征提取器普遍带来 1-1.3pp 提升** —— 印证特征选择比架构微调更重要"
+    }
+  },
+
+  "related_papers_same_group": [
+    {"title": "Continuous Sign Language Recognition via Temporal Super-Resolution Network", "arxiv": "2207.00928", "year": 2022, "arch": "MSTNet"},
+    {"title": "Temporal superimposed crossover module for effective continuous sign language", "arxiv": "2211.03387", "year": 2022, "arch": "SEN, CorrNet"},
+    {"title": "Continuous sign language recognition based on cross-resolution knowledge distillation", "arxiv": "2303.06820", "year": 2023, "arch": "VAC, TFNet(SeqKD)"},
+    {"title": "Continuous Sign Language Recognition Based on Motor attention mechanism and frame-level Self-distillation", "arxiv": "2402.19118", "year": 2024, "arch": "MAM-FSD"}
+  ],
+
+  "our_position_in_fyp": {
+    "writable_points": [
+      "CE-CSL 是 2024 全新数据集，公开可比的 SOTA 基准只有 6 个模型（54.4→41.9）",
+      "**所有官方模型都用 RGB 图像特征，没有任何一篇用 MediaPipe landmark**",
+      "我们的 landmark-only 路线（52.11%）落在 MSTNet(54.4) 与 CorrNet(47.2) 之间",
+      "P38 实测 landmark 特征 macroAUC 仅 0.61（Qwen2.5-VL 0.65），特征判别力是瓶颈",
+      "P44b 证明 train-serve skew 使 48 轮实验结论不可信 —— 这是文献里没人报告的问题"
+    ],
+    "novelty_candidates": [
+      "landmark vs RGB 特征在同一 CE-CSL 上的系统对比（文献空白）",
+      "train-serve feature skew 对 CSLR 结论的影响（我方实测发现，文献未报道）",
+      "低算力约束下的 landmark 基线（官方需 RTX3090Ti 24GB）"
+    ],
+    "must_cite": ["[cite:28] Zhu, Li et al., arXiv:2409.11960, 2024", "SEN arXiv:2211.03387", "VAC arXiv:2303.06820", "MAM-FSD arXiv:2402.19118", "MSTNet arXiv:2207.00928", "CorrNet（TFNet 论文内）"]
+  }
+}

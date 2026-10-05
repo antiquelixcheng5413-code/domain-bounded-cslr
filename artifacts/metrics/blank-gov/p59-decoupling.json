@@ -1,0 +1,33 @@
+{
+  "decoupled": true,
+  "feature_shape": [
+    48,
+    368
+  ],
+  "feature_dtype": "float32",
+  "has_nan": false,
+  "block_layout": {
+    "hands 双手": [
+      0,
+      126
+    ],
+    "pose 上身": [
+      126,
+      158
+    ],
+    "face 面部": [
+      158,
+      182
+    ],
+    "presence 检出": [
+      182,
+      186
+    ],
+    "deltas 差分": [
+      186,
+      368
+    ]
+  },
+  "already_extracted_train": 3900,
+  "verdict": "扩词表不需要重新提特征；正在跑的提取应继续跑完，之后只需改 --max-tokens 3515 --min-frequency 1"
+}

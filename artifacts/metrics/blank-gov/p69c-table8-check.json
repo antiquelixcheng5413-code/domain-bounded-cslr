@@ -1,0 +1,9 @@
+{
+  "formula_in_paper": "式(6): WER = 100% x (ins + del + sub) / sum",
+  "sum_definition": "该语料全部参考 gloss token 数（corpus-level）",
+  "normalization": "无 —— 不去标点、不合并重复、不做大小写归一",
+  "our_primary": "token 级 WER = 0.5211 —— 与官方同口径，可直接对照论文",
+  "table_viii_caveat": "论文 Table VIII 的 per-case WER 与我从 PDF 抽取的 gloss 串不完全对齐（Case-2 GT「可以支持」疑为词组粘连），所以不能用它反推分母来验证公式；但公式本身是明确的。",
+  "verified": false,
+  "note": "Table VIII 是定性示例，其单句 WER 可能用了额外的对齐/拆分歧义处理；不影响主口径结论"
+}

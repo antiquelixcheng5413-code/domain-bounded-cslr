@@ -1,0 +1,133 @@
+{
+  "generated": "/home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p61.json",
+  "ce_csl_modalities_local": {
+    ".csv": 3,
+    ".mp4": 5988
+  },
+  "ce_csl_feature": {
+    "shape": [
+      48,
+      368
+    ],
+    "dtype": "float32",
+    "blocks": [
+      {
+        "name": "双手 landmark",
+        "slice": [
+          0,
+          126
+        ],
+        "dim": 126,
+        "semantics": "2D 归一化 + 肩距缩放"
+      },
+      {
+        "name": "pose 上身",
+        "slice": [
+          126,
+          158
+        ],
+        "dim": 32,
+        "semantics": "取 pose 8 点 × 4（含 visibility）"
+      },
+      {
+        "name": "face 面部",
+        "slice": [
+          158,
+          182
+        ],
+        "dim": 24,
+        "semantics": "取 face 8 点 × 3"
+      },
+      {
+        "name": "presence",
+        "slice": [
+          182,
+          186
+        ],
+        "dim": 4,
+        "semantics": "4 个检出标志位"
+      },
+      {
+        "name": "deltas 一阶差分",
+        "slice": [
+          186,
+          368
+        ],
+        "dim": 182,
+        "semantics": "原始帧率差分再重采样"
+      }
+    ],
+    "note": "MediaPipe 输出 (x,y,z)，z 为相对深度，非米制绝对 3D"
+  },
+  "ustc_2015": {
+    "device": "Microsoft Kinect 2.0，签署者距离约 1.5 m，30 fps",
+    "modalities_per_instance": [
+      "RGB 视频 1280×720",
+      "深度视频 512×424",
+      "3D 骨架 25 关节/帧"
+    ],
+    "slr500": {
+      "task": "孤立词",
+      "words": 500,
+      "signers": 50,
+      "reps": 5,
+      "instances": 125000
+    },
+    "continuous_slr": {
+      "task": "连续句",
+      "sentences": 100,
+      "signers": 50,
+      "reps": 5,
+      "instances": 25000
+    },
+    "skeleton_coordinate": "页面未说明单位/格式 —— 不可假定是 mm 或已归一化",
+    "access": "Release Agreement 需全职员工签署，学生不可"
+  },
+  "modal_alignment_table": [
+    {
+      "modality": "RGB 视频",
+      "ce_csl": "有（5988 个 mp4）",
+      "ustc": "有（1280×720）",
+      "alignable": "✅ 格式对齐，但分辨率/背景/编码不同",
+      "detail": "可解码到帧，通道数一致"
+    },
+    {
+      "modality": "深度视频",
+      "ce_csl": "❌ 无",
+      "ustc": "有（512×424）",
+      "alignable": "❌ 缺失模态 —— 无法凭空生成",
+      "detail": "需要深度相机或单目深度估计"
+    },
+    {
+      "modality": "3D 骨架",
+      "ce_csl": "❌ 无（只有 MediaPipe 抽的 landmark）",
+      "ustc": "有（25 关节/帧，绝对 3D）",
+      "alignable": "❌ 关节数、坐标系、语义全不同",
+      "detail": "25 vs 我们取 21手+8pose+8face=37 点"
+    },
+    {
+      "modality": "手部细节点",
+      "ce_csl": "❌ MediaPipe 21 点/手",
+      "ustc": "❌ Kinect 25 关节不含手指",
+      "alignable": "⚠️ 两边都没有精细手型",
+      "detail": "都需 HaMeR 类模型补"
+    },
+    {
+      "modality": "词表",
+      "ce_csl": "3515",
+      "ustc": "500（SLR500）/ 100句（连续）",
+      "alignable": "❌ label space 不同",
+      "detail": "联合需 5515 类上界"
+    }
+  ],
+  "conclusion": {
+    "only_alignable_modality": "RGB",
+    "missing_in_ce_csl": [
+      "depth video",
+      "absolute 3D skeleton"
+    ],
+    "mediapipe_z_note": "MediaPipe 的 z 是相对深度，非米制绝对 3D",
+    "warning": "引入 Kinect 3D 会再造一次 train-serve skew（同构但更严重）",
+    "recommendation": "保持单一模态；要 3D 就整套换，别混"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "generated": "2026-10-10",
+  "question": "300 词表最早什么时候开始用的？只用 300 怎么可能识别出意思",
+  "answer_part1_when": {
+    "code_default": "build_ordered_vocabulary(max_tokens=None) —— 库本身没有 300 的默认",
+    "first_commit_with_max_tokens": {
+      "sha": "a6a7100",
+      "date": "2026-06-17",
+      "subject": "feat(training): add CE-CSL gloss token baseline",
+      "note": "这是最早的 CE-CSL 词表基线提交，同时引入 data/manifests/ce-csl-gloss-vocab.csv（1938 行）和 configs/training.yaml 里的 max_tokens"
+    },
+    "later_commits_touching_max_tokens": [
+      "e1f5f88 2026-09-28 VL48 full-corpus encoder swap + CTC rerun (negative result)",
+      "d7543d4 2026-09-28 contrastive pretraining + warm start, diagnostically refuted",
+      "9efa205 2026-10-04 fix(ctc): correct off-by-one in CTC target class space",
+      "c37d2de 2026-10-05 feat(blank-gov): P40-P53 推理提速与特征源统一"
+    ],
+    "config_vs_literal": {
+      "configs/training.yaml": "max_tokens 是配置项（src/cslr/training/runner.py:46 读取 training_config['max_tokens']）",
+      "p40_rgb_main.py:334": "build_ordered_vocabulary(..., min_frequency=a.min_frequency, max_tokens=a.max_tokens) —— 48 轮实验都走这里，取命令行默认值",
+      "where_300_literal_now": "只出现在 app/backend/ctc_landmark_service.py:106（我 P44 写的推理服务）"
+    },
+    "decision_point": "300 这个具体数值是 **P6 词表消融实验**里被采纳的（configs='300:2,1828:2,3517:1'），之后所有实验沿用该配置",
+    "why_300_was_chosen": "300 类时 CTC 输出层只有 301 个 logit，训练快、显存省；这是工程便利考虑，不是数据驱动的选择"
+  },
+  "answer_part2_why_300_is_broken": {
+    "measured": {
+      "dev_token_coverage": 0.696,
+      "dev_sentence_full_coverage": 0.089,
+      "median_sentence_coverage": 0.714,
+      "sentences_le_50pct_coverage": 0.184,
+      "sentences_zero_coverage": 0.0,
+      "train_token_coverage": 0.676,
+      "train_target_unk_ratio": 0.324
+    },
+    "headline": "**515 条 dev 里只有 46 条（8.9%）能被 300 词表完整表达。** 剩下 91% 的句子至少有一个词模型永远说不出来。",
+    "user_intuition_confirmed": "『只用300怎么可能识别出意思』—— 数据完全支持。整句可表达率 8.9% 是硬上限，与模型多强、多久训练无关。",
+    "cut_high_freq_tokens": {
+      "最2": 76, "很1": 75, "不行2": 73, "帮助（我）": 64, "没有2": 61,
+      "看1": 51, "真2": 50, "给（我）": 41, "东西2": 34,
+      "note": "被砍掉的全是 train 里出现几十次的常用词 —— 不是长尾垃圾，是主力词"
+    }
+  },
+  "why_p6_conclusion_was_wrong": {
+    "p6_measured": [
+      {"max_tokens": 300, "min_freq": 2, "vocab": 301, "dev_tok_cov": 0.696, "dev_full_cov": 0.089, "best_wer": 0.8506, "best_epoch": 2, "epochs_ran": 10},
+      {"max_tokens": 1828, "min_freq": 2, "vocab": 1828, "dev_tok_cov": 0.901, "dev_full_cov": 0.547, "best_wer": 0.9257, "best_epoch": 3, "epochs_ran": 11},
+      {"max_tokens": 3517, "min_freq": 1, "vocab": 3517, "dev_tok_cov": 0.938, "dev_full_cov": 0.710, "best_wer": 0.9553, "best_epoch": 4, "epochs_ran": 12}
+    ],
+    "p6_verdict": "『词表裁剪影响有限：说明主因仍在特征判别力（AUC 0.68）』",
+    "three_reasons_this_verdict_is_invalid": [
+      "1. **early stop 伪造了『最佳』**：config 里 patience=8，三组的『最佳』都在 ep2~ep4，"
+      "然后 10~12 轮就停。曲线全程在震荡（300 组前5个: 0.8566/0.8506/0.8612/0.8580/0.8534，"
+      "后5个: 0.8587/0.8612/0.8541/0.8633/0.8605）—— **完全没收敛**，报的是噪声最小点而非真实水平",
+      "2. **跑在 off-by-one bug 修复前**：CTC target 少 +1，整体错一格（P23 于 2026-10-04 修复）。"
+      "P6 的 0.8506 / 0.9257 / 0.9553 全部作废",
+      "3. **比较方向反了**：词表越大 WER 越差（0.85 → 0.93 → 0.96），但这不是『扩表有害』，"
+      "而是『大词表欠拟合更严重』——类多了、每类样本少了、需要更长训练。收敛前比较等于比谁没学会得快"
+    ],
+    "additional_note": "P6 已经把关键静态指标算对了：dev_tok_cov 0.696/0.901/0.938、dev_full_cov 0.089/0.547/0.710。"
+    "**整句可表达率从 8.9% 涨到 71.0% 这件事，当时就写在收据里，但被 WER 结论盖过去了。**"
+  },
+  "correct_action_now": {
+    "vocab": "min_frequency=1, max_tokens=None -> 3515 词（与官方论文报告的 3515 完全一致）",
+    "cost": "重训 ~10 分钟（CTC 输出层 3516 vs 301，显存和速度代价需实测）",
+    "expected": "unk 占比从 30.4% 降到 6.2%；整句可表达率从 8.9% 升到约 55%+",
+    "caveat": "词表大不等于 WER 一定低 —— 必须跑满 100 epoch（P42 的做法）再比较，不能用 P6 的 10 轮口径"
+  },
+  "bugs_hit": [
+    "printf 里中文『%』紧跟 % 格式化符会导致 ValueError: unsupported format character，改成 pct 或 %%"
+  ]
+}

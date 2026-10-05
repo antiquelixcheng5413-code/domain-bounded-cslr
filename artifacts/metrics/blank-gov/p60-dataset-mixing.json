@@ -1,0 +1,81 @@
+{
+  "local_data": {
+    "only": "CE-CSL",
+    "ustc_csl_daily_slr500_present": false
+  },
+  "layer1_label_space": {
+    "datasets": {
+      "CE-CNSL（中科大不是这个）": {
+        "vocab": 3515,
+        "dev_oov": 0,
+        "modality": "RGB 连续句",
+        "signers": null,
+        "env": "70+ 复杂背景"
+      },
+      "CSL-Daily": {
+        "vocab": 2000,
+        "dev_oov": null,
+        "modality": "RGB 连续句",
+        "signers": 10,
+        "env": "室内/相对干净",
+        "note": "官方页面 home.ustc.edu.cn/~zhouh156/dataset/csl-daily/",
+        "tfnet_wer": {
+          "dev": 25.1,
+          "test": 23.5
+        }
+      },
+      "SLR500": {
+        "vocab": 500,
+        "modality": "RGB + 深度 + 3D 骨架",
+        "task": "孤立词",
+        "env": "实验室",
+        "note": "需全职教师签协议，学生不可申请"
+      },
+      "NMFs-CSL": {
+        "vocab": 1067,
+        "task": "孤立词",
+        "modality": "RGB",
+        "env": "实验室",
+        "note": "ustc-slr.github.io/datasets/2020_nmfs_csl/，同样需协议"
+      }
+    },
+    "reason": "任务不同（连续句 vs 孤立词）、模态不同（RGB vs RGB+D+骨架）、词表不同（3515/2000/500/1067）",
+    "joint_vocab_upper_bound": 5515,
+    "per_class_samples_now": 8.0,
+    "per_class_samples_joint": 5.1
+  },
+  "layer2_protocol": {
+    "official_protocol": "per-dataset train + per-dataset eval，无混合训练",
+    "tfnet_wer": {
+      "CE-CNSL": {
+        "dev": 42.1,
+        "test": 41.9
+      },
+      "CSL-Daily": {
+        "dev": 25.1,
+        "test": 23.5
+      },
+      "RWTH": {
+        "dev": 18.7,
+        "test": 18.6
+      },
+      "RWTH-T": {
+        "dev": 18.0,
+        "test": 19.1
+      }
+    },
+    "fatal_consequence": "混用后 42.1% 官方基准不可比 -> FYP 失去参照",
+    "paper": "arXiv:2409.11960v2"
+  },
+  "layer3_domain": {
+    "ce_csl_signer_groups": "A-L，12 组（按背景/signer 分组）",
+    "labels_have_domain_field": false,
+    "note": "标签文件无 domain 字段，无法直接做域泛化实验"
+  },
+  "verdict": "不能混用；四层独立理由，协议层最致命",
+  "correct_approach": [
+    "训练与评估都只用 CE-CSL，保持与官方基准可比",
+    "干净背景数据仅用于特征提取器调试/对照，不进训练与评估",
+    "若要数据增强，优先用 CE-CSL 自身的时序增强 ±20% + 随机裁剪翻转（论文明确使用，我们 P35 未测过）"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "generated": "2026-10-10",
+  "question": "现在正在跑的特征提取怎么办",
+  "answer": "继续跑完，不要停。扩词表与特征提取是解耦的。",
+  "why_decoupled": {
+    "dataflow": "视频 --提取--> (48,368) 特征 --查词表--> CTC target",
+    "explanation": "特征提取只吃视频路径，不接收词表参数；词表只影响右路（target）。左边特征一个字节都不用动。",
+    "extractor_signature": "RealtimeLandmarkExtractor.extract_to_48x368(video_path) —— 无词表参数",
+    "vocab_usage_point": "tools/blank_gov/p40_rgb_main.py:334  build_ordered_vocabulary(..., min_frequency=a.min_frequency, max_tokens=a.max_tokens)",
+    "how_to_expand": "只改命令行 --max-tokens 3516 --min-frequency 1",
+    "already_extracted_reusable": "train 3900 条（断点续跑机制在，不会重跑）"
+  },
+  "vocab_size_recheck": {
+    "min_freq_1_max_none": 3516,
+    "min_freq_2_max_none": 1827,
+    "official_paper_reported": 3515,
+    "diff": 1,
+    "note": "差 1 属正常：论文按其标注规范统计，我按 csv 原样解析，可能是一个词的变体归并差异。量级一致。"
+  },
+  "feasibility_3516_vocab": {
+    "device": "cuda",
+    "probes": [
+      {"vocab": 300,  "classes": 301,  "batch": 16, "logits_MB": 0.92,  "peak_est_MB": 2.77,  "step_s": 0.3745, "params_M": 3.07},
+      {"vocab": 300,  "classes": 301,  "batch": 32, "logits_MB": 1.85,  "peak_est_MB": 5.55,  "step_s": 0.0163, "params_M": 3.07},
+      {"vocab": 3516, "classes": 3517, "batch": 16, "logits_MB": 10.80, "peak_est_MB": 32.41, "step_s": 0.2527, "params_M": 3.89},
+      {"vocab": 3516, "classes": 3517, "batch": 32, "logits_MB": 21.61, "peak_est_MB": 64.83, "step_s": 0.0116, "params_M": 3.89}
+    ],
+    "verdict": "完全跑得动",
+    "key_numbers": {
+      "peak_memory_MB": "64.83（batch=32）—— WSL 7GB 里微不足道",
+      "params_growth": "3.07M -> 3.89M（+27%，因为输出层 301->3517 但 LSTM 主体不变）",
+      "100_epoch_estimate": "batch=16 约 2.2 小时；batch=32 约 0.1 小时（首 step 含预热，看后续稳态）",
+      "note": "batch=32 的 step_s 0.0116 含首步预热，单看 batch=16 的 0.2527s 更接近稳态"
+    },
+    "conclusion": "3515 词表不是资源问题。CTC 输出层增大只让 logits 张量变大（batch×T×C），而 batch×T 很小，所以开销可忽略。"
+  },
+  "recommended_next_steps": [
+    "1. 让特征提取跑完（train 剩余约 1095 条 + dev 515 条，按 26 条/分钟约 60 分钟）",
+    "2. 用 3516 词表重训：--max-tokens 3516 --min-frequency 1 --epochs 100",
+    "3. 按 P50 四件套报结果：token 级 WER / 剔 unk WER / 逐句等权 WER / exact 率",
+    "4. 关键判据：整句可表达率应从 8.9% 升到 50%+（这是静态指标，重训前就能算）"
+  ],
+  "bugs_hit": [
+    "DualInputCTC 自带 LSTM encoder，我多加一层导致 input_size 不匹配 -> 去掉多余的 encoder",
+    "ctc_loss 的 targets 必须是 [B,S] 2D 张量（S 用 blank 补齐），传 1D 拼接会报 invalid combination of arguments"
+  ]
+}

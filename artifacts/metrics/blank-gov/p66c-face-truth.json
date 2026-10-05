@@ -1,0 +1,9 @@
+{
+  "p66_my_script": 0.0,
+  "extractor_direct": 0.0,
+  "feature_presence_mean": 0.7219,
+  "old_baseline": 1.0,
+  "conclusion": "P66 的 0.000 是我的脚本 bug；P65b 的 0.720 是小样本波动；**face 检出实际正常，无需调参，可直接重提**",
+  "face_dims": 24,
+  "face_pct_of_368": 6.5
+}

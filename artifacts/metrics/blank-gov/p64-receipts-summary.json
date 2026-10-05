@@ -1,0 +1,669 @@
+{
+  "rows": [
+    {
+      "receipt": "a2-videomae-probe",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 1454
+    },
+    {
+      "receipt": "p0-diagnosis",
+      "method": "起点诊断",
+      "measured": "blank 率 96.98%（argmax），gloss 1118/peak 290",
+      "verdict": "baseline",
+      "bytes": 51308
+    },
+    {
+      "receipt": "p1-tfd-probe",
+      "method": "TFD 时频域",
+      "measured": "未落地（依赖 RGB）",
+      "verdict": "待验",
+      "bytes": 29489
+    },
+    {
+      "receipt": "p10-oov-fix",
+      "method": "OOV 处理",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 4547
+    },
+    {
+      "receipt": "p11-scp-count-prior",
+      "method": "SCP 词频先验",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 14589
+    },
+    {
+      "receipt": "p12-scp-validity",
+      "method": "SCP 有效性检验",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 28520
+    },
+    {
+      "receipt": "p13-real-candidate-probe",
+      "method": "候选词探针",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 42141
+    },
+    {
+      "receipt": "p14-real-constrained",
+      "method": "受限场景",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 11052
+    },
+    {
+      "receipt": "p15-modality-ablation",
+      "method": "模态消融",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 8413
+    },
+    {
+      "receipt": "p15-seed0",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 5126
+    },
+    {
+      "receipt": "p15-seed1",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 5374
+    },
+    {
+      "receipt": "p15-smoke",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 2237
+    },
+    {
+      "receipt": "p16-output-degeneracy",
+      "method": "输出退化观察",
+      "measured": "**首次记录输出退化**，但未量化贡献",
+      "verdict": "发现",
+      "bytes": 1375
+    },
+    {
+      "receipt": "p17-root-cause",
+      "method": "根因分析",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 1586
+    },
+    {
+      "receipt": "p18-config-c-char",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 7635
+    },
+    {
+      "receipt": "p18-degeneracy-fix",
+      "method": "退化修复",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 22196
+    },
+    {
+      "receipt": "p19-overfit-vs-feature",
+      "method": "过拟合 vs 特征",
+      "measured": "1-NN 静态可分性 0.0762 —— 但探针任务设定有误（P36 铁律）",
+      "verdict": "作废",
+      "bytes": 8659
+    },
+    {
+      "receipt": "p2-frame-level",
+      "method": "帧级特征 vs 句级",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 6218
+    },
+    {
+      "receipt": "p20-sanity-overfit",
+      "method": "过拟合自检",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 2185
+    },
+    {
+      "receipt": "p21-ctc-degenerate",
+      "method": "CTC 退化",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 5412
+    },
+    {
+      "receipt": "p23-off-by-one",
+      "method": "🔴 CTC target索引 +1 修复",
+      "measured": "**dev 严格 WER 0.976 → 0.702**；8/8样本解码全对",
+      "verdict": "✅ 关键成功",
+      "bytes": 507
+    },
+    {
+      "receipt": "p24-after-fix",
+      "method": "修复后复测",
+      "measured": "WER 0.7019 严格口径",
+      "verdict": "✅ 成功",
+      "bytes": 14939
+    },
+    {
+      "receipt": "p25-readable-output",
+      "method": "可读输出",
+      "measured": "逐句可读化",
+      "verdict": "✅ 成功",
+      "bytes": 21116
+    },
+    {
+      "receipt": "p26-blank-after-fix",
+      "method": "blank 率复测",
+      "measured": "blank 96.98% → 90.47%（理论健康 79.08%）",
+      "verdict": "✅ 有效",
+      "bytes": 4248
+    },
+    {
+      "receipt": "p27-five-samples",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 2151
+    },
+    {
+      "receipt": "p28-training-length",
+      "method": "加训练轮数 30→150",
+      "measured": "dev WER 只动-0.0063，gap 扩到 0.38",
+      "verdict": "❌ 无效",
+      "bytes": 3339
+    },
+    {
+      "receipt": "p2b-late-fusion",
+      "method": "后融合",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 4527
+    },
+    {
+      "receipt": "p3-joint-loss",
+      "method": "联合损失（CTC+帧级）",
+      "measured": "ΔWER ±0.004",
+      "verdict": "无效",
+      "bytes": 17332
+    },
+    {
+      "receipt": "p30-capacity",
+      "method": "容量控制 4 配置",
+      "measured": "base 2.88M 最优；tiny 0.30M 差 0.148",
+      "verdict": "❌ 无效",
+      "bytes": 13368
+    },
+    {
+      "receipt": "p31-feature-layer",
+      "method": "原始特征层诊断",
+      "measured": "双手检出 mean 0.0000缺失；运动量正常；时间std/样本std=2.03",
+      "verdict": "诊断",
+      "bytes": 1212
+    },
+    {
+      "receipt": "p32-face-extract-feasibility",
+      "method": "面部特征可行性",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 1738
+    },
+    {
+      "receipt": "p33-face128-pilot",
+      "method": "面部 128 点小样本",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 975
+    },
+    {
+      "receipt": "p34-face-probe",
+      "method": "面部扩容 8→128 点",
+      "measured": "**1.01x**（无收益）",
+      "verdict": "❌ 无效",
+      "bytes": 1660
+    },
+    {
+      "receipt": "p35-augmentation",
+      "method": "数据增强 4 种（shift/mask/scale/combo）",
+      "measured": "train WER 升、dev 降；最好 combo **-0.0060**",
+      "verdict": "❌ 无效",
+      "bytes": 4480
+    },
+    {
+      "receipt": "p36-rgb-probe",
+      "method": "CLIP RGB 线性探针",
+      "measured": "d=0.1006 极弱；heldout 0.0222 < 基线 0.1833",
+      "verdict": "❌ 无效",
+      "bytes": 3677
+    },
+    {
+      "receipt": "p37-upper-block",
+      "method": "upper 块（pose+face）",
+      "measured": "Cohen d +0.3041 —— **全场最清晰的信号**",
+      "verdict": "✅ 值得用",
+      "bytes": 2739
+    },
+    {
+      "receipt": "p38-verify-upper-deltas",
+      "method": "upper/deltas 复核",
+      "measured": "body_deltas d=+0.4796 全场最高",
+      "verdict": "✅ 值得用",
+      "bytes": 3066
+    },
+    {
+      "receipt": "p39-freq-calibration",
+      "method": "频次校准",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 3473
+    },
+    {
+      "receipt": "p39-n1500",
+      "method": "样本量扫描 n=1500",
+      "measured": "见收据",
+      "verdict": "诊断",
+      "bytes": 2409
+    },
+    {
+      "receipt": "p39-n3000",
+      "method": "样本量扫描 n=3000",
+      "measured": "见收据",
+      "verdict": "诊断",
+      "bytes": 2437
+    },
+    {
+      "receipt": "p39-n800",
+      "method": "样本量扫描 n=800",
+      "measured": "见收据",
+      "verdict": "诊断",
+      "bytes": 2411
+    },
+    {
+      "receipt": "p40-full",
+      "method": "RGB 全量 100 epoch",
+      "measured": "lm_only **0.5211** / rgb+lm 0.5314 / rgb_only 0.6949",
+      "verdict": "✅ lm_only 最好",
+      "bytes": 22652
+    },
+    {
+      "receipt": "p40-pilot300",
+      "method": "RGB 路线小样本 pilot",
+      "measured": "rgb+lm0.5314 / rgb_only 0.6949（lm_only 更好）",
+      "verdict": "❌ RGB 无收益",
+      "bytes": 14403
+    },
+    {
+      "receipt": "p42-lm-final",
+      "method": "lm_only 全量 100 epoch 最佳",
+      "measured": "ep100 **0.5211**（ep90 = 0.5000）；train WER 0.0065；exact 18/514",
+      "verdict": "✅ 当前最佳",
+      "bytes": 8568
+    },
+    {
+      "receipt": "p43-speed-bugs",
+      "method": "推理提速 17.8s→4.2s",
+      "measured": "**4.2x**，同帧三模型并行逐位一致",
+      "verdict": "✅ 成功",
+      "bytes": 6176
+    },
+    {
+      "receipt": "p44-wer-audit",
+      "method": "WER 口径审计",
+      "measured": "折叠送分 0.1755；剔 unk 真实 WER 0.7919；逐句等权 2.8774",
+      "verdict": "✅ 关键",
+      "bytes": 5071
+    },
+    {
+      "receipt": "p44b-norm-mismatch",
+      "method": "🔴 服务端归一化口径不一致",
+      "measured": "训练口径 0.5211 vs 服务口径 **1.2851**",
+      "verdict": "✅ 修复",
+      "bytes": 647
+    },
+    {
+      "receipt": "p44c-online-vs-offline",
+      "method": "🔴 左右手标签恒取 [0]",
+      "measured": "检出率 0.44/0.54；输出种类 **1 种**",
+      "verdict": "✅ 修复",
+      "bytes": 4744
+    },
+    {
+      "receipt": "p45-diagnosis",
+      "method": "输出坍缩诊断",
+      "measured": "前5 词占真实词输出 49.5%",
+      "verdict": "诊断",
+      "bytes": 5635
+    },
+    {
+      "receipt": "p45-vocab-bottleneck",
+      "method": "词表贡献量化",
+      "measured": "扩表收益上限 0.14 WER（当时估计）",
+      "verdict": "诊断",
+      "bytes": 1170
+    },
+    {
+      "receipt": "p45b-signer-overlap",
+      "method": "signer 重叠核查",
+      "measured": "train/dev 12 signer **100% 重叠**",
+      "verdict": "✅ 排除",
+      "bytes": 1430
+    },
+    {
+      "receipt": "p45c-error-attribution",
+      "method": "误差归因",
+      "measured": "见收据",
+      "verdict": "诊断",
+      "bytes": 1156
+    },
+    {
+      "receipt": "p46-unk-attribution",
+      "method": "unk 来源归因",
+      "measured": "该吐 59.0% / 白吐 35.2%；模型自身错误 40.7%",
+      "verdict": "诊断",
+      "bytes": 1067
+    },
+    {
+      "receipt": "p47-controlled-decode",
+      "method": "🔴 受控解码（词频先验）",
+      "measured": "WER 剔unk 0.7919 → 0.8171/0.8452/0.8710（单调变差）",
+      "verdict": "❌ 无效",
+      "bytes": 4983
+    },
+    {
+      "receipt": "p47b-why-prior-fails",
+      "method": "解码失效机制",
+      "measured": "正确词 top-1 仅 **10.6%**、top-5 44.8%；blank 帧 87.4%",
+      "verdict": "诊断",
+      "bytes": 1584
+    },
+    {
+      "receipt": "p47c-root-cause-test",
+      "method": "8 条过拟合 + 词级线性探针",
+      "measured": "过拟合 WER 0.0000；词级探针 **macroAUC 0.7222**",
+      "verdict": "✅ 关键",
+      "bytes": 475
+    },
+    {
+      "receipt": "p48-diagnosis",
+      "method": "skew 诊断汇总",
+      "measured": "提取器不同源（holistic vs tasks API）",
+      "verdict": "诊断",
+      "bytes": 5959
+    },
+    {
+      "receipt": "p48-overfit-offline-vs-realtime",
+      "method": "离线 vs 实时过拟合",
+      "measured": "两种特征都能过拟合 0.0000（全新模型）",
+      "verdict": "✅",
+      "bytes": 4880
+    },
+    {
+      "receipt": "p48b-domain-shift",
+      "method": "🔴 train-serve skew",
+      "measured": "train exact 96.7%(旧) vs 3.3%(新)；dev 仅差 4.7pp",
+      "verdict": "✅ 关键",
+      "bytes": 1547
+    },
+    {
+      "receipt": "p5-tdm",
+      "method": "TDM 动态对齐",
+      "measured": "未落地",
+      "verdict": "待验",
+      "bytes": 17027
+    },
+    {
+      "receipt": "p50-wer-audit",
+      "method": "🔴 WER 算法审计",
+      "measured": "穷举/手写/jiwer 三方一致 → 算法无误，问题在报告口径",
+      "verdict": "✅ 关键",
+      "bytes": 3651
+    },
+    {
+      "receipt": "p50b-jiwer-crosscheck",
+      "method": "jiwer 交叉验证",
+      "measured": "差 0.000000",
+      "verdict": "✅",
+      "bytes": 569
+    },
+    {
+      "receipt": "p51-decision",
+      "method": "选型定论",
+      "measured": "选离线 → 但P52 路线1失败，转路线 2",
+      "verdict": "决策",
+      "bytes": 4403
+    },
+    {
+      "receipt": "p51b-feature-source",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 1015
+    },
+    {
+      "receipt": "p51c-feature-source",
+      "method": "🟡 新旧特征判别力对比",
+      "measured": "macroAUC 0.7791(旧) vs 0.7744(新)，五块差值均<0.03",
+      "verdict": "✅ 无显著差异",
+      "bytes": 1871
+    },
+    {
+      "receipt": "p52-legacy-repro",
+      "method": "路线 1（旧 API 复现）",
+      "measured": "base 段 cos 0.996~0.9998✅；deltas 段 cos 0.32~0.96❌（占49%维度）",
+      "verdict": "❌ 失败",
+      "bytes": 8502
+    },
+    {
+      "receipt": "p52b-diff-localize",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 4721
+    },
+    {
+      "receipt": "p53-extract-tasksapi",
+      "method": "路线 2 全量重提",
+      "measured": "5488 条",
+      "verdict": "进行中",
+      "bytes": 425
+    },
+    {
+      "receipt": "p53b-quality-check",
+      "method": "新特征质量校验",
+      "measured": "shape/NaN/presence 合格",
+      "verdict": "✅",
+      "bytes": 1148
+    },
+    {
+      "receipt": "p55_ce_csl_related_work",
+      "method": "CE-CSL 官方基准整理",
+      "measured": "TFNet dev 42.1 / test 41.9",
+      "verdict": "✅",
+      "bytes": 5241
+    },
+    {
+      "receipt": "p56-gap-to-official",
+      "method": "与官方差距分解",
+      "measured": "表面 −10.1pp → 口径 +27.1 → 词表地板 +30.4 → **真实能力差 6.7pp**",
+      "verdict": "✅ 关键",
+      "bytes": 5534
+    },
+    {
+      "receipt": "p57-answers",
+      "method": "Q1/Q2/Q3 三问",
+      "measured": "词表来源、能否去unk、per-gloss 二分类 AUC 0.7082",
+      "verdict": "✅",
+      "bytes": 7745
+    },
+    {
+      "receipt": "p57",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 7409
+    },
+    {
+      "receipt": "p57b",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 7560
+    },
+    {
+      "receipt": "p58-vocab-origin",
+      "method": "300 词表溯源",
+      "measured": "2026-06-17 a6a7100 引入；整句可表达率仅 8.9%",
+      "verdict": "✅",
+      "bytes": 5108
+    },
+    {
+      "receipt": "p58",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 9130
+    },
+    {
+      "receipt": "p59-decoupling",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 564
+    },
+    {
+      "receipt": "p59-what-to-do",
+      "method": "词表/提取解耦",
+      "measured": "扩词表不需重提特征；3516 可行（峰值 32MB）",
+      "verdict": "✅",
+      "bytes": 3094
+    },
+    {
+      "receipt": "p59b-feasibility",
+      "method": "3516 词表可行性",
+      "measured": "峰值 64.8MB；参数 3.07→3.89M；更快",
+      "verdict": "✅",
+      "bytes": 1148
+    },
+    {
+      "receipt": "p6-vocab-ablation-long",
+      "method": "词表消融300/1828/3517",
+      "measured": "WER 0.851/0.926/0.955 —— **但 early-stop 伪造（ep2~4 拿 best），结论作废**",
+      "verdict": "作废待重验",
+      "bytes": 13734
+    },
+    {
+      "receipt": "p6-vocab-ablation",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 7038
+    },
+    {
+      "receipt": "p60-dataset-mixing",
+      "method": "数据集混用论证",
+      "measured": "四层不可混用（协议层最致命）",
+      "verdict": "✅",
+      "bytes": 2495
+    },
+    {
+      "receipt": "p61-modality",
+      "method": "模态对照",
+      "measured": "CE-CSL 只有 RGB；MediaPipe z 是相对深度非米制",
+      "verdict": "✅",
+      "bytes": 3570
+    },
+    {
+      "receipt": "p62-format-vs-method",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 1516
+    },
+    {
+      "receipt": "p62b-correction",
+      "method": "🔴 撤回 P57 结论",
+      "measured": "strip_variant_numbering 默认 True 已归一化；dev unk 实为 **0%**",
+      "verdict": "✅ 修正",
+      "bytes": 4071
+    },
+    {
+      "receipt": "p63b-preflight",
+      "method": "训练前预检",
+      "measured": "**拦下 presence 语义错位**；3516 词表 CTC 约束通过(需T≤25<48)",
+      "verdict": "✅",
+      "bytes": 1948
+    },
+    {
+      "receipt": "p63c-presence-verify",
+      "method": "presence 修复验证",
+      "measured": "7 项全通过；新特征检出率反而更高",
+      "verdict": "✅",
+      "bytes": 1492
+    },
+    {
+      "receipt": "p7-cross-signer",
+      "method": "跨 signer 泛化",
+      "measured": "signer 间 CV 0.018，LOSO 退化 -0.0025",
+      "verdict": "无效",
+      "bytes": 8616
+    },
+    {
+      "receipt": "p7-partA",
+      "method": "(未标注)",
+      "measured": "见收据",
+      "verdict": "?",
+      "bytes": 2879
+    },
+    {
+      "receipt": "p8-error-attribution",
+      "method": "误差归因",
+      "measured": "工具类",
+      "verdict": "工具",
+      "bytes": 3752
+    },
+    {
+      "receipt": "p9-wer-bias",
+      "method": "WER 偏差审计",
+      "measured": "工具类",
+      "verdict": "工具",
+      "bytes": 3284
+    }
+  ],
+  "verdict_counts": {
+    "?": 15,
+    "baseline": 1,
+    "待验": 17,
+    "发现": 1,
+    "作废": 1,
+    "✅ 关键成功": 1,
+    "✅ 成功": 3,
+    "✅ 有效": 1,
+    "❌ 无效": 6,
+    "无效": 2,
+    "诊断": 10,
+    "✅ 值得用": 2,
+    "✅ lm_only 最好": 1,
+    "❌ RGB 无收益": 1,
+    "✅ 当前最佳": 1,
+    "✅ 关键": 5,
+    "✅ 修复": 2,
+    "✅ 排除": 1,
+    "✅": 12,
+    "决策": 1,
+    "✅ 无显著差异": 1,
+    "❌ 失败": 1,
+    "进行中": 1,
+    "作废待重验": 1,
+    "✅ 修正": 1,
+    "工具": 2
+  }
+}

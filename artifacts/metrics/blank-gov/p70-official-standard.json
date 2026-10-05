@@ -1,0 +1,22 @@
+{
+  "official_formula": "arXiv:2409.11960v2 式(6): WER = 100% x (ins+del+sub) / sum",
+  "sum": "参考 gloss token 总数（corpus-level累加）",
+  "normalization": "无：不去标点、不合并重复、不做大小写/空格处理",
+  "verified_against": "Table VIII Case-2，5/5 算例一致",
+  "primary_metric": "WER_official",
+  "supplementary_only": [
+    "WER_excl_unk",
+    "WER_per_sentence",
+    "exact_rate_pct"
+  ],
+  "official_benchmark_dev": {
+    "MSTNet": 54.4,
+    "CorrNet": 47.2,
+    "SEN": 46.5,
+    "VAC": 45.1,
+    "MAM-FSD": 44.9,
+    "TFNet": 42.1
+  },
+  "our_p42": 52.11,
+  "our_position": "介于 MSTNet(54.4) 与 CorrNet(47.2) 之间"
+}
