@@ -1,0 +1,85 @@
+{
+  "experiment": "P39 recalibrate P30's 'mid-frequency words are the bottleneck' under macroAUC (P30 used WER, which P38 showed is misleading here)",
+  "n_videos": 1500,
+  "n_segments": 8450,
+  "n_classes_scored": 672,
+  "vocab_size": 301,
+  "seed": 20261004,
+  "pooling": "片段池化（P36 铁律）：按 gloss 数等分时间轴，每段对应 1 个 gloss",
+  "split": "视频级 80/20，train 侧建原型，test 侧评估（泛化口径）",
+  "bucket_distribution": {
+    "100+": {
+      "n": 3796,
+      "share": 0.4492
+    },
+    "11-100": {
+      "n": 2002,
+      "share": 0.2369
+    },
+    "3-10": {
+      "n": 1321,
+      "share": 0.1563
+    },
+    "1-2": {
+      "n": 805,
+      "share": 0.0953
+    },
+    "OOV": {
+      "n": 526,
+      "share": 0.0622
+    }
+  },
+  "three_metrics_by_bucket": {
+    "100+": {
+      "n_test": 752,
+      "acc": 0.0,
+      "balanced_acc": 0.0,
+      "macro_auc": 0.6041,
+      "n_classes_scored": 29
+    },
+    "11-100": {
+      "n_test": 423,
+      "acc": 0.0189,
+      "balanced_acc": 0.0162,
+      "macro_auc": 0.613,
+      "n_classes_scored": 47
+    },
+    "3-10": {
+      "n_test": 286,
+      "acc": 0.0,
+      "balanced_acc": 0.0,
+      "macro_auc": 0.6488,
+      "n_classes_scored": 2
+    },
+    "1-2": {
+      "n_test": 158,
+      "acc": 0.0,
+      "balanced_acc": 0.0,
+      "macro_auc": null,
+      "n_classes_scored": 0
+    },
+    "OOV": {
+      "n_test": 90,
+      "acc": 0.0,
+      "balanced_acc": 0.0,
+      "macro_auc": 0.6211,
+      "n_classes_scored": 5
+    }
+  },
+  "p30_wer_for_comparison": {
+    "100+": 0.4003,
+    "11-100": 0.9178,
+    "OOV": 0.1707
+  },
+  "macroauc_diff_mid_minus_high": 0.0089,
+  "verdict": "两桶 macroAUC 相当（差 +0.0089，|差|<0.02）=> P30 的 WER 口径无法区分两桶，结论不成立于稳健口径",
+  "criterion": "11-100 桶 macroAUC 显著低于 100+ 桶（差 < -0.02）-> P30 成立；差 > +0.02 -> 结论翻转；|差| < 0.02 -> 口径不区分",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "no_training": "本实验不训练任何深度模型，全部基于已有 .landmark.npy",
+  "minutes": 0.01,
+  "p30_holes_being_tested": [
+    "① P30 分桶指标是 WER；P38 实测 WER/acc 在本任务上掩盖真实信号（full368 macroAUC 0.6091 vs acc 0.0260）",
+    "② P30 的 OOV 桶 WER 0.1707 是折叠产物；P9 实测 dev OOV 占 30.4%，宽松 WER 虚高上界 0.1650"
+  ]
+}

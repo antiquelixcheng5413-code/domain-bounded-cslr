@@ -49,7 +49,8 @@ def probe_feature_width(manifest: Path, feature_root: Path) -> int:
     raise ValueError(f"no cached feature file found under {feature_root}")
 
 
-def _config_from_args(args: argparse.Namespace) -> GlossSequenceConfig:    return GlossSequenceConfig(
+def _config_from_args(args: argparse.Namespace) -> GlossSequenceConfig:
+    return GlossSequenceConfig(
         keep_punctuation=not args.drop_punctuation,
         keep_numeric_tokens=not args.drop_numeric_tokens,
         strip_variant_numbering=not args.keep_variant_numbering,

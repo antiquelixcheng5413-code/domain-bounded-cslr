@@ -1,0 +1,360 @@
+{
+  "experiment": "P40 RGB as the MAIN input stream into CTC (A2's old negative result was measured on the off-by-one model)",
+  "n_videos_train": 4973,
+  "n_videos_dev": 514,
+  "n_dropped_too_long": 0,
+  "drop_reason": "target_len > (min(n_windows,48)+1)//2 -> CTC 不可对齐，丢弃而非截断（保持参考一致）",
+  "n_windows": 20,
+  "frames_per_window": 8,
+  "rgb_feature_dim": 512,
+  "lm_feature_dim": 368,
+  "vocab_size": 301,
+  "epochs": 100,
+  "seed": 42,
+  "results": [
+    {
+      "config": "lm_only",
+      "params_M": 3.07,
+      "history": [
+        {
+          "epoch": 5,
+          "loss": 17.2285,
+          "dev_wer": 0.6381,
+          "train_wer": 0.6518,
+          "dev_ndist": 17,
+          "dev_len": 2.597
+        },
+        {
+          "epoch": 10,
+          "loss": 12.1918,
+          "dev_wer": 0.5779,
+          "train_wer": 0.5318,
+          "dev_ndist": 68,
+          "dev_len": 3.331
+        },
+        {
+          "epoch": 15,
+          "loss": 7.8102,
+          "dev_wer": 0.5257,
+          "train_wer": 0.3149,
+          "dev_ndist": 134,
+          "dev_len": 4.268
+        },
+        {
+          "epoch": 20,
+          "loss": 4.4898,
+          "dev_wer": 0.507,
+          "train_wer": 0.1509,
+          "dev_ndist": 164,
+          "dev_len": 4.564
+        },
+        {
+          "epoch": 25,
+          "loss": 2.7746,
+          "dev_wer": 0.5078,
+          "train_wer": 0.0731,
+          "dev_ndist": 168,
+          "dev_len": 4.813
+        },
+        {
+          "epoch": 30,
+          "loss": 1.9901,
+          "dev_wer": 0.5162,
+          "train_wer": 0.0392,
+          "dev_ndist": 198,
+          "dev_len": 4.879
+        },
+        {
+          "epoch": 35,
+          "loss": 1.602,
+          "dev_wer": 0.513,
+          "train_wer": 0.0327,
+          "dev_ndist": 188,
+          "dev_len": 4.792
+        },
+        {
+          "epoch": 40,
+          "loss": 1.3471,
+          "dev_wer": 0.5296,
+          "train_wer": 0.0214,
+          "dev_ndist": 204,
+          "dev_len": 5.082
+        },
+        {
+          "epoch": 45,
+          "loss": 1.1788,
+          "dev_wer": 0.5194,
+          "train_wer": 0.0131,
+          "dev_ndist": 189,
+          "dev_len": 4.763
+        },
+        {
+          "epoch": 50,
+          "loss": 1.127,
+          "dev_wer": 0.513,
+          "train_wer": 0.0172,
+          "dev_ndist": 191,
+          "dev_len": 4.953
+        },
+        {
+          "epoch": 55,
+          "loss": 1.0643,
+          "dev_wer": 0.5095,
+          "train_wer": 0.0137,
+          "dev_ndist": 192,
+          "dev_len": 4.977
+        },
+        {
+          "epoch": 60,
+          "loss": 0.9709,
+          "dev_wer": 0.5106,
+          "train_wer": 0.0119,
+          "dev_ndist": 185,
+          "dev_len": 4.778
+        },
+        {
+          "epoch": 65,
+          "loss": 0.9055,
+          "dev_wer": 0.5141,
+          "train_wer": 0.0119,
+          "dev_ndist": 181,
+          "dev_len": 4.663
+        },
+        {
+          "epoch": 70,
+          "loss": 0.882,
+          "dev_wer": 0.5152,
+          "train_wer": 0.0119,
+          "dev_ndist": 188,
+          "dev_len": 4.85
+        },
+        {
+          "epoch": 75,
+          "loss": 0.8845,
+          "dev_wer": 0.5092,
+          "train_wer": 0.0137,
+          "dev_ndist": 191,
+          "dev_len": 4.835
+        },
+        {
+          "epoch": 80,
+          "loss": 0.8276,
+          "dev_wer": 0.5088,
+          "train_wer": 0.0107,
+          "dev_ndist": 185,
+          "dev_len": 5.039
+        },
+        {
+          "epoch": 85,
+          "loss": 0.8041,
+          "dev_wer": 0.512,
+          "train_wer": 0.0042,
+          "dev_ndist": 187,
+          "dev_len": 4.986
+        },
+        {
+          "epoch": 90,
+          "loss": 0.7732,
+          "dev_wer": 0.5,
+          "train_wer": 0.0137,
+          "dev_ndist": 175,
+          "dev_len": 4.716
+        },
+        {
+          "epoch": 95,
+          "loss": 0.7659,
+          "dev_wer": 0.5173,
+          "train_wer": 0.0113,
+          "dev_ndist": 202,
+          "dev_len": 5.158
+        },
+        {
+          "epoch": 100,
+          "loss": 0.7396,
+          "dev_wer": 0.5211,
+          "train_wer": 0.0065,
+          "dev_ndist": 194,
+          "dev_len": 4.891
+        }
+      ],
+      "final": {
+        "tag": "lm_only",
+        "wer": 0.5211,
+        "n_ref_tokens": 2838,
+        "n_distinct": 194,
+        "token_kinds": 194,
+        "n_distinct_seqs": 466,
+        "hyp_len_mean": 4.891,
+        "ref_len_mean": 5.521,
+        "n_exact": 18,
+        "n_partial": 479,
+        "n_samples": 514,
+        "samples": [
+          {
+            "sid": "dev-00289",
+            "ref": [
+              "我",
+              "去",
+              "<unk>",
+              "找",
+              "老师",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "去",
+              "<unk>",
+              "<unk>",
+              "<unk>",
+              "我",
+              "我",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00216",
+            "ref": [
+              "我们",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我们",
+              "<unk>",
+              "。"
+            ],
+            "edit": 0
+          },
+          {
+            "sid": "dev-00507",
+            "ref": [
+              "那",
+              "<unk>",
+              "你",
+              "以前",
+              "吃",
+              "有",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "吃",
+              "有",
+              "？"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00128",
+            "ref": [
+              "你",
+              "如果",
+              "<unk>",
+              "看",
+              "我",
+              "<unk>",
+              "你",
+              "。"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "很",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00311",
+            "ref": [
+              "我",
+              "最",
+              "<unk>",
+              "什么",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "<unk>",
+              "什么",
+              "<unk>",
+              "<unk>",
+              "？"
+            ],
+            "edit": 3
+          },
+          {
+            "sid": "dev-00093",
+            "ref": [
+              "你",
+              "晚上",
+              "去",
+              "玩",
+              "？"
+            ],
+            "hyp": [
+              "你",
+              "晚上",
+              "<unk>",
+              "？"
+            ],
+            "edit": 2
+          },
+          {
+            "sid": "dev-00471",
+            "ref": [
+              "这",
+              "工作",
+              "人",
+              "<unk>",
+              "<unk>",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "喜欢",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00290",
+            "ref": [
+              "<unk>",
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "<unk>",
+              "<unk>",
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "edit": 1
+          }
+        ]
+      },
+      "checkpoint": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p40-lm_only-ep100.pt",
+      "final_train_wer": 0.0065
+    }
+  ],
+  "verdict": null,
+  "criterion": "rgb_only dev_WER <= lm_only - 0.02",
+  "key_difference_vs_a2": "A2 extracted a single pooled 512-D vector which cannot feed CTC (needs (B,T,C)); P40 keeps the window axis -> (T,512)",
+  "literature_basis": {
+    "ref23_SignFormer-GCN": "Eq.7 Fused = Z_t + L_t (RGB + skeleton addition) — 本实验的 rgb+lm 配置",
+    "ref07_SignBT": "CSL-Daily CSLR SOTA WER 32.0-32.2 vs 我们 0.70",
+    "ref12_CCL-SLR": "pose 有上限、RGB 有语义线索（方向性参考，它是 ISLR 非 CSLR）"
+  },
+  "metrics_note": "P38 铁律：acc/WER 在本任务失真，故同时报 n_distinct / hyp_len / exact / partial 作交叉验证",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "minutes": 10.29
+}

@@ -1,0 +1,646 @@
+{
+  "experiment": "P40 RGB as the MAIN input stream into CTC (A2's old negative result was measured on the off-by-one model)",
+  "n_videos_train": 297,
+  "n_videos_dev": 299,
+  "n_dropped_too_long": 4,
+  "drop_reason": "target_len > (min(n_windows,48)+1)//2 -> CTC 不可对齐，丢弃而非截断（保持参考一致）",
+  "n_windows": 20,
+  "frames_per_window": 8,
+  "rgb_feature_dim": 512,
+  "lm_feature_dim": 368,
+  "vocab_size": 301,
+  "epochs": 30,
+  "seed": 42,
+  "results": [
+    {
+      "config": "lm_only",
+      "params_M": 3.07,
+      "history": [
+        {
+          "epoch": 5,
+          "loss": 19.5711,
+          "dev_wer": 0.8707,
+          "train_wer": 0.8715,
+          "dev_ndist": 1,
+          "dev_len": 1.0
+        },
+        {
+          "epoch": 10,
+          "loss": 18.445,
+          "dev_wer": 0.8707,
+          "train_wer": 0.8715,
+          "dev_ndist": 1,
+          "dev_len": 1.0
+        },
+        {
+          "epoch": 15,
+          "loss": 17.7403,
+          "dev_wer": 0.7976,
+          "train_wer": 0.7661,
+          "dev_ndist": 4,
+          "dev_len": 2.0
+        },
+        {
+          "epoch": 20,
+          "loss": 17.0529,
+          "dev_wer": 0.7891,
+          "train_wer": 0.763,
+          "dev_ndist": 8,
+          "dev_len": 2.067
+        },
+        {
+          "epoch": 25,
+          "loss": 15.9017,
+          "dev_wer": 0.7076,
+          "train_wer": 0.6727,
+          "dev_ndist": 9,
+          "dev_len": 2.652
+        },
+        {
+          "epoch": 30,
+          "loss": 14.3898,
+          "dev_wer": 0.6846,
+          "train_wer": 0.6236,
+          "dev_ndist": 16,
+          "dev_len": 2.903
+        }
+      ],
+      "final": {
+        "tag": "lm_only",
+        "wer": 0.6846,
+        "n_ref_tokens": 1655,
+        "n_distinct": 16,
+        "token_kinds": 16,
+        "n_distinct_seqs": 47,
+        "hyp_len_mean": 2.903,
+        "ref_len_mean": 5.535,
+        "n_exact": 1,
+        "n_partial": 279,
+        "n_samples": 299,
+        "samples": [
+          {
+            "sid": "dev-00289",
+            "ref": [
+              "我",
+              "去",
+              "<unk>",
+              "找",
+              "老师",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "edit": 3
+          },
+          {
+            "sid": "dev-00216",
+            "ref": [
+              "我们",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "。"
+            ],
+            "edit": 1
+          },
+          {
+            "sid": "dev-00507",
+            "ref": [
+              "那",
+              "<unk>",
+              "你",
+              "以前",
+              "吃",
+              "有",
+              "？"
+            ],
+            "hyp": [
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "edit": 6
+          },
+          {
+            "sid": "dev-00128",
+            "ref": [
+              "你",
+              "如果",
+              "<unk>",
+              "看",
+              "我",
+              "<unk>",
+              "你",
+              "。"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "。"
+            ],
+            "edit": 5
+          },
+          {
+            "sid": "dev-00311",
+            "ref": [
+              "我",
+              "最",
+              "<unk>",
+              "什么",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00093",
+            "ref": [
+              "你",
+              "晚上",
+              "去",
+              "玩",
+              "？"
+            ],
+            "hyp": [
+              "<unk>",
+              "。"
+            ],
+            "edit": 5
+          },
+          {
+            "sid": "dev-00471",
+            "ref": [
+              "这",
+              "工作",
+              "人",
+              "<unk>",
+              "<unk>",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00290",
+            "ref": [
+              "<unk>",
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "edit": 1
+          }
+        ]
+      },
+      "final_train_wer": 0.6236
+    },
+    {
+      "config": "rgb_only",
+      "params_M": 3.36,
+      "history": [
+        {
+          "epoch": 5,
+          "loss": 19.3812,
+          "dev_wer": 0.8707,
+          "train_wer": 0.8715,
+          "dev_ndist": 1,
+          "dev_len": 1.0
+        },
+        {
+          "epoch": 10,
+          "loss": 18.7109,
+          "dev_wer": 0.8266,
+          "train_wer": 0.8309,
+          "dev_ndist": 2,
+          "dev_len": 1.963
+        },
+        {
+          "epoch": 15,
+          "loss": 18.0628,
+          "dev_wer": 0.7275,
+          "train_wer": 0.6933,
+          "dev_ndist": 4,
+          "dev_len": 2.592
+        },
+        {
+          "epoch": 20,
+          "loss": 16.9699,
+          "dev_wer": 0.6725,
+          "train_wer": 0.6333,
+          "dev_ndist": 7,
+          "dev_len": 3.13
+        },
+        {
+          "epoch": 25,
+          "loss": 15.8196,
+          "dev_wer": 0.6598,
+          "train_wer": 0.6139,
+          "dev_ndist": 8,
+          "dev_len": 3.258
+        },
+        {
+          "epoch": 30,
+          "loss": 14.5015,
+          "dev_wer": 0.6332,
+          "train_wer": 0.5709,
+          "dev_ndist": 13,
+          "dev_len": 3.682
+        }
+      ],
+      "final": {
+        "tag": "rgb_only",
+        "wer": 0.6332,
+        "n_ref_tokens": 1655,
+        "n_distinct": 13,
+        "token_kinds": 13,
+        "n_distinct_seqs": 32,
+        "hyp_len_mean": 3.682,
+        "ref_len_mean": 5.535,
+        "n_exact": 0,
+        "n_partial": 285,
+        "n_samples": 299,
+        "samples": [
+          {
+            "sid": "dev-00289",
+            "ref": [
+              "我",
+              "去",
+              "<unk>",
+              "找",
+              "老师",
+              "。"
+            ],
+            "hyp": [
+              "我们",
+              "今天",
+              "<unk>",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00216",
+            "ref": [
+              "我们",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "工作",
+              "<unk>",
+              "。"
+            ],
+            "edit": 2
+          },
+          {
+            "sid": "dev-00507",
+            "ref": [
+              "那",
+              "<unk>",
+              "你",
+              "以前",
+              "吃",
+              "有",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "没有",
+              "。"
+            ],
+            "edit": 6
+          },
+          {
+            "sid": "dev-00128",
+            "ref": [
+              "你",
+              "如果",
+              "<unk>",
+              "看",
+              "我",
+              "<unk>",
+              "你",
+              "。"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "什么",
+              "？"
+            ],
+            "edit": 6
+          },
+          {
+            "sid": "dev-00311",
+            "ref": [
+              "我",
+              "最",
+              "<unk>",
+              "什么",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我",
+              "<unk>",
+              "<unk>",
+              "。"
+            ],
+            "edit": 2
+          },
+          {
+            "sid": "dev-00093",
+            "ref": [
+              "你",
+              "晚上",
+              "去",
+              "玩",
+              "？"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "什么",
+              "？"
+            ],
+            "edit": 3
+          },
+          {
+            "sid": "dev-00471",
+            "ref": [
+              "这",
+              "工作",
+              "人",
+              "<unk>",
+              "<unk>",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "<unk>",
+              "。"
+            ],
+            "edit": 3
+          },
+          {
+            "sid": "dev-00290",
+            "ref": [
+              "<unk>",
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "我们",
+              "<unk>",
+              "<unk>",
+              "。"
+            ],
+            "edit": 2
+          }
+        ]
+      },
+      "final_train_wer": 0.5709
+    },
+    {
+      "config": "rgb+lm",
+      "params_M": 6.35,
+      "history": [
+        {
+          "epoch": 5,
+          "loss": 19.3372,
+          "dev_wer": 0.8707,
+          "train_wer": 0.8715,
+          "dev_ndist": 1,
+          "dev_len": 1.0
+        },
+        {
+          "epoch": 10,
+          "loss": 17.8532,
+          "dev_wer": 0.8677,
+          "train_wer": 0.8624,
+          "dev_ndist": 4,
+          "dev_len": 1.023
+        },
+        {
+          "epoch": 15,
+          "loss": 16.0196,
+          "dev_wer": 0.8199,
+          "train_wer": 0.7885,
+          "dev_ndist": 8,
+          "dev_len": 1.478
+        },
+        {
+          "epoch": 20,
+          "loss": 13.2411,
+          "dev_wer": 0.7281,
+          "train_wer": 0.6752,
+          "dev_ndist": 22,
+          "dev_len": 2.625
+        },
+        {
+          "epoch": 25,
+          "loss": 9.4549,
+          "dev_wer": 0.7076,
+          "train_wer": 0.5479,
+          "dev_ndist": 35,
+          "dev_len": 2.823
+        },
+        {
+          "epoch": 30,
+          "loss": 6.6157,
+          "dev_wer": 0.7009,
+          "train_wer": 0.3964,
+          "dev_ndist": 50,
+          "dev_len": 3.023
+        }
+      ],
+      "final": {
+        "tag": "rgb+lm",
+        "wer": 0.7009,
+        "n_ref_tokens": 1655,
+        "n_distinct": 50,
+        "token_kinds": 50,
+        "n_distinct_seqs": 121,
+        "hyp_len_mean": 3.023,
+        "ref_len_mean": 5.535,
+        "n_exact": 1,
+        "n_partial": 276,
+        "n_samples": 299,
+        "samples": [
+          {
+            "sid": "dev-00289",
+            "ref": [
+              "我",
+              "去",
+              "<unk>",
+              "找",
+              "老师",
+              "。"
+            ],
+            "hyp": [
+              "休息",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00216",
+            "ref": [
+              "我们",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "电影",
+              "<unk>",
+              "。"
+            ],
+            "edit": 1
+          },
+          {
+            "sid": "dev-00507",
+            "ref": [
+              "那",
+              "<unk>",
+              "你",
+              "以前",
+              "吃",
+              "有",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "小",
+              "。"
+            ],
+            "edit": 6
+          },
+          {
+            "sid": "dev-00128",
+            "ref": [
+              "你",
+              "如果",
+              "<unk>",
+              "看",
+              "我",
+              "<unk>",
+              "你",
+              "。"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "是",
+              "。"
+            ],
+            "edit": 5
+          },
+          {
+            "sid": "dev-00311",
+            "ref": [
+              "我",
+              "最",
+              "<unk>",
+              "什么",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00093",
+            "ref": [
+              "你",
+              "晚上",
+              "去",
+              "玩",
+              "？"
+            ],
+            "hyp": [
+              "你",
+              "<unk>",
+              "？"
+            ],
+            "edit": 3
+          },
+          {
+            "sid": "dev-00471",
+            "ref": [
+              "这",
+              "工作",
+              "人",
+              "<unk>",
+              "<unk>",
+              "？"
+            ],
+            "hyp": [
+              "这",
+              "<unk>",
+              "。"
+            ],
+            "edit": 4
+          },
+          {
+            "sid": "dev-00290",
+            "ref": [
+              "<unk>",
+              "我",
+              "<unk>",
+              "。"
+            ],
+            "hyp": [
+              "他",
+              "<unk>",
+              "。"
+            ],
+            "edit": 2
+          }
+        ]
+      },
+      "final_train_wer": 0.3964
+    }
+  ],
+  "verdict": "RGB 主干有效（rgb_only - lm_only = -0.0514（判据 <= -0.02 判有效））-> 值得全量提取 5488 个视频",
+  "criterion": "rgb_only dev_WER <= lm_only - 0.02",
+  "key_difference_vs_a2": "A2 extracted a single pooled 512-D vector which cannot feed CTC (needs (B,T,C)); P40 keeps the window axis -> (T,512)",
+  "literature_basis": {
+    "ref23_SignFormer-GCN": "Eq.7 Fused = Z_t + L_t (RGB + skeleton addition) — 本实验的 rgb+lm 配置",
+    "ref07_SignBT": "CSL-Daily CSLR SOTA WER 32.0-32.2 vs 我们 0.70",
+    "ref12_CCL-SLR": "pose 有上限、RGB 有语义线索（方向性参考，它是 ISLR 非 CSLR）"
+  },
+  "metrics_note": "P38 铁律：acc/WER 在本任务失真，故同时报 n_distinct / hyp_len / exact / partial 作交叉验证",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "minutes": 0.52
+}

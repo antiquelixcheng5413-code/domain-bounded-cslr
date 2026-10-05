@@ -1,0 +1,218 @@
+{
+  "per_sample": {
+    "train-00006": {
+      "hands[0:126]": {
+        "cos": 0.6042,
+        "mean_abs": 0.30915,
+        "max_abs": 2.3922,
+        "std_ratio": 1.594
+      },
+      "pose[126:158]": {
+        "cos": 0.9963,
+        "mean_abs": 0.05121,
+        "max_abs": 0.9941,
+        "std_ratio": 0.935
+      },
+      "face[158:182]": {
+        "cos": 0.9961,
+        "mean_abs": 0.03719,
+        "max_abs": 0.5253,
+        "std_ratio": 0.931
+      },
+      "presence[182:186]": {
+        "cos": 0.9314,
+        "mean_abs": 0.125,
+        "max_abs": 1.0,
+        "std_ratio": 1.0
+      },
+      "deltas[186:368]": {
+        "cos": 0.4606,
+        "mean_abs": 0.03174,
+        "max_abs": 2.3698,
+        "std_ratio": 2.682
+      },
+      "top_diff_dims": [
+        {
+          "dim": 52,
+          "mean_abs": 0.4756,
+          "ref_mean": 0.8725,
+          "new_mean": 0.3968
+        },
+        {
+          "dim": 55,
+          "mean_abs": 0.4728,
+          "ref_mean": 0.8166,
+          "new_mean": 0.3438
+        },
+        {
+          "dim": 61,
+          "mean_abs": 0.4724,
+          "ref_mean": 0.7969,
+          "new_mean": 0.3245
+        },
+        {
+          "dim": 58,
+          "mean_abs": 0.4722,
+          "ref_mean": 0.8003,
+          "new_mean": 0.3282
+        },
+        {
+          "dim": 40,
+          "mean_abs": 0.4721,
+          "ref_mean": 0.8191,
+          "new_mean": 0.347
+        }
+      ]
+    },
+    "train-00001": {
+      "hands[0:126]": {
+        "cos": 0.9998,
+        "mean_abs": 0.00716,
+        "max_abs": 0.0948,
+        "std_ratio": 0.989
+      },
+      "pose[126:158]": {
+        "cos": 0.9997,
+        "mean_abs": 0.01265,
+        "max_abs": 0.3005,
+        "std_ratio": 0.983
+      },
+      "face[158:182]": {
+        "cos": 0.9997,
+        "mean_abs": 0.00777,
+        "max_abs": 0.1454,
+        "std_ratio": 0.983
+      },
+      "presence[182:186]": {
+        "cos": 1.0,
+        "mean_abs": 0.0,
+        "max_abs": 0.0,
+        "std_ratio": 0.0
+      },
+      "deltas[186:368]": {
+        "cos": 0.4089,
+        "mean_abs": 0.02361,
+        "max_abs": 2.1862,
+        "std_ratio": 2.644
+      },
+      "top_diff_dims": [
+        {
+          "dim": 249,
+          "mean_abs": 0.0925,
+          "ref_mean": -0.0226,
+          "new_mean": 0.0675
+        },
+        {
+          "dim": 252,
+          "mean_abs": 0.0922,
+          "ref_mean": -0.0191,
+          "new_mean": 0.071
+        },
+        {
+          "dim": 300,
+          "mean_abs": 0.0921,
+          "ref_mean": -0.0202,
+          "new_mean": 0.0698
+        },
+        {
+          "dim": 288,
+          "mean_abs": 0.092,
+          "ref_mean": -0.0189,
+          "new_mean": 0.0711
+        },
+        {
+          "dim": 276,
+          "mean_abs": 0.092,
+          "ref_mean": -0.0172,
+          "new_mean": 0.0728
+        }
+      ]
+    },
+    "train-00002": {
+      "hands[0:126]": {
+        "cos": 0.9988,
+        "mean_abs": 0.02092,
+        "max_abs": 0.5501,
+        "std_ratio": 0.963
+      },
+      "pose[126:158]": {
+        "cos": 0.999,
+        "mean_abs": 0.02129,
+        "max_abs": 0.5496,
+        "std_ratio": 0.971
+      },
+      "face[158:182]": {
+        "cos": 0.9989,
+        "mean_abs": 0.01382,
+        "max_abs": 0.3014,
+        "std_ratio": 0.972
+      },
+      "presence[182:186]": {
+        "cos": 1.0,
+        "mean_abs": 0.0,
+        "max_abs": 0.0,
+        "std_ratio": 0.0
+      },
+      "deltas[186:368]": {
+        "cos": 0.957,
+        "mean_abs": 0.00419,
+        "max_abs": 0.1503,
+        "std_ratio": 1.044
+      },
+      "top_diff_dims": [
+        {
+          "dim": 148,
+          "mean_abs": 0.0967,
+          "ref_mean": -2.5394,
+          "new_mean": -2.4428
+        },
+        {
+          "dim": 58,
+          "mean_abs": 0.0923,
+          "ref_mean": 2.3872,
+          "new_mean": 2.2949
+        },
+        {
+          "dim": 46,
+          "mean_abs": 0.0921,
+          "ref_mean": 2.3584,
+          "new_mean": 2.2663
+        },
+        {
+          "dim": 43,
+          "mean_abs": 0.0919,
+          "ref_mean": 2.3417,
+          "new_mean": 2.2497
+        },
+        {
+          "dim": 55,
+          "mean_abs": 0.0919,
+          "ref_mean": 2.3711,
+          "new_mean": 2.2792
+        }
+      ]
+    }
+  },
+  "aggregate": {
+    "hands[0:126]": {
+      "cos_mean": 0.8676,
+      "mean_abs_mean": 0.11241
+    },
+    "pose[126:158]": {
+      "cos_mean": 0.9983,
+      "mean_abs_mean": 0.02838
+    },
+    "face[158:182]": {
+      "cos_mean": 0.9982,
+      "mean_abs_mean": 0.01959
+    },
+    "presence[182:186]": {
+      "cos_mean": 0.9771,
+      "mean_abs_mean": 0.04167
+    },
+    "deltas[186:368]": {
+      "cos_mean": 0.6088,
+      "mean_abs_mean": 0.01985
+    }
+  }
+}

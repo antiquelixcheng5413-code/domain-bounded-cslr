@@ -59,6 +59,8 @@ async def predict(video: Annotated[UploadFile, File()]) -> PredictionResponse:
         if size == 0:
             raise HTTPException(status_code=400, detail="uploaded video is empty")
         result = service.predict_video(temporary_path)
+        if isinstance(result, dict):
+            return PredictionResponse(**result)
         return PredictionResponse(**asdict(result))
     finally:
         await video.close()

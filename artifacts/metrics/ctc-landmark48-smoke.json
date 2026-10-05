@@ -1,0 +1,75 @@
+{
+  "checkpoint": "artifacts/checkpoints/ctc-landmark48-smoke.pt",
+  "best_epoch": 1,
+  "best_wer": 1.0,
+  "train_samples": 60,
+  "validation_samples": 30,
+  "device": "cuda",
+  "vocabulary_size": 1828,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 333.7324951171875,
+      "validation_loss": 326.06885986328126,
+      "wer": 1.0,
+      "cer": 1.0,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 1.0,
+      "blank_ratio": 1.0,
+      "vocabulary_utilization": 0.0,
+      "learning_rate": 0.0005
+    },
+    {
+      "epoch": 2,
+      "train_loss": 158.08213119506837,
+      "validation_loss": 44.056907653808594,
+      "wer": 1.0,
+      "cer": 1.0,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 1.0,
+      "blank_ratio": 1.0,
+      "vocabulary_utilization": 0.0,
+      "learning_rate": 0.001
+    }
+  ],
+  "validation_metrics": {
+    "samples": 30,
+    "wer": 1.0,
+    "cer": 1.0,
+    "sequence_exact_match": 0.0,
+    "total_edit_distance": 171,
+    "mean_edit_distance": 5.7,
+    "empty_hypotheses": 30,
+    "empty_hypothesis_rate": 1.0,
+    "empty_references": 0,
+    "reference_length": {
+      "mean": 5.7,
+      "max": 13
+    },
+    "hypothesis_length": {
+      "mean": 0.0,
+      "max": 0
+    },
+    "distinct": {
+      "count": 30,
+      "unique": 1,
+      "distinct_ratio": 0.03333333333333333,
+      "most_common_count": 30,
+      "most_common": []
+    },
+    "blank_ratio": 1.0,
+    "top_predicted": [],
+    "vocabulary_size": 1828,
+    "predicted_token_kinds": 0,
+    "vocabulary_utilization": 0.0,
+    "loss": 326.06885986328126
+  },
+  "test_split_read": false,
+  "vocabulary_config": {
+    "keep_punctuation": true,
+    "keep_numeric_tokens": true,
+    "strip_variant_numbering": true,
+    "strip_annotations": true,
+    "target_unit": "token"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "experiment": "P43",
+  "date": "2026-10-05",
+  "trigger": "用户反馈：'以前没这么慢啊，我每个视频3到4秒就能识别出来'（实测 17.8s）",
+  "baseline": {
+    "feature_ms": 17800,
+    "inference_ms": 106,
+    "note": "P42 端到端首次测试，dev-00001.mp4（236 帧 1920x1080）"
+  },
+  "root_cause_analysis": {
+    "method": "逐模型 / 逐分辨率 / 逐 delegate 实测分解，不靠猜测",
+    "decode_only": "0.51s（236 帧 1080p）",
+    "bgr_to_rgb": "0.1 ms/帧（可忽略）",
+    "three_models_total": "38.9 ms/帧 -> 236 帧 = 9.2s（占绝对 majority）",
+    "per_model_ms_per_frame": {"pose": 13.1, "hands": 14.9, "face": 7.6},
+    "conclusion": "全部耗时在 3 个 MediaPipe landmarker 上，与帧数线性相关"
+  },
+  "rejected_optimizations": [
+    {
+      "name": "GPU delegate",
+      "result": "REJECTED — 慢 50~100x",
+      "detail": "pose 1207.8ms/帧、hands 531.5、face 782.6（vs CPU 12~17）",
+      "cause": "WSL 下 EGL 走 llvmpipe 软件渲染，无硬件加速（即使 RTX 5060 存在）",
+      "numerical_agreement": "max|d| 0.00054~0.05263（数值一致但速度不可用）"
+    },
+    {
+      "name": "降低输入分辨率",
+      "result": "REJECTED — 无效",
+      "detail": "1080p 38.9ms/帧 vs 480p 38.8ms/帧（mediapipe 内部固定缩放到 192x192）",
+      "note": "只省预处理（2.74s -> 0.52s），推理耗时不变"
+    },
+    {
+      "name": "索引子采样（只算 48 必需帧 + 前一帧 = 95/236）",
+      "result": "REJECTED — 破坏 VIDEO 跟踪链",
+      "speedup": "2.35x",
+      "fidelity": "cos 0.8139、min -0.1645、presence mismatch 5/48 帧",
+      "cause": "MediaPipe VIDEO 模式有跨帧跟踪状态，跳帧即断链"
+    },
+    {
+      "name": "等间隔抽帧 stride=2 / 3",
+      "result": "REJECTED — 改变特征分布，会改变识别结果",
+      "stride2": {"speedup": 2.26, "cos": 0.89695, "presence_mismatch": "3/48"},
+      "stride3": {"speedup": 3.26, "cos": 0.74619, "presence_mismatch": "12/48"},
+      "verdict": "属于「用正确性换速度」，已否决"
+    },
+    {
+      "name": "跨帧并行（ThreadPoolExecutor.map over frames）",
+      "result": "REJECTED — 同样破坏 VIDEO 跟踪链"
+    }
+  ],
+  "accepted_optimization": {
+    "name": "同帧内三模型并行",
+    "detail": "3 个 landmarker 是独立对象；每个模型内部仍按 ts 严格递增串行推进 VIDEO 链",
+    "speedup": "1.84~2.01x（309 帧 11.44s -> 5.68s）",
+    "fidelity_verified": "np.array_equal(serial, parallel) == True, max|diff| = 0.0（逐位一致）",
+    "worker_count": "3（W=3 与 W=6 同为 ~5.7s，无额外收益）"
+  },
+  "bugs_found_and_fixed": [
+    {
+      "id": "B1",
+      "file": "app/backend/ctc_landmark_service.py",
+      "symptom": "服务 ready 间歇性 False -> 前端一直 unavailable",
+      "root_cause": "from tools.blank_gov.p40_rgb_main import DualInputCTC 需要仓库根在 sys.path，但只加了 src/ 和 tools/blank_gov/",
+      "fix": "for _extra in (REPO, REPO/'src', REPO/'tools'/'blank_gov')",
+      "severity": "高：异常被 _load() 的 try 吞掉，静默失效"
+    },
+    {
+      "id": "B2",
+      "file": "app/backend/realtime_landmark.py:71",
+      "symptom": "找不到模型文件",
+      "root_cause": "REPO = parents[1] 应为 parents[2]（app/backend/ 下少一层）",
+      "fix": "parents[1] -> parents[2]",
+      "severity": "中"
+    },
+    {
+      "id": "B3",
+      "file": "app/backend/realtime_landmark.py extract_to_48x368",
+      "symptom": "第一个视频成功，之后全部 ValueError: Input timestamp must be monotonically increasing.",
+      "root_cause": "ts 是局部变量每次从 0 重来，但 3 个 landmarker 跨调用复用、保留上一视频的时间戳状态",
+      "fix": "self._ts_ms 实例级单调游标 + 2e9 回绕",
+      "severity": "高：这正是「第一个能识别、之后一直失败/重试」的机制"
+    },
+    {
+      "id": "B4",
+      "file": "app/backend/realtime_landmark.py",
+      "symptom": "同一视频重复预测得到 4 个不同结果（不可复现）",
+      "detail": "实测 dev-00004 连续 4 次：'<unk>/<unk>/一直/一直/大' -> '一直/一直/一直' -> '一直' -> '多/一直×6'",
+      "root_cause": "VIDEO 模式跨视频跟踪状态残留，且 mediapipe 没有 reset API",
+      "fix": "_reset_for_new_video()：每个视频开始前重建三个 landmarker",
+      "severity": "高：结果不可复现 = 结果不可信"
+    },
+    {
+      "id": "B5",
+      "file": "app/backend/realtime_landmark.py",
+      "symptom": "加了 per-video 重建后耗时从 3.7s 涨到 18.8s（比修复前更慢）",
+      "root_cause": "mediapipe 的 landmarker.close() 单独阻塞 15.02s（等内部 dispatcher 线程池 pending 任务）；build 只要 0.13s",
+      "tried_and_failed": [
+        "直接覆盖引用 -> GC finalizer 仍触发阻塞 close()，18.5s",
+        "显式 obj.close() -> 15.02s/个",
+        "置零引用后 close -> 15s"
+      ],
+      "fix": "_DawnCloser：把 close() 丢进 daemon 线程，主流程立即继续",
+      "severity": "高：这是本次最大的性能陷阱"
+    }
+  ],
+  "final_result": {
+    "http_endpoint": "POST /api/v1/predict (multipart 字段名必须是 video，不是 file)",
+    "health": "GET /api/v1/health -> {\"model_ready\":true}",
+    "latency_ms": {
+      "dev-00001_236f": 5915,
+      "dev-00003_207f": 4269,
+      "dev-00004_169f": 3497,
+      "dev-00005_145f": 3345,
+      "dev-00006_195f": 4047
+    },
+    "mean_total": "4.2s（原 17.8s -> 4.2s，约 4.2x）",
+    "reproducibility": "同一视频 3 次 HTTP 请求，gloss 与 confidence 逐位相同",
+    "model": "p42-lm_only-ep100.pt, dev WER 0.5211, ep90 最佳 0.5000"
+  },
+  "p42_training_final": {
+    "config": "lm_only, 100 epochs, 全量 train",
+    "dev_wer_ep100": 0.5211,
+    "dev_wer_best": {"epoch": 90, "wer": 0.5000},
+    "train_wer": 0.0065,
+    "exact_match": "18/514",
+    "checkpoints_saved": "p42-lm_only-ep{10,20,...,100}.pt（每 10 epoch）"
+  },
+  "verdict": "P43 SUCCESS — 4.2x 提速 + 3 个真 bug 修复（其中 2 个是静默失效）"
+}

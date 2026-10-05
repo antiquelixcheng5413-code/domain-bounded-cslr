@@ -1,0 +1,60 @@
+{
+  "experiment": "P48b",
+  "date": "2026-10-05",
+  "user_challenge": "「我在网页上测 train 里的数据，效果也不好」",
+  "p48_result": "全新模型对离线/实时两种特征都能过拟合到 WER 0.0000",
+  "offline_extractor_receipt": {
+    "sample_id": "train-00001",
+    "modality": "landmark",
+    "model_name": "mediapipe-holistic",
+    "version": "part1/2-cache",
+    "frame_sampling": "resample-48",
+    "shape": [
+      48,
+      368
+    ],
+    "dtype": "float32",
+    "sha256": "d32dc2b3078cddfca0eea1908dcf80be1c267772142fe09445aaa0fa9bd7b69d"
+  },
+  "train": {
+    "offline": {
+      "wer": 0.0059,
+      "exact": 29,
+      "n": 30,
+      "exact_ratio": 0.9667,
+      "unk_ratio": 0.2781,
+      "len_mean": 5.633
+    },
+    "realtime": {
+      "wer": 0.426,
+      "exact": 1,
+      "n": 30,
+      "exact_ratio": 0.0333,
+      "unk_ratio": 0.4183,
+      "len_mean": 5.1
+    },
+    "domain_shift_wer": 0.4201,
+    "domain_shift_exact": -28
+  },
+  "dev": {
+    "offline": {
+      "wer": 0.5497,
+      "exact": 1,
+      "n": 30,
+      "exact_ratio": 0.0333,
+      "unk_ratio": 0.2806,
+      "len_mean": 4.633
+    },
+    "realtime": {
+      "wer": 0.5965,
+      "exact": 1,
+      "n": 30,
+      "exact_ratio": 0.0333,
+      "unk_ratio": 0.4167,
+      "len_mean": 4.8
+    },
+    "domain_shift_wer": 0.0468,
+    "domain_shift_exact": 0
+  },
+  "diagnosis": "P42 是用【离线预提取特征】训练的，网页走【MediaPipe 实时提取】。同一批 train 视频上，两种特征的 WER 差值即域偏移代价。"
+}

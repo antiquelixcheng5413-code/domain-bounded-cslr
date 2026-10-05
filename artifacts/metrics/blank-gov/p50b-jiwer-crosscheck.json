@@ -1,0 +1,32 @@
+{
+  "folded": {
+    "repo": 0.5211,
+    "jiwer": 0.5211,
+    "jiwer_native": 0.5211,
+    "diff": 0.0,
+    "N": 2838,
+    "E": 1479
+  },
+  "excl_unk": {
+    "repo": 0.7919,
+    "jiwer": 0.7919,
+    "jiwer_native": 0.7919,
+    "diff": 0.0,
+    "N": 2100,
+    "E": 1663
+  },
+  "strict": {
+    "repo": 0.6966,
+    "jiwer": 0.6966,
+    "jiwer_native": 0.6966,
+    "diff": 0.0,
+    "N": 2838,
+    "E": 1977
+  },
+  "per_sentence_average": {
+    "repo": 2.8774,
+    "jiwer": 0.5211,
+    "note": "每句等权，与 token 级平均不同"
+  },
+  "end_to_end_jiwer_wer": 0.5211
+}

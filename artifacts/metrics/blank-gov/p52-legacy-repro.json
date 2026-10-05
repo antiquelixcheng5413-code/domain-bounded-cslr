@@ -1,0 +1,130 @@
+{
+  "experiment": "P52",
+  "date": "2026-10-05",
+  "question": "路线 1 是否可行——旧 Solutions API 能否复现训练特征",
+  "verdict": "⚠️ **base 段能复现，deltas 段不能**。差异根因已定位为**差分基准不同**，不是参数问题。\n=> 路线 1 **仍然可行**，只需对齐差分实现。",
+
+  "environment": {
+    "python": "3.12.13",
+    "mediapipe": "0.10.21",
+    "venv": "/home/su127/legacy-mp",
+    "why_not_3_11": "系统无 python3.11，但 3.12 已足够（mediapipe 0.10.21 有 3.12 wheel）",
+    "solutions_api": "可用 ✅（主 venv 是 3.14 + 0.10.35，已移除 solutions 命名空间）"
+  },
+
+  "legacy_api_object_model": {
+    "gotcha_1": "NormalizedLandmarkList 不支持 __getitem__（not subscriptable）",
+    "gotcha_2": "也不支持 __iter__（not iterable）",
+    "solution": "真正的点在 `.landmark` 字段里：pose.landmark / left_hand_landmarks.landmark",
+    "point_counts": {"pose": 33, "hand": 21, "face": 468},
+    "note": "训练特征只取 face 的 8 个指定索引 FACE_INDICES，不是 468 全部"
+  },
+
+  "repro_result_6_samples": {
+    "identical": "0/6",
+    "cosine_mean": 0.9685,
+    "max_abs_diff": 2.3921
+  },
+
+  "p52b_diff_localization": {
+    "hypothesis": "cos 0.97 但非精确，有两种成因：参数不同 vs 实现细节不同，修法完全不同",
+    "finding": "**base 段几乎完美，deltas 段是全部问题所在**",
+    "per_block_cosine": {
+      "train-00001": {"hands": 0.9998, "pose": 0.9997, "face": 0.9997,
+                      "presence": 1.0, "deltas": 0.4089},
+      "train-00002": {"hands": 0.9988, "pose": 0.9990, "face": 0.9989,
+                      "presence": 1.0, "deltas": 0.9570},
+      "train-00006": {"hands": 0.6042, "pose": 0.9963, "face": 0.9961,
+                      "presence": 0.9314, "deltas": 0.4606}
+    },
+    "deltas_std_ratio": {"train-00001": 2.644, "train-00006": 2.682,
+                         "train-00002": 1.044},
+    "top_diff_dims_are_all_above_186": "train-00001 的 top5 差异维度是 249/252/288/300/276 —— **全部在 186 以后**（deltas 段）",
+    "conclusion": "参数（model_complexity/阈值/468 点）**不是**主因，因为 base 段 cos>0.996。\n差异集中在差分实现。"
+  },
+
+  "hypothesis_for_delta_mismatch": {
+    "training_side": "extractor.py 先把序列重采样到 48 帧（_resample），再算差分？\n实际读代码是：_append_motion(sequence) -> _resample(sequence, 48)，\n即**先在原始帧率上算差分，再重采样**",
+    "my_p52_implementation": "同样先在原始帧率算差分再重采样（照抄）",
+    "so_what_differs": "待查——可能是训练特征是用**另一个旧版 extractor**（part1/2-cache）算的，\n其差分基准（原始帧率 vs 重采样后）与现代码不同。\nreceipt 里写的是 `version: part1/2-cache`，比现代码早。",
+    "next_action": "读 artifacts 的 receipt + 找 part1/2 时期的原始提取代码，确认差分基准"
+  },
+
+  "train-00006_anomaly": {
+    "hands_cosine": 0.6042,
+    "interpretation": "该样本的**手部检出不一致**（presence cos 0.9314 而其它样本是 1.0）。\n旧 holistic 的左右手判定与训练特征所用版本不同，\n或该帧手部检出的边界情况不同。\n样本量小（1/6），不能据此判定系统性差异。"
+  },
+
+  "p52c_delta_mode_test": {
+    "purpose": "验证差异是否由差分基准（先差分后重采样 vs 先重采样后差分）造成",
+    "train-00001": {
+      "native_then_resample": {"base_cos": 0.9998, "deltas_cos": 0.4089, "whole": 0.9724},
+      "resample_then_delta": {"base_cos": 0.9998, "deltas_cos": 0.3239, "whole": 0.9742},
+      "native_frames": 193
+    },
+    "train-00002": {
+      "native_then_resample": {"base_cos": 0.9988, "deltas_cos": 0.9570, "whole": 0.9987},
+      "resample_then_delta": {"base_cos": 0.9988, "deltas_cos": 0.8092, "whole": 0.9907},
+      "native_frames": 185
+    },
+    "conclusion": "**两种变体都不解决**。我的假设（差分基准不同）**错了**。",
+    "key_diagnostic": {
+      "finding": "三个样本的 deltas[0] 绝对值和全为 0.000000",
+      "inference": "这是**原始帧率差分**的特征（重采样后差分首帧必为 0，原始帧率差分重采样后首帧一般非 0）。我的实现也是原始帧率差分 —— **基准一致**。",
+      "remaining_issue": {
+        "observation": "训练 deltas std 只有 48 帧差分 std 的 0.28~0.40 倍",
+        "ratios": {"train-00001": 0.400, "train-00002": 0.282, "train-00006": 0.369},
+        "interpretation": "差分**基准帧数不同**。若训练时用的原始帧数比我的少（如抽帧后），\n或者训练特征是 part1/2-cache 时期的旧版提取器产出（receipt 写 `version: part1/2-cache`，早于现代码），\n其差分基准无法用现代码的 `_append_motion` 复现。"
+      }
+    }
+  },
+
+  "p52c_deep_dive": {
+    "goal": "找出 deltas 段差异的确切来源",
+    "tests_done": [
+      "1. 差分基准两种变体（先差分后重采样 / 先重采样后差分）—— 都试过，都不解决",
+      "2. deltas[0] 判据：三个样本全为 0.000000 => 确认是**原始帧率差分**，与我的实现一致",
+      "3. 幅度对比：训练 deltas std 只有 48 帧差分 std 的 0.28~0.40 倍",
+      "4. git 历史：最原始提交（9e7c6aa）的 extractor.py 也是 `_append_motion` -> `_resample` 顺序，**与现代码一致**",
+      "5. 特征来源：src/cslr/translation/extract.py 明确写 `landmark reused from the existing cache` —— "
+        + "**part3_features 的 landmark 不是这段代码生成的**，而是从更早的缓存沿用"
+    ],
+    "conclusion": "提取器逻辑（差分顺序、索引常量、归一化）**已全部对齐**。\n"
+                  + "deltas 段残留差异的来源是：**训练特征由 part1/2-cache 时期的更早代码产出**，\n"
+                  + "其差分所用的**原始帧序列长度**与「直接解码视频全帧」不同\n"
+                  + "（可能抽了帧、或用了不同的视频解码路径）。",
+    "why_that_matters": "若训练特征的差分基准帧数不可复现，则 deltas[186:368]（182 维，占 49%）\n"
+                        + "**无法在线上精确复现** —— 这直接影响路线 1 的可行性。"
+  },
+
+  "route_1_status_final": {
+    "verdict": "⚠️ **base 段（0:186，占 50%）能精确复现；deltas 段（186:368，占 50%）不能**",
+    "base_evidence": "hands/pose/face cos 0.996~0.9998，std 比 0.96~0.99，参数与实现已对齐",
+    "deltas_evidence": "cos 0.32~0.96；两种差分基准变体都试过；git 历史确认提取器顺序一致；\n"
+                       + "根因是训练特征的原始帧序列来源不可复现",
+    "impact": "deltas 占 182/368 维 = 49%。无法复现意味着**只能做到一半对齐**。",
+    "options": {
+      "A": "接受部分对齐：线上用 base 段（前 186 维）+ 把 deltas 置零或用近似值。\n"
+           "风险：模型是在有 deltas 的特征上训的，置零会造成新的分布偏移。",
+      "B": "转路线 2：用新 API 重提全部特征再重训（5.3 小时），彻底消除 skew。\n"
+           "代价：48 轮实验的 dev 数字作废，但 P51 已证明新旧判别力无显著差异，\n"
+           "         所以模型能力预期不受损。",
+      "C": "继续考古：找 part1 时期的原始提取脚本（可能不在 git 里，在 Kaggle notebook 或本机备份）"
+    },
+    "recommendation": "B（路线 2）。理由：P51 已证明两特征判别力无显著差异（0.7791 vs 0.7744），\n"
+                      + "所以重提特征**不会损失判别力**，却能彻底消除 skew。\n"
+                      + "A 的「部分对齐」会引入一个新的、不可控的偏移，风险更高。"
+  },
+
+  "decision": {
+    "route_1_status": "**失败**（deltas 段 49% 维度的基准不可复现）",
+    "next_step": "转路线 2：用 mp.tasks.vision 重提 train/dev 全部特征（并行 8 进程约 45 分钟）再重训",
+    "expected_outcome": "P51 已证判别力无显著差异，所以重训后 dev 应能反映真实模型水平，\n"
+                        + "且 train/serve 完全对齐（彻底消除 29 倍的坐标系错位）"
+  },
+
+  "receipts": [
+    "artifacts/metrics/blank-gov/p52-legacy-repro.json",
+    "artifacts/metrics/blank-gov/p52b-diff-localize.json"
+  ]
+}

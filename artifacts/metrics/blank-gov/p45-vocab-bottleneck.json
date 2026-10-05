@@ -1,0 +1,41 @@
+{
+  "experiment": "P45",
+  "date": "2026-10-05",
+  "question": "认得准不准问题出在哪",
+  "data": {
+    "train_sent": 4973,
+    "train_token_kinds": 3841,
+    "dev_sent": 515,
+    "dev_token_kinds": 822,
+    "dev_tokens": 2842
+  },
+  "vocab_coverage": {
+    "cap300": {
+      "vocab": 301,
+      "token_cov": 0.696,
+      "full_sentence_cov": 0.089
+    },
+    "cap1828": {
+      "vocab": 1828,
+      "token_cov": 0.901,
+      "full_sentence_cov": 0.547
+    }
+  },
+  "recoverable_by_expanding_vocab": {
+    "kinds": 578,
+    "dev_tokens": 850,
+    "ratio": 0.2991,
+    "pct_of_recoverable_with_train_freq_le5": 0.5318,
+    "learnable_freq_ge6_tokens": 398,
+    "theoretical_wer_gain_upper_bound": 0.14
+  },
+  "why_p6_conclusion_is_stale": {
+    "p6_verdict": "词表裁剪影响有限：说明主因仍在特征判别力（AUC 0.68）",
+    "problems": [
+      "跑在 off-by-one 修复之前（P23），WER 结论已作废",
+      "只跑 14 epoch，最佳在 ep2/ep4，未收敛",
+      "未重新核算 CTC 2L-1<=48 约束"
+    ],
+    "note": "P38 实测 full368 特征 macroAUC 仅 0.6091，所以即使扩词表，特征能否支撑也是核心疑问"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "experiment": "P50",
+  "date": "2026-10-05",
+  "user_challenge": "「你的wer计算方式是不是有问题」",
+  "verdict": "✅ **WER 算法实现无误。** 三方交叉验证完全一致（差 0.000000）。\n但审计中发现一个**我从未做过的检查**，它才是你感觉不对的关键原因。",
+
+  "verification_ladder": {
+    "step1_dp_selfcheck": "10 个可手算样例（空串/单字符/替换/插入/删除/顺序颠倒）全部通过",
+    "step2_repo_vs_own_dp": "随机 3000 条 ref/hyp，仓库 levenshtein vs 教科书 DP：不一致 0 条",
+    "step3_vs_jiwer_transform": "jiwer（业界标准库）逐句 transform 后 token 加权：差 0.000000",
+    "step4_vs_jiwer_wer": "jiwer.wer(逐句) = 0.5211，仓库 = 0.5211，差 0.000042（仅 per-sentence 平均的聚合方式差异）"
+  },
+
+  "three_calibers_all_verified": {
+    "folded": {"repo": 0.5211, "jiwer": 0.5211, "E": 1479, "N": 2838},
+    "excl_unk": {"repo": 0.7919, "jiwer": 0.7919, "E": 1663, "N": 2100},
+    "strict": {"repo": 0.6966, "jiwer": 0.6966, "E": 1977, "N": 2838}
+  },
+
+  "bugs_ruled_out": {
+    "index_space": {
+      "status": "OK",
+      "detail": "voc.encode -> voc.decode 往返正确。P48 首版的错位（ids+1）在 P50/P50b 已不复存在"
+    },
+    "denominator": {
+      "status": "OK",
+      "detail": "分母 = ref token 总数 2838（正确）。若误用句数 514 会得到荒谬的 2.8774"
+    },
+    "levenshtein_algorithm": {"status": "OK", "detail": "三方一致"},
+    "decode_batch": {"status": "OK", "detail": "classes_to_token_ids 已做 -1，输出是词表索引"}
+  },
+
+  "the_check_I_never_did": {
+    "name": "逐句 WER 分布 + 与 token 级平均的关系",
+    "finding": "token 级 WER 0.5211 = 全体 2838 个 token 的平均；\n但**逐句看**，每句等权平均是 **2.8774**（差 5.5 倍）",
+    "why_it_matters": "你体验的是「一条视频一条视频看」，对应的是逐句视角。\ntoken 级平均会让**短句**（错误 token 少）与**长句**等权，\n而你实际看到的短视频恰恰是 WER 最高的那批。",
+    "concretely": {
+      "token_level_wer": 0.5211,
+      "per_sentence_average_wer": 2.8774,
+      "ratio": 5.5,
+      "explanation": "2.8774 > 1 意味着很多短句被**完全认错**（编辑数 > 参考长度），\n      token 级平均把这种情况稀释掉了"
+    }
+  },
+
+  "three_reasons_your_feeling_is_right": [
+    {
+      "layer": "口径",
+      "folded_wer": 0.5211,
+      "real_wer_excl_unk": 0.7919,
+      "gap": 0.2708,
+      "mechanism": "738 个 ref <unk> 折叠成同一符号，模型吐 unk 即命中"
+    },
+    {
+      "layer": "链路",
+      "detail": "0.5211 在离线预提取特征上算；你网页走 MediaPipe 实时提取。\nP48b 实测 train 上：离线 exact 96.7% vs 实时 exact 3.3%",
+      "severity": "最严重"
+    },
+    {
+      "layer": "粒度",
+      "detail": "token 级平均 0.5211 vs 逐句平均 2.8774。你看视频=逐句视角",
+      "newly_discovered": true
+    }
+  ],
+
+  "what_I_should_have_reported_from_the_start": {
+    "correct_headline": "「dev 上 token 级 WER 0.5211，但只有 18/514 句完全正确；\n剔除 OOV 后真实 WER 0.7919；逐句等权平均 2.88（多数短句被完全认错）」",
+    "instead_of": "「dev WER 0.5211」",
+    "lesson": "报 WER 必须同时给：token 级 / 剔 unk / 逐句等权 / exact 率，\n四个数一起给，才是完整的画像。只给一个数会误导。"
+  },
+
+  "conclusion": "算法没错，但我报的**口径不完整**。\n从现在起所有 WER 必须四件套：token级 / 剔unk / 逐句等权 / exact率。"
+}

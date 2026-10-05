@@ -1,0 +1,94 @@
+{
+  "experiment": "P44",
+  "date": "2026-10-05",
+  "trigger": "用户质疑：「这WER 真的有0.5211？我测出来怎么感觉百分之80都是unk」",
+  "verdict": "用户的直觉完全正确。0.5211 数字本身真实（已复现到小数点后 4 位），但它掩盖了两个严重问题：(1) 折叠口径系统性低估真实难度；(2) 线上推理链有两个 bug，导致实际输出几乎全是 <unk>。",
+
+  "part1_wer_audit": {
+    "script": "tools/blank_gov/p44_wer_audit.py",
+    "reproduction": "宽松(folded) WER = 0.5211 —— 与 p42 收据一致，口径已对齐",
+    "critical_methodology_note": "第一版审计算出 1.2851，差 2.5 倍。原因：脚本给输入套了 FeatureNormalizer，而 P40/P42 的 to_batch() 实际是 torch.from_numpy(s['lm'])，不做任何归一化。审计必须复现训练时的真实前向路径，否则数字没有可比性。",
+    "unk_ratios": {
+      "ref_raw_unk": 0.0,
+      "ref_folded_unk": 0.26,
+      "hyp_unk": 0.33
+    },
+    "unk_ratios_explanation": "ref(raw) 的 unk 是 0%（真实标注里没有字面 '<unk>'）；折叠后 26% 全部由 OOV 堆积而成。",
+    "wer_three_calibers": {
+      "folded_reported": 0.5211,
+      "strict_raw": 0.6966,
+      "in_vocab_only": 0.5759,
+      "folding_gift": 0.1755
+    },
+    "why_folding_gifts": "GlossSequenceVocabulary.index_of() 对 OOV 返回 0，而 tokens[0] 就是 '<unk>'。所以 OOV 被折叠成词表里的一个真实类，模型可以主动学会吐它。",
+    "unk_wildcard_hit_rate": 0.751,
+    "unk_wildcard_note": "参考里 738 个 <unk>，模型对上了 554 个（75.1%）。即 WER 0.52 里很大一块是「猜 unk 猜对了」。",
+    "sample_level": {
+      "exact": "18/514 (3.5%)",
+      "partial": "479/514 (93.2%)",
+      "wrong": "17/514 (3.3%)"
+    },
+    "per_sample_unk_ratio_distribution": {
+      "note": "解释用户「80% 都是 unk」的直觉来源",
+      "ge_50pct_unk": "129/514 (25.1%)",
+      "ge_70pct_unk": "68/514 (13.2%)",
+      "ge_90pct_unk": "50/514 (9.7%)",
+      "all_unk": "50/514 (9.7%)",
+      "empty_output": "10/514"
+    },
+    "why_user_saw_80pct": "输出越短，unk 占比越高。前端只显示前几个词，而恰好短输出样本里 unk 占 67-100%，所以主观感受就是「几乎全是 unk」。",
+    "hyp_diversity": {"distinct_tokens": 194, "top1": "<unk> 830 次"}
+  },
+
+  "part2_bug_norm_mismatch": {
+    "script": "tools/blank_gov/p44b_norm_mismatch.py",
+    "file": "app/backend/ctc_landmark_service.py",
+    "bug": "服务端对推理输入套了 FeatureNormalizer，注释自称「与训练一致」，但训练侧 to_batch() 根本不做归一化。",
+    "measured_cost_on_514_real_dev": {
+      "train_path_no_norm": {"wer": 0.5211, "unk": 0.33, "len": 4.89, "exact": 18, "distinct": 194},
+      "service_path_with_norm": {"wer": 1.2851, "unk": 0.112, "len": 6.63, "exact": 0, "distinct": 230}
+    },
+    "interpretation": "归一化让输入分布偏离模型学过的信号：WER 劣化 2.5 倍、精确匹配归零、输出长度虚增（真实参考均值仅 5.52）。",
+    "fix": "self.nrm = None，推理直接用原始特征，与训练严格一致",
+    "status": "FIXED"
+  },
+
+  "part3_bug_handedness_index": {
+    "script": "tools/blank_gov/p44c_online_vs_offline.py",
+    "file": "app/backend/realtime_landmark.py _frame_vector()",
+    "bug": "循环里写 hand_res.handedness[0][0].category_name —— 无论当前处理第几只手，永远读第 0 只手的标签。第 2 只手被套上第 1 只手的左右标签，导致帧间左右手交替闪烁。",
+    "why_it_matters": "hands 段占 126/368 维（34%），是特征里最大的块。",
+    "measured_on_8_real_videos": {
+      "before": {
+        "presence_pose_handL_handR_face": [1.0, 0.438, 0.542, 1.0],
+        "hands_std_ratio": 1.68,
+        "wer": 0.7091,
+        "hyp_unk": 1.0,
+        "distinct_tokens": 1
+      },
+      "after": {
+        "presence_mean": 0.9785,
+        "hands_std_ratio": 1.12,
+        "wer": 0.6000,
+        "hyp_unk": 0.417,
+        "distinct_tokens": 14
+      },
+      "offline_reference": {"wer": 0.5818, "unk": 0.325, "distinct": 18}
+    },
+    "fix": "按循环下标取标签：hand_res.handedness[hi][0]，并对 len(hd) 做边界保护",
+    "status": "FIXED"
+  },
+
+  "final_state": {
+    "http_endpoint": "http://localhost:8082 (POST /api/v1/predict, 字段名 video)",
+    "latency_ms_range": "3100-6000",
+    "outputs_now_contain_real_words": true,
+    "examples": {
+      "dev-00005": "参考 上课/时间/还/长/。 -> 输出 <unk>/<unk>/时间/时间/开始/？",
+      "dev-00003": "参考 书/看1/多少/分钟/吸引/。 -> 输出 书/<unk>/。",
+      "dev-00009": "参考 下/次/大/雨/在/重庆/。 -> 输出 下/没有/<unk>/开始/<unk>/。"
+    }
+  },
+
+  "remaining_known_gap": "线上 WER 0.6000 vs 离线 0.5818（8 视频小样本），仍有差距。hands std 比离线大 3.17 倍（deltas 段），说明实时提取的差分特征仍有噪声，需要单独排查。但已不是「全是 unk」的状态。"
+}

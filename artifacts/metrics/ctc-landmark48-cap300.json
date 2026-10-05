@@ -1,0 +1,238 @@
+{
+  "checkpoint": "artifacts/checkpoints/ctc-landmark48-cap300.pt",
+  "best_epoch": 2,
+  "best_wer": 0.8505990133897111,
+  "train_samples": 4973,
+  "validation_samples": 514,
+  "device": "cuda",
+  "vocabulary_size": 301,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 20.135782388142122,
+      "validation_loss": 9.43766271836099,
+      "wer": 0.8565891472868217,
+      "cer": 0.7692904828442788,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.978112840466926,
+      "vocabulary_utilization": 0.009966777408637873,
+      "learning_rate": 0.0005
+    },
+    {
+      "epoch": 2,
+      "train_loss": 9.400950650442013,
+      "validation_loss": 9.205301949022346,
+      "wer": 0.8505990133897111,
+      "cer": 0.6764477565595405,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9691958495460441,
+      "vocabulary_utilization": 0.013289036544850499,
+      "learning_rate": 0.001
+    },
+    {
+      "epoch": 3,
+      "train_loss": 8.65007738584775,
+      "validation_loss": 8.732300591376042,
+      "wer": 0.861522198731501,
+      "cer": 0.7669616519174042,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9661964980544747,
+      "vocabulary_utilization": 0.026578073089700997,
+      "learning_rate": 0.0009993033715792838
+    },
+    {
+      "epoch": 4,
+      "train_loss": 7.855094101739175,
+      "validation_loss": 8.155787698025833,
+      "wer": 0.8597603946441156,
+      "cer": 0.7421207886974073,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9617380025940337,
+      "vocabulary_utilization": 0.029900332225913623,
+      "learning_rate": 0.000997215529648321
+    },
+    {
+      "epoch": 5,
+      "train_loss": 7.206401000530121,
+      "validation_loss": 8.050498674815731,
+      "wer": 0.854122621564482,
+      "cer": 0.6946126377891632,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9602383268482491,
+      "vocabulary_utilization": 0.046511627906976744,
+      "learning_rate": 0.000993742598207225
+    },
+    {
+      "epoch": 6,
+      "train_loss": 6.572001300250264,
+      "validation_loss": 7.604756642872258,
+      "wer": 0.8629316420014095,
+      "cer": 0.7177456916627852,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.958981841763943,
+      "vocabulary_utilization": 0.04318936877076412,
+      "learning_rate": 0.0009888947639622911
+    },
+    {
+      "epoch": 7,
+      "train_loss": 5.97481911124393,
+      "validation_loss": 7.171257013476776,
+      "wer": 0.8579985905567301,
+      "cer": 0.7239559074677845,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.959387159533074,
+      "vocabulary_utilization": 0.059800664451827246,
+      "learning_rate": 0.0009826862464466309
+    },
+    {
+      "epoch": 8,
+      "train_loss": 5.365006522923294,
+      "validation_loss": 7.175678347799101,
+      "wer": 0.8555320648343904,
+      "cer": 0.7208507995652849,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9591034370946823,
+      "vocabulary_utilization": 0.05647840531561462,
+      "learning_rate": 0.0009751352563118312
+    },
+    {
+      "epoch": 9,
+      "train_loss": 4.749467727501772,
+      "validation_loss": 6.897273197248288,
+      "wer": 0.8629316420014095,
+      "cer": 0.7337369973606582,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9586170557717251,
+      "vocabulary_utilization": 0.07308970099667775,
+      "learning_rate": 0.000966263941912976
+    },
+    {
+      "epoch": 10,
+      "train_loss": 4.152053652072418,
+      "validation_loss": 6.577647602511751,
+      "wer": 0.8643410852713178,
+      "cer": 0.7233348858872846,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9563878080415046,
+      "vocabulary_utilization": 0.08970099667774087,
+      "learning_rate": 0.0009560983243437047
+    },
+    {
+      "epoch": 11,
+      "train_loss": 3.464380784339644,
+      "validation_loss": 6.59606615578618,
+      "wer": 0.8625792811839323,
+      "cer": 0.711380220462661,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9555366407263295,
+      "vocabulary_utilization": 0.09634551495016612,
+      "learning_rate": 0.0009446682211118609
+    },
+    {
+      "epoch": 12,
+      "train_loss": 2.8812093618720103,
+      "validation_loss": 6.264678801080132,
+      "wer": 0.8657505285412262,
+      "cer": 0.7326502095947834,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9546044098573282,
+      "vocabulary_utilization": 0.12292358803986711,
+      "learning_rate": 0.0009320071586796048
+    },
+    {
+      "epoch": 13,
+      "train_loss": 2.251881388430861,
+      "validation_loss": 6.324939776023538,
+      "wer": 0.8699788583509513,
+      "cer": 0.736065828287533,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9521725032425421,
+      "vocabulary_utilization": 0.132890365448505,
+      "learning_rate": 0.0009181522741245231
+    },
+    {
+      "epoch": 14,
+      "train_loss": 1.5953263066890324,
+      "validation_loss": 6.194964672340957,
+      "wer": 0.8692741367159972,
+      "cer": 0.7307871448532837,
+      "sequence_exact_match": 0.0,
+      "empty_hypothesis_rate": 0.0,
+      "blank_ratio": 0.9531452658884566,
+      "vocabulary_utilization": 0.15614617940199335,
+      "learning_rate": 0.0009031442062101808
+    }
+  ],
+  "validation_metrics": {
+    "samples": 514,
+    "wer": 0.8505990133897111,
+    "cer": 0.6764477565595405,
+    "sequence_exact_match": 0.0,
+    "total_edit_distance": 2414,
+    "mean_edit_distance": 4.696498054474708,
+    "empty_hypotheses": 0,
+    "empty_hypothesis_rate": 0.0,
+    "empty_references": 0,
+    "reference_length": {
+      "mean": 5.521400778210117,
+      "max": 13
+    },
+    "hypothesis_length": {
+      "mean": 1.4785992217898833,
+      "max": 2
+    },
+    "distinct": {
+      "count": 514,
+      "unique": 6,
+      "distinct_ratio": 0.011673151750972763,
+      "most_common_count": 250,
+      "most_common": [
+        "<unk>"
+      ]
+    },
+    "blank_ratio": 0.9691958495460441,
+    "top_predicted": [
+      [
+        "<unk>",
+        484
+      ],
+      [
+        "？",
+        208
+      ],
+      [
+        "我",
+        38
+      ],
+      [
+        "。",
+        30
+      ]
+    ],
+    "vocabulary_size": 301,
+    "predicted_token_kinds": 4,
+    "vocabulary_utilization": 0.013289036544850499,
+    "loss": 9.205301949022346
+  },
+  "test_split_read": false,
+  "vocabulary_config": {
+    "keep_punctuation": true,
+    "keep_numeric_tokens": true,
+    "strip_variant_numbering": true,
+    "strip_annotations": true,
+    "target_unit": "token"
+  }
+}

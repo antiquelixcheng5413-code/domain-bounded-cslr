@@ -1,0 +1,48 @@
+{
+  "n_videos": 40,
+  "holdout": 0.3,
+  "results": {
+    "full": {
+      "offline": 0.0785,
+      "offline_n_frag": 74,
+      "offline_n_cls": 5,
+      "realtime": 0.071,
+      "realtime_n_frag": 76,
+      "realtime_n_cls": 5
+    },
+    "hands": {
+      "offline": 0.0512,
+      "offline_n_frag": 80,
+      "offline_n_cls": 5,
+      "realtime": 0.0157,
+      "realtime_n_frag": 65,
+      "realtime_n_cls": 4
+    },
+    "pose": {
+      "offline": 0.0098,
+      "offline_n_frag": 66,
+      "offline_n_cls": 4,
+      "realtime": 0.0302,
+      "realtime_n_frag": 58,
+      "realtime_n_cls": 4
+    },
+    "face": {
+      "offline": -0.2468,
+      "offline_n_frag": 68,
+      "offline_n_cls": 2,
+      "realtime": 0.0006,
+      "realtime_n_frag": 72,
+      "realtime_n_cls": 4
+    },
+    "deltas": {
+      "offline": -0.083,
+      "offline_n_frag": 62,
+      "offline_n_cls": 3,
+      "realtime": 0.0754,
+      "realtime_n_frag": 71,
+      "realtime_n_cls": 5
+    }
+  },
+  "delta_full": -0.0075,
+  "decision": "offline"
+}

@@ -1,0 +1,114 @@
+{
+  "n_videos": 250,
+  "n_frag": {
+    "offline": 1415,
+    "realtime": 1415
+  },
+  "min_frag": 400,
+  "min_cls": 15,
+  "results": {
+    "full": {
+      "offline": {
+        "auc": 0.7791,
+        "ci": [
+          0.6125,
+          0.6806
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      },
+      "realtime": {
+        "auc": 0.7744,
+        "ci": [
+          0.6039,
+          0.6809
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      }
+    },
+    "hands": {
+      "offline": {
+        "auc": 0.7378,
+        "ci": [
+          0.5948,
+          0.6641
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      },
+      "realtime": {
+        "auc": 0.7592,
+        "ci": [
+          0.599,
+          0.681
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      }
+    },
+    "pose": {
+      "offline": {
+        "auc": 0.7538,
+        "ci": [
+          0.598,
+          0.6738
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      },
+      "realtime": {
+        "auc": 0.7605,
+        "ci": [
+          0.6037,
+          0.6825
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      }
+    },
+    "face": {
+      "offline": {
+        "auc": 0.6377,
+        "ci": [
+          0.5462,
+          0.614
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      },
+      "realtime": {
+        "auc": 0.632,
+        "ci": [
+          0.5399,
+          0.6059
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      }
+    },
+    "deltas": {
+      "offline": {
+        "auc": 0.6782,
+        "ci": [
+          0.5548,
+          0.6222
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      },
+      "realtime": {
+        "auc": 0.649,
+        "ci": [
+          0.5372,
+          0.6054
+        ],
+        "n_cls": 17,
+        "n_frag": 291
+      }
+    }
+  },
+  "delta_full": -0.0047,
+  "ci_overlap": true,
+  "decision": "offline"
+}

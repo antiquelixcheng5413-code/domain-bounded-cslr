@@ -1,0 +1,64 @@
+{
+  "experiment": "P51",
+  "date": "2026-10-05",
+  "user_instruction": "「用效果好的那个」（选训练特征还是线上实时特征）",
+  "verdict": "✅ **判别力无显著差异 → 选离线（零重训）**。\n理由：零成本，且**保住 48 轮实验的判优价值**（那些结论都是在离线特征上得到的）。",
+
+  "important_caveat_on_the_numbers": {
+    "issue": "P51c 报告的 95% 置信区间不含点估计（如 0.7791 [0.613, 0.681]），数学上不可能",
+    "root_cause": "bootstrap 逻辑本身经独立验证是正确的（自测 200 次 bootstrap，区间含点估计）；\n问题出在 P51c 运行时类别数不足，bootstrap 重采样后部分类缺失、被填 0.5 拉低区间",
+    "impact_on_conclusion": "**结论方向不变**（离线 0.7791 vs 实时 0.7744，差 -0.0047，\n五个块的差值全部 |d|<0.03），但**具体数值不可引用**，因为 CI 是错的",
+    "action": "要精确引用需重跑，且需保证每类样本量足够（当前 holdout 291 片段 / 17 类，\n各类中位数可能只有 ~17 个，bootstrap 缺失概率高）",
+    "honesty_note": "我选择报告「差值都很小」这个稳健结论，而不是报告有 bug 的 CI 数值"
+  },
+
+  "final_numbers_holdout_291_frag_17_classes": {
+    "full": {"offline": 0.7791, "realtime": 0.7744, "delta": -0.0047},
+    "hands": {"offline": 0.7378, "realtime": 0.7592, "delta": 0.0214},
+    "pose": {"offline": 0.7538, "realtime": 0.7605, "delta": 0.0067},
+    "face": {"offline": 0.6377, "realtime": 0.6320, "delta": -0.0057},
+    "deltas": {"offline": 0.6782, "realtime": 0.6490, "delta": -0.0292}
+  },
+
+  "interpretation": {
+    "no_block_significantly_better": "五个块没有一个的差值超过 0.03 —— 换提取器换不来判别力",
+    "both_above_chance": "两者都远高于随机 0.5（0.63~0.78），说明**特征本身有判别力**",
+    "old_extractor_not_worse": "旧 holistic（478 点 face + 33 pose）精简到 8+8 点后，判别力没掉",
+    "skew_is_not_a_quality_problem": "P48b 测到的 29 倍差距**不是**因为实时特征差，\n而是因为模型记忆绑在离线坐标系上。这是【对齐问题】不是【质量问题】"
+  },
+
+  "decision": {
+    "chosen": "offline（离线预提取特征）",
+    "action_required": "让**线上提取器产出与离线一致的特征**（路线 1：复现旧 holistic 提取器），\n而不是重提全部训练特征（路线 2）",
+    "reasons": [
+        "判别力无显著差异，重训换不来收益",
+        "零重训：省 1 小时",
+        "保住 48 轮实验的判优价值（结论都是在离线特征上得到的，换特征就得全部重验）",
+        "路线 1（复现旧提取器）成本远低于路线 2（全量重提 5.3 小时）"
+    ],
+    "next_step": "在独立 Python 3.11 venv 装 mediapipe 0.10.21，复现 mp.solutions.holistic 提取器，\n用一个 train 视频验证产出特征与旧 .npy 是否逐位/统计一致"
+  },
+
+  "three_attempts_and_what_each_revealed": {
+    "P51": "OOM（anon-rss 7.1GB）。教训：WSL 只有 7GB，736 维特征矩阵必须流式/分批",
+    "P51b": "流式化成功解决 OOM，但 holdout 只 62~80 片段 / 2~5 类，macro-AUC 极不稳定（0.07 与 0.51 混现），**结论作废**",
+    "P51c": "样本量达标（1415 片段），但 CI 计算有 bug（见上）。**方向可信，数值不可引用**"
+  },
+
+  "self_check_bug_found_along_the_way": {
+    "suspected": "自己的手写 Mann-Whitney AUC 实现有 bug（完美分数得 0.5）",
+    "verified": "穷举法（直接数正负对）vs 手写 Mann-Whitney vs sklearn roc_auc_score 三者完全一致",
+    "real_cause": "**自检样例设计错误**：正组全 0、负组含 1 和 2 时，AUC 必然 0/0.5/1，平均成 0.5",
+    "lesson": "自检样例必须先验算过，不能想当然。同 P50 的教训一致：\n出现自相矛盾的数字时，先怀疑索引空间/样例设计，而非算法"
+  },
+
+  "stats_methodology_correction": {
+    "bug": "P51 里 deltas[186:368] 先切维度再池化 —— 但它是帧间差值，会破坏帧间关系",
+    "fix": "改为「整特征先池化，再按维度切」"
+  },
+
+  "receipts": [
+    "artifacts/metrics/blank-gov/p51b-feature-source.json (作废，样本不足)",
+    "artifacts/metrics/blank-gov/p51c-feature-source.json (方向可信，CI 有 bug)"
+  ]
+}

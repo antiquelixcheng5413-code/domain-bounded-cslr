@@ -1,0 +1,103 @@
+{
+  "experiment": "P45b",
+  "date": "2026-10-05",
+  "question": "dev 的 signer 是否也在 train 里",
+  "train_samples": 4973,
+  "dev_samples": 514,
+  "train_signers": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L"
+  ],
+  "dev_signers": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L"
+  ],
+  "overlap_signers": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L"
+  ],
+  "dev_signers_seen_in_train_ratio": 1.0,
+  "dev_samples_on_overlapping_signers": 514,
+  "dev_samples_ratio_on_overlap": 1.0,
+  "per_signer": {
+    "A": {
+      "train": 490,
+      "dev": 55
+    },
+    "B": {
+      "train": 490,
+      "dev": 53
+    },
+    "C": {
+      "train": 504,
+      "dev": 54
+    },
+    "D": {
+      "train": 507,
+      "dev": 46
+    },
+    "E": {
+      "train": 495,
+      "dev": 51
+    },
+    "F": {
+      "train": 492,
+      "dev": 50
+    },
+    "G": {
+      "train": 490,
+      "dev": 54
+    },
+    "H": {
+      "train": 101,
+      "dev": 9
+    },
+    "I": {
+      "train": 66,
+      "dev": 9
+    },
+    "J": {
+      "train": 330,
+      "dev": 28
+    },
+    "K": {
+      "train": 501,
+      "dev": 53
+    },
+    "L": {
+      "train": 507,
+      "dev": 52
+    }
+  },
+  "implication": "dev 与 train 共享 signer，泛化难度低于跨 signer 场景"
+}

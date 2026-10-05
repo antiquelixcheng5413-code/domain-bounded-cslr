@@ -1,14 +1,30 @@
+import os
 import unittest
 
 from fastapi.testclient import TestClient
-
-from app.backend.main import app
 
 
 class ApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.client = TestClient(app)
+        # Force the "no recogniser assets" scenario so these contract tests pass on any machine,
+        # including a dev box where the real VL48 models are installed on disk. The UI-level
+        # behaviour that genuinely matters here is *honesty*: absent a trained model, the API must
+        # not fabricate a prediction and must advertise readiness as False.
+        os.environ["CSLR_CTC_CHECKPOINT"] = os.path.join("definitely", "missing", "model.pt")
+        os.environ["CSLR_VISION_MODEL"] = os.path.join("definitely", "missing", "vision")
+        os.environ["CSLR_LLM_MODEL"] = os.path.join("definitely", "missing", "llm")
+
+        # routes.py calls create_recognition_service() at import time and caches it, so the
+        # no-model env vars above must be in place before the FastAPI app is first imported.
+        import app.backend.main as backend_main
+
+        cls.client = TestClient(backend_main.app)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        for key in ("CSLR_CTC_CHECKPOINT", "CSLR_VISION_MODEL", "CSLR_LLM_MODEL"):
+            os.environ.pop(key, None)
 
     def test_health_reports_model_state(self) -> None:
         response = self.client.get("/api/v1/health")

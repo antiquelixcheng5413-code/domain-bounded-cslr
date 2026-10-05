@@ -1,0 +1,112 @@
+{
+  "experiment": "P45",
+  "date": "2026-10-05",
+  "question": "认得准不准问题出在哪",
+  "headline": "根因是**输出坍缩到高频词**，不是词表截断、不是 signer 泛化、不是 CTC 欠输出。模型有词表能力（240 种已学词能说出 194 种 = 81%），但输出极度集中：前 6 个词占真实词输出的 47%。",
+
+  "decisive_evidence": {
+    "counterfactual": {
+      "description": "把参考里的 <unk> 全删掉再算 WER（模型不可能命中不存在的词）",
+      "baseline_folded": 0.5211,
+      "ref_without_unk": 0.7919,
+      "implication": "模型对「它该认的词」的真实准确率只有 20.8%，远低于 0.5211 的表观值"
+    },
+    "output_concentration": {
+      "hyp_total_tokens": 2514,
+      "distinct_output_tokens": 194,
+      "top1_unk": {"count": 830, "ratio": 0.33},
+      "top6_cumulative": 0.471,
+      "excl_unk_top5": {
+        "note": "剔除 unk 后的真实词输出",
+        "period": {"count": 395, "ratio": 0.235},
+        "wo": {"count": 160, "ratio": 0.095},
+        "question_mark": {"count": 119, "ratio": 0.071},
+        "ni": {"count": 119, "ratio": 0.071},
+        "women": {"count": 41, "ratio": 0.024},
+        "zhe": {"count": 38, "ratio": 0.023},
+        "cumulative5": 0.495
+      }
+    },
+    "vocabulary_capability_is_fine": {
+      "learned_word_kinds_in_ref": 240,
+      "kinds_model_ever_outputs": 194,
+      "recall_of_kinds": 0.808,
+      "never_output_kinds": 70,
+      "conclusion": "模型**有能力**说出 81% 的已学词种类，词表不是硬约束"
+    },
+    "train_freq_of_top_words": {
+      "period_": 3576, "question_mark": 1397, "wo": 1313, "ni": 1286,
+      "zhe": 446, "keyi": 367,
+      "note": "这 6 个词在 train 频次极高，模型坍缩到它们"
+    }
+  },
+
+  "factors_ruled_out": {
+    "vocab_truncation": {
+      "dev_token_coverage_cap300": 0.696,
+      "dev_oov_breakdown": {"truncated_but_seen_in_train": 848, "truly_unseen": 14, "truncated_ratio": 0.984},
+      "why_ruled_out": "扩词表理论收益上限仅 0.140 WER，且其中 15.9% dev token 的训练频次<=5 学不动。真实瓶颈是 in-vocab WER 0.7919，比词表问题的贡献大得多。",
+      "p6_stale_conclusion": {
+        "verdict": "P6 曾测 300 vs 1828，结论'词表裁剪影响有限'",
+        "why_stale": [
+          "跑在 off-by-one 修复之前（P23），WER 全部作废",
+          "只跑 14 epoch，最佳在 ep2/ep4，未收敛",
+          "未重新核算 CTC 2L-1<=48 约束（vocab 1828 时 target 长度分布会变）"
+        ],
+        "status": "该方向在修好的管线上从未充分训练过，值得重做但优先级低于本轮发现的坍缩问题"
+      }
+    },
+    "signer_generalization": {
+      "train_signers": 12, "dev_signers": 12,
+      "overlap": "12/12 = 100%",
+      "dev_samples_on_overlapping_signers": "514/514 = 100%",
+      "conclusion": "**不是跨 signer 泛化问题**。dev 样本的 signer 全都在 train 出现过，模型见过这些人做这些动作。所以 P7 的 signer 间 CV=0.018 不是当前 WER 的解释。"
+    },
+    "ctc_under_output": {
+      "ref_mean_len": 5.52, "hyp_mean_len": 4.89,
+      "hyp_shorter_ratio": 0.523,
+      "all_unk_samples": 0, "empty_samples": 0,
+      "conclusion": "输出偏短但不是欠输出退化（无全 unk、无空输出）。属正常解码行为。"
+    },
+    "sentence_length": {
+      "short_1_4": 0.4565, "mid_5_7": 0.5251, "long_8_plus": 0.5796,
+      "conclusion": "长句更差但幅度有限，不是主因"
+    },
+    "train_frequency_of_target_words": {
+      "hi_freq_ge11": 0.5163, "all_freq": 0.5212,
+      "conclusion": "高频词样本与全样本几乎无差异（0.5163 vs 0.5212）—— "
+                     "说明模型对高频词**也认不准**，不是只在中低频上失败"
+    }
+  },
+
+  "conclusion": {
+    "primary_bottleneck": "输出坍缩到训练集高频词（P16/P20/P21 曾多次观察到退化，但从未量化其对 WER 的贡献）",
+    "secondary": "词表截断 30%（贡献上限 0.14 WER，且 98.4% 是被 max_tokens=300 人工截断而非真未见）",
+    "not_bottleneck": ["跨 signer 泛化", "CTC 欠输出", "句长", "词频（高频词也认不准）"],
+    "what_this_means": "模型不是「学不动」而是「不敢说」。它对 81% 的已学词种类有输出能力，但解码时坍缩到少数高频词。要改善准确率，应约束解码的输出分布（受控解码 / 强制提高低频词召回），而不是继续提特征或加训练轮数。"
+  },
+
+  "recommended_next_steps": [
+    {
+      "priority": 1,
+      "action": "受控解码实验：给低 log-prob 的已学词加 logit bias，或用训练集词频做 prior 校正解码",
+      "rationale": "直接针对坍缩。论文依据：ref07 SignBT / ref15 Camgoz SLT 都用 CTC + beam search + 词表约束；ref12 CCL-SLR 用对比学习对齐输出分布"
+    },
+    {
+      "priority": 2,
+      "action": "重跑扩词表到 1828（P45 已算好：token 覆盖 0.696->0.901，整句可表达 0.089->0.548）",
+      "rationale": "P6 的结论建立在 off-by-one 修复前，从未在修好的管线上充分训练过"
+    },
+    {
+      "priority": 3,
+      "action": "训练时用类别平衡/重采样（P35 只测过 landmark 扰动式增强，未测过按频次重采样）",
+      "rationale": "坍缩的根源是高频词主导 loss"
+    }
+  ],
+
+  "receipts": [
+    "artifacts/metrics/blank-gov/p45-vocab-bottleneck.json",
+    "artifacts/metrics/blank-gov/p45b-signer-overlap.json",
+    "artifacts/metrics/blank-gov/p45c-error-attribution.json"
+  ]
+}

@@ -42,6 +42,10 @@ artifacts/checkpoints/**
 artifacts/exports/**
 artifacts/logs/**
 artifacts/part3_features/**
+# P53 路线 2：新 Tasks API 提取的特征（5488 个 .npy，约 400MB）
+# 必须忽略：与 part3_features 同性质，只是换了个提取器重新生成。
+# 不加这条会让 5000+ 个 npy 进仓库。
+artifacts/part3_features_tasksapi/**
 !artifacts/checkpoints/.gitkeep
 !artifacts/exports/.gitkeep
 !artifacts/logs/.gitkeep

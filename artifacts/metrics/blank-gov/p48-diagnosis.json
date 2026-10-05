@@ -1,0 +1,101 @@
+{
+  "experiment": "P48",
+  "date": "2026-10-05",
+  "user_challenge": "「真的过拟合了吗，我在网页上测train里的数据，效果也不好」",
+  "verdict": "✅ **用户完全正确。** 过拟合是真的（train 离线特征 exact 29/30 = 96.7%），\n但**网页上传同样的 train 视频只对 3.3%** —— 差 29 倍。\n根因是**训练/推理特征提取器不同源（train-serve skew）**，不是模型能力问题。",
+
+  "p48_control_test": {
+    "purpose": "排除「实时特征本身不可学」的可能",
+    "method": "同一批 8 条 train 视频，全新模型各训 600 步（唯一变量=特征来源）",
+    "offline_precomputed_wer": 0.0,
+    "realtime_mediapipe_wer": 0.0,
+    "conclusion": "两种特征都能被完美记住 -> 实时特征含足够信息，提取器不是「学不动」的原因",
+    "bug_found_and_fixed": "首版脚本把 CTC 类索引（词表索引+1）直接传给 voc.decode()，\n参考序列整体错位一格，出现「loss=0.0015 但 WER=1.0」的自相矛盾。\n修正后离线 0.0408 -> 0.0000（step 600），与 P47c 一致。"
+  },
+
+  "p48b_decisive_evidence": {
+    "method": "同一个 P42 checkpoint（trained on 离线特征），喂同一批视频的两种特征",
+    "train_30_samples": {
+      "offline": {"wer": 0.0059, "exact": "29/30 (96.7%)", "unk": 0.278, "len": 5.63},
+      "realtime": {"wer": 0.4260, "exact": "1/30 (3.3%)", "unk": 0.418, "len": 5.10},
+      "domain_shift_wer": 0.4201,
+      "domain_shift_exact": -28
+    },
+    "dev_30_samples": {
+      "offline": {"wer": 0.5497, "exact": "1/30 (3.3%)", "unk": 0.281},
+      "realtime": {"wer": 0.5965, "exact": "1/30 (3.3%)", "unk": 0.417},
+      "domain_shift_wer": 0.0468
+    },
+    "interpretation": [
+      "train 上：离线 96.7% vs 实时 3.3% —— 模型**确实记住了训练集**，但只在离线特征上",
+      "dev 上：离线 54.97% vs 实时 59.65% —— 域偏移代价小（+4.7%）",
+      "关键洞察：**train 上的域偏移代价（+42%）远大于 dev（+4.7%）**",
+      "这说明模型的记忆是**绑定在离线特征的坐标系上**的。",
+      "换到实时特征坐标系，记忆完全失效，模型退回到与 dev 同一水平（3.3%）。"
+    ]
+  },
+
+  "root_cause": {
+    "offline_features_receipt": {
+      "model_name": "mediapipe-holistic",
+      "version": "part1/2-cache",
+      "frame_sampling": "resample-48",
+      "shape": [48, 368]
+    },
+    "online_extractor": "app/backend/realtime_landmark.py（mediapipe 0.10.35 新 API：mp.tasks.vision）",
+    "mismatch": [
+      "训练特征：`mp.solutions.holistic.Holistic`（**旧 Solutions API**，478 点 face + 33 pose + 42 手）",
+      "推理特征：`mp.tasks.vision.PoseLandmarker/HandLandmarker/FaceLandmarker`（**新 Tasks API**）",
+      "mediapipe 0.10.35 已移除整个 `solutions` 命名空间（实测 No module named 'mediapipe.python'），",
+      "所以旧提取器代码在当前环境**从未跑通过**，无法直接复用 -> 只能新写一套 -> 产生 skew"
+    ],
+    "measured_evidence_of_skew": {
+      "hands_std_ratio_online_vs_offline": 1.02,
+      "face_std_ratio": 1.14,
+      "deltas_std_ratio": 3.12,
+      "presence_handL_offline_vs_online": {"offline": 0.977, "online": 0.997},
+      "presence_face_offline_vs_online": {"offline": 1.0, "online": 0.938},
+      "note": "hands/pose 分布已接近（经 P43 归一化 + handedness 修复后），"
+              "但 deltas 段 std 仍大 3.12 倍 —— 差分对帧级噪声极敏感"
+    }
+  },
+
+  "corrections_to_previous_conclusions": {
+    "P47c_was_right_but_misleading": "P47c 的「8 条能过拟合 -> 容量与目标没问题」成立，\n但我没验证「P42 checkpoint 在实时特征上是否也过拟合」。这个缺口让\n「CTC 帧定位能力不足」被误判为瓶颈。",
+    "P47_corrected": "P47 的受控解码失败**仍然有效**，但归因要改：解码救不了是因为\n模型坐标系错位，不是（仅）因为 CTC 帧定位。",
+    "P45_corrected": "P45 定位的「输出坍缩」是**症状**不是根因。模型在离线特征上\n输出分布正常（unk 27.8%、len 5.63）；坍缩只在实时特征上出现。",
+    "the_real_bottom_line": "**dev WER 0.52 里，有多少来自「模型能力不足」、\n多少来自「train-serve skew」，目前尚未分离。** 已知的 skew 代价：\ntrain 上 +42pp（96.7%->3.3%）。修掉 skew 之后 dev 能到多少，需要重测。"
+  },
+
+  "fix_options": [
+    {
+      "id": "A",
+      "action": "用新 Tasks API 重新提取 train/dev 全部特征，再重训 P42",
+      "cost": "约 5487 视频 × 3.5s ≈ 5.3 小时（可并行到 12 核，约 30-40 分钟）",
+      "pros": "彻底消除 skew，train/serve 同源，之后所有实验都建立在正确基础上",
+      "cons": "耗时长；且新特征判别力可能与旧特征不同（需重测 macroAUC）",
+      "recommendation": "⭐ 最正确"
+    },
+    {
+      "id": "B",
+      "action": "在独立 Python 3.11 venv 里装 mediapipe 0.10.21，用旧 Solutions API 复现原提取器",
+      "cost": "需另建环境；mediapipe 0.10.21 在 Python 3.14 无 wheel（当前 venv 是 3.14）",
+      "pros": "能拿到与训练完全一致的在线特征，零重训",
+      "cons": "环境隔离复杂；旧 API 的 landmark 质量未知是否可复现",
+      "recommendation": "备选"
+    },
+    {
+      "id": "C",
+      "action": "把线上实时特征做分布对齐（逐块 z-score 校准到离线统计量）",
+      "cost": "低",
+      "pros": "最快",
+      "cons": "只能对齐一阶/二阶统计量，无法消除坐标系语义差异；deltas 段差 3.12 倍难靠线性变换抹平",
+      "recommendation": "不推荐单独使用，可作为 A 的过渡"
+    }
+  ],
+
+  "receipts": [
+    "artifacts/metrics/blank-gov/p48-overfit-offline-vs-realtime.json",
+    "artifacts/metrics/blank-gov/p48b-domain-shift.json"
+  ]
+}

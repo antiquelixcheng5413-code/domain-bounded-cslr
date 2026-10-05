@@ -1,0 +1,109 @@
+{
+  "experiment": "P39 recalibrate P30's 'mid-frequency words are the bottleneck' under macroAUC (P30 used WER, which P38 showed is misleading here)",
+  "n_videos": 2000,
+  "n_segments": 11347,
+  "n_classes_scored": 870,
+  "vocab_size": 301,
+  "seed": 20261004,
+  "pooling": "片段池化（P36 铁律）：按 gloss 数等分时间轴，每段对应 1 个 gloss",
+  "split": "视频级 80/20，train 侧建原型，test 侧评估（泛化口径）",
+  "bucket_distribution": {
+    "100+": {
+      "n": 5054,
+      "share": 0.4454
+    },
+    "11-100": {
+      "n": 2734,
+      "share": 0.2409
+    },
+    "3-10": {
+      "n": 1790,
+      "share": 0.1578
+    },
+    "1-2": {
+      "n": 1077,
+      "share": 0.0949
+    },
+    "OOV": {
+      "n": 692,
+      "share": 0.061
+    }
+  },
+  "three_metrics_by_bucket": {
+    "100+": {
+      "n_test": 1043,
+      "acc": 0.0067,
+      "balanced_acc": 0.0073,
+      "macro_auc": 0.6031,
+      "n_classes_scored": 30
+    },
+    "11-100": {
+      "n_test": 528,
+      "acc": 0.0114,
+      "balanced_acc": 0.0094,
+      "macro_auc": 0.593,
+      "n_classes_scored": 76
+    },
+    "3-10": {
+      "n_test": 362,
+      "acc": 0.0028,
+      "balanced_acc": 0.0033,
+      "macro_auc": 0.6944,
+      "n_classes_scored": 4
+    },
+    "1-2": {
+      "n_test": 217,
+      "acc": 0.0,
+      "balanced_acc": 0.0,
+      "macro_auc": null,
+      "n_classes_scored": 0
+    },
+    "OOV": {
+      "n_test": 143,
+      "acc": 0.021,
+      "balanced_acc": 0.0166,
+      "macro_auc": 0.6467,
+      "n_classes_scored": 10
+    }
+  },
+  "p30_wer_for_comparison": {
+    "100+": 0.4003,
+    "11-100": 0.9178,
+    "OOV": 0.1707
+  },
+  "macroauc_diff_mid_minus_high": -0.0101,
+  "verdict": "两桶 macroAUC 相当（差 -0.0101，|差|<0.02）=> P30 的 WER 口径无法区分两桶，结论不成立于稳健口径",
+  "criterion": "11-100 桶 macroAUC 显著低于 100+ 桶（差 < -0.02）-> P30 成立；差 > +0.02 -> 结论翻转；|差| < 0.02 -> 口径不区分",
+  "all_data_real": true,
+  "reads_test_split": false,
+  "no_training": "本实验不训练任何深度模型，全部基于已有 .landmark.npy",
+  "minutes": 0.02,
+  "p30_holes_being_tested": [
+    "① P30 分桶指标是 WER；P38 实测 WER/acc 在本任务上掩盖真实信号（full368 macroAUC 0.6091 vs acc 0.0260）",
+    "② P30 的 OOV 桶 WER 0.1707 是折叠产物；P9 实测 dev OOV 占 30.4%，宽松 WER 虚高上界 0.1650"
+  ],
+  "stability_sweep": {
+    "n_videos": [
+      500,
+      800,
+      1500,
+      2000,
+      3000
+    ],
+    "diff_mid_minus_high": [
+      -0.0478,
+      0.0013,
+      0.0089,
+      -0.0101,
+      -0.0192
+    ],
+    "diff_mean": -0.0134,
+    "diff_std": 0.0197,
+    "diff_range": 0.0567,
+    "sign_flips": "2/5",
+    "within_threshold_0.02": "4/5",
+    "note": "500 视频时 11-100 桶仅 9 个类被计分，其 -0.0478 是小样本噪声。唯一超阈值的运行恰是样本量最小的那次。"
+  },
+  "conclusion_override": "⚠️ 单次运行（500 视频）曾判「P30 成立」，但五点过采样显示差值在 -0.048 ~ +0.009 间震荡、符号翻转 2 次、std 0.0197。结论应为：P30 的「误差集中在中频词」在 macroAUC 口径下【不成立】——不是反了，而是两个桶在稳健口径下无法区分。",
+  "caveat_3_10_bucket": "3-10 桶 macroAUC 0.6944 仅由 4 个类支撑，不可信；1-2 桶 0 类（训练侧样本<2 被原型过滤），acc 0.0000 是构造产物不是模型能力。"
+}

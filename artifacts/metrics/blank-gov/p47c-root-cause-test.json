@@ -1,0 +1,14 @@
+{
+  "experiment": "P47c",
+  "date": "2026-10-05",
+  "question": "解码层救不了，那训练层/特征层能救吗",
+  "p47_negative_result": "词频先验校准单调变差，坍缩未被撬动",
+  "p47b_mechanism": "正确词 top-1 仅 10.6%、top-5 仅 44.8%；87.4% 帧 argmax 是 blank；高频词不是分数高而是别的词更低",
+  "word_level_probe": {
+    "acc": 0.3519,
+    "macro_auc": 0.7222,
+    "n_frag": 1136,
+    "n_cls": 47,
+    "chance": 0.0213
+  }
+}

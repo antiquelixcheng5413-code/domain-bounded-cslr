@@ -1,0 +1,15 @@
+{
+  "experiment": "P53",
+  "date": "2026-10-05",
+  "purpose": "路线 2：统一 train/serve 的特征提取器",
+  "output_root": "/home/su127/FYP/domain-bounded-cslr/artifacts/part3_features_tasksapi",
+  "old_features_untouched": "/home/su127/FYP/domain-bounded-cslr/artifacts/part3_features",
+  "test_split_excluded": true,
+  "total": 30,
+  "stat": {
+    "ok": 30,
+    "skip": 24
+  },
+  "elapsed_s": 82.4,
+  "errors": []
+}

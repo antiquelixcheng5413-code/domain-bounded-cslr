@@ -1,0 +1,52 @@
+{
+  "experiment": "P45c",
+  "date": "2026-10-05",
+  "question": "认得准不准问题出在哪",
+  "baseline_folded_wer": 0.5211,
+  "baseline_strict_wer": 0.6966,
+  "factors": {
+    "in_vocab_only": {
+      "wer": 0.7919,
+      "n_tokens": 2100
+    },
+    "hi_freq_ge11": {
+      "wer": 0.5163,
+      "n_samples": 474,
+      "n_tokens": 2580
+    },
+    "all_freq": {
+      "wer": 0.5212,
+      "n_samples": 513,
+      "n_tokens": 2832
+    },
+    "short_1_4": {
+      "wer": 0.4565,
+      "n_samples": 107,
+      "n_tokens": 414
+    },
+    "mid_5_7": {
+      "wer": 0.5251,
+      "n_samples": 371,
+      "n_tokens": 2110
+    },
+    "long_8+": {
+      "wer": 0.5796,
+      "n_samples": 36,
+      "n_tokens": 314
+    },
+    "length": {
+      "ref_mean": 5.521,
+      "hyp_mean": 4.891,
+      "hyp_shorter_ratio": 0.5233,
+      "hyp_all_unk": 0,
+      "hyp_empty": 0
+    },
+    "counterfactual_no_unk_in_ref": 0.7919,
+    "oov_breakdown": {
+      "truncated_but_seen_in_train": 848,
+      "truly_unseen": 14,
+      "truncated_ratio": 0.9838
+    }
+  },
+  "signer_overlap": "12/12 signer 在 train 与 dev 都出现（100%） -> 不是跨 signer 泛化问题"
+}

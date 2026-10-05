@@ -1,0 +1,131 @@
+{
+  "summary": {
+    "samples": 10,
+    "distinct": 2,
+    "collapsed": true,
+    "top_prediction_share": 0.8,
+    "top_prediction": "要",
+    "bleu_1": 0.0,
+    "bleu_2": 0.0,
+    "rouge_l": 0.0,
+    "chrf": 0.0,
+    "exact_match": 0.0,
+    "uses_external_weights": true,
+    "gloss_source": "ctc_predicted",
+    "checkpoint": "artifacts/checkpoints/ctc-vl48-cap300.pt",
+    "test_split_read": false,
+    "prompt": "你是一位中文手语翻译。请把下面的手语手势记号序列(Gloss)翻译成一个通顺、完整、符合中文语法的句子。只输出翻译结果本身，不要解释、不要加引号。\nGloss: {gloss}\n中文翻译："
+  },
+  "per_sample": [
+    {
+      "sample_id": "dev-00001",
+      "gloss": "要",
+      "reference": "10年的禁鱼区不是很长时间。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00002",
+      "gloss": "要",
+      "reference": "2023年的高考有一千多万考生。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00003",
+      "gloss": "",
+      "reference": "一本书看几分钟才会被吸引。",
+      "prediction": "你好！",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00004",
+      "gloss": "要",
+      "reference": "上班的时间都是固定的。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00005",
+      "gloss": "要",
+      "reference": "上课的时间还很长。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00006",
+      "gloss": "要",
+      "reference": "上车请买票。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00007",
+      "gloss": "要",
+      "reference": "上车请投币。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00008",
+      "gloss": "",
+      "reference": "上车需要系安全带。",
+      "prediction": "你好！",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00009",
+      "gloss": "要",
+      "reference": "下一次强降雨出现在重庆。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    },
+    {
+      "sample_id": "dev-00010",
+      "gloss": "要",
+      "reference": "下午的公交车人很少。",
+      "prediction": "要",
+      "bleu_1": 0.0,
+      "bleu_2": 0.0,
+      "rouge_l": 0.0,
+      "chrf": 0.0,
+      "exact_match": 0.0
+    }
+  ]
+}

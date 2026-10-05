@@ -1,0 +1,84 @@
+{
+  "experiment": "P47",
+  "date": "2026-10-05",
+  "question": "受控解码能否撬动输出坍缩（P45 定位的根因）",
+  "verdict": "❌ **假设被证伪。** 词频先验校准不仅无益，而且单调变差。坍缩在解码层不可救。",
+
+  "design": {
+    "fairness": "四个配置共用同一份缓存 log-probs (514,48,302)，权重完全固定，唯一变量是解码策略",
+    "primary_metric": "wer_excl_unk（剔除 ref 里的 unk），因为 folded WER 有 0.1755 的 unk 送分",
+    "literature_basis": [
+      "ref07 SignBT / ref15 Camgoz SLT: CTC + beam search + 词表约束",
+      "经典 ASR: 词频先验校正解码（weighting by word frequency）"
+    ]
+  },
+
+  "results": {
+    "greedy_baseline": {"wer_folded": 0.5211, "wer_excl_unk": 0.7919, "exact": 18, "unk": 0.33, "top5_share": 0.495},
+    "freq_alpha_sweep": [
+      {"alpha": 0.0, "wer_excl_unk": 0.7919, "real_acc": 0.208, "top5_share": 0.495, "distinct": 194},
+      {"alpha": 0.1, "wer_excl_unk": 0.8171, "real_acc": 0.208, "top5_share": 0.496, "distinct": 198},
+      {"alpha": 0.2, "wer_excl_unk": 0.8452, "real_acc": 0.163, "top5_share": 0.494, "distinct": 199},
+      {"alpha": 0.3, "wer_excl_unk": 0.8710, "real_acc": 0.176, "top5_share": 0.492, "distinct": 203},
+      {"alpha": 0.5, "wer_excl_unk": 0.9381, "real_acc": 0.137, "top5_share": 0.495, "distinct": 204},
+      {"alpha": 0.8, "wer_excl_unk": 1.0338, "top5_share": 0.491},
+      {"alpha": 1.0, "wer_excl_unk": 1.1024, "top5_share": 0.494},
+      {"alpha": 1.5, "wer_excl_unk": 1.2776, "top5_share": 0.502}
+    ],
+    "gain": "0.0 个百分点 —— 基线最优"
+  },
+
+  "why_it_fails_p47b_mechanism": {
+    "headline": "「坍缩」的真实机制不是「高频词分数高」，而是「正确词分数压不过 blank 和一堆低分词」",
+    "gold_word_rank": {
+      "n_samples": 13215,
+      "top1": 0.106,
+      "top2": 0.127,
+      "top4": 0.154,
+      "top6": 0.173,
+      "top11": 0.209,
+      "top51": 0.418
+    },
+    "frame_level_weak_upper_bound": {"top1": 0.056, "top5": 0.448},
+    "blank_structure": {
+      "frames_blank_prob_gt_0.9": 0.857,
+      "argmax_is_blank": 0.874,
+      "non_blank_frames_per_sentence": 6.1,
+      "mean_blank_logprob": -2.205
+    },
+    "high_freq_mean_prob": {"。": 0.016, "我": 0.012, "你": 0.009, "？": 0.005, "all_nonblank_mean": 0.0004},
+    "interpretation": "高频词平均 log-prob 是 -38 ~ -54，全部非 blank 类平均约 -7.8。高频词不是分数高，而是**其它词分数更低**。所以减去 log P(token) 只会把随机词推上来。",
+    "consequence": "正确词的分数根本没进前几名（top-5 仅 44.8%），重排/先验校准无从下手"
+  },
+
+  "root_cause_test_p47c": {
+    "test1_overfit_8_samples": {
+      "result": "train WER 0.0408 (step 200) -> **0.0000** (step 600)",
+      "conclusion": "✅ 容量与训练目标**没有问题**，模型完全有能力记住样本。H2（目标保守）不成立"
+    },
+    "test2_word_level_probe": {
+      "method": "片段池化 concat(mean,std) + 线性探针（P36 铁律：不能用整句池化）",
+      "n_fragments": 1136, "n_classes": 47, "feature_dim": 736,
+      "acc": 0.3519, "chance": 0.0213, "macro_auc": 0.7222,
+      "conclusion": "✅ 特征**确实含 gloss 身份信息**（AUC 0.72 >> 0.6 阈值）。H1（特征无信息）不成立"
+    },
+    "both_tests_pass_implication": "既能完美拟合，特征也有可分信息，但序列解码只有 20.8% 真实准确率 → **瓶颈在「片段级判别」到「序列级解码」之间的信息聚合/对齐环节**，不是特征、不是容量、不是目标"
+  },
+
+  "revised_conclusion": {
+    "wrong_assumption_in_p45": "P45 写「模型不是学不动而是不敢说」，暗示可通过解码调整。P47 证明**解码调整无效**。",
+    "correct_picture": "模型有能力（可拟合到 0.0000）、特征有信息（AUC 0.72），但 CTC 序列输出时正确词在 top-1 仅 10.6%、top-5 仅 44.8%，且 87.4% 的帧被 blank 占据。",
+    "real_bottleneck": "CTC 的帧级判别在 48 帧里定位 gloss 边界的能力不足 —— 平均仅 6.1 个非 blank 帧/句，而参考均长 5.52 词。帧数 48 对 5.52 词过于宽裕（8.7:1），blank 占比 87.4% 说明模型在「找不准位置」而非「不会认词」。",
+    "actionable_next": [
+      "A. 提高 CTC 的帧利用率：当前 48 帧里只 6.1 帧非 blank，考虑下采样到 T=16~24（T>=2L-1 的下限是 11），让帧更密集",
+      "B. 换对齐方式：CTC 的独立同分布假设可能不匹配 gloss 边界，用 attention 或更长的上下文建模",
+      "C. 扩词表到 1828（P45 已算：净改善上限约 3%）+ 频次重采样（针对 P45 定位的坍缩根源）"
+    ]
+  },
+
+  "receipts": [
+    "artifacts/metrics/blank-gov/p47-controlled-decode.json",
+    "artifacts/metrics/blank-gov/p47b-why-prior-fails.json",
+    "artifacts/metrics/blank-gov/p47c-root-cause-test.json"
+  ]
+}

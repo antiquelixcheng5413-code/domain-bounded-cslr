@@ -1,0 +1,23 @@
+{
+  "experiment": "P44b",
+  "date": "2026-10-05",
+  "finding": "服务端口径与训练口径不一致：训练 to_batch() 不做归一化，但 ctc_landmark_service.py 对输入套了 FeatureNormalizer",
+  "train_path_NO_norm": {
+    "wer": 0.5211,
+    "unk_ratio_hyp": 0.3302,
+    "hyp_len_mean": 4.891,
+    "exact": 18,
+    "distinct": 194,
+    "n_samples": 514
+  },
+  "service_path_WITH_norm": {
+    "wer": 1.2851,
+    "unk_ratio_hyp": 0.1123,
+    "hyp_len_mean": 6.632,
+    "exact": 0,
+    "distinct": 230,
+    "n_samples": 514
+  },
+  "delta_wer": 0.764,
+  "verdict": "服务端归一化是 BUG，会显著抬高 <unk> 比例并恶化 WER"
+}

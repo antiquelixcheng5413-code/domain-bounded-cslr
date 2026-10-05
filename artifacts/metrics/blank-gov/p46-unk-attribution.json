@@ -1,0 +1,33 @@
+{
+  "experiment": "P46",
+  "date": "2026-10-05",
+  "question": "token300 是不是导致 unk 过多的原因",
+  "answer": "分两侧看：参考侧 unk 100% 由词表截断造成；但模型吐的 unk 里只有一部分是「该吐的」，白吐的比例见 alignment 分类",
+  "alignment_total": 2967,
+  "classes": {
+    "del          漏说": 453,
+    "unk_on_unk  该吐的": 490,
+    "word_on_unk  该说没说": 141,
+    "match        正确": 998,
+    "unk_on_word  白吐的": 292,
+    "sub          换错词": 464,
+    "ins          多说": 81,
+    "unk_insert   多吐的": 48
+  },
+  "hyp_unk_total": 830,
+  "hyp_unk_breakdown_pct": {
+    "deserved_unk_on_unk": 59.04,
+    "wasted_unk_on_word": 35.18,
+    "inserted_unk": 5.78
+  },
+  "ref_unk_total": 1084,
+  "words_said_as_unk": 141,
+  "vocab_expansion_ceiling": {
+    "available_with_min_freq_2": 1828,
+    "note": "train 里频次>=2 的词只有 1828 种，3841 是全量词形"
+  },
+  "static_unk_change_on_ref": {
+    "cap300": "26.0%",
+    "cap1828": "9.9%（token 覆盖 0.696 -> 0.901）"
+  }
+}

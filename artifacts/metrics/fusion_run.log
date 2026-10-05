@@ -1,0 +1,318 @@
+[landmark] train (4973, 368) eval (514, 368) present 514
+[rgb] train (4973, 512) eval (514, 512) present 514
+[motion] train (4973, 512) eval (514, 512) present 514
+[vl48] train (4973, 2048) eval (515, 2048) present 515
+[landmark] macro_auc=0.6915
+[rgb] macro_auc=0.6135
+[motion] macro_auc=0.5419
+[vl48] macro_auc=0.6313
+[landmark+rgb+motion+vl48] macro_auc=0.6399
+{
+  "probe": "discrim-power-fusion",
+  "protocol": "mean-pool + linear OneVsRest on train, ROC-AUC on dev (intersection 514)",
+  "fusion": {
+    "concat_after_pool": true,
+    "families": [
+      "landmark",
+      "rgb",
+      "motion",
+      "vl48"
+    ],
+    "per_family_pooled_dims": {
+      "landmark": 368,
+      "rgb": 512,
+      "motion": 512,
+      "vl48": 2048
+    },
+    "total_dims": 3440
+  },
+  "single_families": {
+    "landmark": {
+      "macro_auc": 0.6915,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "她",
+          "auc": 1.0
+        },
+        {
+          "gloss": "希望",
+          "auc": 0.9883
+        },
+        {
+          "gloss": "学校",
+          "auc": 0.9786
+        },
+        {
+          "gloss": "房子",
+          "auc": 0.9727
+        },
+        {
+          "gloss": "睡觉",
+          "auc": 0.9697
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "像",
+          "auc": 0.0936
+        },
+        {
+          "gloss": "给",
+          "auc": 0.1318
+        },
+        {
+          "gloss": "决定",
+          "auc": 0.1699
+        },
+        {
+          "gloss": "又",
+          "auc": 0.1891
+        },
+        {
+          "gloss": "了",
+          "auc": 0.2222
+        }
+      ],
+      "feature": "landmark",
+      "feature_dim": 368,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "baseline_macro_auc": 0.5,
+      "normalized": true,
+      "eval_kept": 514,
+      "test_split_read": false
+    },
+    "rgb": {
+      "macro_auc": 0.6135,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "告诉（我）",
+          "auc": 0.9903
+        },
+        {
+          "gloss": "很",
+          "auc": 0.961
+        },
+        {
+          "gloss": "这里",
+          "auc": 0.9403
+        },
+        {
+          "gloss": "真2",
+          "auc": 0.9153
+        },
+        {
+          "gloss": "早上1",
+          "auc": 0.9145
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "1",
+          "auc": 0.1037
+        },
+        {
+          "gloss": "知道",
+          "auc": 0.1053
+        },
+        {
+          "gloss": "完了",
+          "auc": 0.1196
+        },
+        {
+          "gloss": "希望",
+          "auc": 0.1221
+        },
+        {
+          "gloss": "了",
+          "auc": 0.1384
+        }
+      ],
+      "feature": "rgb",
+      "feature_dim": 512,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "baseline_macro_auc": 0.5,
+      "normalized": true,
+      "eval_kept": 514,
+      "test_split_read": false
+    },
+    "motion": {
+      "macro_auc": 0.5419,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "又",
+          "auc": 0.9825
+        },
+        {
+          "gloss": "坏",
+          "auc": 0.9454
+        },
+        {
+          "gloss": "了",
+          "auc": 0.9376
+        },
+        {
+          "gloss": "前",
+          "auc": 0.9376
+        },
+        {
+          "gloss": "相信",
+          "auc": 0.924
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "城市",
+          "auc": 0.037
+        },
+        {
+          "gloss": "学校",
+          "auc": 0.0409
+        },
+        {
+          "gloss": "次",
+          "auc": 0.1033
+        },
+        {
+          "gloss": "像",
+          "auc": 0.1189
+        },
+        {
+          "gloss": "走",
+          "auc": 0.126
+        }
+      ],
+      "feature": "motion",
+      "feature_dim": 512,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "baseline_macro_auc": 0.5,
+      "normalized": true,
+      "eval_kept": 514,
+      "test_split_read": false
+    },
+    "vl48": {
+      "macro_auc": 0.6313,
+      "n_labels_with_positive_in_eval": 173,
+      "top_auc": [
+        {
+          "gloss": "行李",
+          "auc": 0.9981
+        },
+        {
+          "gloss": "房子",
+          "auc": 0.9961
+        },
+        {
+          "gloss": "又",
+          "auc": 0.9805
+        },
+        {
+          "gloss": "告诉（我）",
+          "auc": 0.9786
+        },
+        {
+          "gloss": "休息",
+          "auc": 0.9504
+        }
+      ],
+      "bottom_auc": [
+        {
+          "gloss": "了",
+          "auc": 0.0136
+        },
+        {
+          "gloss": "知道",
+          "auc": 0.0799
+        },
+        {
+          "gloss": "好不好",
+          "auc": 0.1539
+        },
+        {
+          "gloss": "决定",
+          "auc": 0.2334
+        },
+        {
+          "gloss": "你们",
+          "auc": 0.2483
+        }
+      ],
+      "feature": "vl48",
+      "feature_dim": 2048,
+      "n_train": 4973,
+      "n_eval": 514,
+      "n_labels": 200,
+      "baseline_macro_auc": 0.5,
+      "normalized": true,
+      "eval_kept": 514,
+      "test_split_read": false
+    }
+  },
+  "fusion_row": {
+    "macro_auc": 0.6399,
+    "n_labels_with_positive_in_eval": 173,
+    "top_auc": [
+      {
+        "gloss": "水果",
+        "auc": 0.9766
+      },
+      {
+        "gloss": "又",
+        "auc": 0.9747
+      },
+      {
+        "gloss": "国",
+        "auc": 0.9726
+      },
+      {
+        "gloss": "她",
+        "auc": 0.9591
+      },
+      {
+        "gloss": "休息",
+        "auc": 0.9569
+      }
+    ],
+    "bottom_auc": [
+      {
+        "gloss": "下",
+        "auc": 0.126
+      },
+      {
+        "gloss": "好不好",
+        "auc": 0.1402
+      },
+      {
+        "gloss": "决定",
+        "auc": 0.1416
+      },
+      {
+        "gloss": "谁",
+        "auc": 0.1423
+      },
+      {
+        "gloss": "走",
+        "auc": 0.1523
+      }
+    ],
+    "feature": "landmark+rgb+motion+vl48",
+    "feature_dim": 3440,
+    "n_train": 4973,
+    "n_eval": 514,
+    "n_labels": 200,
+    "baseline_macro_auc": 0.5,
+    "normalized": true,
+    "eval_kept": 514,
+    "test_split_read": false
+  }
+}
+
+VERDICT: best-single=0.6915  fusion=0.6399  gain=-0.0516

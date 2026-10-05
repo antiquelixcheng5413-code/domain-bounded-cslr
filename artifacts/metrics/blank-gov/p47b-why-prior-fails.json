@@ -1,0 +1,82 @@
+{
+  "experiment": "P47b",
+  "date": "2026-10-05",
+  "question": "为什么词频先验校准没用",
+  "blank": {
+    "frames_with_blank_gt_0.9": 0.8565,
+    "mean_blank_prob": -2.2051,
+    "argmax_blank_ratio": 0.8739,
+    "non_blank_frames_per_sent": 6.05
+  },
+  "frame_topk_weak_upper_bound": {
+    "top1": 0.0561,
+    "top5": 0.448
+  },
+  "gold_word_rank_on_nonblank_frames": {
+    "n": 13215,
+    "in_top1": 0.1059,
+    "in_top3": 0.141,
+    "in_top10": 0.2038,
+    "in_top50": 0.4146
+  },
+  "nonblank_argmax_top10": [
+    {
+      "token": "<unk>",
+      "count": 1042,
+      "ratio": 0.3349
+    },
+    {
+      "token": "。",
+      "count": 396,
+      "ratio": 0.1273
+    },
+    {
+      "token": "我",
+      "count": 294,
+      "ratio": 0.0945
+    },
+    {
+      "token": "你",
+      "count": 233,
+      "ratio": 0.0749
+    },
+    {
+      "token": "？",
+      "count": 119,
+      "ratio": 0.0383
+    },
+    {
+      "token": "我们",
+      "count": 84,
+      "ratio": 0.027
+    },
+    {
+      "token": "这",
+      "count": 41,
+      "ratio": 0.0132
+    },
+    {
+      "token": "这里",
+      "count": 40,
+      "ratio": 0.0129
+    },
+    {
+      "token": "有",
+      "count": 38,
+      "ratio": 0.0122
+    },
+    {
+      "token": "喜欢",
+      "count": 31,
+      "ratio": 0.01
+    }
+  ],
+  "high_freq_mean_prob": {
+    "。": 0.0161,
+    "我": 0.01209,
+    "你": 0.00937,
+    "？": 0.00477
+  },
+  "all_nonblank_mean_prob": 0.00042,
+  "p47_result": "alpha 扫描 0->1.5，WER(剔unk) 0.7919 -> 1.2776 单调变差；前5占比仅 49.5% -> 50.2%，坍缩未被撬动"
+}
