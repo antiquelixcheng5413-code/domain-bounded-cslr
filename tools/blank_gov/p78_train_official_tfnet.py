@@ -79,17 +79,17 @@ def read_csv_split(name: str) -> dict[str, tuple[str, str]]:
     return out
 
 
-def build_transforms(hflip: bool):
+def build_transforms(hflip: bool, img_size: int = 224):
     """官方增强链。hflip 可关⇒ 做对照实验。
 
     ⚠️ 官方默认含 RandomHorizontalFlip(0.5)。中文手语的镜像手势语义可能相反，
        所以做成开关：--no-hflip 关掉，两组对比后再决定。
     """
-    train_ops = [VA.RandomCrop(224)]
+    train_ops = [VA.RandomCrop(img_size)]
     if hflip:
         train_ops.append(VA.RandomHorizontalFlip(0.5))
     train_ops += [VA.ToTensor(), VA.TemporalRescale(0.2)]
-    test_ops = [VA.CenterCrop(224), VA.ToTensor()]
+    test_ops = [VA.CenterCrop(img_size), VA.ToTensor()]
     return VA.Compose(train_ops), VA.Compose(test_ops)
 
 
@@ -261,6 +261,11 @@ def main() -> None:
                          "需配合 --pseudo-boundary")
     ap.add_argument("--pseudo-boundary", action="store_true",
                     help="按 gloss 数等分时间轴造词级伪边界（P1 TFD 思路）")
+    ap.add_argument("--img-size", type=int, default=224,
+                    help="输入分辨率。官方是 224；降到 160/128 可省显存"
+                         "（依据：AdaSize 间接支持，但未在 CE-CSL 验证）")
+    ap.add_argument("--amp-bf16", action="store_true",
+                    help="用 bf16 混合精度（⚠️ fp16 会让 CTC+KLD 梯度 NaN）")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -280,7 +285,8 @@ def main() -> None:
         str(CSV_DIR / "train.csv"), str(CSV_DIR / "dev.csv"),
         str(CSV_DIR / "test.csv"), "CE-CSL")
 
-    tr_tf, dv_tf = build_transforms(hflip=not a.no_hflip)
+    tr_tf, dv_tf = build_transforms(hflip=not a.no_hflip,
+                                   img_size=a.img_size)
     tr_ds = RGBSeqDataset("train", labels_tr, word2idx, tr_tf, True)
     dv_ds = RGBSeqDataset("validation", labels_dv, word2idx, dv_tf, False)
     # dev 在 P77 里落在 validation/ 目录名
@@ -299,6 +305,10 @@ def main() -> None:
     print("帧数 < %d 的训练样本  %d 条（已重复补帧）" % (MIN_FRAMES, tr_ds.n_short))
     print("RandomHorizontalFlip %s" % ("关闭（对照组）" if a.no_hflip else "开启（官方默认 0.5）"))
     print("官方 moduleChoice  %s" % a.module)
+    print("输入分辨率         %d×%d%s" % (
+        a.img_size, a.img_size,
+        "（官方 224）" if a.img_size == 224 else " ⚠️偏离官方，工程取舍"))
+    print("混合精度           %s" % ("bf16" if a.amp_bf16 else "fp32"))
     print("显存预算           %.1f GB（斜率 %.1f MB/帧·样本）"
           % (a.mem_budget / 1e9, {"TFNet": 55.7, "CorrNet": 45.8,
                                   "VAC": 27.1}.get(a.module, 55.7)))
@@ -323,6 +333,9 @@ def main() -> None:
         SLOPE = {"TFNet": 55.7e6, "CorrNet": 45.8e6, "VAC": 27.1e6,
                  "MAM-FSD": 50.0e6, "SEN": 30.0e6}
         per_frame = SLOPE.get(a.module, 55.7e6)
+        # 🔴 激活显存 ∝ (res/224)²（P86b 实测：224→9.04GB, 128→3.45GB）
+        scale = (a.img_size / 224.0) ** 2
+        per_frame = per_frame * scale
         budget = float(a.mem_budget)
         b = int(budget / (per_frame * max(n_frames, 1)))
         return max(1, min(b, a.batch))
@@ -400,9 +413,14 @@ def main() -> None:
         run, nrun = 0.0, 0
         for vid, tgt, tgt_len, dl, _tl, _sids, _ids in tr_dl:
             vid = vid.to(dev)                      # [B,T,3,H,W]
-            out = model(vid, dl, True)
+            with torch.amp.autocast("cuda", enabled=a.amp_bf16,
+                                    dtype=torch.bfloat16):
+                out = model(vid, dl, True)
             # 🔴 官方的 lgt 是卷积后的时间步（out[5]），不是原始帧数。
             #    官方 log_probs 布局就是 [T,B,C]（实测 (9,2,3516)），与 CTCLoss 一致。
+            # 🔴 只转浮点输出；out[5]（lgt）是整型长度，CTC 要求 integral
+            out = [(o.float() if (torch.is_tensor(o) and o.is_floating_point())
+                    else o) for o in out]
             lgt = out[5]
             # 🔴 TFNet 分支推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
             #    其他分支 logProbs1 本身就是最终输出，out[4] 是 None。
@@ -491,6 +509,8 @@ def main() -> None:
                              "MAM-FSD": 44.9, "SEN": 46.5}[a.module],
         "best_wer_official": best,
         "module": a.module,
+        "img_size": a.img_size,
+        "amp_bf16": a.amp_bf16,
         "word_head_w": a.word_head,
         "pseudo_boundary": a.pseudo_boundary,
         "mem_budget_GB": round(a.mem_budget / 1e9, 2),
