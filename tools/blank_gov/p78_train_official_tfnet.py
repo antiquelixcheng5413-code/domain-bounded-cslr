@@ -202,6 +202,11 @@ def main() -> None:
     ap.add_argument("--max-train", type=int, default=0, help="0=全量；小规模验证用")
     ap.add_argument("--max-dev", type=int, default=0)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--mem-budget", type=float, default=6.6e9,
+                    help="显存预算（字节）。默认 6.6GB，留 1.4GB 余量")
+    ap.add_argument("--module", default="VAC",
+                    choices=["VAC", "CorrNet", "TFNet", "MAM-FSD", "SEN"],
+                    help="官方 moduleChoice。VAC=ResNet18(唯一能在8GB跑满帧数的)")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -239,6 +244,10 @@ def main() -> None:
     print("train / dev         %d / %d 条" % (len(tr_ds), len(dv_ds)))
     print("帧数 < %d 的训练样本  %d 条（已重复补帧）" % (MIN_FRAMES, tr_ds.n_short))
     print("RandomHorizontalFlip %s" % ("关闭（对照组）" if a.no_hflip else "开启（官方默认 0.5）"))
+    print("官方 moduleChoice  %s" % a.module)
+    print("显存预算           %.1f GB（斜率 %.1f MB/帧·样本）"
+          % (a.mem_budget / 1e9, {"TFNet": 55.7, "CorrNet": 45.8,
+                                  "VAC": 27.1}.get(a.module, 55.7)))
     print("超参                hidden=%d lr=%g wd=%g batch=%d epochs=%d"
           % (a.hidden, a.lr, a.weight_decay, a.batch, a.epochs))
 
@@ -252,9 +261,15 @@ def main() -> None:
     #   ⇒ 显存 ≈ batch × T 线性增长，必须按帧数分桶动态定batch。
     def _batch_for(n_frames: int) -> int:
         """选能塞进显存的 batch（实测上限 ≈ 1.0e8·B/frame·B，保守取半）。"""
-        # 实测：batch=2/T=48 → 5.36GB，即 5.36e9/(2*48)≈55.8MB 每(帧·样本)
-        per_frame = 5.36e9 / (2 * 48)
-        budget = 3.2e9      # 🔴 保守：实测 8GB 卡上 T=96/B=2 就已 OOM
+        # 🔴 P81 实测斜率（MB 每 帧·样本）：
+        #    TFNet(7项损失,ResNet34MAM) 5.35e9/(2*48) = 55.7
+        #    CorrNet(3项, ResNet18Corr) 4.40e9/(2*48) = 45.8
+        #    VAC    (3项, ResNet18)      2.60e9/(2*48) = 27.1
+        #    ★ 取实测值而不是猜，这是 P78 失败换来的教训
+        SLOPE = {"TFNet": 55.7e6, "CorrNet": 45.8e6, "VAC": 27.1e6,
+                 "MAM-FSD": 50.0e6, "SEN": 30.0e6}
+        per_frame = SLOPE.get(a.module, 55.7e6)
+        budget = float(a.mem_budget)
         b = int(budget / (per_frame * max(n_frames, 1)))
         return max(1, min(b, a.batch))
 
@@ -295,7 +310,7 @@ def main() -> None:
         len(tr_dl), len(dv_dl)))
 
     # ★ 直接用官方网络
-    model = Net.moduleNet(a.hidden, wordSetNum * 1 + 1, "TFNet",
+    model = Net.moduleNet(a.hidden, wordSetNum * 1 + 1, a.module,
                           torch.device(dev), "CE-CSL", True).to(dev)
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
@@ -325,20 +340,30 @@ def main() -> None:
             # 🔴 官方的 lgt 是卷积后的时间步（out[5]），不是原始帧数。
             #    官方 log_probs 布局就是 [T,B,C]（实测 (9,2,3516)），与 CTCLoss 一致。
             lgt = out[5]
-            logp5 = ls(out[4])
+            # 🔴 TFNet 分支推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
+            #    其他分支 logProbs1 本身就是最终输出，out[4] 是 None。
+            logp5 = ls(out[4] if a.module == "TFNet" else out[0])
             # 🔴 nan 防护：非有限就跳过这一 step，保住 Adam 状态
             if not torch.isfinite(logp5).all():
                 nan_steps += 1
                 opt.zero_grad(set_to_none=True)
                 continue
-            loss_ctc = ctc_loss(logp5, tgt, lgt, tgt_len.cpu()).mean()
-            # 官方 TFNet 的完整损失（Train.py 210-223）：4 个 CTC + 2 个 KLD(×25) + 1 个融合 CTC
-            loss = (loss_ctc
-                    + ctc_loss(ls(out[2]), tgt, lgt, tgt_len.cpu()).mean()
-                    + 25.0 * kld(out[3], out[2], use_blank=False)
-                    + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
-                    + 25.0 * kld(out[1], out[0], use_blank=False)
-                    + ctc_loss(ls(out[0]), tgt, lgt, tgt_len.cpu()).mean())
+            #训练时统一用 logProbs1 做主 CTC
+            main_lp = ls(out[0])
+            loss_ctc = ctc_loss(main_lp, tgt, lgt, tgt_len.cpu()).mean()
+            if a.module == "TFNet":
+                # 官方 Train.py 210-223：4 个 CTC + 2 个 SeqKD(×25) + 1 个融合 CTC
+                loss = (ctc_loss(ls(out[4]), tgt, lgt, tgt_len.cpu()).mean()
+                        + ctc_loss(ls(out[2]), tgt, lgt, tgt_len.cpu()).mean()
+                        + 25.0 * kld(out[3], out[2], use_blank=False)
+                        + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
+                        + 25.0 * kld(out[1], out[0], use_blank=False)
+                        + loss_ctc)
+            else:
+                # 官方 CorrNet/VAC/SEN 分支：2 个 CTC + 1 个 SeqKD(×25)
+                loss = (loss_ctc
+                        + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
+                        + 25.0 * kld(out[1], out[0], use_blank=False))
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
@@ -359,7 +384,8 @@ def main() -> None:
             for vid, tgt, tgt_len, dl, tl_len, _sids in dv_dl:
                 vid = vid.to(dev)
                 out = model(vid, dl, False)
-                # 🔴 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）
+                # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
+                #    其他分支 logProbs1 本身就是最终输出。
                 logp5 = ls(out[0])   # 官方布局 [T,B,C]
                 hyps += greedy_decode(logp5, tl_len)
                 for b in _sids:
@@ -387,11 +413,14 @@ def main() -> None:
     out_rec = {
         "experiment": "P78",
         "date": time.strftime("%Y-%m-%d"),
-        "purpose": "官方 TFNet（RGB + resnet34MAM）第一次真训练",
+        "purpose": "官方 moduleChoice=%s 真训练（RGB）" % a.module,
         "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py "
                          "/ DataProcessMoudle.py 均直接 import，未重写)",
-        "official_benchmark_dev": 42.1,
+        "official_benchmark_dev": {"TFNet": 42.1, "CorrNet": 47.2, "VAC": 45.1,
+                             "MAM-FSD": 44.9, "SEN": 46.5}[a.module],
         "best_wer_official": best,
+        "module": a.module,
+        "mem_budget_GB": round(a.mem_budget / 1e9, 2),
         "vocab": {"wordSetNum": wordSetNum,
                   "note": "官方 Word2Id，train+dev+test 全收、无截断"},
         "config": vars(a),
@@ -406,8 +435,7 @@ def main() -> None:
     dst.write_text(json.dumps(out_rec, ensure_ascii=False, indent=2),
                    encoding="utf-8")
     print()
-    print("最佳 WER_official = %.2f%%  差官方 %.2f pp"
-          % (best, 42.1 - best))
+    print("最佳 WER_official = %.2f%%" % best)
     print("收据 -> %s" % dst)
 
 
