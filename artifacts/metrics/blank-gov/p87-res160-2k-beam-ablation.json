@@ -1,0 +1,49 @@
+{
+  "experiment": "P88",
+  "tag": "p87-res160-2k",
+  "checkpoint_epoch": 5,
+  "purpose": "beam search vs greedy（同一 checkpoint，只改解码，不重训）",
+  "paper_basis": {
+    "official": "arXiv:2409.11960v2 Implementation rules: 'a beam search algorithm with a beam width of 10 is employed in the final CTC decoding phase'",
+    "official_code": "external/TFNet/decode.py:22 ctcdecode.CTCBeamDecoder(vocab, beam_width=10)",
+    "ref15": "Camgoz Sign Language Transformers: 训练/验证用 greedy，推理用 beam(width 0~10) + length penalty α —— 与我们做法一致",
+    "no_direct_evidence": "⚠️ 本地 17 篇无任何论文给出 beam vs greedy 的 pp 对比 ⇒ 本实验填补口径空白，预期收益不确定"
+  },
+  "greedy_wer": 80.96,
+  "results": {
+    "greedy": {
+      "wer": 80.96,
+      "out_len": 1.778640776699029,
+      "distinct": 20
+    },
+    "beam_w3": {
+      "wer": 83.6,
+      "out_len": 1.4737864077669902,
+      "distinct": 22
+    },
+    "beam_w5": {
+      "wer": 83.22,
+      "out_len": 1.4776699029126215,
+      "distinct": 22
+    },
+    "beam_w10": {
+      "wer": 82.86,
+      "out_len": 1.4815533980582525,
+      "distinct": 23
+    },
+    "beam_w25": {
+      "wer": 82.72,
+      "out_len": 1.4893203883495145,
+      "distinct": 23
+    },
+    "beam_w50": {
+      "wer": 82.69,
+      "out_len": 1.4912621359223301,
+      "distinct": 23
+    }
+  },
+  "official_beam10_wer": 82.86,
+  "known_deviation": "⚠️ pyctcdecode 0.5.0 不支持 alpha 长度惩罚，而官方 ctcdecode 支持（ref15 提到官方用 length penalty）。⇒ 本实验的 beam 与官方 beam 仍有差异",
+  "best_config": "beam_w50",
+  "best_wer": 82.69
+}
