@@ -96,17 +96,46 @@ def main() -> None:
     a = results.get("p82-vac-noflip", {})
     b = results.get("p82-vac-hflip", {})
     wa, wb = a.get("best_wer_official"), b.get("best_wer_official")
+
+    # 🔴🔴 判据铁律（P83 首版栽过）：**绝不只比 best 单点**。
+    # 必须做逐 epoch 配对分析：① 每 epoch 差 ② 均值±std ③ 胜率
+    #     ④ 符号是否翻转 —— 任一不稳定即判「噪声范围内，不可下结论」。
+    # 理由：P39 教训 + 本次实测反例（首版按 best 判「hflip 更差」，
+    #     逐 epoch 分析却显示 hflip 略好，符号在 ep1 翻转）。
+    import statistics
+    diffs, pairs = [], []
+    if a.get("history") and b.get("history"):
+        ha = {h["epoch"]: h["dev_wer_official"] for h in a["history"]}
+        hb = {h["epoch"]: h["dev_wer_official"] for h in b["history"]}
+        common = sorted(set(ha) & set(hb))
+        # diff = noflip - hflip（正 = noflip 更好 = hflip 有害）
+        diffs = [ha[e] - hb[e] for e in common]
+        pairs = [(e, ha[e], hb[e], ha[e] - hb[e]) for e in common]
+
     verdict = "数据不足"
-    if wa is not None and wb is not None:
-        d = wb - wa
-        if abs(d) < 0.5:
-            verdict = "两组基本无差异，镜像翻转在本任务上中性"
-        elif wb > wa:
-            verdict = ("开启 hflip 后 WER 恶化 %.2f pp⇒ "
-                       "**中文手语镜像语义确实相反，应关闭**" % d)
+    stats = {}
+    if diffs:
+        m = statistics.fmean(diffs)
+        sd = statistics.stdev(diffs) if len(diffs) > 1 else 0.0
+        win = sum(1 for d in diffs if d > 0)
+        sign_flip = (any(d > 0 for d in diffs) and any(d < 0 for d in diffs))
+        stats = {"mean_diff_pp": round(m, 2), "std_pp": round(sd, 2),
+                 "win_rate": "%d/%d" % (win, len(diffs)),
+                 "sign_flip": sign_flip,
+                 "per_epoch": [{"epoch": e, "noflip": x, "hflip": y,
+                                "diff": round(z, 2)} for e, x, y, z in pairs]}
+        if sign_flip or abs(m) < 2 * sd:
+            verdict = ("差异 %.2f ± %.2f pp，符号%s ⇒ **噪声范围内，"
+                       "判定「hflip 开关在本实验无显著影响」**，"
+                       "不足以判定中文手语镜像语义是否相反"
+                       % (m, sd, "不稳定" if sign_flip else "稳定"))
+        elif m > 0:
+            verdict = ("noflip 持续更优 %.2f ± %.2f pp ⇒ "
+                       "**hflip 有害，中文手语镜像语义可能相反，建议关闭**"
+                       % (m, sd))
         else:
-            verdict = ("开启 hflip 后 WER 改善 %.2f pp ⇒ "
-                       "镜像翻转对本数据有帮助，官方默认正确" % -d)
+            verdict = ("hflip 持续更优 %.2f ± %.2f pp ⇒ "
+                       "镜像翻转对本数据有帮助，官方默认正确" % (-m, sd))
 
     out = {
         "experiment": "P83",
@@ -118,14 +147,26 @@ def main() -> None:
                    "note": "两组唯一差异 = RandomHorizontalFlip"},
         "noflip_wer": wa,
         "hflip_wer": wb,
-        "delta_pp": (None if wa is None or wb is None else round(wb - wa, 2)),
+        "delta_best_pp": (None if wa is None or wb is None
+                          else round(wb - wa, 2)),
+        "paired_analysis": stats,
         "verdict": verdict,
+        "_caveat": "⚠️ 600 条 / 6 epoch 规模。仅 best 单点比较不可靠，"
+                   "本判据已改为逐 epoch 配对分析（P39/P83 教训）。",
         "full": results,
     }
     dst = METRICS / "p83-hflip-ablation.json"
     dst.write_text(json.dumps(out, ensure_ascii=False, indent=2),
                    encoding="utf-8")
     print()
+    print("=" * 70)
+    for e, x, y, z in pairs:
+        print("  ep%03d  noflip %6.2f%%  hflip %6.2f%%  diff %+6.2f pp"
+              % (e, x, y, z))
+    if stats:
+        print("  平均 %+.2f ± %.2f pp  胜率 %s  符号翻转 %s"
+              % (stats["mean_diff_pp"], stats["std_pp"],
+                 stats["win_rate"], stats["sign_flip"]))
     print("=" * 70)
     print("结论：%s" % verdict)
     print("收据 -> %s" % dst)
