@@ -79,7 +79,7 @@ artifacts/official_rgb/
 external/TFNet/video.rar
 
 # 官方 TFNet 里我们用不到的其他数据集资产
-.external/TFNet/data/CSL-Daily/
+external/TFNet/data/CSL-Daily/
 external/TFNet/data/RWTH/
 external/TFNet/data/RWTH-T/
 external/TFNet/evaluation/
