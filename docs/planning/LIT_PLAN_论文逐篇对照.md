@@ -198,6 +198,49 @@
 
 **⚠️ 官方 6 个模型全部用 RGB，landmark 路线无文献对照** —— 这是本 FYP 的立足点。
 
+### ⭐ 官方论文自己引的两篇（2026-10-06 补检，本地原缺）
+
+**ref24 Hu et al. — CorrNet, CVPR 2023** ✅ 已下载
+`参考论文/papers/ref24_Hu_CorrNet_CVPR2023.pdf` · 官方代码 `github.com/hulianyuyy/CorrNet`
+
+原文（直指我们的困境）：
+> "current methods in CSLR usually **process frames independently, thus failing to
+> capture cross-frame trajectories** to effectively identify a sign... a **correlation
+> module** is first proposed to **dynamically compute correlation maps between the
+> current frame and adjacent frames** to identify trajectories of all spatial patches."
+
+| 我们采用的做法 | 官方原文依据 | 我们的实测 |
+|---|---|---|
+| **帧间轨迹建模（CorrNet）** | 上述原文 | ⏳ **从未测过**。我们把 48 帧压成 1 个 mean-pool 向量 = 「process frames independently」的极端形态 |
+| CE-CSL 47.2/46.5 的基线 | Table VII | CorrNet 是 TFNet 的直接对照，官方认可其为强基线 |
+
+⚠️ 官方 `external/TFNet/Module.py` 里**已实现 `resNet18Corr`**，`Net.py` 里已有 `"CorrNet"` 分支
+⇒ **不必自己写**，直接 `moduleChoice="CorrNet"` 即可。
+
+**ref25 Hu et al. — AdaSize, Pattern Recognition 2024** ⛔ 全文拿不到
+DOI `10.1016/j.patcog.2023.109903` · Vol.145, 109903
+⛔ ScienceDirect 反爬（返回 HTML 非 PDF）/ ⛔ arXiv 无预印本 / ⛔ S2 `openAccessPdf=CLOSED`
+
+仅可引abstract：
+> "**spatial redundancy** in CSLR... **not all frames are equally important**... lightweight
+> 2D CNN first browses input frames under a **low resolution (e.g. 112×112)**"
+> 结果：**0.38×计算 / 0.41×显存 / 1.25×吞吐**，精度与 SOTA 相当。
+验证集：PHOENIX14 / PHOENIX14-T / CSL-Daily / CSL（**不含 CE-CSL**）
+
+⚠️⚠️ **它调的是每帧的空间分辨率，帧数不变 ⇒ 不能作为「抽稀到 48 帧」的依据。**
+
+### ⭐ 官方论文关于帧的全部原文（2026-10-06 逐字核查）
+
+关键词全文命中：`fps` **1 次**（仅 Table I 表头）· `frame rate` **0** · `frames per second` **0**
+· `number of frames` **0** · `temporal resolution` **0** · `frame stride` **0** · `resize` **0**
+
+- Table I：CE-CSL 的 `FPS` 与 `Resolution` 列均写 **`varying`**（其他数据集是 25/30）
+- §A：「video lengths vary widely, from the shortest at **39 frames** to the longest at **530 frames**」
+- Table II：train frames **930,841** ← 与我们 P77 提取出的帧数**完全一致**（交叉验证提取完整）
+- Implementation rules：**只谈超参，一个字都没提帧数上限或采样策略**
+
+⚠️ **官方代码也不抽帧**：`DataProcessMoudle.sample_indices(n) = np.linspace(0, n-1, num=n)`。
+
 ---
 
 ## D. 按你的需求查表
@@ -210,4 +253,6 @@
 | 分词/分句 | §6 P3-12（TFD，零训练）+ P3-15（TLAS 主动超时）+ 03_Wojcicka（面部韵律）|
 | 理解为什么效果不好 | §5 作废实验 + §10 审计铁律 + §1 差距分解 |
 | 写 FYP 的立足点 | §1 + 附录 B（landmark vs RGB 无文献对照）|
+| **建模帧间关系（2026-10-06 新增）** | **§C 的 ref24 CorrNet —— 官方代码已有实现，`moduleChoice="CorrNet"`** |
+| 想知道还有哪些坑 | `ROADMAP_2026-10-06.md` §8（今天踩的 7 类错误）|
 | 避免重复踩坑 | §4（8 项无效）+ §5（2 项作废）+ §7（7 项已排除）|
