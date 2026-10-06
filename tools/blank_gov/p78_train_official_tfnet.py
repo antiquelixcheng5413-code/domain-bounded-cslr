@@ -152,7 +152,52 @@ def collate(batch):
     true_len = torch.LongTensor([v.shape[0] for v in videos])   # 每条真实帧数
     tgt = torch.cat([torch.LongTensor(b["ids"]) for b in batch])   # CPU
     tgt_len = torch.LongTensor([len(b["ids"]) for b in batch])   # CPU（官方同）
-    return vid, tgt, tgt_len, data_len, true_len, [b["sid"] for b in batch]
+    return (vid, tgt, tgt_len, data_len, true_len,
+            [b["sid"] for b in batch], [b["ids"] for b in batch])
+
+
+def make_word_segments(n_frames: int, n_words: int) -> list[tuple[int, int]]:
+    """P1 TFD 思路：把时间轴按 gloss 数等分，造词级伪边界。
+
+    ⚠️ 这是**伪**边界（论文里没验证过它对 CSLR 有效），
+       但 P13 实测真实候选段长度 1.03 vs 参考 gloss 长 5.52 ⇒ 真边界不可得，
+       只能用等分近似。**必须在收据里标注这是近似边界。**
+    """
+    if n_words <= 0:
+        return []
+    edges = [round(n_frames * k / n_words) for k in range(n_words + 1)]
+    return [(edges[k], edges[k + 1]) for k in range(n_words)
+            if edges[k + 1] - edges[k] >= 1]
+
+
+def word_head_loss(logits_seq: torch.Tensor, ids: list[int],
+                   feat_len: int, idx2word: list) -> torch.Tensor:
+    """C 方向：词级辅助分类头。
+
+    对 CTC 帧序列按伪边界切成 n_words 段，每段 mean-pool 后送一个线性分类头，
+    要求能分出该段的 gloss。**这是多任务辅助监督，不替代 CTC。**
+
+    ⚠️ 官方 Net.py 没有这个头，属于我们自己加的（无直接文献支撑，
+       属常规多任务做法）。C=3516 类。
+    """
+    n = len(ids)
+    if n == 0 or feat_len <= 0:
+        return logits_seq.new_zeros(())
+    segs = make_word_segments(feat_len, n)
+    if len(segs) != n:
+        return logits_seq.new_zeros(())
+    pooled = []
+    for a, b in segs:
+        if b > logits_seq.shape[0]:
+            return logits_seq.new_zeros(())
+        pooled.append(logits_seq[a:b].mean(0))
+    feat = torch.stack(pooled)                # (n_words, C)
+    return torch.nn.functional.cross_entropy(
+        word_classifier(feat), torch.tensor(ids, device=feat.device))
+
+
+#全局分类头（C 方向用；官方网络里没有）
+word_classifier = None
 
 
 def _conv_len(n: int) -> int:
@@ -211,6 +256,11 @@ def main() -> None:
     ap.add_argument("--module", default="VAC",
                     choices=["VAC", "CorrNet", "TFNet", "MAM-FSD", "SEN"],
                     help="官方 moduleChoice。VAC=ResNet18(唯一能在8GB跑满帧数的)")
+    ap.add_argument("--word-head", type=float, default=0.0,
+                    help="C方向：词级辅助分类头的权重 w（0=关闭）。"
+                         "需配合 --pseudo-boundary")
+    ap.add_argument("--pseudo-boundary", action="store_true",
+                    help="按 gloss 数等分时间轴造词级伪边界（P1 TFD 思路）")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -319,11 +369,21 @@ def main() -> None:
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
 
+    if a.word_head > 0:
+        global word_classifier
+        word_classifier = torch.nn.Linear(wordSetNum + 1, wordSetNum + 1).to(dev)
+        print("词级辅助头          C = %d 类，权重 w = %.3f%s"
+              % (wordSetNum + 1, a.word_head,
+                 "（伪边界 = 按 gloss 数等分时间轴）" if a.pseudo_boundary else ""))
+
     # ★ 官方的 CTC 配置（zero_infinity=True 是关键，我 P72 就是漏了这行导致永久 nan）
     ctc_loss = torch.nn.CTCLoss(blank=0, reduction="none", zero_infinity=True)
     kld = DPM.SeqKD(T=8)
     ls = torch.nn.LogSoftmax(dim=-1)
-    opt = torch.optim.Adam(model.parameters(), lr=a.lr, weight_decay=a.weight_decay)
+    _params = list(model.parameters())
+    if a.word_head > 0 and word_classifier is not None:
+        _params += list(word_classifier.parameters())
+    opt = torch.optim.Adam(_params, lr=a.lr, weight_decay=a.weight_decay)
     ms = [int(round(35 * a.epochs / 55)), int(round(45 * a.epochs / 55))]
     sched = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=ms, gamma=0.2)
     print("lr衰减里程碑        %s（官方 35/45 按比例缩放）" % ms)
@@ -338,7 +398,7 @@ def main() -> None:
     for ep in range(1, a.epochs + 1):
         model.train()
         run, nrun = 0.0, 0
-        for vid, tgt, tgt_len, dl, _tl, _sids in tr_dl:
+        for vid, tgt, tgt_len, dl, _tl, _sids, _ids in tr_dl:
             vid = vid.to(dev)                      # [B,T,3,H,W]
             out = model(vid, dl, True)
             # 🔴 官方的 lgt 是卷积后的时间步（out[5]），不是原始帧数。
@@ -368,6 +428,14 @@ def main() -> None:
                 loss = (loss_ctc
                         + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[1], out[0], use_blank=False))
+            # C 方向：词级辅助分类头（多任务，主任务仍是 CTC）
+            if a.word_head > 0:
+                lp_seq = main_lp                      # [T, B, C]
+                for bi in range(lp_seq.shape[1]):
+                    fw = int(lgt[bi])
+                    loss = loss + a.word_head * word_head_loss(
+                        lp_seq[:, bi, :], _ids[bi], fw, idx2word)
+                loss = loss / (1.0 + a.word_head * lp_seq.shape[1])
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
@@ -385,7 +453,7 @@ def main() -> None:
         model.eval()
         hyps, refs, stats = [], [], {"ins": 0, "del": 0, "sub": 0, "n": 0}
         with torch.no_grad():
-            for vid, tgt, tgt_len, dl, tl_len, _sids in dv_dl:
+            for vid, tgt, tgt_len, dl, tl_len, _sids, _ids in dv_dl:
                 vid = vid.to(dev)
                 out = model(vid, dl, False)
                 # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
@@ -423,6 +491,8 @@ def main() -> None:
                              "MAM-FSD": 44.9, "SEN": 46.5}[a.module],
         "best_wer_official": best,
         "module": a.module,
+        "word_head_w": a.word_head,
+        "pseudo_boundary": a.pseudo_boundary,
         "mem_budget_GB": round(a.mem_budget / 1e9, 2),
         "vocab": {"wordSetNum": wordSetNum,
                   "note": "官方 Word2Id，train+dev+test 全收、无截断"},
