@@ -1,0 +1,60 @@
+{
+  "experiment": "P85-analysis",
+  "purpose": "词级辅助头（C 方向）vs 基线，逐 epoch 配对分析",
+  "baseline_tag": "p82-vac-noflip",
+  "exp_tag": "p85-wordhead",
+  "baseline_best_wer": 89.06,
+  "wordhead_best_wer": 90.92,
+  "diff_best_pp": -1.86,
+  "paired": {
+    "per_epoch": [
+      {
+        "epoch": 1,
+        "baseline": 91.48,
+        "wordhead": 95.11,
+        "diff": -3.63
+      },
+      {
+        "epoch": 2,
+        "baseline": 92.19,
+        "wordhead": 93.67,
+        "diff": -1.48
+      },
+      {
+        "epoch": 3,
+        "baseline": 92.54,
+        "wordhead": 92.15,
+        "diff": 0.39
+      },
+      {
+        "epoch": 4,
+        "baseline": 89.55,
+        "wordhead": 91.56,
+        "diff": -2.01
+      },
+      {
+        "epoch": 5,
+        "baseline": 89.06,
+        "wordhead": 90.92,
+        "diff": -1.86
+      },
+      {
+        "epoch": 6,
+        "baseline": 90.53,
+        "wordhead": 91.24,
+        "diff": -0.71
+      }
+    ],
+    "mean_diff_pp": -1.55,
+    "std_pp": 1.35,
+    "win_rate": "1/6",
+    "sign_flip": true
+  },
+  "ctc_loss_final": {
+    "baseline": 23.6149,
+    "wordhead": 24.7715
+  },
+  "verdict": "NO_EFFECT",
+  "implication_for_A": "A 大概率也会失败，建议暂缓",
+  "_caveat": "600 条 / 6 epoch 规模。遵循 P83 修订判据（不做单点比较）。"
+}

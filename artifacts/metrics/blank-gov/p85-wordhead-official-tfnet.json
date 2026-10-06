@@ -1,0 +1,78 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-06",
+  "purpose": "官方 moduleChoice=VAC 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 90.92,
+  "module": "VAC",
+  "word_head_w": 0.3,
+  "pseudo_boundary": true,
+  "mem_budget_GB": 6.6,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 6,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": true,
+    "max_train": 600,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 6600000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "pseudo_boundary": true,
+    "tag": "p85-wordhead",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "n_params_M": 35.25,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 38.7085,
+      "dev_wer_official": 95.11,
+      "gap_to_sota": -53.01
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 29.3037,
+      "dev_wer_official": 93.67,
+      "gap_to_sota": -51.57
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 27.8895,
+      "dev_wer_official": 92.15,
+      "gap_to_sota": -50.05
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 26.6712,
+      "dev_wer_official": 91.56,
+      "gap_to_sota": -49.46
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 25.0556,
+      "dev_wer_official": 90.92,
+      "gap_to_sota": -48.82
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 24.7715,
+      "dev_wer_official": 91.24,
+      "gap_to_sota": -49.14
+    }
+  ],
+  "minutes": 69.8
+}
