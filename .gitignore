@@ -73,3 +73,15 @@ artifacts/metrics/blank-gov/*.npz
 .a2_cache/
 .venv_mp/
 models/*.task
+
+# P77 官方 TFNet RGB 帧（约 27GB，绝不能提交）
+artifacts/official_rgb/
+external/TFNet/video.rar
+
+# 官方 TFNet 里我们用不到的其他数据集资产
+.external/TFNet/data/CSL-Daily/
+external/TFNet/data/RWTH/
+external/TFNet/data/RWTH-T/
+external/TFNet/evaluation/
+external/TFNet/evaluationT/
+external/TFNet/video.rar

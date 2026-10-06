@@ -1,0 +1,24 @@
+{
+  "experiment": "P77",
+  "date": "2026-10-06",
+  "purpose": "官方 TFNet 的 RGB 帧提取（256x256 jpg，照官方 CE-CSLDataPreProcess.py）",
+  "split": "dev",
+  "test_split_excluded": true,
+  "official_source": "external/TFNet/CE-CSLDataPreProcess.py",
+  "deviations": [
+    "官方用 imageio.v2 逐帧读，我们用 cv2.VideoCapture（帧数可能差 1~2）",
+    "官方 jpg 质量未显式指定，我们沿用 cv2.imencode 默认"
+  ],
+  "total": 515,
+  "stat": {
+    "ok": 495,
+    "skip": 20,
+    "missing_video": 0,
+    "zero_frames": 0,
+    "open_fail": 0,
+    "error": 0
+  },
+  "frames_total": 91760,
+  "elapsed_s": 148.4,
+  "errors": []
+}

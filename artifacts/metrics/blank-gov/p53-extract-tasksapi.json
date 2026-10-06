@@ -5,11 +5,11 @@
   "output_root": "/home/su127/FYP/domain-bounded-cslr/artifacts/part3_features_tasksapi",
   "old_features_untouched": "/home/su127/FYP/domain-bounded-cslr/artifacts/part3_features",
   "test_split_excluded": true,
-  "total": 30,
+  "total": 5248,
   "stat": {
-    "ok": 30,
-    "skip": 24
+    "ok": 5248,
+    "skip": 5242
   },
-  "elapsed_s": 79.4,
+  "elapsed_s": 12264.0,
   "errors": []
 }
