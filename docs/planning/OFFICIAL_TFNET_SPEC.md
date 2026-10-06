@@ -56,6 +56,55 @@ def resnet34MAM(**kwargs):
 
 ---
 
+### 2.1 ⭐⭐ MotorAttention（MAM）—— "抗复杂背景"机制的真正落点
+
+```python
+class MotorAttention(nn.Module):
+    def __init__(self, inChannels, hiddens):
+        k, p = 3, 1
+        # 全部 kernel=(k,1,1), padding=(p,0,0)  ← 只在【时间轴 T】上卷，
+        #                                      空间维 H,W 完全不动！
+        conv3d1: Conv3d(inChannels → hiddens, (3,1,1), pad=(1,0,0))
+        conv3d2: Conv3d(hiddens → hiddens, (3,1,1), pad=(1,0,0))
+        conv3d3: Conv3d(hiddens → hiddens, (3,1,1), pad=(1,0,0))
+        conv3d4: Conv3d(hiddens → inChannels, (3,1,1), pad=(1,0,0))
+        LeakyReLU(inplace=True) × 3
+    def forward(self, x):
+        out = sigmoid(conv3d4(conv3d3(conv3d2(conv3d1(x)))))
+        return x * out# ← 通道维注意力权重（SE 式），逐时刻
+```
+
+**关键点：`kernel=(3,1,1)` 意味着只在时间轴做卷积，空间分辨率不变。**
+它输出一个 `[B, C, T, H, W]` 的 sigmoid 权重，逐元素乘回 `x`——
+本质是**通道维注意力（SE-like）**，只是权重由「时间邻域的卷积」生成而非全局池化。
+
+**插入位置（`ResNet34MAM.__init__` / `forward`）**
+```
+x = motorAttention1(x)      # 3 → 16通道，在 conv1/bn1/maxpool 之前
+conv1(3d, k=(1,7,7), s=(1,2,2)) → bn1 → relu → maxpool(1,2,2)
+x = layer1(x);  x = motorAttention2(x)   # 64 → 64
+x = layer2(x);  x = motorAttention3(x)   # 128 → 64   ⇒ outData1 追加 x
+x = layer3(x);  x = motorAttention4(x)   # 256 → 64   ⇒ outData2 追加 x
+                                                       ⇒ outData3 追加 x
+x = layer4(x)                              #                ⇒ outData3 追加 x
+x.transpose(1,2).contiguous().view((-1,)+size[2:])  # BT,C,H,W
+avgpool → fc→ 1000类
+return x, outData1, outData2, outData3
+```
+⚠️ **TFNet 分支只用返回值里的 `x`（`Net.py`：`framewise, outData1, outData2, outData3 = self.conv2d(x)`），
+`outData1/2/3` 是给 MAM-FSD 分支的多尺度特征，TFNet 不用。**
+⚠️ `fc` 被替换成 `Identity()`（`Net.py`：`self.conv2d.fc = Module.Identity()`），
+所以 `x` 是**512 维帧特征**而不是 1000 类 logits。
+
+**为什么这个设计对我们重要**
+MAM 在**每个 stage 之后**沿时间轴做注意力加权，等于让网络自己学
+「哪些时刻的手部运动是可靠的、哪些帧是被复杂背景干扰的」。
+这直接对应论文动机（复杂背景下手部易糊/ 被遮挡）。
+**landmark 路线根本没有这个机制** —— MediaPipe 给的是几何点，
+不受背景干扰，但也**丢掉了让网络自己判断"哪些时刻可信"所需的视觉证据**。
+
+---
+
 ## 3. ⭐ TemporalConv 真实结构（我写错了）
 
 ```python
