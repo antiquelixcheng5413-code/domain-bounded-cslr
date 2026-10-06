@@ -163,14 +163,18 @@ def _conv_len(n: int) -> int:
 
 
 def greedy_decode(logp: torch.Tensor, true_len: torch.Tensor,
-                  blank: int = 0) -> list[list[int]]:
+                  idx2word: list, blank: int = 0) -> list[list[str]]:
     """greedy CTC 解码（官方用 ctcdecode beam_width=10，这里默认 greedy 对照）。
 
     🔴 collate 把整批 pad 到最长帧数，所以 log_probs 的时间维是 T_max，
        而每条样本的卷积后长度 = _conv_len(自己的真实帧数)，
        **不能直接用 out[5]**（那是 batch 内所有样本按同一条 lgt 推的）。
     """
-    from cslr.recognition.training import classes_to_token_ids
+    # 🔴 官方词表的 0 是 PAD/blank，真实 gloss 从 1 开始（word2idx 从 1 排）
+    #    所以 argmax 得到的 class k 直接对应 idx2word[k]，不需要再减 1。
+    #⚠️ 不要用 classes_to_token_ids（那是本仓库 landmark 模型的约定：0=blank、
+    #    词表索引需 -1 还原）。官方 Net.py 的输出层本身就是 wordSetNum*1+1，
+    #    索引 0 是 PAD。**两套约定不同，混用会全错。**
     seq = logp.cpu()                              # 官方是 [T,B,C] ⇒ 转成 [B,T,C]
     if seq.shape[0] != len(true_len) and seq.shape[1] == len(true_len):
         seq = seq.transpose(0, 1)
@@ -178,14 +182,14 @@ def greedy_decode(logp: torch.Tensor, true_len: torch.Tensor,
     lens = true_len.view(-1).tolist()
     for b in range(seq.shape[0]):
         t = min(_conv_len(int(lens[b])), seq.shape[1])
-        ids = []
+        toks = []
         prev = -1
         for ti in range(t):
             k = int(seq[b, ti].argmax())
-            if k != prev and k != blank:
-                ids.append(k)
+            if k != prev and k != blank and 0 <= k < len(idx2word):
+                toks.append(idx2word[k])
             prev = k
-        out.append(classes_to_token_ids(ids) if ids else [])
+        out.append(toks)
     return out
 
 
@@ -387,10 +391,9 @@ def main() -> None:
                 # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
                 #    其他分支 logProbs1 本身就是最终输出。
                 logp5 = ls(out[0])   # 官方布局 [T,B,C]
-                hyps += greedy_decode(logp5, tl_len)
+                hyps += greedy_decode(logp5, tl_len, idx2word)
                 for b in _sids:
                     refs.append(labels_dv[b][1])
-        hyp_txt = ["/".join(idx2word[t] for t in h) for h in hyps]
         o = evaluate(refs, hyps)
 
         cur = (run / max(nrun, 1), o["WER_official"])
