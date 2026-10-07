@@ -1,0 +1,31 @@
+{
+  "experiment": "P89-analysis",
+  "purpose": "label smoothing 逐 epoch 配对分析",
+  "baseline": "p87-res160-2k (beta=0)",
+  "baseline_wer": 80.96,
+  "results": {
+    "0.05": {
+      "mean_diff": 0.31,
+      "std": 1.61,
+      "win": "2/6",
+      "flip": true,
+      "best_wer": 78.22,
+      "verdict": "噪声范围内",
+      "final_out_len": 2.198,
+      "final_distinct": 23
+    },
+    "0.1": {
+      "mean_diff": 0.6,
+      "std": 1.16,
+      "win": "4/6",
+      "flip": true,
+      "best_wer": 78.85,
+      "verdict": "噪声范围内",
+      "final_out_len": 1.806,
+      "final_distinct": 27
+    }
+  },
+  "best_beta": "0.05",
+  "criterion": "P83 修订版：|均值|>2×std 且符号稳定才算有效",
+  "caveat": "2000 条 / 6 epoch；概率平滑（log p' = log((1−β)p+β/K)）≠ Szegedy 的目标平滑，依据等级【无】"
+}

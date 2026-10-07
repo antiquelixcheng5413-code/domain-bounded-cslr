@@ -1,0 +1,74 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-06",
+  "purpose": "官方 moduleChoice=VAC 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 90.71,
+  "module": "VAC",
+  "mem_budget_GB": 6.6,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 6,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 600,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 6600000000.0,
+    "module": "VAC",
+    "tag": "p82-vac-hflip",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "n_params_M": 35.25,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 38.8559,
+      "dev_wer_official": 90.71,
+      "gap_to_sota": -48.61
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 29.2637,
+      "dev_wer_official": 93.63,
+      "gap_to_sota": -51.53
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 27.5823,
+      "dev_wer_official": 93.74,
+      "gap_to_sota": -51.64
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 26.2161,
+      "dev_wer_official": 92.19,
+      "gap_to_sota": -50.09
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 24.5686,
+      "dev_wer_official": 91.94,
+      "gap_to_sota": -49.84
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 24.5464,
+      "dev_wer_official": 91.73,
+      "gap_to_sota": -49.63
+    }
+  ],
+  "minutes": 76.6
+}

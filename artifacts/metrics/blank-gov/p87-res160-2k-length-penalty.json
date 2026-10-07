@@ -1,0 +1,100 @@
+{
+  "experiment": "P90",
+  "purpose": "长度惩罚 beta × beam width（复现官方 beam+length penalty 口径）",
+  "tag": "p87-res160-2k",
+  "paper_basis": {
+    "official": "arXiv:2409.11960v2 Implementation rules: beam width 10",
+    "official_code": "decode.py:22 ctcdecode.CTCBeamDecoder(beam_width=10)",
+    "ref15": "Camgoz: 官方还用 length penalty α"
+  },
+  "library_substitution": {
+    "blocked": "官方 ctcdecode 装不上：① 无 0.4 版本（只有 1.0.x）② 编译失败 ModuleNotFoundError: torch ③ --no-build-isolation 仍失败根因：Cython 项目对 Python 3.14 支持差",
+    "substitute": "pyctcdecode 0.5.0（Kensho Technologies，Apache-2.0，ctcdecode 的活跃继任者）",
+    "remaining_gap": "⚠️ alpha（语言模型浅融合）需 kenlm/arpa，未装⇒ 仍缺 alpha，只有 beta（长度惩罚）"
+  },
+  "results": {
+    "greedy": {
+      "wer": 80.96,
+      "len": 1.778640776699029,
+      "distinct": 20
+    },
+    "w10_beta0.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 64
+    },
+    "w10_beta0.5": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 64
+    },
+    "w10_beta1.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 64
+    },
+    "w10_beta2.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 64
+    },
+    "w10_beta3.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 64
+    },
+    "w25_beta0.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 58
+    },
+    "w25_beta0.5": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 58
+    },
+    "w25_beta1.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 58
+    },
+    "w25_beta2.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 58
+    },
+    "w25_beta3.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 58
+    },
+    "w50_beta0.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 56
+    },
+    "w50_beta0.5": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 56
+    },
+    "w50_beta1.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 56
+    },
+    "w50_beta2.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 56
+    },
+    "w50_beta3.0": {
+      "wer": 100.0,
+      "len": 1.0,
+      "distinct": 56
+    }
+  },
+  "best": "w10_beta0.0",
+  "best_wer": 100.0,
+  "baseline_greedy_wer": 80.96
+}

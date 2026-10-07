@@ -1,0 +1,65 @@
+{
+  "experiment": "P89",
+  "beta": 0.2,
+  "max_train": 2000,
+  "img_size": 160,
+  "best_wer": 82.2,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 40.6969,
+      "dev_wer_official": 84.55,
+      "out_len": 1.12,
+      "distinct": 3
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 35.9599,
+      "dev_wer_official": 82.34,
+      "out_len": 1.715,
+      "distinct": 6
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 35.1234,
+      "dev_wer_official": 84.06,
+      "out_len": 1.406,
+      "distinct": 7
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 34.4601,
+      "dev_wer_official": 82.2,
+      "out_len": 1.357,
+      "distinct": 10
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 33.3313,
+      "dev_wer_official": 82.27,
+      "out_len": 1.495,
+      "distinct": 14
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 32.9205,
+      "dev_wer_official": 82.93,
+      "out_len": 1.53,
+      "distinct": 15
+    }
+  ],
+  "minutes": 494.8,
+  "nan_steps": 0,
+  "baseline_p87": {
+    "best_wer": 80.96,
+    "out_len": 1.78,
+    "distinct": 20
+  },
+  "implementation": "概率平滑 log p' = log((1−β)p + β/K)，平滑施加在 log_probs 上、评估时不平滑（与 P87 口径一致）",
+  "paper_basis": {
+    "ref17_SALS": "§2.2 批评标准 LS『all words have non-zero probabilities』；SALS 只对 FastText 语义相似词(λ=0.6)平滑",
+    "why_not_SALS": "本地无 FastText；且 CE-CSL 的 3515 gloss 是视觉手形而非自然语言词⇒ 词向量无语义",
+    "standard_LS": "Szegedy et al. CVPR2016 是图像分类、平滑one-hot 目标，**从未用于 CTC 输出层**",
+    "honest_caveat": "概率平滑 ≠ 目标平滑（数学不等价）⇒ 依据等级【无】，属我的判断"
+  }
+}
