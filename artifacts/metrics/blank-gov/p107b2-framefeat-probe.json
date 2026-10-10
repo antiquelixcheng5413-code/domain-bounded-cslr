@@ -1,0 +1,25 @@
+{
+  "probe": "P107 B2 frames-feature discriminability",
+  "note": "原全类 macroAUC 不可算（1281/3841 类测试侧 0 样本），故改双指标",
+  "n_segments": 28272,
+  "dim": 256,
+  "pca_applied": true,
+  "pca_dim": 256,
+  "distinct_glosses": 3841,
+  "head_to_head": 28272,
+  "n_test_zero_sample_classes": null,
+  "threshold": {
+    "dead_auc": 0.1,
+    "alive_auc": 0.25,
+    "cohens_d_ref_upper": 0.3041,
+    "cohens_d_ref_full368": 0.041
+  },
+  "cohens_d": 0.4119,
+  "cohens_d_usable_classes": 1948,
+  "subset_min_freq": 20,
+  "subset_classes": 163,
+  "subset_macro_auc": 0.5628,
+  "verdict_by_cohens_d": "判活",
+  "verdict_by_auc": "判活",
+  "_caveat": "Cohen's d 在 resnet34MAM RGB 帧特征上；P36 参照值是 landmark 特征，模态不同，仅作效应量量级参照。Cohen's d 只测前端判别力，不回答 LLM 后端能否降低 WER。"
+}

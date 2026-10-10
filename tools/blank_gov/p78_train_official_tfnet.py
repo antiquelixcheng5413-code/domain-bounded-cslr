@@ -170,6 +170,122 @@ def make_word_segments(n_frames: int, n_words: int) -> list[tuple[int, int]]:
             if edges[k + 1] - edges[k] >= 1]
 
 
+
+# =============================================================================
+# 🔴 P100：对齐边界（替代等分边界）—— C 方向 v2
+#
+# 📄 依据等级【间接】（详见 MEMORY 2026-10-08 的 P98/P99 记录）：
+#   ref18（arXiv:2505.15438, Google 2025）原文：
+#     "we train an order-invariant classifier to predict the set of glosses
+#      in each video, which is then used to infer a temporal alignment"
+#   且明确说该思路来自 action segmentation（Bojanowski ECCV'14 /
+#   Kuehne CVIU'17 / Richard CVPR'18），在 CV 领域是成熟方案
+#   ⚠️ **无任何论文直接验证它能降 CSLR 的 WER**（ref18 衡量 BLEU）
+#   ⚠️ **不是同一任务**：ref18 做 SLT（视频→文本），我们做 CSLR（识别）
+#
+# 🔴 与 ref18 的差别要说清：
+#   ref18 把伪 gloss 当「无序集合」，额外训分类器推顺序；
+#   我们的 CTC forward 算法本身就是「无序集合 → 唯一单调对齐」，
+#   ⇒ 直接读它的贪心路径当软对齐即可，**不需要额外的分类器**。
+#
+# ⚠️ 为什么不能重跑等分边界版：P85 已实测等分边界「无显著影响」
+#   ⇒ 唯一有意义的变量是**边界质量本身**
+# =============================================================================
+
+def align_segments(logp: torch.Tensor, ids: list, blank: int = 0):
+    """用 CTC 贪心路径切词级段。
+
+    参数
+    ----
+    logp : [T, C] 该样本的 log_probs（**单样本**，不是 batch）
+    ids  : 该样本的 gloss 词表索引列表
+
+    返回
+    ----
+    (keep_ids, segments, avg_conf)
+      keep_ids  : 成功对齐的词 id（未对齐的直接丢弃）
+      segments  : 与 keep_ids 一一对应的 (起始帧, 结束帧)
+      avg_conf  : 各片段起点的平均置信度（用于判断可靠性）
+
+    自检结果（构造 3 词各 20 帧 / 40-10-10 非等分两种情况均正确）
+    """
+    T = logp.shape[0]
+    # 🔴 必须 detach：logits_seq 带 grad，Tensor.numpy() 会报
+    #    "Can't call numpy() on Tensor that requires grad"
+    with torch.no_grad():
+        best = logp.argmax(dim=-1).detach().cpu().numpy()
+        conf = logp.max(dim=-1).values.detach().cpu().numpy()
+
+    # CTC 折叠：去掉 blank 与连续重复
+    collapsed = []
+    prev = -1
+    for t in range(T):
+        k = int(best[t])
+        if k != prev and k != blank:
+            collapsed.append((t, k))
+        prev = k
+
+    if not collapsed or not ids:
+        return [], [], 0.0
+
+    # 按 ids 的顺序贪心匹配片段
+    segs = []
+    starts = []
+    ci = 0
+    for gid in ids:
+        found = -1
+        for j in range(ci, len(collapsed)):
+            if collapsed[j][1] == gid:
+                found = j
+                break
+        if found < 0:
+            continue                      # 模型没输出这个词 ⇒ 丢弃
+        start = collapsed[found][0]
+        if found + 1 < len(collapsed):
+            end = collapsed[found + 1][0]
+        else:
+            end = T
+        segs.append((start, max(end, start + 1)))
+        starts.append(start)
+        ci = found + 1
+
+    # 重扫一遍构造 keep_ids（必须与 segs 同序 ⇒ 用同一个 ci 推进逻辑）
+    keep = []
+    ci = 0
+    for gid in ids:
+        for j in range(ci, len(collapsed)):
+            if collapsed[j][1] == gid:
+                keep.append(gid)
+                ci = j + 1
+                break
+
+    avg_conf = float(conf[starts].mean()) if starts else 0.0
+    return keep, segs, avg_conf
+
+
+def word_head_loss_aligned(logits_seq: torch.Tensor, ids: list,
+                           idx2word: list, blank: int = 0) -> torch.Tensor:
+    """C 方向 v2：用 CTC 对齐结果切段的词级辅助分类损失。"""
+    if not ids or logits_seq.shape[0] == 0:
+        return logits_seq.new_zeros(())
+    keep, segs, _conf = align_segments(logits_seq, ids, blank)
+    if not segs or word_classifier is None:
+        return logits_seq.new_zeros(())
+    T = logits_seq.shape[0]
+    pooled = []
+    for (a, b) in segs:
+        b = min(b, T)
+        if a >= T:
+            break
+        pooled.append(logits_seq[a:b].mean(0))
+    if not pooled:
+        return logits_seq.new_zeros(())
+    feat = torch.stack(pooled)
+    return torch.nn.functional.cross_entropy(
+        word_classifier(feat),
+        torch.tensor(keep, device=feat.device, dtype=torch.long))
+
+
 def word_head_loss(logits_seq: torch.Tensor, ids: list[int],
                    feat_len: int, idx2word: list) -> torch.Tensor:
     """C 方向：词级辅助分类头。
@@ -259,6 +375,18 @@ def main() -> None:
     ap.add_argument("--word-head", type=float, default=0.0,
                     help="C方向：词级辅助分类头的权重 w（0=关闭）。"
                          "需配合 --pseudo-boundary")
+    ap.add_argument("--word-boundary", default="equal",
+                    choices=["equal", "ctc_align"],
+                    help="🔴 C 方向 v2 的边界来源："
+                         "equal=按 gloss 数等分（P85 已证无效）；"
+                         "ctc_align=用 CTC 贪心路径切（ref18 机制，【间接】依据）")
+    ap.add_argument("--word-head-lowlr-mult", type=float, default=1.0,
+                    help="🔴 P101：lr 衰减后词级头权重的倍数。"
+                         "1.0 = 不变（对照组）；"
+                         ">1 = 衰减后加大权重（验证『lr 低时才有效』假设）")
+    ap.add_argument("--warmup-ep", type=int, default=0,
+                    help="🔴 前 N 轮不开词级头（早期 CTC 对准极差，"
+                         "此时用对齐结果切边界会提供错误监督）")
     ap.add_argument("--pseudo-boundary", action="store_true",
                     help="按 gloss 数等分时间轴造词级伪边界（P1 TFD 思路）")
     ap.add_argument("--img-size", type=int, default=224,
@@ -266,6 +394,13 @@ def main() -> None:
                          "（依据：AdaSize 间接支持，但未在 CE-CSL 验证）")
     ap.add_argument("--amp-bf16", action="store_true",
                     help="用 bf16 混合精度（⚠️ fp16 会让 CTC+KLD 梯度 NaN）")
+    ap.add_argument("--resume", default="",
+                    help="🔴 续训用：从某个 .pt 恢复（需含 optimizer/sched/RNG）。"
+                         "典型用法：--resume ck/xxx-last.pt --total-epochs 30")
+    ap.add_argument("--total-epochs", type=int, default=0,
+                    help="🔴 lr 调度按**最终总轮数**算，而不是本次要跑的轮数。"
+                         "0 = 用 --epochs（首次训练）。"
+                         "续训时必须传，否则 lr 调度会错位。")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -360,9 +495,30 @@ def main() -> None:
     class _AdaptiveLoader:
         """绕开 DataLoader 的固定 batch_size：按帧数桶自适应组装。"""
 
-        def __init__(self, ds, shuffle):
+        def __init__(self, ds, shuffle, shuffle_state=None):
             self.ds = ds
-            self.batches = _adaptive_batches(ds, shuffle)
+            if shuffle and shuffle_state is not None:
+                # 🔴 续训：用 checkpoint 里的 RNG 状态做 shuffle，
+                #    使 batch 排列与「连续训练到同一epoch」一致，
+                #    且不污染全局 RNG（否则会影响后续 dropout 等）。
+                import random as _r
+                rng = _r.Random()
+                rng.setstate(shuffle_state)
+                order = sorted(range(len(ds.items)),
+                               key=lambda k: ds.items[k]["n_jpg"],
+                               reverse=False)
+                out, cur = [], []
+                for k in order:
+                    cur.append(k)
+                    if len(cur) >= _batch_for(ds.items[k]["n_jpg"]):
+                        out.append(cur)
+                        cur = []
+                if cur:
+                    out.append(cur)
+                rng.shuffle(out)
+                self.batches = out
+            else:
+                self.batches = _adaptive_batches(ds, shuffle)
 
         def __iter__(self):
             for chunk in self.batches:
@@ -371,7 +527,18 @@ def main() -> None:
         def __len__(self):
             return len(self.batches)
 
-    tr_dl = _AdaptiveLoader(tr_ds, True)
+    # 🔴🔴 注意：构造 loader 会调用 random.shuffle() 消耗 python RNG。
+    #   若这里先构造、后面才恢复 RNG（续训分支在 400+ 行），
+    #   续训时的 batch 排列会与连续训练不同（实测 ep004 ctc 差 1.78）。
+    #   ⇒ 解决办法：把 shuffle 的随机源做成可注入，
+    #     续训时用 checkpoint 里的 py_rng 副本，构造后不污染全局 RNG。
+    # 🔴 必须在建 loader 之前读出 shuffle 用的 RNG（见下方 resume 段说明）
+    _ck_pre = None
+    if a.resume:
+        _ck_pre = torch.load(a.resume, map_location="cpu", weights_only=False)
+
+    tr_dl = _AdaptiveLoader(tr_ds, True,
+                            shuffle_state=(_ck_pre or {}).get("py_rng"))
     dv_dl = _AdaptiveLoader(dv_ds, False)
     print("自适应分桶         %d train batch / %d dev batch" % (
         len(tr_dl), len(dv_dl)))
@@ -385,9 +552,20 @@ def main() -> None:
     if a.word_head > 0:
         global word_classifier
         word_classifier = torch.nn.Linear(wordSetNum + 1, wordSetNum + 1).to(dev)
-        print("词级辅助头          C = %d 类，权重 w = %.3f%s"
-              % (wordSetNum + 1, a.word_head,
-                 "（伪边界 = 按 gloss 数等分时间轴）" if a.pseudo_boundary else ""))
+        _bl = ("等分时间轴（P85 已证无效）" if a.word_boundary == "equal"
+               else "★ CTC 贪心路径（ref18 机制，依据【间接】）")
+        print("词级辅助头          C = %d 类，权重 w = %.3f"
+              % (wordSetNum + 1, a.word_head))
+        print("边界来源            %s" % _bl)
+        print("warmup              前 %d 轮不开词级头" % a.warmup_ep)
+        if a.word_head_lowlr_mult != 1.0:
+            # 🔴 ms 在下方才定义，此处用同公式预计算，避免 NameError
+            _T0 = a.total_epochs if a.total_epochs > 0 else a.epochs
+            _ms0 = int(round(35 * _T0 / 55))
+            print("低 lr 增强           ep%d 起权重 ×%.2f（P101 假设验证）"
+                  % (_ms0, a.word_head_lowlr_mult))
+        else:
+            print("低 lr 增强           关闭（对照组，权重恒定）")
 
     # ★ 官方的 CTC 配置（zero_infinity=True 是关键，我 P72 就是漏了这行导致永久 nan）
     ctc_loss = torch.nn.CTCLoss(blank=0, reduction="none", zero_infinity=True)
@@ -397,18 +575,93 @@ def main() -> None:
     if a.word_head > 0 and word_classifier is not None:
         _params += list(word_classifier.parameters())
     opt = torch.optim.Adam(_params, lr=a.lr, weight_decay=a.weight_decay)
-    ms = [int(round(35 * a.epochs / 55)), int(round(45 * a.epochs / 55))]
+    # 🔴 lr 里程碑必须按**最终目标总轮数**算，不是本次要跑的轮数。
+    #   原因：续训时若按本次轮数算，衰减会提前/错位
+    #   （例：从 20 续到 30，若按 30 算 ms=[19,25]，
+    #     但 20 轮时已在 ep14/ep16 衰减过 → lr 不会升回 1e-4，
+    #     模型在4e-6 下空转 10 轮，学习几乎停滞。）
+    T = a.total_epochs if a.total_epochs > 0 else a.epochs
+    ms = [int(round(35 * T / 55)), int(round(45 * T / 55))]
     sched = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=ms, gamma=0.2)
-    print("lr衰减里程碑        %s（官方 35/45 按比例缩放）" % ms)
+
+    print("lr 衰减里程碑        %s（按**总轮数 %d** 缩放，官方 35/45）" % (ms, T))
 
     ck_dir = REPO / "artifacts/checkpoints"
     ck_dir.mkdir(parents=True, exist_ok=True)
-    best = float("inf")
-    hist = []
+    # =========================================================================
+    # 🔴 续训：恢复 optimizer / lr 调度 / 随机数状态
+    #   只 load 权重是不够的 —— Adam 的二阶动量丢了就不是同一个优化过程；
+    #   随机数不复原则数据顺序与增强都变了，续训轨迹不可复现。
+    # =========================================================================
+    start_ep = 1
+    if a.resume:
+        # 🔴 用前面已读的 ck（避免重复读 423MB 文件）
+        ck = _ck_pre
+        model.load_state_dict(ck["model_state"])
+        if "optimizer_state" not in ck:
+            raise SystemExit(
+                "❌ %s 里没有 optimizer_state，无法真正续训。\n"
+                "   （只存 model_state 会丢 Adam 二阶动量 + lr 位置）"
+                % a.resume)
+        opt.load_state_dict(ck["optimizer_state"])
+        start_ep = int(ck["epoch"]) + 1
+        if "torch_rng" in ck:
+            torch.set_rng_state(ck["torch_rng"].cpu())
+        if "cuda_rng" in ck and torch.cuda.is_available():
+            torch.cuda.set_rng_state(ck["cuda_rng"].cpu())
+        if "np_rng" in ck:
+            np.random.set_state(ck["np_rng"])
+        if "py_rng" in ck:
+            random.setstate(ck["py_rng"])
+        # 🔴 恢复 scheduler 位置：让 lr 从「上轮结束时的值」继续，
+        #    而不是从头按 sched.step() 的初始序列走。
+        if "sched_state" in ck:
+            try:
+                sched.load_state_dict(ck["sched_state"])
+                sched.last_epoch = int(ck["epoch"])
+                print("  scheduler 恢复：last_epoch=%d，当前 lr=%.2e"
+                      % (sched.last_epoch, opt.param_groups[0]["lr"]))
+            except Exception as e:
+                print("  ⚠️ scheduler 状态恢复失败（将按初始 lr 继续）：%r" % (e,))
+        best = float(ck.get("wer_official", float("inf")))
+        prev_hist = ck.get("history", [])
+        print("=" * 68)
+        print("续训：从 %s 恢复" % a.resume)
+        print("  已完成 epoch = %d，本次从 ep%d 跑到 ep%d"
+              % (int(ck["epoch"]), start_ep, a.epochs))
+        print("  历史 best WER = %.2f%%" % best)
+        print("  lr 里程碑 %s（按总轮数 %d 算）← 🔴 不会被续训打乱"
+              % (ms, T))
+        # 🔴 主动检查 lr 调度是否与上一轮的规划冲突
+        planned = ck.get("total_epochs_planned")
+        if planned and planned != T:
+            print()
+            print("  ⚠️⚠️ 警告：上一轮原定的总轮数是 %d，这次传的是 %d" % (planned, T))
+            print("     上轮已在该调度下衰减过 lr，本轮不会升回高位lr。")
+            print("     若 T > planned，属正常扩展（衰减点按新 T 重排）；")
+            print("     若 T < planned，学习率会偏高，需谨慎。")
+            print("     上轮 lr 当前位置（sched）："
+                  "last_epoch=%d, base_lrs=%s"
+                  % (ck.get("sched_state", {}).get("last_epoch", -1),
+                     [("%.2e" % x) for x in
+                      ck.get("sched_state", {}).get("_last_lr", [])]))
+        print("=" * 68)
+    else:
+        prev_hist = []
+        best = float("inf")
+
+    # 🔴🔴 等价性修复（续训数字与连续训练不一致的根因）：
+    #   _AdaptiveLoader.__init__ 里 random.shuffle() 会消耗 python RNG，
+    #   而上面恢复 RNG 发生在**建 loader 之前**
+    #   ⇒ 续训时 batch 排列与连续训练不同（实测 ep004 差 1.78）。
+    #   解法：把 RNG 恢复**挪到建 loader 之前**，让 shuffle 用上轮的 RNG 状态。
+    #   （若不修，逐级扩展仍可用，但节点间的数字不可与连续跑直接对比。）
+
+    hist = list(prev_hist)
     t0 = time.time()
     nan_steps = 0
 
-    for ep in range(1, a.epochs + 1):
+    for ep in range(start_ep, a.epochs + 1):
         model.train()
         run, nrun = 0.0, 0
         for vid, tgt, tgt_len, dl, _tl, _sids, _ids in tr_dl:
@@ -447,13 +700,35 @@ def main() -> None:
                         + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[1], out[0], use_blank=False))
             # C 方向：词级辅助分类头（多任务，主任务仍是 CTC）
-            if a.word_head > 0:
+            # C 方向：词级辅助头（主任务仍是 CTC）
+            # 🔴 warmup：前 warmup_ep 轮不开（早期对齐不可靠）
+            # 🔴 ctc_align 模式：用 CTC 贪心路径切边界（非等分）
+            # 🔴 P101：lr 衰减后加大词级头权重
+            #   依据：P100 实测 ep14-20（lr 衰减后）连续 7/7 为正、平均 +2.08pp，
+            #        而 ep04-08（lr 高）为 0/5、平均 −1.46pp
+            #   ⇒ 假设「lr 低时词级头才有益」
+            # ⚠️ 这是**基于单次观察的事后假设**（有 p-hacking 风险），
+            #    故必须设对照组（mult=1.0）才能分离「低 lr」与「权重更大」两个因素。
+            _mult = 1.0
+            if a.word_head_lowlr_mult != 1.0 and ep > (ms[0] if ms else 10**9):
+                _mult = a.word_head_lowlr_mult
+            if a.word_head > 0 and ep > a.warmup_ep:
+                _w = a.word_head * _mult
                 lp_seq = main_lp                      # [T, B, C]
+                n_seg = 0
                 for bi in range(lp_seq.shape[1]):
                     fw = int(lgt[bi])
-                    loss = loss + a.word_head * word_head_loss(
-                        lp_seq[:, bi, :], _ids[bi], fw, idx2word)
-                loss = loss / (1.0 + a.word_head * lp_seq.shape[1])
+                    if a.word_boundary == "ctc_align":
+                        wl = word_head_loss_aligned(
+                            lp_seq[:, bi, :], _ids[bi], idx2word)
+                    else:
+                        wl = word_head_loss(
+                            lp_seq[:, bi, :], _ids[bi], fw, idx2word)
+                    if float(wl) != 0.0:
+                        loss = loss + _w * wl
+                        n_seg += 1
+                if n_seg:
+                    loss = loss / (1.0 + _w * n_seg)
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
@@ -490,12 +765,42 @@ def main() -> None:
               % (ep, cur[0], o["WER_official"], o["gap_to_sota_TFNet"],
                  "  [nan跳过 %d]" % nan_steps if nan_steps else ""), flush=True)
 
+        # =========================================================================
+        # 🔴 存 last.pt（**每轮覆盖**）—— 这是逐级续训的基础
+        #   为什么必须存 last 而不是只用 best：
+        #     逐级扩展要的是「训练到第 N 轮的状态」，不是「最好的那一轮」。
+        #     若只存 best，续训会跳回 best 那一轮，等于每次都重跑最好点之前
+        #     的所有 epoch（lr 轨迹会错乱、优化过程被重入）。
+        # =========================================================================
+        last_state = {
+            "epoch": ep,
+            "model_state": model.state_dict(),
+            "optimizer_state": opt.state_dict(),   # 🔴 Adam 二阶动量
+            "sched_state": sched.state_dict(),     # 🔴 lr 当前位置
+            "torch_rng": torch.get_rng_state(),
+            "np_rng": np.random.get_state(),
+            "py_rng": random.getstate(),
+            "wordSetNum": wordSetNum, "idx2word": idx2word,
+            "hidden": a.hidden, "hflip": not a.no_hflip,
+            "wer_official": o["WER_official"],
+            "history": hist,
+            "total_epochs_planned": T,   # 🔴 记录原定的总轮数，供续训核对
+            "config": vars(a),
+        }
+        if torch.cuda.is_available():
+            last_state["cuda_rng"] = torch.cuda.get_rng_state()
+        torch.save(last_state, ck_dir / ("%s-last.pt" % a.tag))
+
         if o["WER_official"] < best:
             best = o["WER_official"]
             torch.save({"epoch": ep, "model_state": model.state_dict(),
+                        "optimizer_state": opt.state_dict(),
+                        "sched_state": sched.state_dict(),
                         "wordSetNum": wordSetNum, "idx2word": idx2word,
                         "hidden": a.hidden, "hflip": not a.no_hflip,
-                        "wer_official": best, "config": vars(a)},
+                        "wer_official": best, "history": hist,
+                        "total_epochs_planned": T,
+                        "config": vars(a)},
                        ck_dir / ("%s-best.pt" % a.tag))
 
     # ---- 收据（⚠️括号必须加：Path / str 的优先级高于 %）----
@@ -512,11 +817,17 @@ def main() -> None:
         "img_size": a.img_size,
         "amp_bf16": a.amp_bf16,
         "word_head_w": a.word_head,
+        "word_boundary": a.word_boundary,
+        "word_head_lowlr_mult": a.word_head_lowlr_mult,
+        "lr_milestone_ep": ms[0] if ms else None,
+        "warmup_ep": a.warmup_ep,
         "pseudo_boundary": a.pseudo_boundary,
         "mem_budget_GB": round(a.mem_budget / 1e9, 2),
         "vocab": {"wordSetNum": wordSetNum,
                   "note": "官方 Word2Id，train+dev+test 全收、无截断"},
         "config": vars(a),
+        "resumed_from": a.resume or None,
+        "total_epochs_planned": T,
         "n_params_M": round(n_par, 2),
         "short_samples_padded": tr_ds.n_short,
         "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",

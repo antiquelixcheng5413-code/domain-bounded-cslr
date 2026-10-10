@@ -1,0 +1,113 @@
+[P107 03:26:14] ======================================================================
+[P107 03:26:14] P107：等 P101 → 自动启动岔路 B
+[P107 03:26:14] ======================================================================
+[P107 03:26:14] P101 结果：{"p101b-ctrl": {"best_wer": null, "history_len": 20}, "p101a-lowlr": {"best_wer": null, "history_len": 20}}
+[P107 03:26:14] ======================================================================
+[P107 03:26:14] 阶段 B1：导出帧级特征（全量，与 P101 结论无关）
+[P107 03:26:14] ======================================================================
+[P107 03:26:21] 导出 dev：515 个视频
+[P107 03:29:57] ======================================================================
+[P107 03:29:57] P107：等 P101 → 自动启动岔路 B
+[P107 03:29:57] ======================================================================
+[P107 03:29:57] P101 结果：{"p101b-ctrl": {"best_wer": 61.51, "history_len": 20}, "p101a-lowlr": {"best_wer": 61.37, "history_len": 20}}
+[P107 03:29:57] ======================================================================
+[P107 03:29:57] 阶段 B1：导出帧级特征（全量，与 P101 结论无关）
+[P107 03:29:57] ======================================================================
+[P107 03:30:04] 导出 dev：515 个视频
+[P107 03:30:19]   100/515
+[P107 03:30:53]   200/515
+[P107 03:31:30]   300/515
+[P107 03:32:07]   400/515
+[P107 03:32:53]   500/515
+[P107 03:32:59] dev 导出完成 → /home/su127/FYP/domain-bounded-cslr/artifacts/frame_feats/dev
+[P107 03:32:59] 导出 train：4973 个视频
+[P107 03:33:36]   100/4973
+[P107 03:34:18]   200/4973
+[P107 03:34:57]   300/4973
+[P107 03:35:36]   400/4973
+[P107 03:36:16]   500/4973
+[P107 03:36:48]   600/4973
+[P107 03:37:18]   700/4973
+[P107 03:37:59]   800/4973
+[P107 03:38:25]   900/4973
+[P107 03:39:15]   1000/4973
+[P107 03:39:46]   1100/4973
+[P107 03:40:21]   1200/4973
+[P107 03:40:57]   1300/4973
+[P107 03:41:33]   1400/4973
+[P107 03:42:07]   1500/4973
+[P107 03:42:29]   1600/4973
+[P107 03:42:59]   1700/4973
+[P107 03:43:26]   1800/4973
+[P107 03:44:01]   1900/4973
+[P107 03:44:37]   2000/4973
+[P107 03:45:00]   2100/4973
+[P107 03:45:25]   2200/4973
+[P107 03:45:51]   2300/4973
+[P107 03:46:19]   2400/4973
+[P107 03:46:52]   2500/4973
+[P107 03:47:45]   2600/4973
+[P107 03:48:43]   2700/4973
+[P107 03:49:35]   2800/4973
+[P107 03:50:30]   2900/4973
+[P107 03:51:22]   3000/4973
+[P107 03:52:08]   3100/4973
+[P107 03:52:46]   3200/4973
+[P107 03:53:28]   3300/4973
+[P107 03:54:06]   3400/4973
+[P107 03:54:43]   3500/4973
+[P107 03:55:18]   3600/4973
+[P107 03:56:07]   3700/4973
+[P107 03:56:52]   3800/4973
+[P107 03:57:28]   3900/4973
+[P107 03:58:08]   4000/4973
+[P107 03:58:52]   4100/4973
+[P107 03:59:25]   4200/4973
+[P107 03:59:51]   4300/4973
+[P107 04:00:17]   4400/4973
+[P107 04:00:56]   4500/4973
+[P107 04:01:41]   4600/4973
+[P107 04:02:20]   4700/4973
+[P107 04:03:02]   4800/4973
+[P107 04:03:43]   4900/4973
+[P107 04:04:13] train 导出完成 → /home/su127/FYP/domain-bounded-cslr/artifacts/frame_feats/train
+[P107 04:04:13] ======================================================================
+[P107 04:04:13] 阶段 B2：判别力探针（P101 判活⇒降级为可选）
+[P107 04:04:13] ======================================================================
+[P107 04:04:17] 片段池化完成：28272 片段 × 1024 维
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:1457: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+Traceback (most recent call last):
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p107_branch_b.py", line 269, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p107_branch_b.py", line 262, in main
+    probe("p107b2-framefeat-probe")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p107_branch_b.py", line 191, in probe
+    clf.fit(X[tr], Y[tr])
+    ~~~~~~~^^^^^^^^^^^^^^
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/base.py", line 1403, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py", line 1459, in fit
+    X, y = validate_data(
+           ~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<5 lines>...
+        accept_large_sparse=solver not in ["liblinear", "sag", "saga"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/utils/validation.py", line 3055, in validate_data
+    X, y = check_X_y(X, y, **check_params)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/utils/validation.py", line 1344, in check_X_y
+    y = _check_y(y, multi_output=multi_output, y_numeric=y_numeric, estimator=estimator)
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/utils/validation.py", line 1365, in _check_y
+    y = column_or_1d(y, warn=True)
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/utils/validation.py", line 1447, in column_or_1d
+    raise ValueError(
+        "y should be a 1d array, got an array of shape {} instead.".format(shape)
+    )
+ValueError: y should be a 1d array, got an array of shape (14361, 3841) instead.

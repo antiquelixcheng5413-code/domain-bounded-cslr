@@ -85,3 +85,6 @@ external/TFNet/data/RWTH-T/
 external/TFNet/evaluation/
 external/TFNet/evaluationT/
 external/TFNet/video.rar
+
+# P107 B1 帧级特征产物（1.0 GB / 5488 个 npy）——不可提交
+artifacts/frame_feats/**

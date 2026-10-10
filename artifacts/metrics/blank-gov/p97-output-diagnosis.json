@@ -1,0 +1,128 @@
+{
+  "experiment": "P97 output-pattern diagnosis",
+  "checkpoint": "p94-30ep-best.pt",
+  "ckpt_epoch": 29,
+  "ckpt_wer": 62.49,
+  "out_len_mean": 3.61,
+  "ref_len_mean": 5.518,
+  "distinct": 209,
+  "coverage_pct": 27.0,
+  "passed_len_gt3": true,
+  "passed_dist_gt50": true,
+  "breakthrough": true,
+  "top10": [
+    [
+      "。",
+      411
+    ],
+    [
+      "我",
+      136
+    ],
+    [
+      "你",
+      110
+    ],
+    [
+      "？",
+      103
+    ],
+    [
+      "我们",
+      39
+    ],
+    [
+      "可以",
+      38
+    ],
+    [
+      "这",
+      35
+    ],
+    [
+      "这里",
+      31
+    ],
+    [
+      "做",
+      27
+    ],
+    [
+      "好",
+      26
+    ]
+  ],
+  "ref_top8": [
+    [
+      "。",
+      387
+    ],
+    [
+      "我",
+      176
+    ],
+    [
+      "你",
+      128
+    ],
+    [
+      "？",
+      128
+    ],
+    [
+      "我们",
+      42
+    ],
+    [
+      "可以",
+      36
+    ],
+    [
+      "这里",
+      36
+    ],
+    [
+      "有",
+      34
+    ]
+  ],
+  "punct_pct": 27.6,
+  "miss_rate_by_freq": {
+    ">=100": {
+      "dev_tokens": 1421,
+      "hit": 962,
+      "miss_pct": 32.3
+    },
+    "11-100": {
+      "dev_tokens": 729,
+      "hit": 133,
+      "miss_pct": 81.8
+    },
+    "1-10": {
+      "dev_tokens": 692,
+      "hit": 5,
+      "miss_pct": 99.3
+    }
+  },
+  "history": [
+    {
+      "exp": "P84-600",
+      "out_len": 0.95,
+      "distinct": 12,
+      "wer": 89.06
+    },
+    {
+      "exp": "P87-2000",
+      "out_len": 1.78,
+      "distinct": 20,
+      "wer": 80.96
+    },
+    {
+      "exp": "P94-4973-30ep",
+      "out_len": 3.61,
+      "distinct": 209,
+      "wer": 62.49
+    }
+  ],
+  "c_direction_premise_changed": true
+}

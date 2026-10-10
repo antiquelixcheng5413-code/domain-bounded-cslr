@@ -1,0 +1,77 @@
+{
+  "experiment": "P94 saturation analysis (20ep vs 30ep)",
+  "base_tag": "p93-20ep",
+  "exp_tag": "p94-30ep",
+  "base_best": 62.81,
+  "exp_best": 62.49,
+  "gain_pp": 0.32,
+  "new_epochs_curve": [
+    {
+      "epoch": 21,
+      "train_ctc": 14.3059,
+      "wer": 62.63
+    },
+    {
+      "epoch": 22,
+      "train_ctc": 14.1561,
+      "wer": 63.05
+    },
+    {
+      "epoch": 23,
+      "train_ctc": 13.9813,
+      "wer": 63.27
+    },
+    {
+      "epoch": 24,
+      "train_ctc": 13.9061,
+      "wer": 62.95
+    },
+    {
+      "epoch": 25,
+      "train_ctc": 13.705,
+      "wer": 62.63
+    },
+    {
+      "epoch": 26,
+      "train_ctc": 13.5952,
+      "wer": 62.53
+    },
+    {
+      "epoch": 27,
+      "train_ctc": 13.5036,
+      "wer": 63.3
+    },
+    {
+      "epoch": 28,
+      "train_ctc": 13.3609,
+      "wer": 63.12
+    },
+    {
+      "epoch": 29,
+      "train_ctc": 13.2243,
+      "wer": 62.49
+    },
+    {
+      "epoch": 30,
+      "train_ctc": 13.1406,
+      "wer": 62.98
+    }
+  ],
+  "per_epoch_improve": [
+    -0.42,
+    -0.22,
+    0.32,
+    0.32,
+    0.1,
+    -0.77,
+    0.18,
+    0.63,
+    -0.49
+  ],
+  "mean_improve_pp": -0.039,
+  "std_pp": 0.459,
+  "sign_flip": true,
+  "baseline_20ep_mean_improve": 0.341,
+  "verdict": "SATURATED",
+  "criterion": "P83 修订版（配对） + P93 定的 0.2pp/轮 饱和线"
+}

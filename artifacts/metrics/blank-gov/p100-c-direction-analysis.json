@@ -1,0 +1,190 @@
+{
+  "experiment": "P100 paired analysis (C direction v2: CTC-aligned boundary)",
+  "base_tag": "p93-20ep",
+  "exp_tag": "p100-whalign",
+  "base_best": 62.81,
+  "exp_best": 60.94,
+  "best_diff_pp": 1.87,
+  "paper_basis": "ref18 (arXiv:2505.15438) order-invariant classifier → temporal alignment；action segmentation (Bojanowski'14/Kuehne'17/Richard'18)。等级【间接】",
+  "warmup_ep": 3,
+  "per_epoch_diff": [
+    {
+      "epoch": 1,
+      "base": 80.89,
+      "exp": 80.19,
+      "diff": 0.7,
+      "in_warmup": true
+    },
+    {
+      "epoch": 2,
+      "base": 78.57,
+      "exp": 78.47,
+      "diff": 0.1,
+      "in_warmup": true
+    },
+    {
+      "epoch": 3,
+      "base": 77.13,
+      "exp": 75.4,
+      "diff": 1.73,
+      "in_warmup": true
+    },
+    {
+      "epoch": 4,
+      "base": 76.21,
+      "exp": 76.71,
+      "diff": -0.5,
+      "in_warmup": false
+    },
+    {
+      "epoch": 5,
+      "base": 73.26,
+      "exp": 74.28,
+      "diff": -1.02,
+      "in_warmup": false
+    },
+    {
+      "epoch": 6,
+      "base": 74.14,
+      "exp": 75.55,
+      "diff": -1.41,
+      "in_warmup": false
+    },
+    {
+      "epoch": 7,
+      "base": 70.62,
+      "exp": 72.66,
+      "diff": -2.04,
+      "in_warmup": false
+    },
+    {
+      "epoch": 8,
+      "base": 70.97,
+      "exp": 73.29,
+      "diff": -2.32,
+      "in_warmup": false
+    },
+    {
+      "epoch": 9,
+      "base": 70.94,
+      "exp": 69.28,
+      "diff": 1.66,
+      "in_warmup": false
+    },
+    {
+      "epoch": 10,
+      "base": 69.46,
+      "exp": 69.7,
+      "diff": -0.24,
+      "in_warmup": false
+    },
+    {
+      "epoch": 11,
+      "base": 66.26,
+      "exp": 65.87,
+      "diff": 0.39,
+      "in_warmup": false
+    },
+    {
+      "epoch": 12,
+      "base": 67.56,
+      "exp": 67.24,
+      "diff": 0.32,
+      "in_warmup": false
+    },
+    {
+      "epoch": 13,
+      "base": 67.95,
+      "exp": 64.6,
+      "diff": 3.35,
+      "in_warmup": false
+    },
+    {
+      "epoch": 14,
+      "base": 65.87,
+      "exp": 63.27,
+      "diff": 2.6,
+      "in_warmup": false
+    },
+    {
+      "epoch": 15,
+      "base": 64.57,
+      "exp": 62.91,
+      "diff": 1.66,
+      "in_warmup": false
+    },
+    {
+      "epoch": 16,
+      "base": 64.53,
+      "exp": 62.17,
+      "diff": 2.36,
+      "in_warmup": false
+    },
+    {
+      "epoch": 17,
+      "base": 63.51,
+      "exp": 61.12,
+      "diff": 2.39,
+      "in_warmup": false
+    },
+    {
+      "epoch": 18,
+      "base": 63.23,
+      "exp": 61.37,
+      "diff": 1.86,
+      "in_warmup": false
+    },
+    {
+      "epoch": 19,
+      "base": 62.81,
+      "exp": 61.37,
+      "diff": 1.44,
+      "in_warmup": false
+    },
+    {
+      "epoch": 20,
+      "base": 63.19,
+      "exp": 60.94,
+      "diff": 2.25,
+      "in_warmup": false
+    }
+  ],
+  "warmup_phase_mean_pp": 0.843,
+  "noise_baseline_pp": 0.824,
+  "post_warmup_mean_pp": 0.75,
+  "post_warmup_std_pp": 1.749,
+  "post_warmup_win": "11/17",
+  "sign_flip": true,
+  "ctc_loss_final": {
+    "base": 12.8127,
+    "exp": 12.7748,
+    "delta_pct": -0.3
+  },
+  "verdict": "NO_EFFECT",
+  "criterion": "P83 修订版：|均值|>2×std 且符号稳定；且幅度须超过 warmup 期测得的 CUDA 抖动基线",
+  "segment_analysis": {
+    "lr_high_ep04_08": {
+      "mean": -1.46,
+      "std": 0.74,
+      "win": "0/5"
+    },
+    "transition_ep09_13": {
+      "mean": 1.1,
+      "std": 1.44,
+      "win": "4/5"
+    },
+    "lr_low_ep14_20": {
+      "mean": 2.08,
+      "std": 0.43,
+      "win": "7/7"
+    },
+    "consecutive_positive_ep14_20": 7,
+    "p_all_same_sign_by_chance": 0.781
+  },
+  "reinterpretation": {
+    "p83_strict_verdict": "NO_EFFECT",
+    "segmented_view": "ep14-20 (lr 衰减后) 连续 7/7 为正，平均 +2.10pp",
+    "honest_positioning": "倾向『lr 低时才有效』，但证据不足以定论；P83 判据把分阶段效应当成噪声，是判据本身的缺陷",
+    "caveat": "这是基于单次观察的事后假设，有 p-hacking 风险"
+  }
+}

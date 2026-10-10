@@ -1,0 +1,177 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-09",
+  "purpose": "官方 moduleChoice=VAC 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 61.51,
+  "module": "VAC",
+  "img_size": 160,
+  "amp_bf16": false,
+  "word_head_w": 0.3,
+  "word_boundary": "ctc_align",
+  "word_head_lowlr_mult": 1.0,
+  "lr_milestone_ep": 13,
+  "warmup_ep": 3,
+  "pseudo_boundary": false,
+  "mem_budget_GB": 5.2,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 20,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": true,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": false,
+    "resume": "",
+    "total_epochs": 20,
+    "tag": "p101b-ctrl",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "resumed_from": null,
+  "total_epochs_planned": 20,
+  "n_params_M": 35.25,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 35.995,
+      "dev_wer_official": 83.18,
+      "gap_to_sota": -41.08
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 32.3961,
+      "dev_wer_official": 78.68,
+      "gap_to_sota": -36.58
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 30.8744,
+      "dev_wer_official": 77.62,
+      "gap_to_sota": -35.52
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 29.5783,
+      "dev_wer_official": 75.69,
+      "gap_to_sota": -33.59
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 28.2543,
+      "dev_wer_official": 74.1,
+      "gap_to_sota": -32.0
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 26.8068,
+      "dev_wer_official": 73.22,
+      "gap_to_sota": -31.12
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 25.2936,
+      "dev_wer_official": 69.95,
+      "gap_to_sota": -27.85
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 23.8536,
+      "dev_wer_official": 71.32,
+      "gap_to_sota": -29.22
+    },
+    {
+      "epoch": 9,
+      "train_ctc": 22.4752,
+      "dev_wer_official": 69.63,
+      "gap_to_sota": -27.53
+    },
+    {
+      "epoch": 10,
+      "train_ctc": 21.1372,
+      "dev_wer_official": 67.91,
+      "gap_to_sota": -25.81
+    },
+    {
+      "epoch": 11,
+      "train_ctc": 19.9511,
+      "dev_wer_official": 68.16,
+      "gap_to_sota": -26.06
+    },
+    {
+      "epoch": 12,
+      "train_ctc": 18.9372,
+      "dev_wer_official": 68.9,
+      "gap_to_sota": -26.8
+    },
+    {
+      "epoch": 13,
+      "train_ctc": 17.9224,
+      "dev_wer_official": 66.4,
+      "gap_to_sota": -24.3
+    },
+    {
+      "epoch": 14,
+      "train_ctc": 15.1624,
+      "dev_wer_official": 62.74,
+      "gap_to_sota": -20.64
+    },
+    {
+      "epoch": 15,
+      "train_ctc": 14.3122,
+      "dev_wer_official": 62.7,
+      "gap_to_sota": -20.6
+    },
+    {
+      "epoch": 16,
+      "train_ctc": 13.7412,
+      "dev_wer_official": 61.58,
+      "gap_to_sota": -19.48
+    },
+    {
+      "epoch": 17,
+      "train_ctc": 13.6358,
+      "dev_wer_official": 61.72,
+      "gap_to_sota": -19.62
+    },
+    {
+      "epoch": 18,
+      "train_ctc": 13.4393,
+      "dev_wer_official": 62.17,
+      "gap_to_sota": -20.07
+    },
+    {
+      "epoch": 19,
+      "train_ctc": 13.2147,
+      "dev_wer_official": 61.51,
+      "gap_to_sota": -19.41
+    },
+    {
+      "epoch": 20,
+      "train_ctc": 12.9879,
+      "dev_wer_official": 61.86,
+      "gap_to_sota": -19.76
+    }
+  ],
+  "minutes": 678.7
+}

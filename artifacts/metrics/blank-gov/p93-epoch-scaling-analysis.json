@@ -1,0 +1,48 @@
+{
+  "experiment": "P91-vs-P93 paired (6ep vs 20ep)",
+  "base_tag": "p91-full-4973",
+  "exp_tag": "p93-20ep",
+  "base_best": 72.94,
+  "exp_best": 62.81,
+  "improvement_pp": 10.13,
+  "paired_first6": {
+    "diffs": [
+      -0.66,
+      1.51,
+      -0.95,
+      -1.02,
+      0.77,
+      -1.2
+    ],
+    "mean_pp": -0.26,
+    "std_pp": 1.12,
+    "win_rate": "2/6",
+    "sign_flip": true
+  },
+  "p93_full_curve": [
+    80.89,
+    78.57,
+    77.13,
+    76.21,
+    73.26,
+    74.14,
+    70.62,
+    70.97,
+    70.94,
+    69.46,
+    66.26,
+    67.56,
+    67.95,
+    65.87,
+    64.57,
+    64.53,
+    63.51,
+    63.23,
+    62.81,
+    63.19
+  ],
+  "last5_avg_improve_pp": 0.335,
+  "best_epoch": 19,
+  "total_epochs": 20,
+  "verdict_extend_to_30": false
+}

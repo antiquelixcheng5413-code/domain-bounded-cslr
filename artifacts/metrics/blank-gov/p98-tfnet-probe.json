@@ -1,0 +1,31 @@
+{
+  "experiment": "P98 TFNet feasibility probe",
+  "res": 160,
+  "hidden": 1024,
+  "wordSetNum": 3516,
+  "budget_GB": 6.6,
+  "loss": "official 7-term (TFNet) / 3-term (VAC)",
+  "results": {
+    "VAC_T520_B1": {
+      "ok": true,
+      "mem_GB": 6.8,
+      "nan": 0,
+      "loss": 1361.56,
+      "params_M": 35.25
+    },
+    "TFNet_T520_B1": {
+      "ok": true,
+      "mem_GB": 14.8,
+      "nan": 0,
+      "loss": 3868.67,
+      "params_M": 73.27
+    }
+  },
+  "criteria": {
+    "b1_under_budget": false,
+    "b1_no_nan": false,
+    "worst_frames_runnable": true,
+    "b2_under_budget": false
+  },
+  "verdict": "NOT FEASIBLE"
+}
