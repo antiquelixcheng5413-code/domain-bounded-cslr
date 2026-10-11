@@ -1,0 +1,24 @@
+==============================================================================
+P121 配对分析（2026-10-11 17:22）
+==============================================================================
+  p121-disamb    best 59.61%  epochs 20  cfg={'epochs': 20, 'total_epochs': 20, 'word_head': 0.0, 'warmup_ep': 3, 'no_hflip': True, 'amp_bf16': True, 'img_size': 160, 'seed': 42}
+  p93-20ep       best 62.81%  epochs 20  cfg={'epochs': 20, 'total_epochs': 20, 'word_head': 0.0, 'warmup_ep': None, 'no_hflip': True, 'amp_bf16': False, 'img_size': 160, 'seed': 42}
+  p101b-ctrl     best 61.51%  epochs 20  cfg={'epochs': 20, 'total_epochs': 20, 'word_head': 0.3, 'warmup_ep': 3, 'no_hflip': True, 'amp_bf16': False, 'img_size': 160, 'seed': 42}
+  p100-whalign   best 60.94%  epochs 20  cfg={'epochs': 20, 'total_epochs': 20, 'word_head': 0.3, 'warmup_ep': 3, 'no_hflip': True, 'amp_bf16': False, 'img_size': 160, 'seed': 42}
+
+── 唯一有效的对比：bf16 净效应（P121 vs P93，其余变量全同）──
+  ep01-20                      mean -1.804  std(ddof1) 2.082 [ddof0 2.030]  胜 15/20  SNR 1.16  ⇒ 强提示
+  ep13-20（lr 衰减后）              mean -3.747  std(ddof1) 0.630 [ddof0 0.589]  胜 8/8  SNR 2.41  ⇒ 可判
+      ↳ P101 的口径：衰减后区间更稳定
+
+── 三方混淆，不可用于归因（仅供参考）──
+  P121 vs CTRL ep13-20         mean -1.875  std(ddof1) 0.421 [ddof0 0.394]  胜 8/8  SNR 1.21  ⇒ 强提示
+      ↳ 同时变了 word_head 0→0.3、warmup 0→3、fp32→bf16
+
+── 附带复核（fp32 同口径）──
+  CTRL vs P93 ep13-20          mean -1.872  std(ddof1) 0.769 [ddof0 0.719]  胜 8/8  SNR 1.20  ⇒ 强提示
+      ↳ = word_head + warmup 的**组合**效应
+  CTRL vs P100 ep13-20         mean +0.366  std(ddof1) 0.820 [ddof0 0.767]  胜 3/8  SNR 0.24  ⇒ 噪声内（不可判）
+      ↳ 同配置重复 ⇒ 噪声复核
+
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p121-analysis.json

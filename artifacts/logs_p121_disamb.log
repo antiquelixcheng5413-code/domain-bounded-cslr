@@ -34,3 +34,10 @@ lr 衰减里程碑        [13, 16]（按**总轮数 20** 缩放，官方 35/45�
   ep014 ctc 13.9537  **WER_official 60.94%**  差SOTA -18.84pp
   ep015 ctc 13.1021  **WER_official 60.77%**  差SOTA -18.67pp
   ep016 ctc 12.6172  **WER_official 60.52%**  差SOTA -18.42pp
+  ep017 ctc 12.5999  **WER_official 59.82%**  差SOTA -17.72pp
+  ep018 ctc 12.3991  **WER_official 60.20%**  差SOTA -18.10pp
+  ep019 ctc 12.2275  **WER_official 59.89%**  差SOTA -17.79pp
+  ep020 ctc 12.0539  **WER_official 59.61%**  差SOTA -17.51pp
+
+最佳 WER_official = 59.61%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p121-disamb-official-tfnet.json

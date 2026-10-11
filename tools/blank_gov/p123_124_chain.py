@@ -60,12 +60,18 @@ def main():
     wait_receipt("p121-disamb", timeout_h=30)
 
     # ---------- 1. P123：官方全套超参 ----------
-    # 与 P119 的唯一差别：**训练轮数/里程碑**（55 + [35,45]）和**官方补帧**
-    # （其余：hflip 开、word_head 0.3、warmup 3、160res、fp32、seed42）
+    # 🔴 2026-10-11 17:2x 改：加 --amp-bf16
+    #    依据：P121（bf16, word_head 0）vs P93（fp32, word_head 0）单变量对比
+    #      ep13-20 配对 mean **-3.747** / std 0.630 / 胜 8/8 / SNR 2.41 ⇒ **可判**
+    #      best 59.61 vs 62.81（-3.20 pp）
+    #    且官方本身就是 autocast+GradScaler，bf16 比 fp32 更接近官方。
+    #    代价：P123 相对 P119 的差别变成三个变量（轮数/里程碑、官方补帧、bf16），
+    #          归因由后续 P124d（bf16 单变量）与隔离跑补回。
     run("P123", [PY, "-u", "tools/blank_gov/p78_train_official_tfnet.py",
-                 "--tag", "p123-official55",
+                 "--tag", "p123-official55bf16",
                  "--module", "VAC",
                  "--img-size", "160",
+                 "--amp-bf16",
                  "--epochs", "55", "--total-epochs", "55",
                  "--word-head", "0.3", "--word-boundary", "ctc_align",
                  "--warmup-ep", "3",
@@ -112,12 +118,31 @@ def main():
             "verdict", "未知")
     log("探针判定 = %s（rc=%d；rc!=0 视为不判活）" % (verdict, rc))
 
-    # ---------- 4. 仅当判活才微调 ----------
+    # ---------- 4. P124d：bf16 对照组（**无论探针结果如何都跑**）----------
+    # 一箭双雕：
+    #   (a) bf16 效应的**第二次独立验证**：P124d vs CTRL（fp32，其余全同）
+    #       —— P121 那次是 word_head=0 配置下测的，这次是 word_head=0.3+hflip 配置
+    #   (b) 自监督微调的**配对对照组**（与 P124c 只差主干初始化）
+    # ⚠️ 不加 --official-pad：CTRL/P119 都没有，保持 bf16 单变量
+    run("P124d", [PY, "-u", "tools/blank_gov/p78_train_official_tfnet.py",
+                  "--tag", "p124d-bf16ctrl",
+                  "--module", "VAC",
+                  "--img-size", "160",
+                  "--amp-bf16",
+                  "--epochs", "20", "--total-epochs", "20",
+                  "--word-head", "0.3", "--word-boundary", "ctc_align",
+                  "--warmup-ep", "3",
+                  "--mem-budget", "5.2e9",
+                  "--seed", "42"],
+        "logs_p124d_bf16ctrl.log")
+
+    # ---------- 5. 仅当探针判活才做 SSL 微调 ----------
     if verdict == "判活":
         run("P124c", [PY, "-u", "tools/blank_gov/p78_train_official_tfnet.py",
                       "--tag", "p124c-ssl-ft",
                       "--module", "VAC",
                       "--img-size", "160",
+                      "--amp-bf16",
                       "--epochs", "20", "--total-epochs", "20",
                       "--word-head", "0.3", "--word-boundary", "ctc_align",
                       "--warmup-ep", "3",
@@ -125,8 +150,10 @@ def main():
                       "--mem-budget", "5.2e9",
                       "--seed", "42"],
             "logs_p124c_ssl_ft.log")
+        log("P124c 与 P124d 逐轮配对 ⇒ 自监督预训练的净效应")
     else:
-        log("探针未判活 ⇒ 不投 9 小时做 20 轮微调（省下的时间用于其他方向）")
+        log("探针未判活 ⇒ 不投 9 小时做 SSL 微调"
+            "（P124d 仍跑，用于独立复核 bf16 效应）")
 
     log("链条结束")
 
