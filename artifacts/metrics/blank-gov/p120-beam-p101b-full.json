@@ -1,0 +1,17 @@
+{
+  "tag": "p101b-full",
+  "ckpt": "artifacts/checkpoints/p101b-ctrl-last.pt",
+  "ckpt_epoch": 20,
+  "module": "VAC",
+  "hflip": false,
+  "beam_width": 10,
+  "n_dev": 515,
+  "greedy_wer": 61.86,
+  "beam_wer": 125.58,
+  "delta_pp": -63.72,
+  "beam_fail": 0,
+  "minutes": 40.62,
+  "greedy_stats": {},
+  "beam_stats": {},
+  "note": "beam = 自实现标准 CTC 前向；官方 ctcdecode 在 py3.14 装不上"
+}

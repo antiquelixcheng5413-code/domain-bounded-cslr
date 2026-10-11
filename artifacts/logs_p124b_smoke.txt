@@ -1,0 +1,14 @@
+[P124b 09:10:21] 片段 A=778  B=778
+[P124b 09:10:21] 对齐后片段=778  维度 A=1024 B=1024
+[P124b 09:10:22] Cohen's d: ImageNet=+0.9119 (类100)   P124a-SimCLR=+0.8091 (类100)
+[P124b 09:10:26]   bootstrap 50/200（4s）
+[P124b 09:10:29]   bootstrap 100/200（8s）
+[P124b 09:10:34]   bootstrap 150/200（12s）
+[P124b 09:10:38]   bootstrap 200/200（16s）
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:1457: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:1457: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+[P124b 09:10:39] 高频子集 macroAUC: ImageNet=0.7187 (2类/176片段)  P124a-SimCLR=0.6454 (2类/176片段)
+[P124b 09:10:39] Δd = -0.1028  95%CI [-0.1649, -0.0493]  ⇒ 判死
+[P124b 09:10:39] 收据 -> /tmp/smoke_probe.json

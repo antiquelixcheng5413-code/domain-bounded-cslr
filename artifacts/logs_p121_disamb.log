@@ -1,0 +1,36 @@
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 关闭（对照组）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           6.6 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=0.0001 wd=0.0001 batch=2 epochs=20
+自适应分桶         3014 train batch / 292 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+lr 衰减里程碑        [13, 16]（按**总轮数 20** 缩放，官方 35/45）
+  ep001 ctc 36.2627  **WER_official 82.34%**  差SOTA -40.24pp
+  ep002 ctc 32.3539  **WER_official 77.69%**  差SOTA -35.59pp
+  ep003 ctc 30.8280  **WER_official 77.45%**  差SOTA -35.35pp
+  ep004 ctc 29.3692  **WER_official 75.97%**  差SOTA -33.87pp
+  ep005 ctc 27.7942  **WER_official 73.89%**  差SOTA -31.79pp
+  ep006 ctc 26.0942  **WER_official 72.06%**  差SOTA -29.96pp
+  ep007 ctc 24.4437  **WER_official 72.27%**  差SOTA -30.17pp
+  ep008 ctc 22.7827  **WER_official 69.88%**  差SOTA -27.78pp
+  ep009 ctc 21.3011  **WER_official 69.46%**  差SOTA -27.36pp
+  ep010 ctc 19.8771  **WER_official 66.82%**  差SOTA -24.72pp
+  ep011 ctc 18.6641  **WER_official 67.63%**  差SOTA -25.53pp
+  ep012 ctc 17.5585  **WER_official 64.46%**  差SOTA -22.36pp
+  ep013 ctc 16.4748  **WER_official 63.93%**  差SOTA -21.83pp
+  ep014 ctc 13.9537  **WER_official 60.94%**  差SOTA -18.84pp
+  ep015 ctc 13.1021  **WER_official 60.77%**  差SOTA -18.67pp
+  ep016 ctc 12.6172  **WER_official 60.52%**  差SOTA -18.42pp

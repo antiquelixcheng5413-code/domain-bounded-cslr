@@ -1,0 +1,17 @@
+{
+  "tag": "smoke2",
+  "ckpt": "artifacts/checkpoints/p101b-ctrl-last.pt",
+  "ckpt_epoch": 20,
+  "module": "VAC",
+  "hflip": false,
+  "beam_width": 10,
+  "n_dev": 20,
+  "greedy_wer": 68.38,
+  "beam_wer": 135.04,
+  "delta_pp": -66.66,
+  "beam_fail": 0,
+  "minutes": 1.18,
+  "greedy_stats": {},
+  "beam_stats": {},
+  "note": "beam = 自实现标准 CTC 前向；官方 ctcdecode 在 py3.14 装不上"
+}

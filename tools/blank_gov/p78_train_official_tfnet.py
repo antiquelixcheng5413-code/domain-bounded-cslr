@@ -140,16 +140,43 @@ class RGBSeqDataset(Dataset):
         return {"video": seq, "ids": it["ids"], "sid": it["sid"]}
 
 
+# 🔴 P123：官方 collate_fn 的补帧约定（由 --official-pad 打开）
+#   来源：external/TFNet/DataProcessMoudle.py:435 collate_fn
+#     left_pad = 6, total_stride = 4
+#     right_pad = ceil(max_len/4)*4 - max_len + left_pad
+#     videoLength_i = ceil(len_i/4)*4 + 2*left_pad
+#   即：首帧复制 6 帧放左边，末帧复制补齐到 ceil(T/4)*4+12，
+#   dataLen 用**含 padding 的长度**（不是真实帧数）。
+#   ⚠️ 默认关闭：P93~P121 全部用的是「零填充 + dataLen=真实帧数」口径。
+OFFICIAL_PAD = False
+
+
 def collate(batch):
     """dataLen 必须是 CPU 的 [B,1] LongTensor（已实测，否则 CTC 报错）。"""
     batch = sorted(batch, key=lambda x: len(x["video"]), reverse=True)
     videos = [b["video"] for b in batch]
-    T = max(v.shape[0] for v in videos)
-    vid = torch.zeros(len(videos), T, 3, videos[0].shape[2], videos[0].shape[3])
-    for i, v in enumerate(videos):# [T,C,H,W] → [T,3,H,W]
-        vid[i, :v.shape[0]] = v
-    data_len = torch.LongTensor([[v.shape[0]] for v in videos])   # CPU, [B,1]
-    true_len = torch.LongTensor([v.shape[0] for v in videos])   # 每条真实帧数
+    if OFFICIAL_PAD:
+        # 官方口径：每样本补到 L_i = ceil(T_i/4)*4 + 12，全 batch 再补到 max(L_i)
+        Ls = [((v.shape[0] + 3) // 4) * 4 + 12 for v in videos]
+        T = max(Ls)
+        vid = torch.zeros(len(videos), T, 3, videos[0].shape[2],
+                          videos[0].shape[3])
+        for i, v in enumerate(videos):
+            vv = torch.cat([v[0][None].expand(6, -1, -1, -1),
+                            v,
+                            v[-1][None].expand(T - 6 - v.shape[0], -1, -1, -1)],
+                           dim=0)
+            vid[i, :vv.shape[0]] = vv
+        data_len = torch.LongTensor([[l] for l in Ls])          # CPU, [B,1]
+        true_len = torch.LongTensor([v.shape[0] for v in videos])
+    else:
+        T = max(v.shape[0] for v in videos)
+        vid = torch.zeros(len(videos), T, 3, videos[0].shape[2],
+                          videos[0].shape[3])
+        for i, v in enumerate(videos):# [T,C,H,W] → [T,3,H,W]
+            vid[i, :v.shape[0]] = v
+        data_len = torch.LongTensor([[v.shape[0]] for v in videos])   # CPU, [B,1]
+        true_len = torch.LongTensor([v.shape[0] for v in videos])   # 每条真实帧数
     tgt = torch.cat([torch.LongTensor(b["ids"]) for b in batch])   # CPU
     tgt_len = torch.LongTensor([len(b["ids"]) for b in batch])   # CPU（官方同）
     return (vid, tgt, tgt_len, data_len, true_len,
@@ -397,6 +424,15 @@ def main() -> None:
     ap.add_argument("--resume", default="",
                     help="🔴 续训用：从某个 .pt 恢复（需含 optimizer/sched/RNG）。"
                          "典型用法：--resume ck/xxx-last.pt --total-epochs 30")
+    ap.add_argument("--official-pad", action="store_true",
+                    help="🔴 P123：改用官方 collate_fn 的补帧约定"
+                         "（left_pad=6 首帧复制 + 右补末帧到 4 的倍数，"
+                         "dataLen=ceil(T/4)*4+12）。"
+                         "默认关闭＝P93~P121 的「零填充+真实帧数」口径")
+    ap.add_argument("--backbone-ckpt", default="",
+                    help="🔴 P124：用自监督预训练的 2D 主干权重替代 ImageNet 初始化。"
+                         "VAC 的主干是 **2D resnet18**（官方 Net.py:88，逐帧前向），"
+                         "故 torchvision resnet18 的 state_dict 可直接载入")
     ap.add_argument("--total-epochs", type=int, default=0,
                     help="🔴 lr 调度按**最终总轮数**算，而不是本次要跑的轮数。"
                          "0 = 用 --epochs（首次训练）。"
@@ -405,6 +441,10 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
     a = ap.parse_args()
+
+    # 🔴 collate 是模块级函数，用全局开关传递官方补帧约定
+    global OFFICIAL_PAD
+    OFFICIAL_PAD = bool(a.official_pad)
 
     random.seed(a.seed)
     np.random.seed(a.seed)
@@ -449,6 +489,10 @@ def main() -> None:
                                   "VAC": 27.1}.get(a.module, 55.7)))
     print("超参                hidden=%d lr=%g wd=%g batch=%d epochs=%d"
           % (a.hidden, a.lr, a.weight_decay, a.batch, a.epochs))
+    print("补帧约定           %s" % (
+        "★官方 collate（left_pad=6 + 末帧复制，dataLen=ceil(T/4)*4+12）"
+        if a.official_pad else "零填充 + dataLen=真实帧数（P93~P121 口径）"))
+    print("主干初始化         %s" % (a.backbone_ckpt or "ImageNet（官方默认）"))
 
     if len(tr_ds) < 2 or len(dv_ds) < 2:
         print("❌ 样本不足，先跑 p77_extract_rgb.py")
@@ -549,6 +593,29 @@ def main() -> None:
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
 
+    # ---- P124：自监督预训练主干替换（替代 ImageNet 初始化）----
+    if a.backbone_ckpt:
+        _ck = torch.load(a.backbone_ckpt, map_location="cpu",
+                         weights_only=False)
+        _sd = _ck.get("state_dict", _ck)
+        _tgt = model.conv2d                       # VAC: 2D resnet18（官方 Net.py:88）
+        _tsd = _tgt.state_dict()
+        _sd2 = {}
+        for k, v in _sd.items():
+            if (k in _tsd and torch.is_tensor(v) and v.dim() == 4
+                    and _tsd[k].dim() == 5):
+                # 官方 Module.py:467 的 inflate：2D 卷积 → 3D（时间维=1）
+                v = v.unsqueeze(2)
+            _sd2[k] = v
+        _res = _tgt.load_state_dict(_sd2, strict=False)
+        print("主干初始化          %s" % a.backbone_ckpt)
+        print("  载入 %d/%d 张量，missing=%d unexpected=%d"
+              % (len(_sd2) - len(_res.unexpected_keys), len(_sd2),
+                 len(_res.missing_keys), len(_res.unexpected_keys)))
+        if len(_res.missing_keys) > 4:
+            print("  ⚠️ missing 过多，主干可能没换成功：" % ())
+            print("     %s" % _res.missing_keys[:8])
+
     if a.word_head > 0:
         global word_classifier
         word_classifier = torch.nn.Linear(wordSetNum + 1, wordSetNum + 1).to(dev)
@@ -585,6 +652,19 @@ def main() -> None:
     sched = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=ms, gamma=0.2)
 
     print("lr 衰减里程碑        %s（按**总轮数 %d** 缩放，官方 35/45）" % (ms, T))
+
+    # 🔴🔴 P119 事故修复：--total-epochs 原本只影响 lr 里程碑，
+    #   训练循环却用 a.epochs（默认 55）⇒ 传 --total-epochs 20 仍会跑 55 轮。
+    #   本项目 P93/P100/P101 都同时传了 --epochs 20 才正确，
+    #   但 P119 只传 --total-epochs ⇒ 跑超到 44 轮（已饱和，白跑 24 轮）。
+    #   ⇒ 现在：若两者不一致，明确警告并**以 --epochs 为准**（保持向后兼容）。
+    if a.total_epochs > 0 and a.total_epochs != a.epochs:
+        print()
+        print("  ⚠️⚠️⚠️ --total-epochs=%d 与 --epochs=%d 不一致！" % (a.total_epochs, a.epochs))
+        print("     --total-epochs 只用于缩放 lr 里程碑，**不限制训练轮数**。")
+        print("     实际训练轮数由 --epochs 决定 ⇒ 本次会跑 %d 轮。" % a.epochs)
+        print("     若只想跑 %d 轮，请同时传 --epochs %d。" % (a.total_epochs, a.total_epochs))
+        print()
 
     ck_dir = REPO / "artifacts/checkpoints"
     ck_dir.mkdir(parents=True, exist_ok=True)
@@ -793,9 +873,18 @@ def main() -> None:
 
         if o["WER_official"] < best:
             best = o["WER_official"]
+            # 🔴 best.pt 原本缺 RNG 状态（last.pt 有）⇒ 从 best 续训时
+            #    data shuffle / dropout 的随机流会重新初始化。
+            #    实例：p119-hflip-best.pt（ep33, 56.72%）就是缺 RNG 存的。
+            #    P122 已补齐四项 RNG。
             torch.save({"epoch": ep, "model_state": model.state_dict(),
                         "optimizer_state": opt.state_dict(),
                         "sched_state": sched.state_dict(),
+                        "torch_rng": torch.random.get_rng_state(),
+                        "np_rng": np.random.get_state(),
+                        "py_rng": random.getstate(),
+                        "cuda_rng": (torch.cuda.get_rng_state_all()
+                                     if torch.cuda.is_available() else None),
                         "wordSetNum": wordSetNum, "idx2word": idx2word,
                         "hidden": a.hidden, "hflip": not a.no_hflip,
                         "wer_official": best, "history": hist,
@@ -820,6 +909,10 @@ def main() -> None:
         "word_boundary": a.word_boundary,
         "word_head_lowlr_mult": a.word_head_lowlr_mult,
         "lr_milestone_ep": ms[0] if ms else None,
+        "lr_milestones": ms,
+        "lr_gamma": 0.2,
+        "official_pad": bool(a.official_pad),
+        "backbone_ckpt": a.backbone_ckpt or None,
         "warmup_ep": a.warmup_ep,
         "pseudo_boundary": a.pseudo_boundary,
         "mem_budget_GB": round(a.mem_budget / 1e9, 2),

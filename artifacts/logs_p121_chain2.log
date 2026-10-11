@@ -1,0 +1,6 @@
+[08:19:28] === P121 链条启动 ===
+[08:19:28] 阶段1：等 p119-hflip 收据
+[08:19:28] p119-hflip 收据已出：44 epoch，best WER 56.72 %
+[08:19:28] === 阶段2：启动解混淆实验 p121-disamb ===
+[08:19:28] 配置：word_head=0.0  +  warmup_ep=3  （与 P93 唯一差异 = warmup）
+[08:19:28] 命令：/home/su127/FYP/domain-bounded-cslr/venv/bin/python -u /home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py --tag p121-disamb --module VAC --img-size 160 --amp-bf16 --total-epochs 20 --epochs 20 --word-head 0.0 --warmup-ep 3 --no-hflip

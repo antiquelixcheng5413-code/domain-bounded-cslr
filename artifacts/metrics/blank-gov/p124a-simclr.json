@@ -1,0 +1,39 @@
+{
+  "experiment": "P124a",
+  "date": "2026-10-11",
+  "method": "SimCLR (NT-Xent) 域内自监督预训练",
+  "target": "替换官方 VAC 的 2D ResNet18 主干初始化",
+  "evidence_level": {
+    "VAC主干是2D resnet18": "【有】Net.py:88/331",
+    "自监督预训练提升手语识别": "【有】但只在 ISLR（ref12 CCL-SLR 原文）",
+    "CSLR/CE-CSL 上有效": "【无】",
+    "反向证据": "【有】官方 CorrNet 47.2 > VAC 45.1（自监督一致性反而更差）"
+  },
+  "config": {
+    "epochs": 2,
+    "batch": 32,
+    "lr": 0.0003,
+    "wd": 0.0001,
+    "temp": 0.2,
+    "size": 160,
+    "frames_per_video": 8,
+    "max_videos": 60,
+    "workers": 2,
+    "from_scratch": false,
+    "tag": "smoke",
+    "seed": 42
+  },
+  "n_frames": 480,
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 2.65264
+    },
+    {
+      "epoch": 2,
+      "loss": 1.73336
+    }
+  ],
+  "minutes": 0.1,
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/smoke-final.pt"
+}

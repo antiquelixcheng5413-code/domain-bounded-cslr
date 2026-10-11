@@ -1,0 +1,78 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-11",
+  "purpose": "官方 moduleChoice=VAC 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 100.0,
+  "module": "VAC",
+  "img_size": 160,
+  "amp_bf16": true,
+  "word_head_w": 0.0,
+  "word_boundary": "equal",
+  "word_head_lowlr_mult": 1.0,
+  "lr_milestone_ep": 1,
+  "lr_milestones": [
+    1,
+    2
+  ],
+  "lr_gamma": 0.2,
+  "official_pad": true,
+  "backbone_ckpt": null,
+  "warmup_ep": 0,
+  "pseudo_boundary": false,
+  "mem_budget_GB": 3.0,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 2,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 240,
+    "max_dev": 80,
+    "workers": 4,
+    "mem_budget": 3000000000.0,
+    "module": "VAC",
+    "word_head": 0.0,
+    "word_boundary": "equal",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 0,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "",
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "total_epochs": 2,
+    "tag": "p123-smoke",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "resumed_from": null,
+  "total_epochs_planned": 2,
+  "n_params_M": 35.25,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 47.6563,
+      "dev_wer_official": 100.0,
+      "gap_to_sota": -57.9
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 30.8387,
+      "dev_wer_official": 100.0,
+      "gap_to_sota": -57.9
+    }
+  ],
+  "minutes": 4.2
+}
