@@ -1,0 +1,17 @@
+[DIAG 07:15:03] 词表 3515
+[DIAG 07:15:03] dev 120 条
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[DIAG 07:15:04] 载入 p123-official55bf16-last.pt（epoch 31，strict=True OK）
+
+[DIAG 07:15:04] ──── A/B 对照（同一权重，只换解码截断）────
+[DIAG 07:15:33] pad=True  截断用=true_len   WER=69.38%  ins=-1 del=-1 sub=-1 ref=676  (29s)
+[DIAG 07:15:58] pad=True  截断用=data_len   WER=55.47%  ins=-1 del=-1 sub=-1 ref=676  (24s)
+
+[DIAG 07:15:58] ──── 交叉验证：关掉官方补帧（权重是在补帧下训练的，仅看口径）────
+[DIAG 07:16:20] pad=False 截断用=true_len   WER=55.33%  ins=-1 del=-1 sub=-1 ref=676  (22s)
+
+[DIAG 07:16:20] 结论：ΔWER(修好−现行) = -13.91 pp
+[DIAG 07:16:20] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p123-pad-diag.json

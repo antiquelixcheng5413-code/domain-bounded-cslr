@@ -1,0 +1,49 @@
+{
+  "diag": "P123 official-pad 解码截断事故",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-last.pt",
+  "epoch": 31,
+  "n_dev": 515,
+  "A_pad_true_len": {
+    "WER_official": 74.74,
+    "edits": 2124,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": "TFNet",
+    "worse_than": null,
+    "gap_to_that_method": 32.64,
+    "gap_to_sota_TFNet": -32.64,
+    "WER_excl_unk": 74.74,
+    "WER_per_sentence": 412.4272,
+    "exact_rate_pct": 0.0,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "B_pad_data_len": {
+    "WER_official": 58.66,
+    "edits": 1667,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": "TFNet",
+    "worse_than": null,
+    "gap_to_that_method": 16.56,
+    "gap_to_sota_TFNet": -16.56,
+    "WER_excl_unk": 58.66,
+    "WER_per_sentence": 323.6893,
+    "exact_rate_pct": 0.58,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "C_nopad_true_len": {
+    "WER_official": 58.87,
+    "edits": 1673,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": "TFNet",
+    "worse_than": null,
+    "gap_to_that_method": 16.77,
+    "gap_to_sota_TFNet": -16.77,
+    "WER_excl_unk": 58.87,
+    "WER_per_sentence": 324.8544,
+    "exact_rate_pct": 0.97,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "delta_B_minus_A_pp": -16.08
+}

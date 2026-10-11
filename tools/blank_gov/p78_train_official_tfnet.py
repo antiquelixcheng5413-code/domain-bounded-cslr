@@ -832,7 +832,13 @@ def main() -> None:
                 # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
                 #    其他分支 logProbs1 本身就是最终输出。
                 logp5 = ls(out[0])   # 官方布局 [T,B,C]
-                hyps += greedy_decode(logp5, tl_len, idx2word)
+                # 🔴 P123 事故修复：截断长度必须用 **data_len(dl)**，不是真实帧数
+                #   开了 --official-pad 后 data_len = ceil(T/4)*4+12（含 left_pad=6
+                #   与右补齐），模型有效输出长度按 data_len 算；
+                #   若仍按 true_len 截 ⇒ 句尾被切掉 + left_pad 把内容整体右移
+                #   ⇒ 实测 WER 虚高 **13.91 pp**（69.38 → 55.47，收据 p123-pad-diag）
+                #   ⚠️ 无补帧时 data_len == true_len ⇒ 与历史数字**完全一致**
+                hyps += greedy_decode(logp5, dl, idx2word)
                 for b in _sids:
                     refs.append(labels_dv[b][1])
         o = evaluate(refs, hyps)

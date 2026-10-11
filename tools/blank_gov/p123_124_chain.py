@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import json
+import torch
 import subprocess
 import sys
 import time
@@ -67,7 +68,10 @@ def main():
     #    且官方本身就是 autocast+GradScaler，bf16 比 fp32 更接近官方。
     #    代价：P123 相对 P119 的差别变成三个变量（轮数/里程碑、官方补帧、bf16），
     #          归因由后续 P124d（bf16 单变量）与隔离跑补回。
-    run("P123", [PY, "-u", "tools/blank_gov/p78_train_official_tfnet.py",
+    # 🔴 断点续训：若已有 last.pt 但收据未出 ⇒ 上轮是被中断的，接着跑
+    p123_ck = CK / "p123-official55bf16-last.pt"
+    p123_rec = MET / "p123-official55bf16-official-tfnet.json"
+    p123_args = [PY, "-u", "tools/blank_gov/p78_train_official_tfnet.py",
                  "--tag", "p123-official55bf16",
                  "--module", "VAC",
                  "--img-size", "160",
@@ -77,8 +81,13 @@ def main():
                  "--warmup-ep", "3",
                  "--official-pad",
                  "--mem-budget", "5.2e9",
-                 "--seed", "42"],
-        "logs_p123_official55.log")
+                 "--seed", "42"]
+    if p123_ck.exists() and not p123_rec.exists():
+        p123_args += ["--resume", str(p123_ck)]
+        log("检测到未完成的 P123 权重（%s）⇒ **续训**（非重跑）" % p123_ck.name)
+        log("⚠️ 历史里 ep1~%s 的 WER 是用**坏的解码截断**算的，已作废"
+            % "(见 receipt epoch)")
+    run("P123", p123_args, "logs_p123_official55.log")
 
     # ---------- 2. P124a：自监督预训练 ----------
     # 12 帧/视频 × 4973 ≈ 60k 帧；batch 128 ⇒ ~470 步/轮，约 7 min/轮
