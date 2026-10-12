@@ -205,6 +205,10 @@ def main():
                     help="不用 ImageNet 初始化（纯从头对比学习）")
     ap.add_argument("--tag", default="p124a-simclr")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--resume", default="",
+                    help="续训：从 -epNN.pt 恢复主干权重与 lr 调度位置。"
+                         "⚠️ 旧 ckpt 未存 optimizer 状态 ⇒ AdamW 动量会重建（可接受），"
+                         "但 **lr 位置必须恢复**，否则 cosine 从头开始会把已学表征扰动掉")
     a = ap.parse_args()
 
     random.seed(a.seed); np.random.seed(a.seed); torch.manual_seed(a.seed)
@@ -218,17 +222,50 @@ def main():
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     net = SimCLR(a.from_scratch).to(dev)
     opt = torch.optim.AdamW(net.parameters(), lr=a.lr, weight_decay=a.wd)
-    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
+
+    start_ep, hist, ck = 1, [], None
+    if a.resume:
+        ck = torch.load(a.resume, map_location="cpu", weights_only=False)
+        # 🔴 strict=True：载入失败必须炸出来，不能静默（P123 诊断脚本曾因静默失败得出反向结论）
+        r = net.backbone.load_state_dict(ck["state_dict"], strict=True)
+        assert not r.missing_keys and not r.unexpected_keys, r
+        start_ep = int(ck["epoch"]) + 1
+        hist = list(ck.get("hist", []))
+        log("续训：载入 %s（ep%d，loss 已降到 %.4f）"
+            % (Path(a.resume).name, ck["epoch"],
+               hist[-1]["loss"] if hist else float("nan")))
+
+    if start_ep > 1 and ck is not None and "opt" in ck and "sched" in ck:
+        opt.load_state_dict(ck["opt"])
+        sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
+        sched.load_state_dict(ck["sched"])
+        log("  已恢复 optimizer / scheduler 状态")
+    elif start_ep > 1:
+        # 旧 ckpt 未存调度器状态 ⇒ 用 cosine **闭式公式**把 lr 摆到正确位置。
+        # ⚠️ 只传 last_epoch= 是不够的（实测）：CosineAnnealingLR 靠 group['lr'] 递推，
+        #    单设 last_epoch=6 仍返回初始 3e-4，而 ep7 正确值应为 2.5935e-4。
+        import math
+        t = start_ep - 1
+        closed = a.lr * (1 + math.cos(math.pi * t / a.epochs)) / 2
+        for pg in opt.param_groups:
+            pg["initial_lr"] = a.lr
+            pg["lr"] = closed
+        sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
+        sched.last_epoch = t
+        sched._step_count = t
+        log("  ckpt 无 scheduler 状态 ⇒ 按闭式公式对齐 lr=%.8g（last_epoch=%d）"
+            % (closed, t))
+    else:
+        sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
     scaler = torch.amp.GradScaler("cuda", enabled=False)   # bf16 不安全时用 fp32/bf16 autocast
     use_amp = True
 
-    log("device=%s  batch=%d  steps/epoch=%d  epochs=%d  init=%s"
-        % (dev, a.batch, len(dl), a.epochs,
+    log("device=%s  batch=%d  steps/epoch=%d  epochs=%d  start_ep=%d  init=%s"
+        % (dev, a.batch, len(dl), a.epochs, start_ep,
            "scratch" if a.from_scratch else "ImageNet"))
 
     t0 = time.time()
-    hist = []
-    for ep in range(1, a.epochs + 1):
+    for ep in range(start_ep, a.epochs + 1):
         net.train()
         run, nb = 0.0, 0
         t_ep = time.time()
@@ -267,7 +304,8 @@ def main():
             CKDIR.mkdir(parents=True, exist_ok=True)
             p = CKDIR / ("%s-ep%02d.pt" % (a.tag, ep))
             torch.save({"state_dict": net.backbone.state_dict(),
-                        "epoch": ep, "hist": hist, "config": vars(a)},
+                        "epoch": ep, "hist": hist, "config": vars(a),
+                        "opt": opt.state_dict(), "sched": sched.state_dict()},
                        p)
             log("已存 %s" % p)
 
@@ -275,6 +313,7 @@ def main():
     out = CKDIR / ("%s-final.pt" % a.tag)
     torch.save({"state_dict": net.backbone.state_dict(), "epoch": a.epochs,
                 "hist": hist, "config": vars(a),
+                "opt": opt.state_dict(), "sched": sched.state_dict(),
                 "note": "torchvision resnet18，fc=Identity（与官方 VAC 主干同构）"},
                out)
     rec = REPO / "artifacts/metrics/blank-gov/p124a-simclr.json"
