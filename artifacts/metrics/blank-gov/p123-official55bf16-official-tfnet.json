@@ -1,0 +1,360 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-12",
+  "purpose": "官方全套超参（55轮 + milestones[35,45] + 官方补帧 + bf16）",
+  "official_code": "external/TFNet（Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import）",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 55.84,
+  "best_epoch": 39,
+  "module": "VAC",
+  "img_size": 160,
+  "amp_bf16": true,
+  "word_head_w": 0.3,
+  "word_boundary": "ctc_align",
+  "lr_milestones": [
+    35,
+    45
+  ],
+  "lr_gamma": 0.2,
+  "official_pad": true,
+  "backbone_ckpt": null,
+  "warmup_ep": 3,
+  "mem_budget_GB": 5.2,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 55,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-last.pt",
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "total_epochs": 55,
+    "tag": "p123-official55bf16",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "resumed_from": "p123-official55bf16-last.pt（ep31 续训）",
+  "total_epochs_planned": 55,
+  "n_params_M": 35.25,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 36.0956,
+      "dev_wer_official": 96.24,
+      "gap_to_sota": -54.14
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 32.8978,
+      "dev_wer_official": 93.0,
+      "gap_to_sota": -50.9
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 31.2696,
+      "dev_wer_official": 93.24,
+      "gap_to_sota": -51.14
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 30.023,
+      "dev_wer_official": 90.08,
+      "gap_to_sota": -47.98
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 28.8435,
+      "dev_wer_official": 90.71,
+      "gap_to_sota": -48.61
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 27.6407,
+      "dev_wer_official": 87.79,
+      "gap_to_sota": -45.69
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 26.4853,
+      "dev_wer_official": 88.32,
+      "gap_to_sota": -46.22
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 25.2632,
+      "dev_wer_official": 87.23,
+      "gap_to_sota": -45.13
+    },
+    {
+      "epoch": 9,
+      "train_ctc": 24.1428,
+      "dev_wer_official": 86.84,
+      "gap_to_sota": -44.74
+    },
+    {
+      "epoch": 10,
+      "train_ctc": 22.991,
+      "dev_wer_official": 84.66,
+      "gap_to_sota": -42.56
+    },
+    {
+      "epoch": 11,
+      "train_ctc": 21.9053,
+      "dev_wer_official": 83.18,
+      "gap_to_sota": -41.08
+    },
+    {
+      "epoch": 12,
+      "train_ctc": 20.8974,
+      "dev_wer_official": 82.09,
+      "gap_to_sota": -39.99
+    },
+    {
+      "epoch": 13,
+      "train_ctc": 19.8686,
+      "dev_wer_official": 81.67,
+      "gap_to_sota": -39.57
+    },
+    {
+      "epoch": 14,
+      "train_ctc": 19.05,
+      "dev_wer_official": 80.58,
+      "gap_to_sota": -38.48
+    },
+    {
+      "epoch": 15,
+      "train_ctc": 18.1256,
+      "dev_wer_official": 79.87,
+      "gap_to_sota": -37.77
+    },
+    {
+      "epoch": 16,
+      "train_ctc": 17.3368,
+      "dev_wer_official": 80.58,
+      "gap_to_sota": -38.48
+    },
+    {
+      "epoch": 17,
+      "train_ctc": 16.6292,
+      "dev_wer_official": 79.8,
+      "gap_to_sota": -37.7
+    },
+    {
+      "epoch": 18,
+      "train_ctc": 15.9472,
+      "dev_wer_official": 78.99,
+      "gap_to_sota": -36.89
+    },
+    {
+      "epoch": 19,
+      "train_ctc": 15.39,
+      "dev_wer_official": 77.9,
+      "gap_to_sota": -35.8
+    },
+    {
+      "epoch": 20,
+      "train_ctc": 14.7741,
+      "dev_wer_official": 77.3,
+      "gap_to_sota": -35.2
+    },
+    {
+      "epoch": 21,
+      "train_ctc": 14.1907,
+      "dev_wer_official": 78.4,
+      "gap_to_sota": -36.3
+    },
+    {
+      "epoch": 22,
+      "train_ctc": 13.7256,
+      "dev_wer_official": 76.21,
+      "gap_to_sota": -34.11
+    },
+    {
+      "epoch": 23,
+      "train_ctc": 13.2225,
+      "dev_wer_official": 77.16,
+      "gap_to_sota": -35.06
+    },
+    {
+      "epoch": 24,
+      "train_ctc": 12.8185,
+      "dev_wer_official": 78.36,
+      "gap_to_sota": -36.26
+    },
+    {
+      "epoch": 25,
+      "train_ctc": 12.4275,
+      "dev_wer_official": 76.92,
+      "gap_to_sota": -34.82
+    },
+    {
+      "epoch": 26,
+      "train_ctc": 12.1808,
+      "dev_wer_official": 76.0,
+      "gap_to_sota": -33.9
+    },
+    {
+      "epoch": 27,
+      "train_ctc": 11.7295,
+      "dev_wer_official": 77.27,
+      "gap_to_sota": -35.17
+    },
+    {
+      "epoch": 28,
+      "train_ctc": 11.5021,
+      "dev_wer_official": 75.69,
+      "gap_to_sota": -33.59
+    },
+    {
+      "epoch": 29,
+      "train_ctc": 11.1955,
+      "dev_wer_official": 75.4,
+      "gap_to_sota": -33.3
+    },
+    {
+      "epoch": 30,
+      "train_ctc": 10.9104,
+      "dev_wer_official": 74.81,
+      "gap_to_sota": -32.71
+    },
+    {
+      "epoch": 31,
+      "train_ctc": 10.6458,
+      "dev_wer_official": 74.74,
+      "gap_to_sota": -32.64
+    },
+    {
+      "epoch": 32,
+      "train_ctc": 13.9114,
+      "dev_wer_official": 59.04,
+      "gap_to_sota": -16.94
+    },
+    {
+      "epoch": 33,
+      "train_ctc": 13.0586,
+      "dev_wer_official": 61.47,
+      "gap_to_sota": -19.37
+    },
+    {
+      "epoch": 34,
+      "train_ctc": 12.3625,
+      "dev_wer_official": 58.87,
+      "gap_to_sota": -16.77
+    },
+    {
+      "epoch": 35,
+      "train_ctc": 11.852,
+      "dev_wer_official": 58.52,
+      "gap_to_sota": -16.42
+    },
+    {
+      "epoch": 36,
+      "train_ctc": 8.8265,
+      "dev_wer_official": 57.92,
+      "gap_to_sota": -15.82
+    },
+    {
+      "epoch": 37,
+      "train_ctc": 8.059,
+      "dev_wer_official": 56.26,
+      "gap_to_sota": -14.16
+    },
+    {
+      "epoch": 38,
+      "train_ctc": 7.6618,
+      "dev_wer_official": 56.51,
+      "gap_to_sota": -14.41
+    },
+    {
+      "epoch": 39,
+      "train_ctc": 7.3593,
+      "dev_wer_official": 55.84,
+      "gap_to_sota": -13.74
+    },
+    {
+      "epoch": 40,
+      "train_ctc": 7.1571,
+      "dev_wer_official": 56.19,
+      "gap_to_sota": -14.09
+    },
+    {
+      "epoch": 41,
+      "train_ctc": 6.9443,
+      "dev_wer_official": 56.09,
+      "gap_to_sota": -13.99
+    },
+    {
+      "epoch": 42,
+      "train_ctc": 6.7723,
+      "dev_wer_official": 56.19,
+      "gap_to_sota": -14.09
+    },
+    {
+      "epoch": 43,
+      "train_ctc": 6.5879,
+      "dev_wer_official": 56.79,
+      "gap_to_sota": -14.69
+    },
+    {
+      "epoch": 44,
+      "train_ctc": 6.4612,
+      "dev_wer_official": 56.19,
+      "gap_to_sota": -14.09
+    },
+    {
+      "epoch": 45,
+      "train_ctc": 6.2987,
+      "dev_wer_official": 57.11,
+      "gap_to_sota": -15.01
+    },
+    {
+      "epoch": 46,
+      "train_ctc": 5.7107,
+      "dev_wer_official": 57.28,
+      "gap_to_sota": -15.18
+    },
+    {
+      "epoch": 47,
+      "train_ctc": 5.5992,
+      "dev_wer_official": 56.4,
+      "gap_to_sota": -14.3
+    },
+    {
+      "epoch": 48,
+      "train_ctc": 5.5204,
+      "dev_wer_official": 56.23,
+      "gap_to_sota": -14.13
+    }
+  ],
+  "_early_stop": {
+    "by": "tools/blank_gov/p123_watch_stop.py",
+    "epoch_reached": 48,
+    "criterion": "连续 6 轮无新低 且 最近6轮极差 < 1.556",
+    "note": "⚠️ 本收据由 last.pt 重建（进程被提前停止，未走 p78 正常收尾）",
+    "fields_unavailable": [
+      "nan_steps_skipped",
+      "minutes",
+      "short_samples_padded"
+    ]
+  },
+  "_history_caveat": "ep1-31 的 dev_wer_official 是用坏的解码截断算的，已作废；ep31 真实值 58.66（见 p123-pad-diag.json）"
+}

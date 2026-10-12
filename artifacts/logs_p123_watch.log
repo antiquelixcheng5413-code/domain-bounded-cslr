@@ -1,0 +1,76 @@
+[STOP 09:43:03] 早停器启动（dry_run=False, patience=6, noise=1.556, min_ep=38/48）
+[STOP 09:43:04] ep35  best 58.52% @ ep35  ⇒ continue（还没到最小观察轮数 38）
+[STOP 09:48:05] ep35  best 58.52% @ ep35  ⇒ continue（还没到最小观察轮数 38）
+[STOP 09:53:05] ep36  best 57.92% @ ep36  ⇒ continue（还没到最小观察轮数 38）
+[STOP 09:58:06] ep36  best 57.92% @ ep36  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:03:06] ep36  best 57.92% @ ep36  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:08:06] ep36  best 57.92% @ ep36  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:13:07] ep36  best 57.92% @ ep36  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:18:07] ep37  best 56.26% @ ep37  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:23:07] ep37  best 56.26% @ ep37  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:28:08] ep37  best 56.26% @ ep37  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:33:08] ep37  best 56.26% @ ep37  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:38:08] ep37  best 56.26% @ ep37  ⇒ continue（还没到最小观察轮数 38）
+[STOP 10:43:08] ep38  best 56.26% @ ep37  ⇒ continue（最近 6 轮内还有新低（ep37））
+[STOP 10:48:09] ep38  best 56.26% @ ep37  ⇒ continue（最近 6 轮内还有新低（ep37））
+[STOP 10:53:09] ep38  best 56.26% @ ep37  ⇒ continue（最近 6 轮内还有新低（ep37））
+[STOP 10:58:09] ep38  best 56.26% @ ep37  ⇒ continue（最近 6 轮内还有新低（ep37））
+[STOP 11:03:10] ep38  best 56.26% @ ep37  ⇒ continue（最近 6 轮内还有新低（ep37））
+[STOP 11:08:10] ep39  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:13:10] ep39  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:18:11] ep39  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:23:11] ep39  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:28:11] ep39  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:33:12] ep40  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:38:12] ep40  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:43:12] ep40  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:48:13] ep40  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:53:13] ep40  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 11:58:13] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:03:13] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:08:14] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:13:23] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:18:25] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:23:26] ep41  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:28:27] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:33:28] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:38:29] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:43:30] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:48:31] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:53:32] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 12:58:32] ep42  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:03:33] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:08:34] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:13:34] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:18:35] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:23:35] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:28:36] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:33:36] ep43  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:38:36] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:43:37] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:48:39] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:53:40] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 13:58:41] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 14:03:42] ep44  best 55.84% @ ep39  ⇒ continue（最近 6 轮内还有新低（ep39））
+[STOP 14:08:43] ep45  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:13:43] ep45  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:18:43] ep45  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:23:44] ep45  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:28:44] ep45  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:33:46] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:38:49] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:43:53] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:48:56] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:53:59] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 14:59:02] ep46  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:04:05] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:09:08] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:14:10] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:19:32] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:24:43] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:29:55] ep47  best 55.84% @ ep39  ⇒ continue（还没到最小观察轮数 48）
+[STOP 15:35:00] ep48  best 55.84% @ ep39  ⇒ stop（连续 6 轮无新低且极差 1.09 < 1.556 ⇒ 平台）
+[STOP 15:35:00] 触发早停 ⇒ SIGTERM 训练进程
+[STOP 15:35:00]   已发 SIGTERM 给 2409
+[STOP 15:35:40] 收据已重建 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p123-official55bf16-official-tfnet.json（best 55.84% @ ep39）
+[STOP 15:35:40] 早停完成；链条会继续下一步（P124a）

@@ -24,3 +24,30 @@ RandomHorizontalFlip 开启（官方默认 0.5）
 warmup              前 3 轮不开词级头
 低 lr 增强           关闭（对照组，权重恒定）
 lr 衰减里程碑        [35, 45]（按**总轮数 55** 缩放，官方 35/45）
+  scheduler 恢复：last_epoch=31，当前 lr=1.00e-04
+====================================================================
+续训：从 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-last.pt 恢复
+  已完成 epoch = 31，本次从 ep32 跑到 ep55
+  历史 best WER = 74.74%
+  lr 里程碑 [35, 45]（按总轮数 55 算）← 🔴 不会被续训打乱
+====================================================================
+/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py:807: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  if float(wl) != 0.0:
+  ep032 ctc 13.9114  **WER_official 59.04%**  差SOTA -16.94pp
+  ep033 ctc 13.0586  **WER_official 61.47%**  差SOTA -19.37pp
+  ep034 ctc 12.3625  **WER_official 58.87%**  差SOTA -16.77pp
+  ep035 ctc 11.8520  **WER_official 58.52%**  差SOTA -16.42pp
+  ep036 ctc 8.8265  **WER_official 57.92%**  差SOTA -15.82pp
+  ep037 ctc 8.0590  **WER_official 56.26%**  差SOTA -14.16pp
+  ep038 ctc 7.6618  **WER_official 56.51%**  差SOTA -14.41pp
+  ep039 ctc 7.3593  **WER_official 55.84%**  差SOTA -13.74pp
+  ep040 ctc 7.1571  **WER_official 56.19%**  差SOTA -14.09pp
+  ep041 ctc 6.9443  **WER_official 56.09%**  差SOTA -13.99pp
+  ep042 ctc 6.7723  **WER_official 56.19%**  差SOTA -14.09pp
+  ep043 ctc 6.5879  **WER_official 56.79%**  差SOTA -14.69pp
+  ep044 ctc 6.4612  **WER_official 56.19%**  差SOTA -14.09pp
+  ep045 ctc 6.2987  **WER_official 57.11%**  差SOTA -15.01pp
+  ep046 ctc 5.7107  **WER_official 57.28%**  差SOTA -15.18pp
+  ep047 ctc 5.5992  **WER_official 56.40%**  差SOTA -14.30pp
+  ep048 ctc 5.5204  **WER_official 56.23%**  差SOTA -14.13pp

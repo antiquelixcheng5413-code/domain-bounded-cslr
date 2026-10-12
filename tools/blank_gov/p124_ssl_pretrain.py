@@ -47,6 +47,7 @@ from __future__ import annotations
 import argparse
 import os
 import random
+import sys
 import time
 from pathlib import Path
 
@@ -231,18 +232,30 @@ def main():
         net.train()
         run, nb = 0.0, 0
         t_ep = time.time()
-        for v1, v2 in dl:
-            v1 = v1.to(dev, non_blocking=True)
-            v2 = v2.to(dev, non_blocking=True)
-            with torch.amp.autocast("cuda", enabled=use_amp,
-                                    dtype=torch.bfloat16):
-                _, z1 = net(v1)
-                _, z2 = net(v2)
-                loss = nt_xent(z1.float(), z2.float(), a.temp)
-            opt.zero_grad(set_to_none=True)
-            loss.backward()
-            opt.step()
-            run += loss.item(); nb += 1
+        try:
+            for v1, v2 in dl:
+                v1 = v1.to(dev, non_blocking=True)
+                v2 = v2.to(dev, non_blocking=True)
+                with torch.amp.autocast("cuda", enabled=use_amp,
+                                        dtype=torch.bfloat16):
+                    _, z1 = net(v1)
+                    _, z2 = net(v2)
+                    loss = nt_xent(z1.float(), z2.float(), a.temp)
+                opt.zero_grad(set_to_none=True)
+                loss.backward()
+                opt.step()
+                run += loss.item(); nb += 1
+        except Exception as e:
+            log("ep%02d 训练中断：%r" % (ep, e))
+            CKDIR.mkdir(parents=True, exist_ok=True)
+            out = CKDIR / ("%s-final.pt" % a.tag)
+            torch.save({"state_dict": net.backbone.state_dict(),
+                        "epoch": ep, "hist": hist, "config": vars(a),
+                        "note": "⚠️ 中断应急存盘（未完成 %d 轮），实际停在 ep%d"
+                                % (a.epochs, ep)},
+                       out)
+            log("应急存盘 -> %s（ep%d）" % (out, ep))
+            sys.exit(1)
         sched.step()
         dt = (time.time() - t_ep) / 60
         el = (time.time() - t0) / 60
@@ -250,7 +263,7 @@ def main():
         log("ep%02d  loss %.4f  (%.1f min/轮, 已用 %.0f min, ETA %.0f min)"
             % (ep, run / max(nb, 1), dt, el, eta))
         hist.append({"epoch": ep, "loss": round(run / max(nb, 1), 5)})
-        if ep % 10 == 0 or ep == a.epochs:
+        if ep % 3 == 0 or ep == a.epochs:
             CKDIR.mkdir(parents=True, exist_ok=True)
             p = CKDIR / ("%s-ep%02d.pt" % (a.tag, ep))
             torch.save({"state_dict": net.backbone.state_dict(),
