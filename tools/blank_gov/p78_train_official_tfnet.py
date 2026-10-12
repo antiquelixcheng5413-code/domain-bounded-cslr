@@ -684,6 +684,18 @@ def main() -> None:
                 "   （只存 model_state 会丢 Adam 二阶动量 + lr 位置）"
                 % a.resume)
         opt.load_state_dict(ck["optimizer_state"])
+        # 🔴 P123 续训事故修复：word_classifier 是**独立于 model 的全局模块**，
+        #   不在 model.state_dict() 里 ⇒ 不单独存就会在续训时被随机重建，
+        #   却配上上一轮针对旧权重的 Adam 二阶动量 ⇒ 词级头梯度把共享特征带偏。
+        #   实测：ep31 ctc 10.65 → ep32(续训) ctc 13.91（+3.27）。
+        if a.word_head > 0 and word_classifier is not None:
+            _wcs = ck.get("word_classifier_state")
+            if _wcs is not None:
+                word_classifier.load_state_dict(_wcs)
+                print("  词级头状态恢复  ✅")
+            else:
+                print("  ⚠️ ckpt 里没有 word_classifier_state ⇒ 词级头被随机重建，"
+                      "将配着旧 Adam 动量跑，头几轮 ctc 会被抬高（需 1-2 轮恢复）")
         start_ep = int(ck["epoch"]) + 1
         if "torch_rng" in ck:
             torch.set_rng_state(ck["torch_rng"].cpu())
@@ -861,6 +873,10 @@ def main() -> None:
         last_state = {
             "epoch": ep,
             "model_state": model.state_dict(),
+            # 🔴 词级头是独立于 model 的全局模块，不在 model.state_dict() 里
+            "word_classifier_state":
+                (word_classifier.state_dict()
+                 if (a.word_head > 0 and word_classifier is not None) else None),
             "optimizer_state": opt.state_dict(),   # 🔴 Adam 二阶动量
             "sched_state": sched.state_dict(),     # 🔴 lr 当前位置
             "torch_rng": torch.get_rng_state(),
@@ -884,6 +900,10 @@ def main() -> None:
             #    实例：p119-hflip-best.pt（ep33, 56.72%）就是缺 RNG 存的。
             #    P122 已补齐四项 RNG。
             torch.save({"epoch": ep, "model_state": model.state_dict(),
+                        "word_classifier_state":
+                            (word_classifier.state_dict()
+                             if (a.word_head > 0 and word_classifier is not None)
+                             else None),
                         "optimizer_state": opt.state_dict(),
                         "sched_state": sched.state_dict(),
                         "torch_rng": torch.random.get_rng_state(),
