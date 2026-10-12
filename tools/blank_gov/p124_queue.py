@@ -27,7 +27,10 @@ LOGS = REPO / "artifacts"
 
 POLL = 60           # 轮询间隔（秒）
 WAIT_GPU = 90       # 崩溃后等 GPU 释放
-MAX_RESTART = 3     # 单个任务最多重启次数
+MAX_RESTART = 12    # 单个任务最多重启次数
+# ⚠️ 实测（2026-10-12）：用户办公时 P124d 只撑了 1h38m 就 sticky error，
+#    20 轮训练约 5-9h ⇒ 3 次上限远远不够。每次 resume 只丢 <1 轮（p78 每轮存 last.pt），
+#    所以重启代价很低，上限放宽到 12 次。
 
 
 def log(*a):

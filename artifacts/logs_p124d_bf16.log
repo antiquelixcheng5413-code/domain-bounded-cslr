@@ -1,0 +1,57 @@
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 开启（官方默认 0.5）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           5.2 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=0.0001 wd=0.0001 batch=2 epochs=20
+补帧约定           零填充 + dataLen=真实帧数（P93~P121 口径）
+主干初始化         ImageNet（官方默认）
+自适应分桶         3626 train batch / 362 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+词级辅助头          C = 3516 类，权重 w = 0.300
+边界来源            ★ CTC 贪心路径（ref18 机制，依据【间接】）
+warmup              前 3 轮不开词级头
+低 lr 增强           关闭（对照组，权重恒定）
+lr 衰减里程碑        [13, 16]（按**总轮数 20** 缩放，官方 35/45）
+  词级头状态恢复  ✅
+  scheduler 恢复：last_epoch=3，当前 lr=1.00e-04
+====================================================================
+续训：从 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124d-bf16-wh03-last.pt 恢复
+  已完成 epoch = 3，本次从 ep4 跑到 ep20
+  历史 best WER = 76.67%
+  lr 里程碑 [13, 16]（按总轮数 20 算）← 🔴 不会被续训打乱
+====================================================================
+/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py:819: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  if float(wl) != 0.0:
+  ep004 ctc 30.7169  **WER_official 75.72%**  差SOTA -33.62pp
+  ep005 ctc 29.3712  **WER_official 74.67%**  差SOTA -32.57pp
+  ep006 ctc 27.8146  **WER_official 73.33%**  差SOTA -31.23pp
+  ep007 ctc 26.2801  **WER_official 70.87%**  差SOTA -28.77pp
+  ep008 ctc 24.7206  **WER_official 69.85%**  差SOTA -27.75pp
+  ep009 ctc 23.3118  **WER_official 69.18%**  差SOTA -27.08pp
+  ep010 ctc 21.9786  **WER_official 69.88%**  差SOTA -27.78pp
+  ep011 ctc 20.7832  **WER_official 68.33%**  差SOTA -26.23pp
+  ep012 ctc 19.7319  **WER_official 65.38%**  差SOTA -23.28pp
+  ep013 ctc 18.7205  **WER_official 64.00%**  差SOTA -21.90pp
+  ep014 ctc 15.8574  **WER_official 61.72%**  差SOTA -19.62pp
+  ep015 ctc 15.0202  **WER_official 60.49%**  差SOTA -18.39pp
+  ep016 ctc 14.4398  **WER_official 60.45%**  差SOTA -18.35pp
+  ep017 ctc 14.1200  **WER_official 60.94%**  差SOTA -18.84pp
+  ep018 ctc 13.8878  **WER_official 60.56%**  差SOTA -18.46pp
+  ep019 ctc 13.7210  **WER_official 60.73%**  差SOTA -18.63pp
+  ep020 ctc 13.5836  **WER_official 60.20%**  差SOTA -18.10pp
+
+最佳 WER_official = 60.20%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p124d-bf16-wh03-official-tfnet.json

@@ -1,0 +1,118 @@
+{
+  "pair": {
+    "a": "p124d-bf16-wh03",
+    "b": "p119-hflip"
+  },
+  "epoch_range": [
+    13,
+    20
+  ],
+  "n_pairs": 8,
+  "mean_pp": 1.6562,
+  "std_pp": 0.9575,
+  "win": "1/8",
+  "snr": 1.064,
+  "noise_baseline_pp": 1.556,
+  "verdict": "强提示",
+  "best_a": 60.2,
+  "best_b": 56.72,
+  "per_epoch": {
+    "13": [
+      64.0,
+      64.14,
+      -0.14
+    ],
+    "14": [
+      61.72,
+      59.99,
+      1.73
+    ],
+    "15": [
+      60.49,
+      59.71,
+      0.78
+    ],
+    "16": [
+      60.45,
+      58.9,
+      1.55
+    ],
+    "17": [
+      60.94,
+      58.23,
+      2.71
+    ],
+    "18": [
+      60.56,
+      58.34,
+      2.22
+    ],
+    "19": [
+      60.73,
+      58.09,
+      2.64
+    ],
+    "20": [
+      60.2,
+      58.44,
+      1.76
+    ]
+  },
+  "config_a": {
+    "epochs": 20,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124d-bf16-wh03-last.pt",
+    "official_pad": false,
+    "backbone_ckpt": "",
+    "total_epochs": 20,
+    "tag": "p124d-bf16-wh03",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "config_b": {
+    "epochs": 55,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": false,
+    "resume": "",
+    "total_epochs": 20,
+    "tag": "p119-hflip",
+    "seed": 42,
+    "eval_every": 1,
+    "hflip": true
+  },
+  "note": "bf16 净效应（word_head=0.3 配置，与 P119 fp32 配对）",
+  "generated": "2026-10-13 02:01:00"
+}
