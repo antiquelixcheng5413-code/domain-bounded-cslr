@@ -1,0 +1,44 @@
+{
+  "experiment": "P124b",
+  "date": "2026-10-12",
+  "probe": "自监督主干 vs ImageNet 主干的帧级判别力",
+  "criteria_preregistered": {
+    "metric": "ΔCohen's d（主）+ 高频子集 macroAUC（辅助）",
+    "random_baseline": "Cohen's d = 0；多分类 OVR macroAUC = 0.5",
+    "alive": "Δd >= 0.05 且 bootstrap95%CI 下界 > 0",
+    "dead": "Δd <= 0.01 或 CI 上界 < 0.05",
+    "note": "P107B2 脚本的 0.10/0.25 阈值低于随机基线 0.5，本脚本已修正"
+  },
+  "n_segments": 11595,
+  "n_videos": 2000,
+  "A": {
+    "name": "ImageNet",
+    "dir": "artifacts/frame_feats/p124_base",
+    "cohens_d": 0.5274,
+    "usable_classes": 986,
+    "subset_macro_auc": 0.5429,
+    "subset_classes": 69,
+    "subset_segments": 6470
+  },
+  "B": {
+    "name": "P124a-SimCLR",
+    "dir": "artifacts/frame_feats/p124_ssl06",
+    "cohens_d": 0.4726,
+    "usable_classes": 986,
+    "subset_macro_auc": 0.6063,
+    "subset_classes": 69,
+    "subset_segments": 6470
+  },
+  "delta_d": -0.0549,
+  "bootstrap": {
+    "n": 200,
+    "pairs_per_rep": 5000,
+    "ci95": [
+      -0.0083,
+      0.0347
+    ],
+    "by_video_cluster": true
+  },
+  "verdict": "判死",
+  "caveat": "Cohen's d 只测前端判别力，不等于 WER 会降；判活也只是「值得花 9 小时做微调验证」，不是已证实"
+}

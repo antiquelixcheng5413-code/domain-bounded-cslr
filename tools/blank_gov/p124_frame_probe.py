@@ -240,10 +240,13 @@ def compare(dir_a: Path, dir_b: Path, name_a: str, name_b: str, out: Path):
     ds = []
     t0 = time.time()
     for b in range(N_BOOT):
-        pick = rs.choice(len(vids), len(vids), replace=True)
+        # 🔴 必须去重：replace=True 会让同一视频的片段在 idx 里重复出现，
+        # 而 cohens_d 取每类"前两个片段"算同类距离 ⇒ 可能变成同一片段自减（距离 0）
+        # ⇒ same 被人为压低、d 系统性偏高（实测导致 CI 不含点估计）。
+        pick = np.unique(rs.choice(len(vids), len(vids), replace=True))
         idx = np.concatenate([vid2idx[vids[p]] for p in pick])
-        d_a, _ = cohens_d(Xa[idx], ya[idx], BOOT_PAIRS, seed=b)
-        d_b, _ = cohens_d(Xb[idx], yb[idx], BOOT_PAIRS, seed=b)
+        d_a, _ = cohens_d(Xa[idx], ya[idx], POINT_PAIRS, seed=b)
+        d_b, _ = cohens_d(Xb[idx], yb[idx], POINT_PAIRS, seed=b)
         ds.append(d_b - d_a)
         if (b + 1) % 50 == 0:
             log("  bootstrap %d/%d（%.0fs）" % (b + 1, N_BOOT, time.time() - t0))
