@@ -1,0 +1,15 @@
+[P125 12:11:55] 词表 3515
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P125 12:11:58] 载入 p123-official55bf16-best.pt（epoch 39，strict=True OK）
+[P125 12:13:53] CenterCrop(160)  dev=515  WER= 55.84%  ins=-1 del=-1 sub=-1 ref=2842  (115s)
+[P125 12:15:50] CenterCrop(192)  dev=515  WER= 59.08%  ins=-1 del=-1 sub=-1 ref=2842  (117s)
+[P125 12:19:08] CenterCrop(224)  dev=515  WER= 64.95%  ins=-1 del=-1 sub=-1 ref=2842  (198s)
+
+[P125 12:19:08] ──── 结论 ────
+[P125 12:19:08]   192 vs 160：Δ = +3.24 pp
+[P125 12:19:08]   224 vs 160：Δ = +9.11 pp
+[P125 12:19:08] 判定：224 更差（+9.11 pp）⇒ 无法区分「尺度不匹配」与「分辨率本身有害」，仍建议重训一次 224 以分离两因素
+[P125 12:19:08] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p125-resolution-probe.json

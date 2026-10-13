@@ -1,0 +1,42 @@
+{
+  "probe": "P126 10-crop TTA：边缘区域是否含判别信息",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n_dev": 40,
+  "crop_size": 160,
+  "full_size": 256,
+  "official_pad": true,
+  "truncation": "data_len",
+  "A_center_1crop": {
+    "WER_official": 53.57,
+    "edits": 120,
+    "ref_tokens": 224,
+    "n_sentences": 40,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 0.83,
+    "gap_to_sota_TFNet": -11.47,
+    "WER_excl_unk": 53.57,
+    "WER_per_sentence": 300.0,
+    "exact_rate_pct": 0.0,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "B_10crop_tta": {
+    "WER_official": 56.7,
+    "edits": 127,
+    "ref_tokens": 224,
+    "n_sentences": 40,
+    "better_than": "TFNet",
+    "worse_than": null,
+    "gap_to_that_method": 14.6,
+    "gap_to_sota_TFNet": -14.6,
+    "WER_excl_unk": 56.7,
+    "WER_per_sentence": 317.5,
+    "exact_rate_pct": 0.0,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "delta_B_minus_A_pp": 3.13,
+  "known_answer_check_passed": false,
+  "verdict": "边缘基本无判别信息（Δ=+3.13 pp）⇒ 160 不是瓶颈，缺口要从别处找",
+  "design_note": "所有 crop 均 160x160（与训练尺度一致）⇒ 无空间尺度不匹配，只有位置覆盖差异；baseline 为集成效应（通常 1~2 pp）"
+}

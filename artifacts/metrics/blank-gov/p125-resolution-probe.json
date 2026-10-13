@@ -1,0 +1,59 @@
+{
+  "probe": "P125 分辨率核对（我们 160 vs 官方 224）",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n_dev": 515,
+  "official_pad": true,
+  "truncation": "data_len",
+  "source_frame": "256x256（与官方一致）",
+  "results": {
+    "160": {
+      "WER_official": 55.84,
+      "edits": 1587,
+      "ref_tokens": 2842,
+      "n_sentences": 515,
+      "better_than": "TFNet",
+      "worse_than": null,
+      "gap_to_that_method": 13.74,
+      "gap_to_sota_TFNet": -13.74,
+      "WER_excl_unk": 55.84,
+      "WER_per_sentence": 308.1553,
+      "exact_rate_pct": 1.17,
+      "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+    },
+    "192": {
+      "WER_official": 59.08,
+      "edits": 1679,
+      "ref_tokens": 2842,
+      "n_sentences": 515,
+      "better_than": "TFNet",
+      "worse_than": null,
+      "gap_to_that_method": 16.98,
+      "gap_to_sota_TFNet": -16.98,
+      "WER_excl_unk": 59.08,
+      "WER_per_sentence": 326.0194,
+      "exact_rate_pct": 0.39,
+      "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+    },
+    "224": {
+      "WER_official": 64.95,
+      "edits": 1846,
+      "ref_tokens": 2842,
+      "n_sentences": 515,
+      "better_than": "TFNet",
+      "worse_than": null,
+      "gap_to_that_method": 22.85,
+      "gap_to_sota_TFNet": -22.85,
+      "WER_excl_unk": 64.95,
+      "WER_per_sentence": 358.4466,
+      "exact_rate_pct": 0.19,
+      "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+    }
+  },
+  "delta_vs_160_pp": {
+    "192": 3.24,
+    "224": 9.11
+  },
+  "verdict": "224 更差（+9.11 pp）⇒ 无法区分「尺度不匹配」与「分辨率本身有害」，仍建议重训一次 224 以分离两因素",
+  "caveat": "模型以 160 训练 ⇒ 224/192 评估存在 train-test 空间尺度不匹配"
+}
