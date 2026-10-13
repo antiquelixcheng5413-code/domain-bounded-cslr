@@ -287,7 +287,7 @@ def compare(dir_a: Path, dir_b: Path, name_a: str, name_b: str, out: Path):
               "usable_classes": kb, "subset_macro_auc": round(aucb, 4),
               "subset_classes": nb_cb, "subset_segments": nb_n},
         "delta_d": round(float(delta), 4),
-        "bootstrap": {"n": N_BOOT, "pairs_per_rep": BOOT_PAIRS,
+        "bootstrap": {"n": N_BOOT, "pairs_per_rep": POINT_PAIRS,
                       "ci95": [round(float(lo), 4), round(float(hi), 4)],
                       "by_video_cluster": True},
         "verdict": verdict,

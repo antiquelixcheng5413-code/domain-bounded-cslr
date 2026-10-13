@@ -1,0 +1,32 @@
+[P124b 11:16:49] 片段 A=11595  B=11595
+[P124b 11:16:52] 对齐后片段=11595  维度 A=1024 B=1024
+[P124b 11:16:53] Cohen's d: ImageNet=+0.5274 (类986)   P124a-SimCLR=+0.5195 (类986)
+[P124b 11:17:23]   bootstrap 50/200（30s）
+[P124b 11:17:50]   bootstrap 100/200（57s）
+[P124b 11:18:19]   bootstrap 150/200（85s）
+[P124b 11:18:48]   bootstrap 200/200（114s）
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:1457: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:1457: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+[P124b 11:22:37] 高频子集 macroAUC: ImageNet=0.5429 (69类/6470片段)  P124a-SimCLR=0.5522 (69类/6470片段)
+[P124b 11:22:37] Δd = -0.0079  95%CI [-0.0344, +0.0493]  ⇒ 判死
+[P124b 11:22:37] 收据 -> artifacts/metrics/blank-gov/p124b-probe-ep25.json

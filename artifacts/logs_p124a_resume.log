@@ -1,0 +1,32 @@
+[P124a 10:16:05] 帧池：4973 视频 → 59676 帧
+[P124a 10:16:06] 续训：载入 p124a-simclr-ep06.pt（ep6，loss 已降到 1.1781）
+[P124a 10:16:06]   ckpt 无 scheduler 状态 ⇒ 按闭式公式对齐 lr=0.00025934529（last_epoch=6）
+[P124a 10:16:06] device=cuda  batch=128  steps/epoch=466  epochs=25  start_ep=7  init=ImageNet
+[P124a 10:18:52] ep07  loss 1.2009  (2.8 min/轮, 已用 3 min, ETA 7 min)
+[P124a 10:21:20] ep08  loss 1.1660  (2.5 min/轮, 已用 5 min, ETA 11 min)
+[P124a 10:23:46] ep09  loss 1.1488  (2.4 min/轮, 已用 8 min, ETA 14 min)
+[P124a 10:23:47] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep09.pt
+[P124a 10:26:08] ep10  loss 1.1364  (2.4 min/轮, 已用 10 min, ETA 15 min)
+[P124a 10:28:24] ep11  loss 1.1287  (2.3 min/轮, 已用 12 min, ETA 16 min)
+[P124a 10:30:40] ep12  loss 1.1188  (2.3 min/轮, 已用 15 min, ETA 16 min)
+[P124a 10:30:41] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep12.pt
+[P124a 10:32:58] ep13  loss 1.1230  (2.3 min/轮, 已用 17 min, ETA 16 min)
+[P124a 10:35:26] ep14  loss 1.1170  (2.5 min/轮, 已用 19 min, ETA 15 min)
+[P124a 10:37:49] ep15  loss 1.1092  (2.4 min/轮, 已用 22 min, ETA 14 min)
+[P124a 10:37:50] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep15.pt
+[P124a 10:40:13] ep16  loss 1.1064  (2.4 min/轮, 已用 24 min, ETA 14 min)
+[P124a 10:42:35] ep17  loss 1.0999  (2.4 min/轮, 已用 26 min, ETA 12 min)
+[P124a 10:44:56] ep18  loss 1.0969  (2.3 min/轮, 已用 29 min, ETA 11 min)
+[P124a 10:44:57] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep18.pt
+[P124a 10:47:17] ep19  loss 1.0918  (2.3 min/轮, 已用 31 min, ETA 10 min)
+[P124a 10:49:40] ep20  loss 1.0892  (2.4 min/轮, 已用 34 min, ETA 8 min)
+[P124a 10:52:04] ep21  loss 1.0872  (2.4 min/轮, 已用 36 min, ETA 7 min)
+[P124a 10:52:05] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep21.pt
+[P124a 10:54:28] ep22  loss 1.0844  (2.4 min/轮, 已用 38 min, ETA 5 min)
+[P124a 10:56:52] ep23  loss 1.0857  (2.4 min/轮, 已用 41 min, ETA 4 min)
+[P124a 10:59:18] ep24  loss 1.0831  (2.4 min/轮, 已用 43 min, ETA 2 min)
+[P124a 10:59:19] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep24.pt
+[P124a 11:01:40] ep25  loss 1.0831  (2.4 min/轮, 已用 46 min, ETA 0 min)
+[P124a 11:01:40] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep25.pt
+[P124a 11:01:41] 完成 -> /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-final.pt（46 min）
+[P124a 11:01:41] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p124a-simclr.json
