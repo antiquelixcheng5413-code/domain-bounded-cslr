@@ -1,0 +1,120 @@
+{
+  "tag": "p127-res224",
+  "config": {
+    "epochs": 20,
+    "total_epochs": 20,
+    "img_size": 224,
+    "amp_bf16": true,
+    "no_hflip": false,
+    "word_head": 0.0,
+    "warmup_ep": 0,
+    "seed": 42,
+    "official_pad": false,
+    "batch": 2,
+    "hidden": 1024,
+    "lr": 0.0001,
+    "mem_budget": 5200000000.0
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 34.2812,
+      "dev_wer_official": 83.64,
+      "gap_to_sota": -41.54
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 31.1238,
+      "dev_wer_official": 83.71,
+      "gap_to_sota": -41.61
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 29.4526,
+      "dev_wer_official": 82.09,
+      "gap_to_sota": -39.99
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 27.8849,
+      "dev_wer_official": 80.82,
+      "gap_to_sota": -38.72
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 26.3446,
+      "dev_wer_official": 81.46,
+      "gap_to_sota": -39.36
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 24.8312,
+      "dev_wer_official": 79.1,
+      "gap_to_sota": -37.0
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 23.3998,
+      "dev_wer_official": 79.66,
+      "gap_to_sota": -37.56
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 22.1073,
+      "dev_wer_official": 80.19,
+      "gap_to_sota": -38.09
+    },
+    {
+      "epoch": 9,
+      "train_ctc": 20.9219,
+      "dev_wer_official": 79.94,
+      "gap_to_sota": -37.84
+    },
+    {
+      "epoch": 10,
+      "train_ctc": 19.8312,
+      "dev_wer_official": 77.52,
+      "gap_to_sota": -35.42
+    },
+    {
+      "epoch": 11,
+      "train_ctc": 18.8462,
+      "dev_wer_official": 77.87,
+      "gap_to_sota": -35.77
+    },
+    {
+      "epoch": 12,
+      "train_ctc": 17.9455,
+      "dev_wer_official": 75.48,
+      "gap_to_sota": -33.38
+    },
+    {
+      "epoch": 13,
+      "train_ctc": 17.1729,
+      "dev_wer_official": 76.99,
+      "gap_to_sota": -34.89
+    },
+    {
+      "epoch": 14,
+      "train_ctc": 14.3755,
+      "dev_wer_official": 74.67,
+      "gap_to_sota": -32.57
+    },
+    {
+      "epoch": 15,
+      "train_ctc": 13.5682,
+      "dev_wer_official": 74.95,
+      "gap_to_sota": -32.85
+    }
+  ],
+  "best_wer_official": 74.67,
+  "best_epoch": 14,
+  "epochs_completed": 15,
+  "_stopped_early": {
+    "by": "manual (中期判定止损)",
+    "reason": "判据区间 ep13-15 差距已达 +13.29pp（SNR 8.54），且单调发散，继续跑不会改变结论 ⇒ 止损省 5 轮 ×42min",
+    "epochs_run": 15,
+    "epochs_planned": 20,
+    "note": "权重完好（last.pt 423MB）；收据由 p127_finalize.py 重建"
+  }
+}

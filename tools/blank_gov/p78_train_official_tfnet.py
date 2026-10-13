@@ -79,17 +79,50 @@ def read_csv_split(name: str) -> dict[str, tuple[str, str]]:
     return out
 
 
-def build_transforms(hflip: bool, img_size: int = 224):
-    """官方增强链。hflip 可关⇒ 做对照实验。
+class CenterCropShift(object):
+    """官方 CenterCrop + **垂直方向偏移**（y_shift=0 时与官方完全等价）。
+
+    为什么需要：P128 实测运动能量重心在 y≈157，而 CenterCrop(160) 保留
+    [48,208]（中心 128）⇒ **系统性切掉下部**。224 更大区域已证明有害（P127，
+    +13.29pp），所以问题在**位置**不在**大小** ⇒ 需要能平移裁切窗口来单独验证。
+    """
+
+    def __init__(self, size, y_shift: int = 0):
+        self.size = size if isinstance(size, tuple) else (size, size)
+        self.y_shift = int(y_shift)
+
+    def __call__(self, clip):
+        h, w = clip[0].shape[:2]
+        sh, sw = self.size
+        y0 = (h - sh) // 2 + self.y_shift
+        x0 = (w - sw) // 2
+        y0 = max(0, min(h - sh, y0))      # 夹紧，防止越界
+        x0 = max(0, min(w - sw, x0))
+        return [img[y0:y0 + sh, x0:x0 + sw] for img in clip]
+
+
+def build_transforms(hflip: bool, img_size: int = 224, y_shift: int = 0,
+                     temporal_rescale: float = 0.2):
+    """官方增强链 + 两个可选偏离开关（默认 y_shift=0 / 0.2 ⇒ 与官方完全一致）。
 
     ⚠️ 官方默认含 RandomHorizontalFlip(0.5)。中文手语的镜像手势语义可能相反，
-       所以做成开关：--no-hflip 关掉，两组对比后再决定。
+       所以做成开关：--no-hflip 关掉，两组对比后再决定（P119 已证伪该假设）。
+
+    两个后加的开关（各自都有实测动机，默认保持官方行为）：
+      - y_shift             ：**只平移测试裁切窗口**。P128 测得运动重心偏下 29px，
+                              而训练时 RandomCrop 是随机的（覆盖全图、含下部），
+                              ⇒ 出问题的只有测试时那个**固定**的 CenterCrop，
+                              所以训练侧保持官方不变，只动测试侧。
+      - temporal_rescale=0  ：关掉时序缩放。官方 Train.py:76 未启用，
+                              是我们长期多带的增强（P125 静态核对发现）
     """
-    train_ops = [VA.RandomCrop(img_size)]
+    train_ops = [VA.RandomCrop(img_size)]          # 训练侧恒为官方行为
     if hflip:
         train_ops.append(VA.RandomHorizontalFlip(0.5))
-    train_ops += [VA.ToTensor(), VA.TemporalRescale(0.2)]
-    test_ops = [VA.CenterCrop(img_size), VA.ToTensor()]
+    train_ops += [VA.ToTensor()]
+    if temporal_rescale:
+        train_ops.append(VA.TemporalRescale(temporal_rescale))
+    test_ops = [CenterCropShift(img_size, y_shift), VA.ToTensor()]
     return VA.Compose(train_ops), VA.Compose(test_ops)
 
 
@@ -391,6 +424,14 @@ def main() -> None:
     ap.add_argument("--w-kd", type=float, default=1.0, help="SeqKD 权重（官方未给）")
     ap.add_argument("--no-hflip", action="store_true",
                     help="关掉 RandomHorizontalFlip（中文手语镜像语义可能相反）")
+    ap.add_argument("--test-crop-shift", type=int, default=0,
+                    help="🔴 只平移**测试**裁切窗口（像素，正=下移）。0=官方。\n"
+                         "动机：P128 测得运动能量重心在 y≈157，而 CenterCrop(160)\n"
+                         "保留 [48,208]（中心 128）⇒ 系统性切掉下部。训练侧 RandomCrop\n"
+                         "是随机的（覆盖全图含下部），故只有测试侧的固定裁切有问题。")
+    ap.add_argument("--no-temporal-rescale", action="store_true",
+                    help="关掉 TemporalRescale(0.2)：官方 Train.py:76 未启用，\n"
+                         "是我们长期多带的增强（P125 静态核对发现）")
     ap.add_argument("--max-train", type=int, default=0, help="0=全量；小规模验证用")
     ap.add_argument("--max-dev", type=int, default=0)
     ap.add_argument("--workers", type=int, default=4)
@@ -460,8 +501,10 @@ def main() -> None:
         str(CSV_DIR / "train.csv"), str(CSV_DIR / "dev.csv"),
         str(CSV_DIR / "test.csv"), "CE-CSL")
 
-    tr_tf, dv_tf = build_transforms(hflip=not a.no_hflip,
-                                   img_size=a.img_size)
+    tr_tf, dv_tf = build_transforms(
+        hflip=not a.no_hflip, img_size=a.img_size,
+        y_shift=a.test_crop_shift,
+        temporal_rescale=(0.0 if a.no_temporal_rescale else 0.2))
     tr_ds = RGBSeqDataset("train", labels_tr, word2idx, tr_tf, True)
     dv_ds = RGBSeqDataset("validation", labels_dv, word2idx, dv_tf, False)
     # dev 在 P77 里落在 validation/ 目录名
