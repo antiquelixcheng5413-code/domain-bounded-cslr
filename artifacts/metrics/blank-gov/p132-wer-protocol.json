@@ -1,0 +1,21 @@
+{
+  "probe": "P132 WER 口径核对：语料级 vs 逐句等权（官方代码实际口径）",
+  "finding": "官方 validLoader/testLoader batch_size=1，WerScore 逐样本算 WER，最后 werScoreSum/len(loader) ⇒ 实为逐句等权平均",
+  "source": {
+    "Train.py": "validLoader batch_size=1 (line 97)",
+    "WER.py": "WerScore line 145-161",
+    "Train.py_eval": "werScore = werScoreSum / len(validLoader)"
+  },
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n_dev": 515,
+  "A_corpus_level_pct": 55.84,
+  "B_sentence_mean_pct": 55.31,
+  "A_selfcheck_pct": 55.84,
+  "delta_A_minus_B_pp": 0.53,
+  "gap_to_official_45_10_if_B_pp": 10.21,
+  "n_sentences": 515,
+  "n_skipped_empty_ref": 0,
+  "known_answer_check_passed": true,
+  "note": "逐句等权给短句更大权重；若短句更易识别则该口径系统性偏低"
+}
