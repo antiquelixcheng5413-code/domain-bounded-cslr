@@ -1,0 +1,86 @@
+{
+  "probe": "P134 blank 负偏置扫描（针对生成率仅 77.2% 的欠生成）",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124e-wh0-bf16-best.pt",
+  "epoch": 17,
+  "n_dev": 515,
+  "motivation": {
+    "sub": 864,
+    "del": 685,
+    "ins": 38,
+    "generation_rate_pct": 77.2
+  },
+  "biases": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0
+  ],
+  "rows": [
+    {
+      "bias": 0.0,
+      "WER": 59.61,
+      "gen_pct": 70.8,
+      "delta_pp": 0.0,
+      "edits": 1694
+    },
+    {
+      "bias": 0.25,
+      "WER": 59.25,
+      "gen_pct": 73.6,
+      "delta_pp": -0.36,
+      "edits": 1684
+    },
+    {
+      "bias": 0.5,
+      "WER": 59.01,
+      "gen_pct": 77.6,
+      "delta_pp": -0.6,
+      "edits": 1677
+    },
+    {
+      "bias": 0.75,
+      "WER": 58.87,
+      "gen_pct": 80.7,
+      "delta_pp": -0.74,
+      "edits": 1673
+    },
+    {
+      "bias": 1.0,
+      "WER": 58.8,
+      "gen_pct": 83.6,
+      "delta_pp": -0.81,
+      "edits": 1671
+    },
+    {
+      "bias": 1.5,
+      "WER": 59.96,
+      "gen_pct": 89.7,
+      "delta_pp": 0.35,
+      "edits": 1704
+    },
+    {
+      "bias": 2.0,
+      "WER": 61.47,
+      "gen_pct": 95.4,
+      "delta_pp": 1.86,
+      "edits": 1747
+    },
+    {
+      "bias": 3.0,
+      "WER": 65.2,
+      "gen_pct": 105.0,
+      "delta_pp": 5.59,
+      "edits": 1853
+    }
+  ],
+  "baseline_WER": 59.61,
+  "best_bias": 1.0,
+  "best_WER": 58.8,
+  "gain_pp": 0.81,
+  "known_answer_check_passed": true,
+  "verdict": "不判活：最优 bias=1.00 仅改善 0.81 pp ⇒ 欠生成不是可调的解码问题"
+}

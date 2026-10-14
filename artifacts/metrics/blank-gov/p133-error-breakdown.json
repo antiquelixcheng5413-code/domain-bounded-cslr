@@ -1,0 +1,60 @@
+{
+  "probe": "P133 误差构成诊断（ins/del/sub + 生成率）",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n_dev": 515,
+  "WER_official": 55.84,
+  "edits": 1587,
+  "ref_tokens": 2842,
+  "sub": 864,
+  "del": 685,
+  "ins": 38,
+  "sum_check_ok": true,
+  "pct_sub": 54.4,
+  "pct_del": 43.2,
+  "pct_ins": 2.4,
+  "hyp_tokens": 2195,
+  "ref_tokens_sum": 2842,
+  "generation_rate_pct": 77.2,
+  "exact": 6,
+  "exact_pct": 1.17,
+  "buckets": {
+    "7-9": {
+      "n": 94,
+      "ins": 2,
+      "del": 215,
+      "sub": 188,
+      "ref": 694,
+      "hyp": 481,
+      "exact": 0
+    },
+    "10+": {
+      "n": 7,
+      "ins": 0,
+      "del": 34,
+      "sub": 15,
+      "ref": 75,
+      "hyp": 41,
+      "exact": 0
+    },
+    "4-6": {
+      "n": 401,
+      "ins": 35,
+      "del": 432,
+      "sub": 645,
+      "ref": 2035,
+      "hyp": 1638,
+      "exact": 6
+    },
+    "1-3": {
+      "n": 13,
+      "ins": 1,
+      "del": 4,
+      "sub": 16,
+      "ref": 38,
+      "hyp": 35,
+      "exact": 0
+    }
+  },
+  "verdict": "**以替换 sub 为主** ⇒ 是判别力问题，才该去动模型/表征"
+}

@@ -1,0 +1,86 @@
+{
+  "probe": "P134 blank 负偏置扫描（针对生成率仅 77.2% 的欠生成）",
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n_dev": 515,
+  "motivation": {
+    "sub": 864,
+    "del": 685,
+    "ins": 38,
+    "generation_rate_pct": 77.2
+  },
+  "biases": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0
+  ],
+  "rows": [
+    {
+      "bias": 0.0,
+      "WER": 55.84,
+      "gen_pct": 77.2,
+      "delta_pp": 0.0,
+      "edits": 1587
+    },
+    {
+      "bias": 0.25,
+      "WER": 55.49,
+      "gen_pct": 79.0,
+      "delta_pp": -0.35,
+      "edits": 1577
+    },
+    {
+      "bias": 0.5,
+      "WER": 54.96,
+      "gen_pct": 81.4,
+      "delta_pp": -0.88,
+      "edits": 1562
+    },
+    {
+      "bias": 0.75,
+      "WER": 54.75,
+      "gen_pct": 83.6,
+      "delta_pp": -1.09,
+      "edits": 1556
+    },
+    {
+      "bias": 1.0,
+      "WER": 54.93,
+      "gen_pct": 85.9,
+      "delta_pp": -0.91,
+      "edits": 1561
+    },
+    {
+      "bias": 1.5,
+      "WER": 55.28,
+      "gen_pct": 89.4,
+      "delta_pp": -0.56,
+      "edits": 1571
+    },
+    {
+      "bias": 2.0,
+      "WER": 56.02,
+      "gen_pct": 93.5,
+      "delta_pp": 0.18,
+      "edits": 1592
+    },
+    {
+      "bias": 3.0,
+      "WER": 58.55,
+      "gen_pct": 100.8,
+      "delta_pp": 2.71,
+      "edits": 1664
+    }
+  ],
+  "baseline_WER": 55.84,
+  "best_bias": 0.75,
+  "best_WER": 54.75,
+  "gain_pp": 1.09,
+  "known_answer_check_passed": true,
+  "verdict": "弱证据：bias=0.75 改善 1.09 pp"
+}
