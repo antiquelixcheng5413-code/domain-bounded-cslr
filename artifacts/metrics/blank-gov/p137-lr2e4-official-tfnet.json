@@ -1,0 +1,86 @@
+{
+  "tag": "p137-lr2e4",
+  "config": {
+    "img_size": 160,
+    "amp_bf16": true,
+    "word_head": 0.0,
+    "epochs": 20,
+    "seed": 42,
+    "official_pad": false,
+    "batch": 2,
+    "hidden": 1024,
+    "lr": 0.0002,
+    "weight_decay": 0.0001
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 35.4791,
+      "dev_wer_official": 81.32,
+      "gap_to_sota": -39.22
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 33.5357,
+      "dev_wer_official": 80.61,
+      "gap_to_sota": -38.51
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 32.5558,
+      "dev_wer_official": 78.64,
+      "gap_to_sota": -36.54
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 31.4611,
+      "dev_wer_official": 78.61,
+      "gap_to_sota": -36.51
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 30.5072,
+      "dev_wer_official": 77.69,
+      "gap_to_sota": -35.59
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 29.439,
+      "dev_wer_official": 77.09,
+      "gap_to_sota": -34.99
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 28.3634,
+      "dev_wer_official": 77.2,
+      "gap_to_sota": -35.1
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 27.3017,
+      "dev_wer_official": 75.3,
+      "gap_to_sota": -33.2
+    },
+    {
+      "epoch": 9,
+      "train_ctc": 26.2508,
+      "dev_wer_official": 74.84,
+      "gap_to_sota": -32.74
+    },
+    {
+      "epoch": 10,
+      "train_ctc": 25.1567,
+      "dev_wer_official": 74.45,
+      "gap_to_sota": -32.35
+    }
+  ],
+  "best_wer_official": 74.45,
+  "best_epoch": 10,
+  "epochs_completed": 10,
+  "_stopped_early": {
+    "by": "p137_chain 早停止损",
+    "reason": "最近 3 轮 ΔWER 全部 > 3.0 pp 且发散：ep08 +5.14, ep09 +3.87, ep10 +6.72",
+    "epochs_run": 10,
+    "epochs_planned": 20
+  }
+}
