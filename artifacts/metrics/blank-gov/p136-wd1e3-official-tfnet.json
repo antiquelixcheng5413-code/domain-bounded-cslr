@@ -1,0 +1,74 @@
+{
+  "tag": "p136-wd1e3",
+  "config": {
+    "img_size": 160,
+    "amp_bf16": true,
+    "word_head": 0.0,
+    "epochs": 20,
+    "seed": 42,
+    "official_pad": false,
+    "batch": 2,
+    "hidden": 1024,
+    "lr": 0.0001,
+    "weight_decay": 0.001
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 36.6265,
+      "dev_wer_official": 84.94,
+      "gap_to_sota": -42.84
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 34.1737,
+      "dev_wer_official": 80.05,
+      "gap_to_sota": -37.95
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 33.3281,
+      "dev_wer_official": 81.91,
+      "gap_to_sota": -39.81
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 32.6195,
+      "dev_wer_official": 80.33,
+      "gap_to_sota": -38.23
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 31.9327,
+      "dev_wer_official": 79.42,
+      "gap_to_sota": -37.32
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 31.3003,
+      "dev_wer_official": 78.33,
+      "gap_to_sota": -36.23
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 30.7253,
+      "dev_wer_official": 76.6,
+      "gap_to_sota": -34.5
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 30.1732,
+      "dev_wer_official": 76.95,
+      "gap_to_sota": -34.85
+    }
+  ],
+  "best_wer_official": 76.6,
+  "best_epoch": 7,
+  "epochs_completed": 8,
+  "_stopped_early": {
+    "by": "手动止损",
+    "reason": "8 轮全程更差且 Δtrain_ctc 单调扩大(+0.64→+5.91) ⇒ 欠拟合，非过拟合；继续跑不会翻转 ⇒ 省 12 轮 ≈5.2h",
+    "epochs_run": 8,
+    "epochs_planned": 20
+  }
+}
