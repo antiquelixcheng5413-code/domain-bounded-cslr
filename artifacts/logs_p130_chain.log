@@ -1,0 +1,14 @@
+[CHAIN 10-13 23:38:49] === P130 串行链条启动（一次只跑一个）===
+[CHAIN 10-13 23:38:49] 启动 P129（日志 logs_p129_cropshift.log）
+[CHAIN 10-13 23:47:40] P129 结束 rc=0
+[CHAIN 10-13 23:47:40] P129 结论：最优 shift=+0，改善 0.00 pp
+[CHAIN 10-13 23:47:40]   不判活：最优 shift=+0 仅改善 0.00 pp ⇒ 转 P131（去掉 TemporalRescale）
+[CHAIN 10-13 23:47:40]   已知答案校验（shift=0 应=55.84）：通过
+[CHAIN 10-13 23:47:40] ⇒ 不判活：启动 P131（去掉 TemporalRescale），与 p124e-wh0-bf16 配对
+[CHAIN 10-13 23:47:40] p131-norescale 进程不在（第 1/12 次）⇒ 等 90s 后 resume=False 重启
+[CHAIN 10-14 07:58:13] p131-norescale 收据已出 ⇒ 完成
+[CHAIN 10-14 07:58:13] 启动 配对 p131-norescale vs p124e-wh0-bf16（日志 logs_pair_p131_norescale.log）
+[CHAIN 10-14 07:58:13] 配对 p131-norescale vs p124e-wh0-bf16 结束 rc=0
+[CHAIN 10-14 07:58:13] === 链条全部结束 ===
+07:58:13] 配对 p131-norescale vs p124e-wh0-bf16 结束 rc=0
+[CHAIN 10-14 07:58:13] === 链条全部结束 ===

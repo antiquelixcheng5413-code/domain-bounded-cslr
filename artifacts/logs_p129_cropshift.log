@@ -1,0 +1,25 @@
+
+[CHAIN 10-13 23:38:49] P129
+[P129 23:38:52] 词表 3515
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P129 23:38:56] 载入 p123-official55bf16-best.pt（epoch 39，strict=True OK）
+[P129 23:40:40] y_shift  -32（裁 y∈[ 16,176]）  WER= 57.67%  ref=2842  (104s)
+[P129 23:42:04] y_shift  -16（裁 y∈[ 32,192]）  WER= 57.00%  ref=2842  (84s)
+[P129 23:43:28] y_shift   +0（裁 y∈[ 48,208]）  WER= 55.84%  ref=2842  (84s)
+[P129 23:44:52] y_shift  +16（裁 y∈[ 64,224]）  WER= 56.51%  ref=2842  (83s)
+[P129 23:46:15] y_shift  +29（裁 y∈[ 77,237]）  WER= 56.19%  ref=2842  (83s)
+[P129 23:47:39] y_shift  +48（裁 y∈[ 96,256]）  WER= 59.01%  ref=2842  (84s)
+
+[P129 23:47:39] ──── 结论 ────
+[P129 23:47:39]   shift  -32 :  57.67%   Δ  +1.83 pp
+[P129 23:47:39]   shift  -16 :  57.00%   Δ  +1.16 pp
+[P129 23:47:39]   shift   +0 :  55.84%   Δ  +0.00 pp  ← 基准(官方)
+[P129 23:47:39]   shift  +16 :  56.51%   Δ  +0.67 pp
+[P129 23:47:39]   shift  +29 :  56.19%   Δ  +0.35 pp
+[P129 23:47:39]   shift  +48 :  59.01%   Δ  +3.17 pp
+[P129 23:47:39]   判定：不判活：最优 shift=+0 仅改善 0.00 pp ⇒ 转 P131（去掉 TemporalRescale）
+[P129 23:47:39]   已知答案校验：shift=0 应=55.84 ⇒ ✅ 通过（实测 55.84）
+[P129 23:47:39] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p129-cropshift-probe.json
