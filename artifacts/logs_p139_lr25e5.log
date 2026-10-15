@@ -55,3 +55,55 @@ lr 衰减里程碑        [13, 16]（按**总轮数 20** 缩放，官方 35/45�
   历史 best WER = 78.54%
   lr 里程碑 [13, 16]（按总轮数 20 算）← 🔴 不会被续训打乱
 ====================================================================
+  ep003 ctc 32.1787  **WER_official 76.04%**  差SOTA -33.94pp
+  ep004 ctc 30.9375  **WER_official 77.16%**  差SOTA -35.06pp
+  ep005 ctc 29.5713  **WER_official 74.88%**  差SOTA -32.78pp
+  ep006 ctc 28.1151  **WER_official 72.73%**  差SOTA -30.63pp
+  ep007 ctc 26.6007  **WER_official 68.44%**  差SOTA -26.34pp
+  ep008 ctc 25.1630  **WER_official 68.19%**  差SOTA -26.09pp
+  ep009 ctc 23.8448  **WER_official 68.54%**  差SOTA -26.44pp
+  ep010 ctc 22.6177  **WER_official 66.78%**  差SOTA -24.68pp
+  ep011 ctc 21.4557  **WER_official 66.15%**  差SOTA -24.05pp
+  ep012 ctc 20.3864  **WER_official 65.27%**  差SOTA -23.17pp
+  ep013 ctc 19.4506  **WER_official 64.53%**  差SOTA -22.43pp
+  ep014 ctc 17.7867  **WER_official 63.41%**  差SOTA -21.31pp
+
+[CHAIN 10-15 11:50:10] 启动/重启 resume=True
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 开启（官方默认 0.5）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           5.2 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=2.5e-05 wd=0.0001 batch=2 epochs=20
+补帧约定           零填充 + dataLen=真实帧数（P93~P121 口径）
+主干初始化         ImageNet（官方默认）
+自适应分桶         3626 train batch / 362 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+lr 衰减里程碑        [13, 16]（按**总轮数 20** 缩放，官方 35/45）
+  scheduler 恢复：last_epoch=14，当前 lr=5.00e-06
+====================================================================
+续训：从 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p139-lr25e5-last.pt 恢复
+  已完成 epoch = 14，本次从 ep15 跑到 ep20
+  历史 best WER = 63.41%
+  lr 里程碑 [13, 16]（按总轮数 20 算）← 🔴 不会被续训打乱
+====================================================================
+  ep015 ctc 17.7020  **WER_official 62.53%**  差SOTA -20.43pp
+  ep016 ctc 17.3777  **WER_official 62.17%**  差SOTA -20.07pp
+  ep017 ctc 16.8512  **WER_official 62.21%**  差SOTA -20.11pp
+  ep018 ctc 16.6910  **WER_official 61.93%**  差SOTA -19.83pp
+  ep019 ctc 16.6779  **WER_official 61.75%**  差SOTA -19.65pp
+  ep020 ctc 16.6035  **WER_official 62.39%**  差SOTA -20.29pp
+
+最佳 WER_official = 61.75%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p139-lr25e5-official-tfnet.json
