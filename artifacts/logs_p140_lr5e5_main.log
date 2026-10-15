@@ -32,3 +32,49 @@ lr 衰减里程碑        [35, 45]（按**总轮数 55** 缩放，官方 35/45�
      实际训练轮数由 --epochs 决定 ⇒ 本次会跑 40 轮。
      若只想跑 55 轮，请同时传 --epochs 55。
 
+  ep001 ctc 36.9295  **WER_official 80.44%**  差SOTA -38.34pp
+  ep002 ctc 32.6964  **WER_official 78.57%**  差SOTA -36.47pp
+  ep003 ctc 31.1530  **WER_official 76.04%**  差SOTA -33.94pp
+/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py:862: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  if float(wl) != 0.0:
+  ep004 ctc 29.8067  **WER_official 73.29%**  差SOTA -31.19pp
+  ep005 ctc 28.3411  **WER_official 72.70%**  差SOTA -30.60pp
+  ep006 ctc 26.7577  **WER_official 70.13%**  差SOTA -28.03pp
+  ep007 ctc 25.1075  **WER_official 68.23%**  差SOTA -26.13pp
+  ep008 ctc 23.5968  **WER_official 66.89%**  差SOTA -24.79pp
+  ep009 ctc 22.1299  **WER_official 65.59%**  差SOTA -23.49pp
+  ep010 ctc 20.8126  **WER_official 64.88%**  差SOTA -22.78pp
+  ep011 ctc 19.6213  **WER_official 64.29%**  差SOTA -22.19pp
+  ep012 ctc 18.4989  **WER_official 63.44%**  差SOTA -21.34pp
+  ep013 ctc 17.4807  **WER_official 62.39%**  差SOTA -20.29pp
+  ep014 ctc 16.5736  **WER_official 65.02%**  差SOTA -22.92pp
+  ep015 ctc 15.6766  **WER_official 63.65%**  差SOTA -21.55pp
+  ep016 ctc 14.9073  **WER_official 63.12%**  差SOTA -21.02pp
+  ep017 ctc 14.1846  **WER_official 62.17%**  差SOTA -20.07pp
+  ep018 ctc 13.5296  **WER_official 61.47%**  差SOTA -19.37pp
+  ep019 ctc 12.9371  **WER_official 60.73%**  差SOTA -18.63pp
+  ep020 ctc 12.2908  **WER_official 59.96%**  差SOTA -17.86pp
+  ep021 ctc 11.7419  **WER_official 61.05%**  差SOTA -18.95pp
+  ep022 ctc 11.2511  **WER_official 61.19%**  差SOTA -19.09pp
+  ep023 ctc 10.7815  **WER_official 60.31%**  差SOTA -18.21pp
+  ep024 ctc 10.3377  **WER_official 64.39%**  差SOTA -22.29pp
+  ep025 ctc 9.9944  **WER_official 58.97%**  差SOTA -16.87pp
+  ep026 ctc 9.6098  **WER_official 60.66%**  差SOTA -18.56pp
+  ep027 ctc 9.2306  **WER_official 60.91%**  差SOTA -18.81pp
+  ep028 ctc 8.9203  **WER_official 59.15%**  差SOTA -17.05pp
+  ep029 ctc 8.6038  **WER_official 58.13%**  差SOTA -16.03pp
+  ep030 ctc 8.3097  **WER_official 61.33%**  差SOTA -19.23pp
+  ep031 ctc 8.0462  **WER_official 58.69%**  差SOTA -16.59pp
+  ep032 ctc 7.7185  **WER_official 59.22%**  差SOTA -17.12pp
+  ep033 ctc 7.4692  **WER_official 59.57%**  差SOTA -17.47pp
+  ep034 ctc 7.2269  **WER_official 61.22%**  差SOTA -19.12pp
+  ep035 ctc 7.0409  **WER_official 62.24%**  差SOTA -20.14pp
+  ep036 ctc 5.5685  **WER_official 58.83%**  差SOTA -16.73pp
+  ep037 ctc 5.0376  **WER_official 58.69%**  差SOTA -16.59pp
+  ep038 ctc 4.7848  **WER_official 57.14%**  差SOTA -15.04pp
+  ep039 ctc 4.6014  **WER_official 59.18%**  差SOTA -17.08pp
+  ep040 ctc 4.4524  **WER_official 57.32%**  差SOTA -15.22pp
+
+最佳 WER_official = 57.14%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p140-lr5e5-main-official-tfnet.json
