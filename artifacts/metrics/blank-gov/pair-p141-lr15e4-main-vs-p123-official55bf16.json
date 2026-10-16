@@ -1,0 +1,112 @@
+{
+  "pair": {
+    "a": "p141-lr15e4-main",
+    "b": "p123-official55bf16"
+  },
+  "epoch_range": [
+    35,
+    40
+  ],
+  "n_pairs": 6,
+  "mean_pp": 1.2667,
+  "std_pp": 0.9424,
+  "win": "0/6",
+  "snr": 0.814,
+  "noise_baseline_pp": 1.556,
+  "verdict": "不可判",
+  "best_a": 57.0,
+  "best_b": 55.84,
+  "per_epoch": {
+    "35": [
+      61.05,
+      58.52,
+      2.53
+    ],
+    "36": [
+      57.92,
+      57.92,
+      0.0
+    ],
+    "37": [
+      58.3,
+      56.26,
+      2.04
+    ],
+    "38": [
+      57.0,
+      56.51,
+      0.49
+    ],
+    "39": [
+      57.25,
+      55.84,
+      1.41
+    ],
+    "40": [
+      57.32,
+      56.19,
+      1.13
+    ]
+  },
+  "config_a": {
+    "epochs": 40,
+    "batch": 2,
+    "lr": 0.00015,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "test_crop_shift": 0,
+    "no_temporal_rescale": false,
+    "blank_bias": 0.0,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "",
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "total_epochs": 55,
+    "tag": "p141-lr15e4-main",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "config_b": {
+    "epochs": 55,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-last.pt",
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "total_epochs": 55,
+    "tag": "p123-official55bf16",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "note": "主配置 lr 1e-4 -> 1.5e-4 的净效应",
+  "generated": "2026-10-17 03:11:07"
+}
