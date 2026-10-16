@@ -189,6 +189,33 @@ OFFICIAL_PAD = False
 BLANK_BIAS = 0.0
 
 
+def ls_penalty(log_probs, lgt):
+    """label smoothing 的第二项：β·[-(1/N)·Σ_c log p_c]，在**有效时间步**上累积。
+
+    推导（写清楚以免日后误解）：
+        标准 LS 目标   y_ls = (1-β)·y_hot + β·uniform(N)
+        KL(y_ls‖p)    = -Σ_c y_ls[c]·log p[c]
+                      = (1-β)·(-log p[true]) + β·[-(1/N)·Σ_c log p[c]]
+                          └─ 对 CTC 即 CTC_loss ─┘   └─ 本函数 ─┘
+    第二项只依赖 log_probs，**不需要改 CTC 的前向后向** ⇒ 与 CTCLoss 完全兼容。
+
+    量级对齐：CTC_loss 是**序列级** -log P(seq) ≈ Σ_t(-log p[·])；
+    所以本项也按样本**累积**（÷B）而非在 (T,B) 上平均（÷(T·B)），
+    否则 β 的实际强度会被 T（≈100+）稀释到可忽略。
+
+    Args:
+        log_probs: [T,B,C]，已 log_softmax
+        lgt: 各样本的有效输出长度（卷积后时间步）
+    Returns:
+        标量
+    """
+    T, B, _ = log_probs.shape
+    t = torch.arange(T, device=log_probs.device).unsqueeze(1)      # [T,1]
+    mask = (t < lgt.to(log_probs.device).view(1, -1)).to(log_probs.dtype)
+    per_t = log_probs.mean(dim=-1)          # [T,B] = mean_c(log p_c)
+    return -(per_t * mask).sum() / max(B, 1)
+
+
 def collate(batch):
     """dataLen 必须是 CPU 的 [B,1] LongTensor（已实测，否则 CTC 报错）。"""
     batch = sorted(batch, key=lambda x: len(x["video"]), reverse=True)
@@ -437,6 +464,26 @@ def main() -> None:
     ap.add_argument("--no-temporal-rescale", action="store_true",
                     help="关掉 TemporalRescale(0.2)：官方 Train.py:76 未启用，\n"
                          "是我们长期多带的增强（P125 静态核对发现）")
+    ap.add_argument("--label-smoothing", type=float, default=0.0,
+                    help="🔴 CTC 的 label smoothing 系数 β（默认 0=官方行为）。\n"
+                         "标准 LS 把目标分布换成 y_ls=(1-β)·onehot + β·uniform，\n"
+                         "其 KL 可分解为 (1-β)·CE + β·[-(1/N)·Σ_c log p_c]；\n"
+                         "第一项对 CTC 就是 CTC loss，第二项（对均匀分布的 CE）\n"
+                         "只依赖 log_probs，**与 CTC 完全兼容** ⇒ 可直接实现。\n"
+                         "第二项量级需与序列级 CTC 对齐 ⇒ 按样本累积（÷B）而非 ÷(T·B)。\n"
+                         "⚠️⚠️ **β 的有效强度在 CTC 上被放大约 9 倍**（实测，必读）：\n"
+                         "   CTC 因对**所有对齐路径求和**，其 per-step 有效 CE 只有 ~1.4，\n"
+                         "   而 uniform 的 per-step CE = log(N) = 8.17 ⇒ 比值 ≈ 9。\n"
+                         "   实测 penalty/CTC ≈ 326/36 ≈ 9 ⇒\n"
+                         "     β=0.10 ⇒ penalty 项 ≈ CTC 项（**100%**，过强）\n"
+                         "     β=0.05 ⇒ ≈48%      β=0.01 ⇒ ≈9%（≈ 标准 CE 的 0.1）\n"
+                         "   ⇒ **CTC 上推荐 β = 0.01**（等效标准 CE 的 label_smoothing=0.1）\n"
+                         "依据：\n"
+                         "  【有】ref17 Gloss2Text 提出 SALS（语义感知 LS，手语专用）\n"
+                         "  【有】ref16 Sign2GPT 用 label smoothing 0.1\n"
+                         "  【间接】LS 抑制过拟合是通用原理（Szegedy 2016 / Müller 2019）\n"
+                         "  ⚠️【无】CTC-based CSLR 上 LS 的**直接**论文证据（这是首次尝试）\n"
+                         "动机：P127/P140 已确认本项目**过拟合**（train 远低于 dev）")
     ap.add_argument("--blank-bias", type=float, default=0.0,
                     help="🔴 解码时给 blank 类（index 0）的 log-prob 减该常数，\n"
                          "抑制 blank ⇒ 迫使多输出，**零训练成本**（P134）。\n"
@@ -836,6 +883,11 @@ def main() -> None:
             #训练时统一用 logProbs1 做主 CTC
             main_lp = ls(out[0])
             loss_ctc = ctc_loss(main_lp, tgt, lgt, tgt_len.cpu()).mean()
+            # 🔴 label smoothing：CTC 项替换成 (1-β)·CTC + β·[对均匀分布的平均 CE]
+            #    β=0 时严格等价（(1-0)·CTC + 0·penalty）⇒ 默认行为不变
+            if a.label_smoothing > 0:
+                loss_ctc = ((1.0 - a.label_smoothing) * loss_ctc
+                            + a.label_smoothing * ls_penalty(main_lp, lgt))
             if a.module == "TFNet":
                 # 官方 Train.py 210-223：4 个 CTC + 2 个 SeqKD(×25) + 1 个融合 CTC
                 loss = (ctc_loss(ls(out[4]), tgt, lgt, tgt_len.cpu()).mean()
