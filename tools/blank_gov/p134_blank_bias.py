@@ -96,12 +96,16 @@ def main() -> int:
     log("缓存完成 %.0fs，%d 条" % (time.time() - t0, len(cache)))
 
     def decode(bias: float):
+        """🔴 与 p78 评估段**逐字一致**的写法（[T,B,C] + [..., 0] -= bias），
+        这样本脚本验证的就是训练时真正会走的路径，而不是另一套实现。"""
         hyps, ntok = [], 0
+        P.BLANK_BIAS = float(bias)                      # 走 p78 的全局开关
         for lp16, L in zip(cache, lens):
-            lp = lp16.float()
-            if bias:
-                lp[:, 0] = lp[:, 0] - bias              # 🔴 抑制 blank
-            toks = P.greedy_decode(lp.unsqueeze(1),     # [T,1,C]
+            lp = lp16.float().unsqueeze(1)              # [T,1,C]
+            if P.BLANK_BIAS:
+                lp = lp.clone()
+                lp[..., 0] -= P.BLANK_BIAS              # 🔴 抑制 blank
+            toks = P.greedy_decode(lp,
                                    torch.LongTensor([[L]]), idx2word)
             hyps += toks
             ntok += sum(len(t) for t in toks)

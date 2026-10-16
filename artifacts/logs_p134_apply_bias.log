@@ -1,0 +1,25 @@
+[P134 09:05:59] 词表 3515
+[P134 09:05:59] official_pad = True（取自 ckpt config）
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P134 09:06:00] 载入 p123-official55bf16-best.pt（epoch 39）
+[P134 09:06:00] 推理并缓存 logp（515 条）…
+[P134 09:07:53] 缓存完成 113s，515 条
+[P134 09:07:54] 已知答案校验：bias=0 WER=55.84（收据 best=55.84）⇒ ✅
+[P134 09:07:54]   生成率 77.2%
+
+[P134 09:07:54] ──── 扫描 ────
+[P134 09:07:54] bias    WER      生成率    Δ vs bias=0
+[P134 09:07:54] 0.00    55.84%     77.2%    +0.00
+[P134 09:07:54] 0.25    55.49%     79.0%    -0.35
+[P134 09:07:54] 0.50    54.96%     81.4%    -0.88
+[P134 09:07:55] 0.75    54.75%     83.6%    -1.09
+[P134 09:07:55] 1.00    54.93%     85.9%    -0.91
+[P134 09:07:55] 1.50    55.28%     89.4%    -0.56
+[P134 09:07:55] 2.00    56.02%     93.5%    +0.18
+[P134 09:07:56] 3.00    58.55%    100.8%    +2.71
+
+[P134 09:07:56] 判定：弱证据：bias=0.75 改善 1.09 pp
+[P134 09:07:56] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p134-blank-bias-p123-official55bf16.json

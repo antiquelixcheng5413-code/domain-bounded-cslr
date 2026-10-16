@@ -183,6 +183,11 @@ class RGBSeqDataset(Dataset):
 #   ⚠️ 默认关闭：P93~P121 全部用的是「零填充 + dataLen=真实帧数」口径。
 OFFICIAL_PAD = False
 
+# 🔴 P134：解码时给 blank 类（index 0）的 log-prob 减去的常数。
+#   全局量是因为解码在 evaluate() 内部，参数对象不方便逐层传递（与 OFFICIAL_PAD 同模式）。
+#   默认 0.0 = 官方行为；>0 抑制 blank ⇒ 迫使多输出，零训练成本。
+BLANK_BIAS = 0.0
+
 
 def collate(batch):
     """dataLen 必须是 CPU 的 [B,1] LongTensor（已实测，否则 CTC 报错）。"""
@@ -432,6 +437,15 @@ def main() -> None:
     ap.add_argument("--no-temporal-rescale", action="store_true",
                     help="关掉 TemporalRescale(0.2)：官方 Train.py:76 未启用，\n"
                          "是我们长期多带的增强（P125 静态核对发现）")
+    ap.add_argument("--blank-bias", type=float, default=0.0,
+                    help="🔴 解码时给 blank 类（index 0）的 log-prob 减该常数，\n"
+                         "抑制 blank ⇒ 迫使多输出，**零训练成本**（P134）。\n"
+                         "动机：P133 实测生成率仅 77.2%%，且随句长崩塌（10+ 句仅\n"
+                         "54.7%%）⇒ CTC 不确定时退化成 blank。\n"
+                         "实测：P123 55.84→54.75（0.75）、P124e 59.61→58.80（1.00），\n"
+                         "双 ckpt 同为平滑 U 形、最优区间 0.75-1.0。\n"
+                         "⚠️ 默认 0（官方行为）；⚠️ 该 bias 是在 dev 上调出来的，\n"
+                         "有乐观风险，最终验收须在 test 上复核一次。")
     ap.add_argument("--max-train", type=int, default=0, help="0=全量；小规模验证用")
     ap.add_argument("--max-dev", type=int, default=0)
     ap.add_argument("--workers", type=int, default=4)
@@ -484,8 +498,9 @@ def main() -> None:
     a = ap.parse_args()
 
     # 🔴 collate 是模块级函数，用全局开关传递官方补帧约定
-    global OFFICIAL_PAD
+    global OFFICIAL_PAD, BLANK_BIAS
     OFFICIAL_PAD = bool(a.official_pad)
+    BLANK_BIAS = float(a.blank_bias)
 
     random.seed(a.seed)
     np.random.seed(a.seed)
@@ -887,6 +902,11 @@ def main() -> None:
                 # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
                 #    其他分支 logProbs1 本身就是最终输出。
                 logp5 = ls(out[0])   # 官方布局 [T,B,C]
+                # 🔴 P134：解码前给 blank 减常数 ⇒ 抑制 blank、迫使多输出。
+                #    只影响解码，不参与训练（零训练成本）。默认 0 = 官方行为。
+                if BLANK_BIAS:
+                    logp5 = logp5.clone()
+                    logp5[..., 0] -= BLANK_BIAS
                 # 🔴 P123 事故修复：截断长度必须用 **data_len(dl)**，不是真实帧数
                 #   开了 --official-pad 后 data_len = ceil(T/4)*4+12（含 left_pad=6
                 #   与右补齐），模型有效输出长度按 data_len 算；
