@@ -1,0 +1,113 @@
+
+[CHAIN 10-17 03:12:47] 启动/重启 resume=False
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/argparse.py", line 1759, in _check_help
+    formatter._expand_help(action)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/argparse.py", line 687, in _expand_help
+    return help_string % params
+           ~~~~~~~~~~~~^~~~~~~~
+TypeError: * wants int
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py", line 1081, in <module>
+    main()
+    ~~~~^^
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py", line 467, in main
+    ap.add_argument("--label-smoothing", type=float, default=0.0,
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    help="🔴 CTC 的 label smoothing 系数 β（默认 0=官方行为）。\n"
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<16 lines>...
+                         "  ⚠️【无】CTC-based CSLR 上 LS 的**直接**论文证据（这是首次尝试）\n"
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         "动机：P127/P140 已确认本项目**过拟合**（train 远低于 dev）")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/argparse.py", line 1573, in add_argument
+    self._check_help(action)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/argparse.py", line 1761, in _check_help
+    raise ValueError('badly formed help string') from exc
+ValueError: badly formed help string
+
+[CHAIN 10-17 03:15:17] 启动/重启 resume=False
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 开启（官方默认 0.5）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           5.2 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=0.0001 wd=0.0001 batch=2 epochs=40
+补帧约定           ★官方 collate（left_pad=6 + 末帧复制，dataLen=ceil(T/4)*4+12）
+主干初始化         ImageNet（官方默认）
+自适应分桶         3626 train batch / 362 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+词级辅助头          C = 3516 类，权重 w = 0.300
+边界来源            ★ CTC 贪心路径（ref18 机制，依据【间接】）
+warmup              前 3 轮不开词级头
+低 lr 增强           关闭（对照组，权重恒定）
+lr 衰减里程碑        [35, 45]（按**总轮数 55** 缩放，官方 35/45）
+
+  ⚠️⚠️⚠️ --total-epochs=55 与 --epochs=40 不一致！
+     --total-epochs 只用于缩放 lr 里程碑，**不限制训练轮数**。
+     实际训练轮数由 --epochs 决定 ⇒ 本次会跑 40 轮。
+     若只想跑 55 轮，请同时传 --epochs 55。
+
+  ep001 ctc 41.0612  **WER_official 78.96%**  差SOTA -36.86pp
+  ep002 ctc 37.6598  **WER_official 77.69%**  差SOTA -35.59pp
+  ep003 ctc 36.4672  **WER_official 76.99%**  差SOTA -34.89pp
+/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py:929: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  if float(wl) != 0.0:
+  ep004 ctc 35.4709  **WER_official 75.93%**  差SOTA -33.83pp
+  ep005 ctc 34.2818  **WER_official 73.79%**  差SOTA -31.69pp
+  ep006 ctc 32.9712  **WER_official 71.75%**  差SOTA -29.65pp
+  ep007 ctc 31.6964  **WER_official 72.91%**  差SOTA -30.81pp
+  ep008 ctc 30.4619  **WER_official 70.06%**  差SOTA -27.96pp
+  ep009 ctc 29.2584  **WER_official 68.47%**  差SOTA -26.37pp
+  ep010 ctc 28.2122  **WER_official 67.24%**  差SOTA -25.14pp
+  ep011 ctc 27.2214  **WER_official 64.29%**  差SOTA -22.19pp
+  ep012 ctc 26.2790  **WER_official 65.52%**  差SOTA -23.42pp
+  ep013 ctc 25.4789  **WER_official 62.81%**  差SOTA -20.71pp
+  ep014 ctc 24.7331  **WER_official 64.60%**  差SOTA -22.50pp
+  ep015 ctc 23.9778  **WER_official 63.27%**  差SOTA -21.17pp
+  ep016 ctc 23.3220  **WER_official 64.39%**  差SOTA -22.29pp
+  ep017 ctc 22.7118  **WER_official 64.74%**  差SOTA -22.64pp
+  ep018 ctc 22.1197  **WER_official 63.05%**  差SOTA -20.95pp
+  ep019 ctc 21.5771  **WER_official 63.41%**  差SOTA -21.31pp
+  ep020 ctc 21.1119  **WER_official 63.05%**  差SOTA -20.95pp
+  ep021 ctc 20.5269  **WER_official 62.74%**  差SOTA -20.64pp
+  ep022 ctc 20.1300  **WER_official 63.02%**  差SOTA -20.92pp
+  ep023 ctc 19.7214  **WER_official 61.68%**  差SOTA -19.58pp
+  ep024 ctc 19.3218  **WER_official 63.86%**  差SOTA -21.76pp
+  ep025 ctc 19.0031  **WER_official 62.77%**  差SOTA -20.67pp
+  ep026 ctc 18.6420  **WER_official 60.03%**  差SOTA -17.93pp
+  ep027 ctc 18.3591  **WER_official 62.17%**  差SOTA -20.07pp
+  ep028 ctc 18.0771  **WER_official 60.98%**  差SOTA -18.88pp
+  ep029 ctc 17.8274  **WER_official 61.26%**  差SOTA -19.16pp
+  ep030 ctc 17.5592  **WER_official 59.82%**  差SOTA -17.72pp
+  ep031 ctc 17.2999  **WER_official 61.29%**  差SOTA -19.19pp
+  ep032 ctc 16.9623  **WER_official 60.77%**  差SOTA -18.67pp
+  ep033 ctc 16.8020  **WER_official 60.42%**  差SOTA -18.32pp
+  ep034 ctc 16.5292  **WER_official 61.86%**  差SOTA -19.76pp
+  ep035 ctc 16.3565  **WER_official 60.70%**  差SOTA -18.60pp
+  ep036 ctc 14.6582  **WER_official 57.74%**  差SOTA -15.64pp
+  ep037 ctc 13.9454  **WER_official 57.64%**  差SOTA -15.54pp
+  ep038 ctc 13.6558  **WER_official 57.85%**  差SOTA -15.75pp
+  ep039 ctc 13.4293  **WER_official 58.34%**  差SOTA -16.24pp
+  ep040 ctc 13.1832  **WER_official 57.32%**  差SOTA -15.22pp
+
+最佳 WER_official = 57.32%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p142-ls001-main-official-tfnet.json

@@ -1,0 +1,310 @@
+{
+  "experiment": "P78",
+  "date": "2026-10-17",
+  "purpose": "官方 moduleChoice=VAC 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 45.1,
+  "best_wer_official": 57.32,
+  "module": "VAC",
+  "img_size": 160,
+  "amp_bf16": true,
+  "word_head_w": 0.3,
+  "word_boundary": "ctc_align",
+  "word_head_lowlr_mult": 1.0,
+  "lr_milestone_ep": 35,
+  "lr_milestones": [
+    35,
+    45
+  ],
+  "lr_gamma": 0.2,
+  "official_pad": true,
+  "backbone_ckpt": null,
+  "warmup_ep": 3,
+  "pseudo_boundary": false,
+  "mem_budget_GB": 5.2,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 40,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "test_crop_shift": 0,
+    "no_temporal_rescale": false,
+    "label_smoothing": 0.01,
+    "blank_bias": 0.0,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.3,
+    "word_boundary": "ctc_align",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 3,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "",
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "total_epochs": 55,
+    "tag": "p142-ls001-main",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "resumed_from": null,
+  "total_epochs_planned": 55,
+  "n_params_M": 35.25,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 41.0612,
+      "dev_wer_official": 78.96,
+      "gap_to_sota": -36.86
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 37.6598,
+      "dev_wer_official": 77.69,
+      "gap_to_sota": -35.59
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 36.4672,
+      "dev_wer_official": 76.99,
+      "gap_to_sota": -34.89
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 35.4709,
+      "dev_wer_official": 75.93,
+      "gap_to_sota": -33.83
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 34.2818,
+      "dev_wer_official": 73.79,
+      "gap_to_sota": -31.69
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 32.9712,
+      "dev_wer_official": 71.75,
+      "gap_to_sota": -29.65
+    },
+    {
+      "epoch": 7,
+      "train_ctc": 31.6964,
+      "dev_wer_official": 72.91,
+      "gap_to_sota": -30.81
+    },
+    {
+      "epoch": 8,
+      "train_ctc": 30.4619,
+      "dev_wer_official": 70.06,
+      "gap_to_sota": -27.96
+    },
+    {
+      "epoch": 9,
+      "train_ctc": 29.2584,
+      "dev_wer_official": 68.47,
+      "gap_to_sota": -26.37
+    },
+    {
+      "epoch": 10,
+      "train_ctc": 28.2122,
+      "dev_wer_official": 67.24,
+      "gap_to_sota": -25.14
+    },
+    {
+      "epoch": 11,
+      "train_ctc": 27.2214,
+      "dev_wer_official": 64.29,
+      "gap_to_sota": -22.19
+    },
+    {
+      "epoch": 12,
+      "train_ctc": 26.279,
+      "dev_wer_official": 65.52,
+      "gap_to_sota": -23.42
+    },
+    {
+      "epoch": 13,
+      "train_ctc": 25.4789,
+      "dev_wer_official": 62.81,
+      "gap_to_sota": -20.71
+    },
+    {
+      "epoch": 14,
+      "train_ctc": 24.7331,
+      "dev_wer_official": 64.6,
+      "gap_to_sota": -22.5
+    },
+    {
+      "epoch": 15,
+      "train_ctc": 23.9778,
+      "dev_wer_official": 63.27,
+      "gap_to_sota": -21.17
+    },
+    {
+      "epoch": 16,
+      "train_ctc": 23.322,
+      "dev_wer_official": 64.39,
+      "gap_to_sota": -22.29
+    },
+    {
+      "epoch": 17,
+      "train_ctc": 22.7118,
+      "dev_wer_official": 64.74,
+      "gap_to_sota": -22.64
+    },
+    {
+      "epoch": 18,
+      "train_ctc": 22.1197,
+      "dev_wer_official": 63.05,
+      "gap_to_sota": -20.95
+    },
+    {
+      "epoch": 19,
+      "train_ctc": 21.5771,
+      "dev_wer_official": 63.41,
+      "gap_to_sota": -21.31
+    },
+    {
+      "epoch": 20,
+      "train_ctc": 21.1119,
+      "dev_wer_official": 63.05,
+      "gap_to_sota": -20.95
+    },
+    {
+      "epoch": 21,
+      "train_ctc": 20.5269,
+      "dev_wer_official": 62.74,
+      "gap_to_sota": -20.64
+    },
+    {
+      "epoch": 22,
+      "train_ctc": 20.13,
+      "dev_wer_official": 63.02,
+      "gap_to_sota": -20.92
+    },
+    {
+      "epoch": 23,
+      "train_ctc": 19.7214,
+      "dev_wer_official": 61.68,
+      "gap_to_sota": -19.58
+    },
+    {
+      "epoch": 24,
+      "train_ctc": 19.3218,
+      "dev_wer_official": 63.86,
+      "gap_to_sota": -21.76
+    },
+    {
+      "epoch": 25,
+      "train_ctc": 19.0031,
+      "dev_wer_official": 62.77,
+      "gap_to_sota": -20.67
+    },
+    {
+      "epoch": 26,
+      "train_ctc": 18.642,
+      "dev_wer_official": 60.03,
+      "gap_to_sota": -17.93
+    },
+    {
+      "epoch": 27,
+      "train_ctc": 18.3591,
+      "dev_wer_official": 62.17,
+      "gap_to_sota": -20.07
+    },
+    {
+      "epoch": 28,
+      "train_ctc": 18.0771,
+      "dev_wer_official": 60.98,
+      "gap_to_sota": -18.88
+    },
+    {
+      "epoch": 29,
+      "train_ctc": 17.8274,
+      "dev_wer_official": 61.26,
+      "gap_to_sota": -19.16
+    },
+    {
+      "epoch": 30,
+      "train_ctc": 17.5592,
+      "dev_wer_official": 59.82,
+      "gap_to_sota": -17.72
+    },
+    {
+      "epoch": 31,
+      "train_ctc": 17.2999,
+      "dev_wer_official": 61.29,
+      "gap_to_sota": -19.19
+    },
+    {
+      "epoch": 32,
+      "train_ctc": 16.9623,
+      "dev_wer_official": 60.77,
+      "gap_to_sota": -18.67
+    },
+    {
+      "epoch": 33,
+      "train_ctc": 16.802,
+      "dev_wer_official": 60.42,
+      "gap_to_sota": -18.32
+    },
+    {
+      "epoch": 34,
+      "train_ctc": 16.5292,
+      "dev_wer_official": 61.86,
+      "gap_to_sota": -19.76
+    },
+    {
+      "epoch": 35,
+      "train_ctc": 16.3565,
+      "dev_wer_official": 60.7,
+      "gap_to_sota": -18.6
+    },
+    {
+      "epoch": 36,
+      "train_ctc": 14.6582,
+      "dev_wer_official": 57.74,
+      "gap_to_sota": -15.64
+    },
+    {
+      "epoch": 37,
+      "train_ctc": 13.9454,
+      "dev_wer_official": 57.64,
+      "gap_to_sota": -15.54
+    },
+    {
+      "epoch": 38,
+      "train_ctc": 13.6558,
+      "dev_wer_official": 57.85,
+      "gap_to_sota": -15.75
+    },
+    {
+      "epoch": 39,
+      "train_ctc": 13.4293,
+      "dev_wer_official": 58.34,
+      "gap_to_sota": -16.24
+    },
+    {
+      "epoch": 40,
+      "train_ctc": 13.1832,
+      "dev_wer_official": 57.32,
+      "gap_to_sota": -15.22
+    }
+  ],
+  "minutes": 1065.2
+}
