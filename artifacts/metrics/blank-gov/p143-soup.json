@@ -1,0 +1,53 @@
+{
+  "max_dev": 60,
+  "results": {
+    "p123-official55bf16": {
+      "WER": 49.38,
+      "gen": 82.4074074074074
+    },
+    "p140-lr5e5-main": {
+      "WER": 51.54,
+      "gen": 68.51851851851852
+    },
+    "p141-lr15e4-main": {
+      "WER": 53.09,
+      "gen": 75.61728395061728
+    },
+    "p142-ls001-main": {
+      "WER": 50.93,
+      "gen": 70.06172839506173
+    },
+    "soup_all(4)": {
+      "WER": 93.52,
+      "gen": 21.296296296296298,
+      "members": [
+        "p123-official55bf16",
+        "p140-lr5e5-main",
+        "p141-lr15e4-main",
+        "p142-ls001-main"
+      ],
+      "best_bias": 0.0,
+      "WER_with_bias": 93.52
+    },
+    "soup_3_no123": {
+      "WER": 85.19,
+      "gen": 18.51851851851852,
+      "members": [
+        "p140-lr5e5-main",
+        "p141-lr15e4-main",
+        "p142-ls001-main"
+      ]
+    },
+    "soup_123_142": {
+      "WER": 85.19,
+      "gen": 18.51851851851852,
+      "members": [
+        "p123-official55bf16",
+        "p142-ls001-main"
+      ]
+    }
+  },
+  "baseline_P123": 49.38,
+  "noise_baseline_pp": 1.556,
+  "note": "uniform weight averaging of main-config ckpts (zero training cost)"
+}
