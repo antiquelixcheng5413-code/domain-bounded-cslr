@@ -1,0 +1,32 @@
+{
+  "ckpt": "p123-official55bf16-best.pt",
+  "epoch": 39,
+  "n": 515,
+  "beam_width": 10,
+  "topk": 40,
+  "rows": {
+    "greedy": {
+      "bias0.00": {
+        "WER": 55.84,
+        "gen_rate": 77.23434201266714
+      },
+      "bias0.75": {
+        "WER": 54.71,
+        "gen_rate": 83.63828289936664
+      }
+    },
+    "beam": {
+      "bias0.00": {
+        "WER": 55.67,
+        "gen_rate": 78.11400422237861
+      },
+      "bias0.75": {
+        "WER": 55.42,
+        "gen_rate": 85.39760731878958
+      }
+    }
+  },
+  "delta_pp": -0.1700000000000017,
+  "sanity_greedy_ok": true,
+  "source": "Train.py:152 Decode(...,beam); decode.py:24 CTCBeamDecoder(beam_width=10)"
+}
