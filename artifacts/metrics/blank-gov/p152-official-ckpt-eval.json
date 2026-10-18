@@ -1,0 +1,23 @@
+{
+  "ckpt": "TFNet-CE-CSL-CSLDaily-32.46.pth",
+  "module": "TFNet",
+  "img_size": 224,
+  "rgb_fix": true,
+  "official_pad": true,
+  "n": 515,
+  "official_bestWerScore_dev_per_sentence": 33.19,
+  "rows": {
+    "greedy": {
+      "WER_official": 33.92,
+      "WER_per_sentence": 187.1845,
+      "gen_rate": 94.93314567206193
+    },
+    "beam10": {
+      "WER_official": 34.55,
+      "WER_per_sentence": 190.6796,
+      "gen_rate": 95.88318085855032
+    }
+  },
+  "delta_vs_official_per_sentence": 157.4896,
+  "note": "官方 ckpt 内 bestWerScore=33.19 是 dev 逐句等权（Train.py:295）"
+}
