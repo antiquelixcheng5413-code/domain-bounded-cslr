@@ -1,0 +1,27 @@
+[P145 16:10:27] split = test   ckpt = p123-official55bf16-best.pt
+[P145 16:10:27] 🔴 只验证 dev 上选定的 bias，不在 test 上扫描
+[P145 16:10:27] 词表 3515；test 样本 501 条
+[P145 16:10:28] official_pad = True（取自 ckpt config）
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P145 16:10:29] 载入 p123-official55bf16-best.pt（epoch 39）
+[P145 16:10:29] 推理并缓存 logp（500 条）…
+[P145 16:12:29] 缓存完成 120s，500 条
+
+[P145 16:12:29] ──── test 最终验收 ────
+[P145 16:12:29] bias    WER        生成率    Δ vs bias=0
+[P145 16:12:29] 0.00     56.64%      73.4%     +0.00 pp
+[P145 16:12:29] 0.75     55.95%      80.4%     -0.69 pp
+
+[P145 16:12:29] ──── 与 dev 对照（bias 是否在 test 上复现）────
+[P145 16:12:29]   口径        dev      test     差
+[P145 16:12:29]   bias=0      55.84     56.64    +0.80
+[P145 16:12:29]   bias=0.75   54.75     55.95    +1.20
+[P145 16:12:29]   bias 收益   -1.09     -0.69   ⇒ ✅ 迁移成功（test 上也改善）
+
+[P145 16:12:29] ──── 距官方基准（test）────
+[P145 16:12:29]   官方 VAC     43.3%   我们(bias0.75) 55.95%   差 +12.65 pp
+[P145 16:12:29]   官方 TFNet   41.9%   我们(bias0.75) 55.95%   差 +14.05 pp
+[P145 16:12:29] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p145-test-final.json

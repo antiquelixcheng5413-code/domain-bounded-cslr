@@ -1,0 +1,29 @@
+{
+  "split": "test",
+  "ckpt": "p123-official55bf16-best.pt",
+  "n_samples": 500,
+  "ref_tokens": 3040,
+  "results": {
+    "bias0.00": {
+      "WER": 56.64,
+      "gen": 73.38815789473684,
+      "ref_tokens": 3040,
+      "edits": 1722
+    },
+    "bias0.75": {
+      "WER": 55.95,
+      "gen": 80.36184210526316,
+      "ref_tokens": 3040,
+      "edits": 1701
+    }
+  },
+  "dev_reference": {
+    "bias0": 55.84,
+    "bias075": 54.75
+  },
+  "bias_gain_pp": {
+    "dev": -1.0900000000000034,
+    "test": -0.6899999999999977
+  },
+  "note": "test 最终验收；bias 在 dev 上选定，此处只验证不重选"
+}

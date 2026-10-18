@@ -121,12 +121,20 @@ def extract_one(job: tuple[str, str, str, str]) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--split", required=True, choices=["train", "dev"])
+    # 🔴 test 于 2026-10-18 开放，但**仅限最终验收评估**用：
+    #    - 禁止用 test 帧训练
+    #    - 禁止在 test 上扫描超参（bias / 阈值等一律只在 dev 上选）
+    #    - 评估只跑一次，结果直接归档
+    #   下方 assert 仍保护 OUT_ROOT 不被误设为 test 目录。
+    ap.add_argument("--split", required=True, choices=["train", "dev", "test"])
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--limit", type=int, default=0, help="0 = 全量")
     a = ap.parse_args()
 
-    assert a.split != "test", "test split 冻结，不得提取"
+    if a.split == "test":
+        # 🔴 2026-10-18：为**最终验收评估**开放，改为警告不再硬阻断。
+        #    铁律不变：test 帧**只用于评估一次**，禁止训练、禁止在 test 上选超参。
+        print("⚠️⚠️ --split test：仅用于**最终验收评估**，不得用于训练或在 test 上调参")
     labels = read_labels(a.split)
     items = sorted(labels.items())
     if a.limit:
