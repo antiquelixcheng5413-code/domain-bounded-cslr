@@ -126,6 +126,14 @@ def build_transforms(hflip: bool, img_size: int = 224, y_shift: int = 0,
     return VA.Compose(train_ops), VA.Compose(test_ops)
 
 
+# 🔴 P149（2026-10-18 实测）：通道顺序开关。默认 False = 复现历史行为。
+#   我们的 jpg 由「cv2 抽帧 -> cvtColor(BGR2RGB) -> imencode」写出，磁盘语义 R/B 颠倒；
+#   训练读图再 cvtColor(BGR2RGB) => 喂给模型的是 **BGR**。
+#   官方用 imageio.get_data()（RGB）也做一次 cvtColor(BGR2RGB) => 官方最终是 **RGB**。
+#   True = 读图后不再 cvtColor => 得到真 RGB（与官方一致）
+RGB_FIX = False
+
+
 class RGBSeqDataset(Dataset):
     """读 artifacts/official_rgb/{split}/{translator}/{sid}/*.jpg。
 
@@ -165,8 +173,11 @@ class RGBSeqDataset(Dataset):
     def __getitem__(self, i):
         it = self.items[i]
         files = sorted(f for f in os.listdir(it["dir"]) if f.endswith(".jpg"))
-        imgs = [cv2.cvtColor(cv2.imread(str(it["dir"] / f)), cv2.COLOR_BGR2RGB)
-                for f in files]
+        if RGB_FIX:
+            imgs = [cv2.imread(str(it["dir"] / f)) for f in files]
+        else:
+            imgs = [cv2.cvtColor(cv2.imread(str(it["dir"] / f)), cv2.COLOR_BGR2RGB)
+                    for f in files]
         # 官方 MyDataset 也做 cv2.resize(...,(256,256))；P77 已resize 过，这里不再重复
         seq = self.transform(imgs)
         seq = seq.float() / 127.5 - 1.0            # 官方归一化→ [-1, 1]
@@ -526,6 +537,8 @@ def main() -> None:
     ap.add_argument("--resume", default="",
                     help="🔴 续训用：从某个 .pt 恢复（需含 optimizer/sched/RNG）。"
                          "典型用法：--resume ck/xxx-last.pt --total-epochs 30")
+    ap.add_argument("--fix-rgb-order", action="store_true",
+                    help="读图后不再做 cvtColor(BGR2RGB)：修正 R/B 通道错位，使输入与官方一致（P149 实测：当前喂给模型的是 BGR）")
     ap.add_argument("--official-pad", action="store_true",
                     help="🔴 P123：改用官方 collate_fn 的补帧约定"
                          "（left_pad=6 首帧复制 + 右补末帧到 4 的倍数，"
@@ -545,9 +558,12 @@ def main() -> None:
     a = ap.parse_args()
 
     # 🔴 collate 是模块级函数，用全局开关传递官方补帧约定
-    global OFFICIAL_PAD, BLANK_BIAS
+    global OFFICIAL_PAD, BLANK_BIAS, RGB_FIX
     OFFICIAL_PAD = bool(a.official_pad)
     BLANK_BIAS = float(a.blank_bias)
+    RGB_FIX = bool(a.fix_rgb_order)
+    if RGB_FIX:
+        print("[RGB_FIX] 通道顺序修正开启：读图后不再 cvtColor => 真 RGB")
 
     random.seed(a.seed)
     np.random.seed(a.seed)

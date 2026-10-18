@@ -1,0 +1,28 @@
+{
+  "ckpt": "p123-official55bf16-best.pt",
+  "n": 516,
+  "rows": {
+    "bgr": {
+      "bias0.00": {
+        "WER": 55.84,
+        "gen_rate": 77.23434201266714
+      },
+      "bias0.75": {
+        "WER": 54.71,
+        "gen_rate": 83.63828289936664
+      }
+    },
+    "rgb": {
+      "bias0.00": {
+        "WER": 87.12,
+        "gen_rate": 18.472906403940886
+      },
+      "bias0.75": {
+        "WER": 87.02,
+        "gen_rate": 19.176636171710065
+      }
+    }
+  },
+  "delta_rgb_minus_bgr": 31.28,
+  "sanity_bgr_ok": true
+}
