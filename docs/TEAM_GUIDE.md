@@ -1,6 +1,6 @@
 # 队友操作指南（D3 / D4）
 
-> **v5 · 2026-10-19 13:15 更新**（变更记录见文末第 9 节）
+> **v6 · 2026-10-19 13:25 更新**（变更记录见文末第 10 节）
 >
 > 目标：两台机器并行，把「我们和官方差 22pp」拆成
 > **通道 / 分辨率 / 容量** 三块，各自值多少 pp。
@@ -228,14 +228,24 @@ RESUME=1 bash tools/blank_gov/run_d4_tfnet224.sh
   ```
   （`ctc` = 训练集 CTC 损失，应逐步下降；`WER_official` = dev 词错误率）
 
-### 5.4 产物在哪
+### 5.4 产物分别在哪
 
-训练结束（或被中断）后，回传这三样：
+| 产物 | 路径 | 什么时候才有 |
+|---|---|---|
+| 训练日志 | `artifacts/logs_D3_vac224.log`（或 `logs_D4_tfnet224.log`）| 一直在写 |
+| 收据 json | `artifacts/metrics/blank-gov/p157-vac224-rgb-official-tfnet.json`<br>（D4 是 `p158-tfnet224-rgb-official-tfnet.json`）| 🔴 **只在训练正常跑完时写** |
+| 最佳权重 | `artifacts/checkpoints/p157-vac224-rgb-best.pt`（约 545MB）| 每轮都在更新 |
 
-```
-artifacts/logs_D3_vac224.log                     （或 logs_D4_tfnet224.log）
-artifacts/metrics/blank-gov/p157-vac224-rgb.json （收据，含 per_epoch 曲线）
-artifacts/checkpoints/<tag>-best.pt              （最佳权重，约 545MB；太大就先不传）
+⚠️ 收据名字结尾是 `-official-tfnet.json`，**不是**直接 `<tag>.json`。
+
+🔴 **日志才是最重要的那个**：收据只在跑完时才生成，
+中途被中断（这几乎一定会发生）时，**逐轮 WER 曲线只存在于日志里**。
+真被中断了也别删东西，把当时的日志 + `<tag>-last.pt` 交回来就行。
+
+从日志里摘逐轮曲线的办法：
+
+```bash
+grep -E "ep[0-9]{3}" artifacts/logs_D3_vac224.log > /tmp/d3_curve.txt
 ```
 
 ---
@@ -317,7 +327,63 @@ python3 tools/blank_gov/check_env.py
 
 ---
 
-## 9. 版本变更
+## 9. 最后要交什么（清单）
+
+按重要性排序，**前两项是必需的**。
+
+### ① 训练日志 —— 必需
+
+```
+artifacts/logs_D3_vac224.log     # 或 logs_D4_tfnet224.log
+```
+
+我们要拿它做**逐轮配对**（只能用 ep32 以后，见 6.3），
+所以请把**完整日志**交回来，不要只挑最后几行。
+
+### ② 收据 json —— 跑完了就交，没跑完就没有
+
+```bash
+ls artifacts/metrics/blank-gov/*-official-tfnet.json
+#   D3: p157-vac224-rgb-official-tfnet.json
+#   D4: p158-tfnet224-rgb-official-tfnet.json
+```
+
+里面有 `history`（逐轮 `epoch / train_ctc / dev_wer_official`）、
+`best_wer_official`、`best_epoch`、以及**全量 config**（img_size / module / lr 等）
+⇒ 有它我们就能核对你跑的到底是不是我们说的那个配置。
+⚠️ 注意名字结尾是 `-official-tfnet.json`。
+
+### ③ 最佳权重 —— 先问我们要不要
+
+```
+artifacts/checkpoints/p157-vac224-rgb-best.pt   # 约 545MB
+```
+
+传不动就先不传。只有我们后面要做误差构成 / 后验锐度分析时才会单独问你要。
+
+### ④ 一段文字结论 —— 一句话就够
+
+```
+tag / 实际跑了几轮 / best WER 多少 / 落在第几轮 / 中途断过几次、怎么续的
+```
+
+### 万一要中途停
+
+别直接删。把当下的**日志 + `<tag>-last.pt`** 交回来即可，
+我们既能拿它做部分分析，也能让你用 `RESUME=1` 接着跑（见 5.1）。
+
+---
+
+## 10. 版本变更
+
+### v6（2026-10-19 13:25）
+- 🔴 **修正 5.4 里写错的收据路径**：真实名字是
+  `artifacts/metrics/blank-gov/<tag>-official-tfnet.json`（结尾有 `-official-tfnet`），
+  不是 `<tag>.json`。这是我之前凭印象写的，核对 p78 源码 1088 行后才改对。
+- 🔴 新增警示：**收据只在训练正常跑完时写**，中途被中断时
+  **逐轮 WER 曲线只存在于日志里** ⇒ 日志才是最重要的产物，必须交完整日志。
+- 新增 **第 9 节「最后要交什么」清单**：日志 / 收据 / 权重 / 一句话结论，
+  并说明中途要停时该怎么交。
 
 ### v5（2026-10-19 13:15）
 - 新增 **0.1 实验设计详解**：四配置阶梯表（相邻只差一个变量）+ 四个名词速览，
