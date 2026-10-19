@@ -86,7 +86,7 @@ def main() -> int:
         p = found[0]
         print("    %s %s（%.0f MB）" % (OK, p.name, p.stat().st_size / 1e6))
     else:
-        print("    %s 未找到 TFNet-CE-CSL-CSLDaily-32.46.pth（D1 需要它）" % WARN)
+        print("    %s 未找到 TFNet-CE-CSL-CSLDaily-32.46.pth（只有 D1 需要，D3/D4 可忽略）" % WARN)
 
     # 6. 磁盘
     print("\n[6] 磁盘空间")
@@ -97,7 +97,7 @@ def main() -> int:
     print(" 下一步：先跑冒烟，再上 55 轮")
     print("   D3: bash tools/blank_gov/run_d3_vac224.sh smoke")
     print("   D4: bash tools/blank_gov/run_d4_tfnet224.sh smoke")
-    print("   D1: ./venv/bin/python -u tools/blank_gov/p156_official_ablation.py 0 fast")
+    print("   D1: 已由我们跑完，你们不用跑（且需要 880MB 官方权重，不需传）")
     print("=" * 56)
     return 0
 
