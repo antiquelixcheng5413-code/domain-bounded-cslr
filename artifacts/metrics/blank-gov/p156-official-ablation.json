@@ -1,0 +1,21 @@
+{
+  "ckpt": "TFNet-CE-CSL-CSLDaily-32.46.pth",
+  "module": "TFNet",
+  "n": 516,
+  "baseline_224_rgb": 33.92,
+  "rows": {
+    "160_RGB": {
+      "WER": 88.63,
+      "gen_rate": 13.159746657283604
+    },
+    "224_BGR": {
+      "WER": 97.71,
+      "gen_rate": 4.046446164672766
+    },
+    "160_BGR": {
+      "WER": 98.35,
+      "gen_rate": 3.2371569317382125
+    }
+  },
+  "mode": "fast"
+}

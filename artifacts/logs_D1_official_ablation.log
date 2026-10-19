@@ -1,0 +1,18 @@
+[P156 10:00:32] 官方 TFNet，dev 516 条，组合 [(160, True), (224, False), (160, False)]
+[P156 10:03:06]   img=160 RGB  WER  88.63%  生成率  13.2%  (154s)
+[W1019 10:06:56.310968363 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3057647616 bytes (free: 0, total: 8518041600).
+[P156 10:09:58]   img=224 BGR  WER  97.71%  生成率   4.0%  (412s)
+[P156 10:12:31]   img=160 BGR  WER  98.35%  生成率   3.2%  (152s)
+
+[P156 10:12:31] ──── 官方权重上的代价分解（dev，greedy，语料级）────
+[P156 10:12:31]   组合                  WER   vs 224+RGB
+[P156 10:12:31]   224+RGB(基线)       33.92            —
+[P156 10:12:31]   160_RGB           88.63       +54.71
+[P156 10:12:31]   224_BGR           97.71       +63.79
+[P156 10:12:31]   160_BGR           98.35       +64.43
+
+[P156 10:12:31]   ⇒ 分辨率代价（224→160，RGB 下）：+54.71 pp
+[P156 10:12:31]   ⇒ 通道代价（RGB→BGR，224 下）：+63.79 pp
+[P156 10:12:31]   ⇒ 两者叠加（= 我们的取舍）：+64.43 pp
+[P156 10:12:31]   ⚠️ 这是「推理时换输入」的上界；从头训练会适应 ⇒ 训练侧真实损失更小
+[P156 10:12:31] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p156-official-ablation.json

@@ -52,3 +52,4 @@ Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pyto
   ep022 ctc 13.4308  **WER_official 61.72%**  差SOTA -19.62pp
   ep023 ctc 12.9545  **WER_official 61.93%**  差SOTA -19.83pp
   ep024 ctc 12.5871  **WER_official 61.01%**  差SOTA -18.91pp
+  ep025 ctc 12.2044  **WER_official 62.07%**  差SOTA -19.97pp
