@@ -1,0 +1,121 @@
+{
+  "pair": {
+    "a": "p138-lr5e5",
+    "b": "p124e-wh0-bf16"
+  },
+  "epoch_range": [
+    13,
+    20
+  ],
+  "n_pairs": 8,
+  "mean_pp": -1.6475,
+  "std_pp": 0.3968,
+  "win": "8/8",
+  "snr": 1.059,
+  "noise_baseline_pp": 1.556,
+  "verdict": "强提示",
+  "best_a": 58.3,
+  "best_b": 59.61,
+  "per_epoch": {
+    "13": [
+      62.21,
+      64.36,
+      -2.15
+    ],
+    "14": [
+      59.47,
+      61.47,
+      -2.0
+    ],
+    "15": [
+      59.92,
+      60.91,
+      -0.99
+    ],
+    "16": [
+      59.08,
+      61.05,
+      -1.97
+    ],
+    "17": [
+      58.34,
+      59.61,
+      -1.27
+    ],
+    "18": [
+      58.3,
+      60.03,
+      -1.73
+    ],
+    "19": [
+      58.37,
+      59.82,
+      -1.45
+    ],
+    "20": [
+      58.44,
+      60.06,
+      -1.62
+    ]
+  },
+  "config_a": {
+    "epochs": 20,
+    "batch": 2,
+    "lr": 5e-05,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "test_crop_shift": 0,
+    "no_temporal_rescale": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.0,
+    "word_boundary": "equal",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 0,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "",
+    "official_pad": false,
+    "backbone_ckpt": "",
+    "total_epochs": 20,
+    "tag": "p138-lr5e5",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "config_b": {
+    "epochs": 20,
+    "batch": 2,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "w_kd": 1.0,
+    "no_hflip": false,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 5200000000.0,
+    "module": "VAC",
+    "word_head": 0.0,
+    "word_boundary": "equal",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 0,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "",
+    "official_pad": false,
+    "backbone_ckpt": "",
+    "total_epochs": 20,
+    "tag": "p124e-wh0-bf16",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "note": "learning rate 1e-4 → 5e-5 的净效应",
+  "generated": "2026-10-15 02:25:48"
+}

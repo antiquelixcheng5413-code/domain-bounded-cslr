@@ -1,0 +1,4 @@
+[QUEUE 10-12 17:15:22] === P124 串行队列启动（一次只跑一个）===
+[QUEUE 10-12 18:10:23] ⚠️ p124d-bf16-wh03 进程已退出但无收据 ⇒ 续训重启（第 1/3 次）
+[QUEUE 10-12 18:11:53]   续训起点 p124d-bf16-wh03-last.pt
+[QUEUE 10-12 18:11:53] 启动：...ctc_align --warmup-ep 3 --resume /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124d-bf16-wh03-last.pt

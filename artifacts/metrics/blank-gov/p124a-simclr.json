@@ -1,6 +1,6 @@
 {
   "experiment": "P124a",
-  "date": "2026-10-11",
+  "date": "2026-10-13",
   "method": "SimCLR (NT-Xent) 域内自监督预训练",
   "target": "替换官方 VAC 的 2D ResNet18 主干初始化",
   "evidence_level": {
@@ -10,30 +10,123 @@
     "反向证据": "【有】官方 CorrNet 47.2 > VAC 45.1（自监督一致性反而更差）"
   },
   "config": {
-    "epochs": 2,
-    "batch": 32,
+    "epochs": 25,
+    "batch": 128,
     "lr": 0.0003,
     "wd": 0.0001,
     "temp": 0.2,
     "size": 160,
-    "frames_per_video": 8,
-    "max_videos": 60,
-    "workers": 2,
+    "frames_per_video": 12,
+    "max_videos": 0,
+    "workers": 4,
     "from_scratch": false,
-    "tag": "smoke",
-    "seed": 42
+    "tag": "p124a-simclr",
+    "seed": 42,
+    "resume": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep06.pt"
   },
-  "n_frames": 480,
+  "n_frames": 59676,
   "history": [
     {
       "epoch": 1,
-      "loss": 2.65264
+      "loss": 1.5327
     },
     {
       "epoch": 2,
-      "loss": 1.73336
+      "loss": 1.29146
+    },
+    {
+      "epoch": 3,
+      "loss": 1.24153
+    },
+    {
+      "epoch": 4,
+      "loss": 1.2135
+    },
+    {
+      "epoch": 5,
+      "loss": 1.1959
+    },
+    {
+      "epoch": 6,
+      "loss": 1.17807
+    },
+    {
+      "epoch": 7,
+      "loss": 1.20089
+    },
+    {
+      "epoch": 8,
+      "loss": 1.16597
+    },
+    {
+      "epoch": 9,
+      "loss": 1.14877
+    },
+    {
+      "epoch": 10,
+      "loss": 1.13637
+    },
+    {
+      "epoch": 11,
+      "loss": 1.12869
+    },
+    {
+      "epoch": 12,
+      "loss": 1.11885
+    },
+    {
+      "epoch": 13,
+      "loss": 1.12304
+    },
+    {
+      "epoch": 14,
+      "loss": 1.11702
+    },
+    {
+      "epoch": 15,
+      "loss": 1.10923
+    },
+    {
+      "epoch": 16,
+      "loss": 1.10643
+    },
+    {
+      "epoch": 17,
+      "loss": 1.09986
+    },
+    {
+      "epoch": 18,
+      "loss": 1.09689
+    },
+    {
+      "epoch": 19,
+      "loss": 1.09184
+    },
+    {
+      "epoch": 20,
+      "loss": 1.08917
+    },
+    {
+      "epoch": 21,
+      "loss": 1.08724
+    },
+    {
+      "epoch": 22,
+      "loss": 1.08443
+    },
+    {
+      "epoch": 23,
+      "loss": 1.08567
+    },
+    {
+      "epoch": 24,
+      "loss": 1.08311
+    },
+    {
+      "epoch": 25,
+      "loss": 1.0831
     }
   ],
-  "minutes": 0.1,
-  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/smoke-final.pt"
+  "minutes": 45.6,
+  "ckpt": "/home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-final.pt"
 }

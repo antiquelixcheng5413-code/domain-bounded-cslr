@@ -1,2 +1,8 @@
-[CHAIN 10-11 17:32:10] ✅ 收到 p121-disamb 收据
-[CHAIN 10-11 17:32:10] 启动 P123：tools/blank_gov/p78_train_official_tfnet.py --tag p123-official55bf16 --module VAC --img-size 160 --amp-bf16 --epochs 55 --total-epochs 55 --word-head 0.3 --word-boundary ctc_align --warmup-ep 3 --official-pad --mem-budget 5.2e9 --seed 42
+[CHAIN 10-12 07:27:31] ✅ 收到 p121-disamb 收据
+[CHAIN 10-12 07:27:31] 检测到未完成的 P123 权重（p123-official55bf16-last.pt）⇒ **续训**（非重跑）
+[CHAIN 10-12 07:27:31] ⚠️ 历史里 ep1~(见 receipt epoch) 的 WER 是用**坏的解码截断**算的，已作废
+[CHAIN 10-12 07:27:31] 启动 P123：tools/blank_gov/p78_train_official_tfnet.py --tag p123-official55bf16 --module VAC --img-size 160 --amp-bf16 --epochs 55 --total-epochs 55 --word-head 0.3 --word-boundary ctc_align --warmup-ep 3 --official-pad --mem-budget 5.2e9 --seed 42 --resume /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p123-official55bf16-last.pt
+[CHAIN 10-12 15:35:00] P123 结束：rc=-15（日志 /home/su127/FYP/domain-bounded-cslr/artifacts/logs_p123_official55.log）
+[CHAIN 10-12 15:35:00] 启动 P124a：tools/blank_gov/p124_ssl_pretrain.py --tag p124a-simclr --epochs 40 --batch 128 --size 160 --frames-per-video 12
+[CHAIN 10-12 15:44:54] P124a 结束：rc=1（日志 /home/su127/FYP/domain-bounded-cslr/artifacts/logs_p124a_simclr.log）
+[CHAIN 10-12 15:44:54] ⚠️ 没找到 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-final.pt，跳过探针与微调

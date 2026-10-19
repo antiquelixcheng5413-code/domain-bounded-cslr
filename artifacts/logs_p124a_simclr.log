@@ -1,0 +1,63 @@
+[P124a 15:47:55] 帧池：4973 视频 → 59676 帧
+[P124a 15:47:56] device=cuda  batch=128  steps/epoch=466  epochs=25  init=ImageNet
+[P124a 15:50:22] ep01  loss 1.5327  (2.4 min/轮, 已用 2 min, ETA 58 min)
+[P124a 15:52:38] ep02  loss 1.2915  (2.3 min/轮, 已用 5 min, ETA 54 min)
+[P124a 15:54:47] ep03  loss 1.2415  (2.1 min/轮, 已用 7 min, ETA 50 min)
+[P124a 15:54:47] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep03.pt
+[P124a 15:56:47] ep04  loss 1.2135  (2.0 min/轮, 已用 9 min, ETA 46 min)
+[P124a 15:58:43] ep05  loss 1.1959  (1.9 min/轮, 已用 11 min, ETA 43 min)
+[P124a 16:00:41] ep06  loss 1.1781  (2.0 min/轮, 已用 13 min, ETA 40 min)
+[P124a 16:00:41] 已存 /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep06.pt
+[P124a 16:02:40] ep07  loss 1.1674  (2.0 min/轮, 已用 15 min, ETA 38 min)
+[P124a 16:04:44] ep08  loss 1.1589  (2.1 min/轮, 已用 17 min, ETA 36 min)
+[P124a 16:06:31] ep09 训练中断：AcceleratorError("CUDA error: unknown error\nSearch for `cudaErrorUnknown' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nReturning 999 (CUDA_ERROR_UNKNOWN) from cuStreamSynchronize\n\n")
+Traceback (most recent call last):
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p124_ssl_pretrain.py", line 247, in main
+    run += loss.item(); nb += 1
+           ~~~~~~~~~^^
+torch.AcceleratorError: CUDA error: unknown error
+Search for `cudaErrorUnknown' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+The CUDA driver logged these messages, which may provide useful details:
+Returning 999 (CUDA_ERROR_UNKNOWN) from cuStreamSynchronize
+
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p124_ssl_pretrain.py", line 299, in <module>
+    main()
+    ~~~~^^
+  File "/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p124_ssl_pretrain.py", line 252, in main
+    torch.save({"state_dict": net.backbone.state_dict(),
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "epoch": ep, "hist": hist, "config": vars(a),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "note": "⚠️ 中断应急存盘（未完成 %d 轮），实际停在 ep%d"
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        % (a.epochs, ep)},
+                        ^^^^^^^^^^^^^^^^^^
+               out)
+               ^^^^
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torch/serialization.py", line 1003, in save
+    _save(
+    ~~~~~^
+        obj,
+        ^^^^
+    ...<3 lines>...
+        _disable_byteorder_record,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torch/serialization.py", line 1310, in _save
+    storage = storage.cpu()
+  File "/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torch/storage.py", line 273, in cpu
+    return torch.UntypedStorage(self.size()).copy_(self, False)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: unknown error
+Search for `cudaErrorUnknown' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+The CUDA driver logged these messages, which may provide useful details:
+Sticky error detected
+Returning 999 (CUDA_ERROR_UNKNOWN) from cuStreamIsCapturing
+
+

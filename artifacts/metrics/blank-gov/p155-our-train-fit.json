@@ -1,0 +1,20 @@
+{
+  "ckpt": "p123-official55bf16-best.pt",
+  "n_train": 150,
+  "seed": 42,
+  "rgb_fix": false,
+  "img_size": 160,
+  "ours": {
+    "train_wer": 87.35,
+    "gen_rate": 14.598540145985401,
+    "peak_sharp": 0.6165916241474361,
+    "p_blank": 0.8580194214979807,
+    "dev_wer": 55.84
+  },
+  "official_tfnet": {
+    "train_wer": 0.36,
+    "dev_wer": 33.92,
+    "peak_sharp": 0.8641,
+    "p_blank": 0.8722
+  }
+}

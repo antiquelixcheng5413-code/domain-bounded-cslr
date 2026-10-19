@@ -1,0 +1,22 @@
+[QUEUE 10-12 18:13:40] === P124 串行队列启动（一次只跑一个）===
+[QUEUE 10-12 18:13:40] ⚠️ p124d-bf16-wh03 进程已退出但无收据 ⇒ 续训重启（第 1/12 次）
+[QUEUE 10-12 18:15:10]   续训起点 p124d-bf16-wh03-last.pt
+[QUEUE 10-12 18:15:10] 启动：...ctc_align --warmup-ep 3 --resume /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124d-bf16-wh03-last.pt
+[QUEUE 10-13 01:59:55] 结束 rc=0（日志 logs_p124d_bf16.log）
+[QUEUE 10-13 01:59:55] ✅ p124d-bf16-wh03 完成
+[QUEUE 10-13 01:59:55] ⚠️ p124e-wh0-bf16 进程已退出但无收据 ⇒ 续训重启（第 1/12 次）
+[QUEUE 10-13 02:01:25] 启动：...0.0 --mem-budget 5.2e9 --seed 42
+[QUEUE 10-13 10:15:53] 结束 rc=0（日志 logs_p124e_wh0.log）
+[QUEUE 10-13 10:15:53] ✅ p124e-wh0-bf16 完成
+[QUEUE 10-13 10:15:53] 续训起点 p124a-simclr-ep06.pt
+[QUEUE 10-13 10:15:53] 启动：...160 --frames-per-video 12 --resume /home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-ep06.pt
+[QUEUE 10-13 11:01:46] 结束 rc=0（日志 logs_p124a_resume.log）
+[QUEUE 10-13 11:01:46] ✅ P124a 完成（137.4 MB）
+[QUEUE 10-13 11:01:46] 启动：.../home/su127/FYP/domain-bounded-cslr/artifacts/checkpoints/p124a-simclr-final.pt --out artifacts/frame_feats/p124_ssl25 --max-videos 2000
+[QUEUE 10-13 11:09:10] 结束 rc=0（日志 logs_p124b_extract_ssl25.log）
+[QUEUE 10-13 11:09:10] 启动：...artifacts/frame_feats/p124_base --b artifacts/frame_feats/p124_ssl25 --out artifacts/metrics/blank-gov/p124b-probe-ep25.json
+[QUEUE 10-13 11:15:08] 结束 rc=1（日志 logs_p124b_compare_ep25.log）
+[QUEUE 10-13 11:15:08] 失败 ⇒ 等 90s 让 GPU 释放后重试
+[QUEUE 10-13 11:16:38] 启动：...artifacts/frame_feats/p124_base --b artifacts/frame_feats/p124_ssl25 --out artifacts/metrics/blank-gov/p124b-probe-ep25.json
+[QUEUE 10-13 11:22:39] 结束 rc=1（日志 logs_p124b_compare_ep25.log）
+[QUEUE 10-13 11:22:39] === 队列全部结束 ===

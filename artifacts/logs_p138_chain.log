@@ -26,3 +26,5 @@ best:  p138-lr5e 58.30%   p124e-wh0 59.61%
 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/pair-p138-lr5e5-vs-p124e-wh0-bf16.json
 [CHAIN 10-15 02:25:48] === 链条结束 ===
 [CHAIN 10-15 02:25:48] === 链条结束 ===
+[CHAIN 10-15 02:28:11] p138-lr5e5 收据已出 ⇒ 开始
+[CHAIN 10-15 02:28:11] p139-lr25e5 进程不在（第 1/12 次）⇒ 等 90s 后 resume=False 重启

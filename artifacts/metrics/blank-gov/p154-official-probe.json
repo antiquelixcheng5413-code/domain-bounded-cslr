@@ -1,0 +1,37 @@
+{
+  "ckpt": "TFNet-CE-CSL-CSLDaily-32.46.pth",
+  "module": "TFNet",
+  "img_size": 224,
+  "rgb_fix": true,
+  "official_pad": true,
+  "dev_bias_sweep": {
+    "bias0.00": {
+      "WER": 33.92,
+      "gen_rate": 94.93314567206193
+    },
+    "bias0.25": {
+      "WER": 33.95,
+      "gen_rate": 95.74243490499649
+    },
+    "bias0.50": {
+      "WER": 34.1,
+      "gen_rate": 96.4109781843772
+    },
+    "bias0.75": {
+      "WER": 34.2,
+      "gen_rate": 97.009148486981
+    },
+    "bias1.00": {
+      "WER": 34.17,
+      "gen_rate": 97.74806474313864
+    }
+  },
+  "best_bias": "bias0.00",
+  "delta_best": 0.0,
+  "train_subset": {
+    "n": 150,
+    "WER": 0.36,
+    "gen_rate": 100.2433090024331
+  },
+  "dev_train_gap_pp": 33.56
+}

@@ -1,0 +1,54 @@
+[RGB_FIX] 通道顺序修正开启：读图后不再 cvtColor => 真 RGB
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 开启（官方默认 0.5）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           5.2 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=0.0001 wd=0.0001 batch=2 epochs=55
+补帧约定           ★官方 collate（left_pad=6 + 末帧复制，dataLen=ceil(T/4)*4+12）
+主干初始化         ImageNet（官方默认）
+自适应分桶         3626 train batch / 362 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+词级辅助头          C = 3516 类，权重 w = 0.300
+边界来源            ★ CTC 贪心路径（ref18 机制，依据【间接】）
+warmup              前 3 轮不开词级头
+低 lr 增强           关闭（对照组，权重恒定）
+lr 衰减里程碑        [35, 45]（按**总轮数 55** 缩放，官方 35/45）
+  ep001 ctc 36.0957  **WER_official 81.56%**  差SOTA -39.46pp
+  ep002 ctc 32.7843  **WER_official 78.96%**  差SOTA -36.86pp
+  ep003 ctc 31.1630  **WER_official 77.30%**  差SOTA -35.20pp
+/home/su127/FYP/domain-bounded-cslr/tools/blank_gov/p78_train_official_tfnet.py:945: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  if float(wl) != 0.0:
+  ep004 ctc 29.9093  **WER_official 75.55%**  差SOTA -33.45pp
+  ep005 ctc 28.7155  **WER_official 73.43%**  差SOTA -31.33pp
+  ep006 ctc 27.4444  **WER_official 73.61%**  差SOTA -31.51pp
+  ep007 ctc 26.1950  **WER_official 72.34%**  差SOTA -30.24pp
+  ep008 ctc 24.8624  **WER_official 70.06%**  差SOTA -27.96pp
+  ep009 ctc 23.6081  **WER_official 70.37%**  差SOTA -28.27pp
+  ep010 ctc 22.4206  **WER_official 68.72%**  差SOTA -26.62pp
+  ep011 ctc 21.2377  **WER_official 67.35%**  差SOTA -25.25pp
+  ep012 ctc 20.1986  **WER_official 67.10%**  差SOTA -25.00pp
+  ep013 ctc 19.2348  **WER_official 64.64%**  差SOTA -22.54pp
+  ep014 ctc 18.4410  **WER_official 63.58%**  差SOTA -21.48pp
+  ep015 ctc 17.5017  **WER_official 64.39%**  差SOTA -22.29pp
+  ep016 ctc 16.8462  **WER_official 62.91%**  差SOTA -20.81pp
+  ep017 ctc 16.1227  **WER_official 62.84%**  差SOTA -20.74pp
+  ep018 ctc 15.4923  **WER_official 62.10%**  差SOTA -20.00pp
+  ep019 ctc 14.9330  **WER_official 63.23%**  差SOTA -21.13pp
+  ep020 ctc 14.3719  **WER_official 62.70%**  差SOTA -20.60pp
+  ep021 ctc 13.8351  **WER_official 62.81%**  差SOTA -20.71pp
+  ep022 ctc 13.4308  **WER_official 61.72%**  差SOTA -19.62pp
+  ep023 ctc 12.9545  **WER_official 61.93%**  差SOTA -19.83pp
+  ep024 ctc 12.5871  **WER_official 61.01%**  差SOTA -18.91pp
