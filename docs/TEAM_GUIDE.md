@@ -135,8 +135,30 @@ OOM 时降 batch：
 BATCH=1 bash tools/blank_gov/run_d3_vac224.sh
 ```
 
-日志：`artifacts/logs_D3_vac224.log` / `artifacts/logs_D4_tfnet224.log`。
+日志会自动追加到 `artifacts/logs_D3_vac224.log` / `artifacts/logs_D4_tfnet224.log`
+（脚本内部用 `tee -a` 追加，多次续跑不会覆盖历史）。
 跑完把**日志文件**和 `artifacts/metrics/blank-gov/` 下的收据 json 一起发回来。
+
+### 🔴 5.1 中断了怎么办：一定要用 RESUME=1 续跑
+
+`p78` 的 `--resume` **默认是空的，不会按 tag 自动找 ckpt**。
+⇒ 跑挂了直接重跑脚本 = **从第 1 轮重来**，前面几十小时全丢。
+
+```bash
+# 中断后（不管是 OOM、被杀、还是会话回收），用这条原地续跑：
+RESUME=1 bash tools/blank_gov/run_d3_vac224.sh
+RESUME=1 bash tools/blank_gov/run_d4_tfnet224.sh
+```
+
+脚本会自动做三件事：
+1. 找 `artifacts/checkpoints/<tag>-last.pt`；
+2. **校验文件大小**（<100MB 视为残file，直接拒绝并提示，因为 CUDA sticky error
+   会写出 18KB 的坏权重）；
+3. 把 `--resume` 拼进去，并从 ckpt 里恢复 epoch / optimizer / scheduler
+   ⇒ **lr 里程碑不会被续训打乱**。
+
+⚠️ 会话回收是常态不是意外：我们这边同一个训练就被无 traceback 地杀过两次。
+⇒ 建议用 `tmux` / `screen` 挂着跑，或者保持终端开着；但**无论如何先记住 RESUME=1**。
 
 ---
 
@@ -188,7 +210,7 @@ BATCH=1 bash tools/blank_gov/run_d3_vac224.sh
 |---|---|
 | `ls tools/blank_gov/` 里没有 `run_d3_*.sh` | 没切分支 ⇒ `git checkout experiment/blank-governance-p0-p38` |
 | `ModuleNotFoundError: torch` | 用了系统 python3，必须用 `./venv/bin/python` |
-| 跑着跑着没日志、GPU 归零 | 没加 `-u`（脚本已加）；或会话被回收 ⇒ 重跑即可（会从 ckpt 续） |
+| 跑着跑着没日志、GPU 归零 | 大概率会话被回收（我们踩过两次，无 traceback）。**别直接重跑** ⇒ 用 `RESUME=1 bash run_d3_vac224.sh` 续（见 5.1），否则从第 1 轮重来 |
 | 结果和我们差 30pp 量级 | 通道开关用反了 ⇒ 回看 3.2 |
 | 显存爆 | `BATCH=1`；D4 已 batch 1，再爆就 `--img-size 160` |
 | 打包/压缩时 `Cannot allocate memory` | 系统内存小，别 gzip（jpg 已压缩，compress 只省 7%） |
