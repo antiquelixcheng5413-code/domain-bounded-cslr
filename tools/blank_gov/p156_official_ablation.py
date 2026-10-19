@@ -17,9 +17,12 @@
 
 用法
   python tools/blank_gov/p156_official_ablation.py [n_dev] [组合]
-    组合可选 all / fast（fast 跳过 224+RGB）
+    组合可选 all / fast
+    ⚠️ 做数据一致性门禁必须用 all —— fast 会跳过基线 224+RGB
+       若只想看代价、数据已确认无误，可用 fast（省 ~8 分钟）
 """
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -33,7 +36,27 @@ import torch  # noqa: E402
 import p78_train_official_tfnet as P  # noqa: E402
 from official_wer import evaluate  # noqa: E402
 
-CK = Path("/mnt/c/Users/su127/Desktop/中文手语识别/官方权重/TFNet-CE-CSL-CSLDaily-32.46.pth")
+# 权重路径：命令行第 3 参 > 环境变量 OFFICIAL_CKPT > 默认 > 自动搜索
+_CK_ENV = os.environ.get("OFFICIAL_CKPT", "")
+CK = Path(sys.argv[3] if len(sys.argv) > 3 else
+          (_CK_ENV or "/mnt/c/Users/su127/Desktop/中文手语识别/官方权重/"
+                     "TFNet-CE-CSL-CSLDaily-32.46.pth"))
+if not CK.exists():
+    print("[P156] 权重不在 %s ⇒ 自动搜索…" % CK)
+    for _base in (Path.cwd(), Path.cwd() / "官方权重",
+                  Path.home(), Path.home() / "官方权重"):
+        if not _base.exists():
+            continue
+        try:
+            _hits = sorted(_base.glob("*TFNet-CE-CSL*.pth")) or \
+                sorted(_base.glob("*/*TFNet-CE-CSL*.pth"))
+        except Exception:
+            _hits = []
+        if _hits:
+            CK = _hits[0]
+            break
+    print("[P156] 使用权重：%s%s" % (CK, "" if CK.exists() else "  ⚠️ 仍然找不到"))
+
 N_DEV = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 MODE = sys.argv[2] if len(sys.argv) > 2 else "fast"
 BASE = 33.92                      # 224+RGB（P152 实测）
@@ -95,8 +118,17 @@ def main() -> int:
 
     rows = {}
     for img, rgb in COMBOS:
-        rows["%d_%s" % (img, "RGB" if rgb else "BGR")] = run(
-            model, word2idx, idx2word, labels, img, rgb)
+        k = "%d_%s" % (img, "RGB" if rgb else "BGR")
+        rows[k] = run(model, word2idx, idx2word, labels, img, rgb)
+        if k == "224_RGB":
+            gap = rows[k]["WER"] - BASE
+            if abs(gap) > 2.0:
+                log("🔴 门禁告警：基线 224+RGB = %.2f，与官方 33.92 差 %+.2f pp"
+                    % (rows[k]["WER"], gap))
+                log("   ⇒ 数据/环境可能不一致，先排查再跑 D3/D4（否则可能白跑）")
+            else:
+                log("✅ 门禁通过：224+RGB = %.2f（官方 33.92，差 %+.2f pp）"
+                    % (rows[k]["WER"], gap))
 
     print()
     log("──── 官方权重上的代价分解（dev，greedy，语料级）────")

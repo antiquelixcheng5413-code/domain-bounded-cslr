@@ -49,10 +49,13 @@ python3 tools/blank_gov/check_env.py   # 自检：GPU/显存/bf16/帧数/csv/磁
 不管你们的帧是怎么来的，**先跑 D1 的第一个组合**：
 
 ```bash
-./venv/bin/python -u tools/blank_gov/p156_official_ablation.py 0 fast
+./venv/bin/python -u tools/blank_gov/p156_official_ablation.py 0 all
 ```
 
-看输出里的 `224_RGB`（官方权重的原配配置）：
+看输出里的 `224_RGB`（官方权重的原配配置）。
+**注意参数用 `all` 不是 `fast`** —— `fast` 会跳过基线 224+RGB，门禁就没了
+（all 比 fast 多约 8 分钟，换来数据一致性验证，值）。
+脚本会自己判定并打印 ✅/🔴：
 
 | 结果 | 含义 |
 |---|---|
