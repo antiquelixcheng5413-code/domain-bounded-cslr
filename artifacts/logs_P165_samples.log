@@ -1,0 +1,42 @@
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P165 10:54:46] 载入 p150-rgbfix-best.pt（epoch 49）
+[P165 10:56:43] dev 515 条推理 118s
+
+[P165 10:56:44] ──── 5 条真实样例（按 WER 分位取，非挑好看的）────
+
+[P165 10:56:44] 样例 #465   参考长度 5   WER(bias0)=20.00%   WER(bias1.0)=20.00%
+[P165 10:56:44]   参考 REF : 这 事 算了 不行 。
+[P165 10:56:44]   识别 HYP : 这 事 不行 。
+[P165 10:56:44]   逐词     : =这 =事 D算了 =不行 =。
+
+[P165 10:56:44] 样例 #291   参考长度 5   WER(bias0)=40.00%   WER(bias1.0)=40.00%
+[P165 10:56:44]   参考 REF : 我 买 书 一 。
+[P165 10:56:44]   识别 HYP : 我 买 妈妈 。
+[P165 10:56:44]   逐词     : =我 =买 D书 S一>妈妈 =。
+
+[P165 10:56:44] 样例 #369   参考长度 4   WER(bias0)=50.00%   WER(bias1.0)=50.00%
+[P165 10:56:44]   参考 REF : 早 饭 没有 。
+[P165 10:56:44]   识别 HYP : 早上 吃 没有 。
+[P165 10:56:44]   逐词     : S早>早上 S饭>吃 =没有 =。
+
+[P165 10:56:44] 样例 #54   参考长度 6   WER(bias0)=66.67%   WER(bias1.0)=66.67%
+[P165 10:56:44]   参考 REF : 你 沉迷 短 视频 为什么 ？
+[P165 10:56:44]   识别 HYP : 你 喜欢 买 朋友 好 ？
+[P165 10:56:44]   逐词     : =你 S沉迷>喜欢 S短>买 S视频>朋友 S为什么>好 =？
+
+[P165 10:56:44] 样例 #412   参考长度 5   WER(bias0)=80.00%   WER(bias1.0)=80.00%
+[P165 10:56:44]   参考 REF : 西红柿 营养 很 丰富 。
+[P165 10:56:44]   识别 HYP : 水 经济 最 。
+[P165 10:56:44]   逐词     : D西红柿 S营养>水 S很>经济 S丰富>最 =。
+
+[P165 10:56:44] ──── 逐句 WER 分布（dev 515）────
+[P165 10:56:44]   P0       0.0%
+[P165 10:56:44]   P25     40.0%
+[P165 10:56:44]   P50     50.0%
+[P165 10:56:44]   P75     66.7%
+[P165 10:56:44]   P100   140.0%
+[P165 10:56:44]   整句全对 : 8 / 515 = 1.55%
+[P165 10:56:44] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p165-dev-samples.json
