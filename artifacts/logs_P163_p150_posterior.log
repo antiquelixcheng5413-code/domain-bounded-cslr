@@ -1,0 +1,40 @@
+[P146 08:33:59] ckpt = p150-rgbfix-best.pt
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P146 08:34:02] 载入 epoch 49；official_pad=True（取自 ckpt）
+[P146 08:35:53] dev   515 条推理 111s
+[P146 08:36:57] train 300 条推理 61s
+
+[P146 08:36:57] ──── 校验：dev 全量 bias=0 必须 = 53.73 ────
+[P146 08:36:57]   实测 53.73  ⇒ ✅ 代码路径正确
+
+[P146 08:36:57] ──── 帧级后验统计（bias=0 原始输出）────
+[P146 08:36:57] split   p_blank pnb_top1   margin  entropy    peak锐度  frac>0.2    峰/样本
+[P146 08:36:57] dev      0.8747   0.0728   0.0662    0.434     0.624      9.3%     4.2
+[P146 08:36:57] train    0.8600   0.0852   0.0783    0.458     0.652     10.8%     4.5
+[P146 08:36:57]   ⇒ train 与 dev 的差 = 过拟合在后验层面的证据
+[P146 08:36:57]     Δentropy +0.024   Δp_blank -0.0147   Δpeak锐度 +0.028   Δfrac>0.2 +1.5 pp
+
+[P146 08:36:57] ──── 生成率与 beam 崩溃的机理 ────
+[P146 08:36:57]   dev   生成率  76.4%，实心峰 3.0 帧/样本，实际输出 4.2 token/样本
+[P146 08:36:57]         实心峰/实际输出 = 0.71  ⇒ 每吐一个词就有 0.7 帧处于「高置信非blank」
+[P146 08:36:57]   train 生成率  80.3%，实心峰 3.2 帧/样本，实际输出 4.5 token/样本
+[P146 08:36:57]         实心峰/实际输出 = 0.73  ⇒ 每吐一个词就有 0.7 帧处于「高置信非blank」
+[P146 08:36:57]   ⇒ 该比值越大于 1，beam 越容易在峰之间插重复词（P?: beam10 输出 +109%% 与此同源）
+
+[P146 08:36:57] ──── dev 上的 bias 复核（应与 P134 一致）────
+[P146 08:36:57]   bias=0    53.73（生成率 76.4%）
+[P146 08:36:57]   bias=0.75 53.06（生成率 82.4%）  Δ -0.67 pp
+
+[P146 08:36:57] ──── 三方后验对比：判别力到底有没有改善 ────
+[P146 08:36:57] 模型                 p_blank         峰锐度    dev WER
+[P146 08:36:57] P123(BGR,旧)         0.8750      0.5640      55.84
+[P146 08:36:57] 官方 TFNet            0.8722      0.8641      33.92
+[P146 08:36:57] P150(RGB,新)         0.8747      0.6242      53.73
+
+[P146 08:36:57]   ⇒ 通道修正 BGR→RGB：峰锐度 +0.0602（0.5640 → 0.6242）
+[P146 08:36:57]      官方 0.8641 ⇒ 仍差 0.2399，判别力缺口补了 20.1%
+[P146 08:36:57]      p_blank 变化 -0.0003 ⇒ 生成/不生成的倾向是否改变，看上面生成率
+[P146 08:36:57] 收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p163-p150-posterior.json
