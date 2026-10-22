@@ -1,0 +1,22 @@
+{
+  "ckpt": "p150-rgbfix-best.pt",
+  "lm_train_split_only": true,
+  "lm": {
+    "n_seq": 4974,
+    "vocab": 3516,
+    "bigram_ctx": 3513
+  },
+  "grid": {
+    "0.0": {
+      "WER": 53.84,
+      "gen_rate": 74.48979591836735
+    },
+    "0.1": {
+      "WER": 55.74,
+      "gen_rate": 66.1505981703026
+    }
+  },
+  "best_lambda": 0.0,
+  "best_wer": 53.69,
+  "baseline_lambda0": 53.84
+}

@@ -1,0 +1,8 @@
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+[P166 13:59:34] 载入 p150-rgbfix-best.pt（epoch 49）
+[P166 14:01:34] dev 515 条推理 119s
+[P166 14:01:34] 校验 greedy WER = 53.73（应 53.73）⇒ OK 路径正确
+[P166 14:01:35] 缓存 -> /home/su127/FYP/domain-bounded-cslr/artifacts/cache/p150_dev_lp.pkl（170 MB）
