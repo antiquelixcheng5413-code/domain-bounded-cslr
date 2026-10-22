@@ -23,7 +23,11 @@ CKPT=artifacts/checkpoints/$TAG-last.pt
 if [ "${1:-}" = "smoke" ]; then
   EXTRA="--max-train 40 --max-dev 20 --epochs 2 --total-epochs 55"
   LOG=artifacts/logs_D3_smoke.log
-  echo "[D3] 冒烟模式：40 条 / 2 轮"
+  # ★ 冒烟必须用独立 tag：否则会写坏正式 ckpt，
+  #   正式跑若在 ep001 前崩掉，RESUME=1 会静默续到这个只训过 40 条的模型上
+  TAG=${TAG}-smoke
+  CKPT=artifacts/checkpoints/$TAG-last.pt
+  echo "[D3] 冒烟模式：40 条 / 2 轮（tag=$TAG）"
 else
   EXTRA="--epochs 55 --total-epochs 55"
 fi
