@@ -1,0 +1,82 @@
+──── [P167] 2026-10-22 21:18:18 启动 mode=full resume=no ────
+[RGB_FIX] 通道顺序修正开启：读图后不再 cvtColor => 真 RGB
+======================================================================
+P78 官方 TFNet 训练（RGB + resnet34MAM，原版网络代码）
+======================================================================
+device              cuda
+词表 wordSetNum     3515（+1 blank = 3516 类）
+train / dev         4973 / 515 条
+帧数 < 48 的训练样本  4 条（已重复补帧）
+RandomHorizontalFlip 开启（官方默认 0.5）
+官方 moduleChoice  VAC
+输入分辨率         160×160 ⚠️偏离官方，工程取舍
+混合精度           bf16
+显存预算           5.2 GB（斜率 27.1 MB/帧·样本）
+超参                hidden=1024 lr=0.0001 wd=0.0001 batch=2 epochs=55
+补帧约定           ★官方 collate（left_pad=6 + 末帧复制，dataLen=ceil(T/4)*4+12）
+主干初始化         ImageNet（官方默认）
+自适应分桶         3626 train batch / 362 dev batch
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/su127/FYP/domain-bounded-cslr/venv/lib/python3.14/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+参数                35.25 M
+lr 衰减里程碑        [35, 45]（按**总轮数 55** 缩放，官方 35/45）
+  ep001 ctc 36.0957  **WER_official 81.56%**  差SOTA -39.46pp
+  ep002 ctc 32.7843  **WER_official 78.96%**  差SOTA -36.86pp
+  ep003 ctc 31.1630  **WER_official 77.30%**  差SOTA -35.20pp
+  ep004 ctc 29.8817  **WER_official 76.78%**  差SOTA -34.68pp
+  ep005 ctc 28.6451  **WER_official 74.60%**  差SOTA -32.50pp
+  ep006 ctc 27.2969  **WER_official 75.12%**  差SOTA -33.02pp
+  ep007 ctc 25.9975  **WER_official 74.14%**  差SOTA -32.04pp
+  ep008 ctc 24.6842  **WER_official 70.16%**  差SOTA -28.06pp
+  ep009 ctc 23.4203  **WER_official 71.99%**  差SOTA -29.89pp
+  ep010 ctc 22.1874  **WER_official 68.09%**  差SOTA -25.99pp
+  ep011 ctc 21.0202  **WER_official 66.96%**  差SOTA -24.86pp
+  ep012 ctc 19.9608  **WER_official 66.33%**  差SOTA -24.23pp
+  ep013 ctc 19.0266  **WER_official 66.85%**  差SOTA -24.75pp
+  ep014 ctc 18.2082  **WER_official 64.64%**  差SOTA -22.54pp
+  ep015 ctc 17.3033  **WER_official 63.02%**  差SOTA -20.92pp
+  ep016 ctc 16.5684  **WER_official 63.97%**  差SOTA -21.87pp
+  ep017 ctc 15.8565  **WER_official 63.34%**  差SOTA -21.24pp
+  ep018 ctc 15.2684  **WER_official 63.16%**  差SOTA -21.06pp
+  ep019 ctc 14.6967  **WER_official 62.32%**  差SOTA -20.22pp
+  ep020 ctc 14.1358  **WER_official 63.37%**  差SOTA -21.27pp
+  ep021 ctc 13.5813  **WER_official 62.28%**  差SOTA -20.18pp
+  ep022 ctc 13.1641  **WER_official 61.79%**  差SOTA -19.69pp
+  ep023 ctc 12.7060  **WER_official 61.47%**  差SOTA -19.37pp
+  ep024 ctc 12.3144  **WER_official 61.15%**  差SOTA -19.05pp
+  ep025 ctc 11.9604  **WER_official 60.45%**  差SOTA -18.35pp
+  ep026 ctc 11.6145  **WER_official 60.91%**  差SOTA -18.81pp
+  ep027 ctc 11.2953  **WER_official 61.05%**  差SOTA -18.95pp
+  ep028 ctc 11.0056  **WER_official 61.05%**  差SOTA -18.95pp
+  ep029 ctc 10.7009  **WER_official 61.12%**  差SOTA -19.02pp
+  ep030 ctc 10.4789  **WER_official 59.78%**  差SOTA -17.68pp
+  ep031 ctc 10.2009  **WER_official 61.47%**  差SOTA -19.37pp
+  ep032 ctc 9.8992  **WER_official 59.89%**  差SOTA -17.79pp
+  ep033 ctc 9.6436  **WER_official 60.87%**  差SOTA -18.77pp
+  ep034 ctc 9.4470  **WER_official 60.49%**  差SOTA -18.39pp
+  ep035 ctc 9.2969  **WER_official 59.89%**  差SOTA -17.79pp
+  ep036 ctc 7.4571  **WER_official 56.33%**  差SOTA -14.23pp
+  ep037 ctc 6.8086  **WER_official 56.97%**  差SOTA -14.87pp
+  ep038 ctc 6.4593  **WER_official 56.79%**  差SOTA -14.69pp
+  ep039 ctc 6.2445  **WER_official 56.23%**  差SOTA -14.13pp
+  ep040 ctc 6.0452  **WER_official 57.32%**  差SOTA -15.22pp
+  ep041 ctc 5.8959  **WER_official 56.19%**  差SOTA -14.09pp
+  ep042 ctc 5.7500  **WER_official 56.72%**  差SOTA -14.62pp
+  ep043 ctc 5.6606  **WER_official 56.16%**  差SOTA -14.06pp
+  ep044 ctc 5.5653  **WER_official 56.97%**  差SOTA -14.87pp
+  ep045 ctc 5.4152  **WER_official 55.77%**  差SOTA -13.67pp
+  ep046 ctc 5.4118  **WER_official 55.77%**  差SOTA -13.67pp
+  ep047 ctc 5.3074  **WER_official 55.95%**  差SOTA -13.85pp
+  ep048 ctc 5.1953  **WER_official 56.44%**  差SOTA -14.34pp
+  ep049 ctc 5.1760  **WER_official 56.33%**  差SOTA -14.23pp
+  ep050 ctc 5.1493  **WER_official 55.38%**  差SOTA -13.28pp
+  ep051 ctc 5.0984  **WER_official 55.91%**  差SOTA -13.81pp
+  ep052 ctc 5.0188  **WER_official 56.05%**  差SOTA -13.95pp
+  ep053 ctc 5.0128  **WER_official 55.59%**  差SOTA -13.49pp
+  ep054 ctc 4.9451  **WER_official 55.98%**  差SOTA -13.88pp
+  ep055 ctc 4.9181  **WER_official 56.40%**  差SOTA -14.30pp
+
+最佳 WER_official = 55.38%
+收据 -> /home/su127/FYP/domain-bounded-cslr/artifacts/metrics/blank-gov/p167-vac160-rgb-wh0-official-tfnet.json
