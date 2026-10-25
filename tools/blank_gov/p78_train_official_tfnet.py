@@ -41,6 +41,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.optim.swa_utils import AveragedModel, update_bn
 
 # ── 仓库路径 ────────────────────────────────────────────────────
 def _find_repo() -> Path:
@@ -457,6 +459,25 @@ def greedy_decode(logp: torch.Tensor, true_len: torch.Tensor,
     return out
 
 
+def _dev_eval(mdl, dv_loader, device, idx2word, labels_dv):
+    """官方口径 dev 评估（供训练循环与 SWA 终评复用）。
+    idx2word / labels_dv 由 main 传入（它们是 main 局部量，不可模块级引用）。"""
+    mdl.eval()
+    hyps, refs = [], []
+    with torch.no_grad():
+        for vid, tgt, tgt_len, dl, tl_len, _sids, _ids in dv_loader:
+            vid = vid.to(device)
+            out = mdl(vid, dl, False)
+            logp5 = F.log_softmax(out[0], dim=-1)   # 官方布局 [T,B,C]
+            if BLANK_BIAS:
+                logp5 = logp5.clone()
+                logp5[..., 0] -= BLANK_BIAS
+            hyps += greedy_decode(logp5, dl, idx2word)
+            for b in _sids:
+                refs.append(labels_dv[b][1])
+    return evaluate(refs, hyps)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--epochs", type=int, default=55)
@@ -552,6 +573,15 @@ def main() -> None:
                     help="🔴 lr 调度按**最终总轮数**算，而不是本次要跑的轮数。"
                          "0 = 用 --epochs（首次训练）。"
                          "续训时必须传，否则 lr 调度会错位。")
+    ap.add_argument("--sched", default="multistep", choices=["multistep", "cosine"],
+                    help="lr 调度：multistep(官方 35/45) 或 cosine 退火")
+    ap.add_argument("--eta-min", type=float, default=0.0,
+                    help="cosine 退火下限 lr")
+    ap.add_argument("--no-resume-sched", action="store_true",
+                    help="续训扩展时【不】恢复旧 scheduler，改用新 T 重建并把 lr "
+                         "重置回高位（否则上轮已衰减到 4e-6，扩展段空转）")
+    ap.add_argument("--swa-start", type=int, default=0,
+                    help=">=1 时从该 epoch 起做 SWA 权重平均（0=关闭）")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -770,7 +800,11 @@ def main() -> None:
     #     模型在4e-6 下空转 10 轮，学习几乎停滞。）
     T = a.total_epochs if a.total_epochs > 0 else a.epochs
     ms = [int(round(35 * T / 55)), int(round(45 * T / 55))]
-    sched = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=ms, gamma=0.2)
+    if a.sched == "cosine":
+        sched = CosineAnnealingLR(opt, T_max=T, eta_min=a.eta_min)
+    else:
+        sched = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=ms, gamma=0.2)
+    swa_model = (AveragedModel(model) if a.swa_start > 0 else None)
 
     print("lr 衰减里程碑        %s（按**总轮数 %d** 缩放，官方 35/45）" % (ms, T))
 
@@ -821,14 +855,38 @@ def main() -> None:
         if "torch_rng" in ck:
             torch.set_rng_state(ck["torch_rng"].cpu())
         if "cuda_rng" in ck and torch.cuda.is_available():
-            torch.cuda.set_rng_state(ck["cuda_rng"].cpu())
+            _cr = ck["cuda_rng"]
+            if isinstance(_cr, (list, tuple)):
+                # best.pt 存的是 get_rng_state_all()（张量列表）
+                torch.cuda.set_rng_state_all(
+                    [t.cpu() if hasattr(t, "cpu") else t for t in _cr])
+            else:
+                torch.cuda.set_rng_state(_cr.cpu())
         if "np_rng" in ck:
             np.random.set_state(ck["np_rng"])
         if "py_rng" in ck:
             random.setstate(ck["py_rng"])
         # 🔴 恢复 scheduler 位置：让 lr 从「上轮结束时的值」继续，
         #    而不是从头按 sched.step() 的初始序列走。
-        if "sched_state" in ck:
+        if a.no_resume_sched:
+            # 🔴 续训扩展：上轮 lr 已衰减到极小（如 4e-6），必须重置回高位，
+            #    否则扩展段在 4e-6 下空转（p78 注释已警告过此坑）。
+            #    同时【不】恢复旧 scheduler，避免里程碑被覆盖回旧的 [35,45]。
+            for _pg in opt.param_groups:
+                _pg["lr"] = a.lr
+            _ext = a.epochs - start_ep + 1
+            if a.sched == "cosine":
+                sched = CosineAnnealingLR(opt, T_max=_ext, eta_min=a.eta_min)
+            else:
+                _ms_new = [m for m in ms if m >= start_ep]
+                sched = torch.optim.lr_scheduler.MultiStepLR(
+                    opt, milestones=_ms_new, gamma=0.2)
+            sched.last_epoch = 0
+            print("  scheduler 重建（不恢复旧调度）：%s，lr 重置为 %.2e，扩展段 %d 轮"
+                  % (("cosine T_max=%d" % _ext)
+                     if a.sched == "cosine"
+                     else ("multistep ms=%s" % _ms_new), a.lr, _ext))
+        elif "sched_state" in ck:
             try:
                 sched.load_state_dict(ck["sched_state"])
                 sched.last_epoch = int(ck["epoch"])
@@ -961,30 +1019,9 @@ def main() -> None:
         sched.step()
 
         # ---- 评估（官方口径）----
-        model.eval()
-        hyps, refs, stats = [], [], {"ins": 0, "del": 0, "sub": 0, "n": 0}
-        with torch.no_grad():
-            for vid, tgt, tgt_len, dl, tl_len, _sids, _ids in dv_dl:
-                vid = vid.to(dev)
-                out = model(vid, dl, False)
-                # 🔴 TFNet 推理时 logProbs1 = logProbs5（官方 Net.py 末尾）；
-                #    其他分支 logProbs1 本身就是最终输出。
-                logp5 = ls(out[0])   # 官方布局 [T,B,C]
-                # 🔴 P134：解码前给 blank 减常数 ⇒ 抑制 blank、迫使多输出。
-                #    只影响解码，不参与训练（零训练成本）。默认 0 = 官方行为。
-                if BLANK_BIAS:
-                    logp5 = logp5.clone()
-                    logp5[..., 0] -= BLANK_BIAS
-                # 🔴 P123 事故修复：截断长度必须用 **data_len(dl)**，不是真实帧数
-                #   开了 --official-pad 后 data_len = ceil(T/4)*4+12（含 left_pad=6
-                #   与右补齐），模型有效输出长度按 data_len 算；
-                #   若仍按 true_len 截 ⇒ 句尾被切掉 + left_pad 把内容整体右移
-                #   ⇒ 实测 WER 虚高 **13.91 pp**（69.38 → 55.47，收据 p123-pad-diag）
-                #   ⚠️ 无补帧时 data_len == true_len ⇒ 与历史数字**完全一致**
-                hyps += greedy_decode(logp5, dl, idx2word)
-                for b in _sids:
-                    refs.append(labels_dv[b][1])
-        o = evaluate(refs, hyps)
+        o = _dev_eval(model, dv_dl, dev, idx2word, labels_dv)
+        if swa_model is not None and ep >= a.swa_start:
+            swa_model.update_parameters(model)
 
         cur = (run / max(nrun, 1), o["WER_official"])
         hist.append({"epoch": ep, "train_ctc": round(cur[0], 4),
@@ -1040,7 +1077,7 @@ def main() -> None:
                         "torch_rng": torch.random.get_rng_state(),
                         "np_rng": np.random.get_state(),
                         "py_rng": random.getstate(),
-                        "cuda_rng": (torch.cuda.get_rng_state_all()
+                        "cuda_rng": (torch.cuda.get_rng_state()
                                      if torch.cuda.is_available() else None),
                         "wordSetNum": wordSetNum, "idx2word": idx2word,
                         "hidden": a.hidden, "hflip": not a.no_hflip,
@@ -1048,6 +1085,23 @@ def main() -> None:
                         "total_epochs_planned": T,
                         "config": vars(a)},
                        ck_dir / ("%s-best.pt" % a.tag))
+
+    # ---- SWA 最终评估（顺带）----
+    swa_wer_official = None
+    if swa_model is not None:
+        update_bn(tr_dl, swa_model, device=dev)
+        swa_wer_official = _dev_eval(swa_model.module, dv_dl, dev,
+                                    idx2word, labels_dv)["WER_official"]
+        torch.save({"model_state": swa_model.module.state_dict(),
+                    "word_classifier_state":
+                        (word_classifier.state_dict()
+                         if (a.word_head > 0 and word_classifier is not None)
+                         else None),
+                    "wordSetNum": wordSetNum, "idx2word": idx2word,
+                    "hidden": a.hidden, "config": vars(a)},
+                   ck_dir / ("%s-swa.pt" % a.tag))
+        print("SWA 平均(ep%d+) WER_official = %.2f%%"
+              % (a.swa_start, swa_wer_official))
 
     # ---- 收据（⚠️括号必须加：Path / str 的优先级高于 %）----
     out_rec = {
@@ -1059,6 +1113,7 @@ def main() -> None:
         "official_benchmark_dev": {"TFNet": 42.1, "CorrNet": 47.2, "VAC": 45.1,
                              "MAM-FSD": 44.9, "SEN": 46.5}[a.module],
         "best_wer_official": best,
+        "swa_wer_official": swa_wer_official,
         "module": a.module,
         "img_size": a.img_size,
         "amp_bf16": a.amp_bf16,
