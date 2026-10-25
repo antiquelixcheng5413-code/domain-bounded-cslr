@@ -478,6 +478,22 @@ def _dev_eval(mdl, dv_loader, device, idx2word, labels_dv):
     return evaluate(refs, hyps)
 
 
+def _update_bn(loader, swa_mdl, device):
+    """自定义 BN 统计量刷新：torch 自带 update_bn 只喂 model(input) 单参，
+    但 TFNet.forward 签名是 forward(x, len_x, ...)，单参会令 len_x=None 崩。
+    这里手动按 (vid, dl, False) 两参喂入，刷新 BN running stats。"""
+    swa_mdl.train()
+    with torch.no_grad():
+        for batch in loader:
+            vid = batch[0].to(device)
+            # 🔴 dl(=len_x) 必须保持 CPU：TFNet 内部 pack_padded_sequence
+            #    要求 lengths 为 1D CPU int64，搬 cuda 会崩（正常训练/_dev_eval
+            #    里 dl 也一直是 CPU）。
+            dl = batch[3]
+            swa_mdl(vid, dl, False)
+    swa_mdl.eval()
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--epochs", type=int, default=55)
@@ -1089,7 +1105,7 @@ def main() -> None:
     # ---- SWA 最终评估（顺带）----
     swa_wer_official = None
     if swa_model is not None:
-        update_bn(tr_dl, swa_model, device=dev)
+        _update_bn(tr_dl, swa_model, dev)
         swa_wer_official = _dev_eval(swa_model.module, dv_dl, dev,
                                     idx2word, labels_dv)["WER_official"]
         torch.save({"model_state": swa_model.module.state_dict(),
