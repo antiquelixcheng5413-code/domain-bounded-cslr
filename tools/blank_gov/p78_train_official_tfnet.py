@@ -598,6 +598,8 @@ def main() -> None:
                          "重置回高位（否则上轮已衰减到 4e-6，扩展段空转）")
     ap.add_argument("--swa-start", type=int, default=0,
                     help=">=1 时从该 epoch 起做 SWA 权重平均（0=关闭）")
+    ap.add_argument("--dropout", type=float, default=0.0,
+                    help="VAC 主干空间特征后 dropout（正则探针）；0=关闭（默认，历史实验不变）。")
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
@@ -756,7 +758,8 @@ def main() -> None:
 
     # ★ 直接用官方网络
     model = Net.moduleNet(a.hidden, wordSetNum * 1 + 1, a.module,
-                          torch.device(dev), "CE-CSL", True).to(dev)
+                          torch.device(dev), "CE-CSL", True,
+                          dropout=a.dropout).to(dev)
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
 

@@ -8,7 +8,7 @@ from BiLSTM import BiLSTMLayer
 import SEN
 
 class moduleNet(nn.Module):
-    def __init__(self, hiddenSize, wordSetNum, moduleChoice="Seq2Seq", device=torch.device("cuda:0"), dataSetName='RWTH', isFlag=False):
+    def __init__(self, hiddenSize, wordSetNum, moduleChoice="Seq2Seq", device=torch.device("cuda:0"), dataSetName='RWTH', isFlag=False, dropout=0.0):
         super().__init__()
         self.device = device
         self.moduleChoice = moduleChoice
@@ -97,6 +97,7 @@ class moduleNet(nn.Module):
 
             self.classifier = Module.NormLinear(hidden_size, self.outDim)
             self.classifier1 = self.classifier
+            self.drop = nn.Dropout(dropout)
         elif "CorrNet" == self.moduleChoice:
             hidden_size = hiddenSize
             self.conv2d = Module.resnet18Corr()
@@ -334,6 +335,7 @@ class moduleNet(nn.Module):
             x = torch.cat([inputs[len_x[0] * idx:len_x[0] * idx + lgt] for idx, lgt in enumerate(len_x)])
 
             x = self.conv2d(x)
+            x = self.drop(x)
 
             framewise = torch.cat([self.pad(x[sum(len_x[:idx]):sum(len_x[:idx + 1])], len_x[0])
                                    for idx, lgt in enumerate(len_x)])
