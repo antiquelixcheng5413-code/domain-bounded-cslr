@@ -30,8 +30,8 @@ REGISTRY = build_registry()
 
 def default_model_name() -> str | None:
     # 优先发布 TFNet，其次任意可用模型
-    if "tfnet-ce-csl-160-rgb-published" in REGISTRY:
-        return "tfnet-ce-csl-160-rgb-published"
+    if "tfnet" in REGISTRY:
+        return "tfnet"
     return next(iter(REGISTRY)) if REGISTRY else None
 
 

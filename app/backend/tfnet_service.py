@@ -45,8 +45,8 @@ class CslrRecognitionService:
     CK_KEY = "moduleNet_state_dict" # 权重文件里的状态字典键
     STRICT = True                  # load_state_dict 严格度
     OFFICIAL_PAD = True            # 是否用官方补帧（TFNet 用；VAC 训练用 False）
-    MODEL_VERSION = "tfnet-ce-csl-160-rgb-published"
-    LABEL = "发布 TFNet@160（免训练部署）"
+    MODEL_VERSION = "tfnet"
+    LABEL = "TFNet（发布权重）"
     WER = "dev 36.81% / test 35.66%"
     WARN = "发布权重免训练部署（CE-CSL, @160 RGB）。输出为 gloss 序列，未做中文翻译。"
 
@@ -280,8 +280,8 @@ class VacTrainedService(CslrRecognitionService):
     CK_KEY = "model_state"
     STRICT = False                 # VAC 主干不含辅助头键时用宽松加载，推理只看 CTC(out[0])
     OFFICIAL_PAD = False           # P150 训练用默认 collate（真实帧数，不补帧）
-    MODEL_VERSION = "vac-p150-rgbfix"
-    LABEL = "我们训练的最好模型 VAC@160 (P150)"
+    MODEL_VERSION = "vac"
+    LABEL = "VAC（自训 P150）"
     WER = "dev 53.73%"
     WARN = "我们 from-scratch 训练的最佳 VAC@160（P150, dev 53.73%），输出为 gloss 序列。"
 
