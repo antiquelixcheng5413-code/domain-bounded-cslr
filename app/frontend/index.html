@@ -29,6 +29,10 @@
             选择视频
             <input id="file-input" type="file" accept="video/*" />
           </label>
+          <label class="file-button">
+            识别模型
+            <select id="model-select"></select>
+          </label>
         </div>
         <p id="selection" class="muted">尚未选择视频。</p>
       </section>
@@ -44,6 +48,7 @@
           <div><dt>Gloss Tokens</dt><dd id="result-gloss-tokens">-</dd></div>
           <div><dt>Confidence</dt><dd id="result-confidence">-</dd></div>
           <div><dt>Latency</dt><dd id="result-latency">-</dd></div>
+          <div><dt>Model</dt><dd id="result-model">-</dd></div>
         </dl>
         <ul id="warnings" class="warnings"></ul>
       </section>

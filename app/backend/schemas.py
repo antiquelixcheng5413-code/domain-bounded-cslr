@@ -24,8 +24,17 @@ class PredictionResponse(BaseModel):
     model_version: str | None = None
 
 
+class ModelInfo(BaseModel):
+    name: str
+    label: str
+    wer: str
+    ready: bool
+
+
 class HealthResponse(BaseModel):
     status: str
     model_ready: bool
     demo_mode: bool
     model_error: str | None = None
+    available_models: list[ModelInfo] = []
+    default_model: str | None = None

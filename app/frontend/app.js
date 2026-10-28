@@ -2,6 +2,7 @@ const preview = document.querySelector("#preview");
 const cameraButton = document.querySelector("#camera-button");
 const recordButton = document.querySelector("#record-button");
 const fileInput = document.querySelector("#file-input");
+const modelSelect = document.querySelector("#model-select");
 const selection = document.querySelector("#selection");
 const systemStatus = document.querySelector("#system-status");
 const resultStatus = document.querySelector("#result-status");
@@ -10,6 +11,7 @@ const resultLabel = document.querySelector("#result-label");
 const resultGlossTokens = document.querySelector("#result-gloss-tokens");
 const resultConfidence = document.querySelector("#result-confidence");
 const resultLatency = document.querySelector("#result-latency");
+const resultModel = document.querySelector("#result-model");
 const warnings = document.querySelector("#warnings");
 
 let mediaStream;
@@ -18,9 +20,11 @@ async function loadHealth() {
   try {
     const response = await fetch("/api/v1/health");
     const health = await response.json();
-    if (health.model_ready) {
-      systemStatus.textContent = "模型已加载，可以进行真实 CE-CSL 识别。";
+    const models = health.available_models || [];
+    if (health.model_ready && models.length) {
+      systemStatus.textContent = `模型已加载（${models.length} 个可用），可以进行真实 CE-CSL 识别。`;
       systemStatus.dataset.kind = "ready";
+      populateModels(models, health.default_model);
     } else if (health.demo_mode) {
       systemStatus.textContent = "界面演示模式：结果不是模型预测，不能用于实验报告。";
       systemStatus.dataset.kind = "warning";
@@ -31,6 +35,24 @@ async function loadHealth() {
   } catch (error) {
     systemStatus.textContent = `无法连接后端：${error.message}`;
     systemStatus.dataset.kind = "error";
+  }
+}
+
+function populateModels(models, defaultModel) {
+  modelSelect.innerHTML = "";
+  if (!models.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（无可用模型）";
+    modelSelect.appendChild(opt);
+    return;
+  }
+  for (const m of models) {
+    const opt = document.createElement("option");
+    opt.value = m.name;
+    opt.textContent = `${m.label} · ${m.wer}`;
+    if (m.name === defaultModel) opt.selected = true;
+    modelSelect.appendChild(opt);
   }
 }
 
@@ -78,6 +100,7 @@ fileInput.addEventListener("change", async () => {
 async function submitVideo(file) {
   const payload = new FormData();
   payload.append("video", file, file.name);
+  if (modelSelect && modelSelect.value) payload.append("model", modelSelect.value);
   resultStatus.textContent = "处理中";
   resultText.textContent = "正在提取特征并执行推理...";
   warnings.replaceChildren();
@@ -95,6 +118,7 @@ async function submitVideo(file) {
     resultGlossTokens.textContent = "-";
     resultConfidence.textContent = "-";
     resultLatency.textContent = "-";
+    resultModel.textContent = "-";
   }
 }
 
@@ -107,6 +131,7 @@ function renderResult(result) {
     : "-";
   resultConfidence.textContent = `${(result.confidence * 100).toFixed(1)}%`;
   resultLatency.textContent = `${result.latency_ms.total ?? 0} ms`;
+  resultModel.textContent = result.model_version ?? "-";
   warnings.replaceChildren(
     ...result.warnings.map((warning) => {
       const item = document.createElement("li");
