@@ -3,12 +3,13 @@ const cameraButton = document.querySelector("#camera-button");
 const recordButton = document.querySelector("#record-button");
 const fileInput = document.querySelector("#file-input");
 const modelSelect = document.querySelector("#model-select");
+const translateToggle = document.querySelector("#translate-toggle");
 const selection = document.querySelector("#selection");
 const systemStatus = document.querySelector("#system-status");
 const resultStatus = document.querySelector("#result-status");
 const resultText = document.querySelector("#result-text");
-const resultLabel = document.querySelector("#result-label");
-const resultGlossTokens = document.querySelector("#result-gloss-tokens");
+const resultTranslation = document.querySelector("#result-translation");
+const resultGloss = document.querySelector("#result-gloss");
 const resultConfidence = document.querySelector("#result-confidence");
 const resultLatency = document.querySelector("#result-latency");
 const resultModel = document.querySelector("#result-model");
@@ -101,6 +102,7 @@ async function submitVideo(file) {
   const payload = new FormData();
   payload.append("video", file, file.name);
   if (modelSelect && modelSelect.value) payload.append("model", modelSelect.value);
+  if (translateToggle && translateToggle.checked) payload.append("translate", "on");
   resultStatus.textContent = "处理中";
   resultText.textContent = "正在提取特征并执行推理...";
   warnings.replaceChildren();
@@ -114,8 +116,8 @@ async function submitVideo(file) {
   } catch (error) {
     resultStatus.textContent = "错误";
     resultText.textContent = error.message;
-    resultLabel.textContent = "-";
-    resultGlossTokens.textContent = "-";
+    resultTranslation.textContent = "-";
+    resultGloss.textContent = "-";
     resultConfidence.textContent = "-";
     resultLatency.textContent = "-";
     resultModel.textContent = "-";
@@ -124,11 +126,16 @@ async function submitVideo(file) {
 
 function renderResult(result) {
   resultStatus.textContent = result.status;
-  resultText.textContent = result.text_zh;
-  resultLabel.textContent = result.label;
-  resultGlossTokens.textContent = result.gloss_tokens?.length
-    ? result.gloss_tokens.join(" / ")
-    : "-";
+  const translation = result.translation;
+  if (translation && translation.trim()) {
+    resultText.textContent = translation;
+    resultText.dataset.kind = "translated";
+    resultTranslation.textContent = translation;
+  } else {
+    resultText.textContent = result.text_zh;
+    resultTranslation.textContent = "（未翻译 / 翻译模型不可用）";
+  }
+  resultGloss.textContent = result.gloss || "-";
   resultConfidence.textContent = `${(result.confidence * 100).toFixed(1)}%`;
   resultLatency.textContent = `${result.latency_ms.total ?? 0} ms`;
   resultModel.textContent = result.model_version ?? "-";

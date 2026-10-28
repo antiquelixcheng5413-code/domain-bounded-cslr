@@ -17,6 +17,7 @@ class PredictionResponse(BaseModel):
     intent: str
     gloss: str
     text_zh: str
+    translation: str | None = None
     confidence: float
     top_k: list[RankedPrediction]
     warnings: list[str]

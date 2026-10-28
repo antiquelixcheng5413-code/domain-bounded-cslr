@@ -14,6 +14,7 @@
         <p class="lead">
           上传或录制一段短视频。系统以 CE-CSL 数据集中的 gloss/token
           范围为识别边界，展示预测标签、置信度、延迟和受限中文重构结果。
+          勾选「翻译为中文」可将识别出的 gloss 经本地 Qwen2.5 转为通顺句子。
         </p>
         <div id="system-status" class="status">正在检查模型状态...</div>
       </header>
@@ -33,6 +34,10 @@
             识别模型
             <select id="model-select"></select>
           </label>
+          <label class="file-button checkbox">
+            <input id="translate-toggle" type="checkbox" checked />
+            翻译为中文（Qwen2.5）
+          </label>
         </div>
         <p id="selection" class="muted">尚未选择视频。</p>
       </section>
@@ -44,8 +49,8 @@
         </div>
         <p id="result-text" class="result-text">完成录制或选择视频后开始。</p>
         <dl class="details">
-          <div><dt>Label</dt><dd id="result-label">-</dd></div>
-          <div><dt>Gloss Tokens</dt><dd id="result-gloss-tokens">-</dd></div>
+          <div><dt>中文翻译</dt><dd id="result-translation">-</dd></div>
+          <div><dt>原始 Gloss</dt><dd id="result-gloss">-</dd></div>
           <div><dt>Confidence</dt><dd id="result-confidence">-</dd></div>
           <div><dt>Latency</dt><dd id="result-latency">-</dd></div>
           <div><dt>Model</dt><dd id="result-model">-</dd></div>
