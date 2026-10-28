@@ -1,0 +1,20 @@
+{
+  "split": "test",
+  "ckpt": "TFNet-CE-CSL-CSLDaily-32.46.pth",
+  "n_samples": 501,
+  "test_base_224_rgb": 32.46,
+  "rows": {
+    "224_RGB": {
+      "WER": 33.09,
+      "gen": 94.57236842105263,
+      "n": 500
+    },
+    "160_RGB": {
+      "WER": 35.66,
+      "gen": 92.26973684210526,
+      "n": 500
+    }
+  },
+  "dev_160_rgb": 36.81,
+  "note": "test 一次性破例验收；TFNet 零样本 160 RGB；BLANK_BIAS=0.0 固定"
+}
