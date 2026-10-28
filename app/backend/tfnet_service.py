@@ -45,6 +45,8 @@ class CslrRecognitionService:
     CK_KEY = "moduleNet_state_dict" # 权重文件里的状态字典键
     STRICT = True                  # load_state_dict 严格度
     OFFICIAL_PAD = True            # 是否用官方补帧（TFNet 用；VAC 训练用 False）
+    CHANNEL_FIX = True             # cv2 解码 BGR -> RGB（对齐官方 RGB_FIX=True，P177 实测 MAE 10.32->1.42）
+    PIXEL_SCALE = "pm1"            # "pm1"=官方 TFNet 口径 /127.5-1 -> [-1,1]；"raw"=[0,255] 不缩放
     MODEL_VERSION = "tfnet"
     LABEL = "TFNet（发布权重）"
     WER = "dev 36.81% / test 35.66%"
@@ -124,25 +126,44 @@ class CslrRecognitionService:
         cap = cv2.VideoCapture(str(video_path))
         if not cap.isOpened():
             raise ValueError("无法打开视频文件")
+
+        # 🔴 必须「先算目标帧号、再 grab 跳读」：CE-CSL 里有 47MB 的超长视频
+        #   （dev-00403），旧实现先把全部帧读进 list 再 np.linspace 下采样，
+        #   一步就吃掉几 GB 内存并把 WSL 撑崩（P178 实测反复在第 402 条挂掉）。
+        total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+        want = None
+        if total > MAX_FRAMES:
+            want = set(np.linspace(0, total - 1, MAX_FRAMES).astype(int).tolist())
+
         raw = []
+        i = 0
         while True:
-            ret, frame = cap.read()
-            if not ret:
+            if not cap.grab():          # grab 只推进指针，不解码到内存
                 break
-            if frame is not None and frame.ndim == 3:
-                raw.append(frame)  # BGR uint8，匹配 RGB_FIX=True（不 cvtColor）
+            take = True if want is None else (i in want)
+            if take:
+                ok, frame = cap.retrieve()
+                if ok and frame is not None and frame.ndim == 3:
+                    # cv2 解码得到 BGR。官方路径（RGBSeqDataset + RGB_FIX=True）等价于
+                    # 「mp4 帧转 RGB」：P177 实测 mp4_RGB vs 官方帧 MAE=1.42，mp4_BGR vs 官方帧 MAE=10.32
+                    raw.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) if self.CHANNEL_FIX
+                               else frame)  # BGR uint8（旧行为，通道颠倒）
+            i += 1
+            # CAP_PROP_FRAME_COUNT 不可信（返回 0）时的兜底：只留前 MAX_FRAMES 帧
+            if want is None and len(raw) >= MAX_FRAMES:
+                break
         cap.release()
         if not raw:
             raise ValueError("视频中未读取到任何帧")
 
-        if len(raw) > MAX_FRAMES:
-            idxs = np.linspace(0, len(raw) - 1, MAX_FRAMES).astype(int)
-            raw = [raw[i] for i in idxs]
-
         imgs = [cv2.resize(f, (RESIZE_HW, RESIZE_HW)) for f in raw]
         tf = self._P.build_transforms(hflip=False, img_size=self.img_size)[1]
-        seq = tf(imgs)                      # [T,3,H,W] float [0,1]
-        seq = seq.float() / 127.5 - 1.0     # -> [-1,1]
+        # VA.ToTensor 只做 transpose+float，**不除 255** ⇒ 这里范围是 [0,255]（P177 实测 max=251）
+        seq = tf(imgs).float()
+        if self.PIXEL_SCALE == "pm1":
+            # 与官方 RGBSeqDataset.__getitem__ 末行完全一致：seq/127.5-1 -> [-1,1]
+            seq = seq / 127.5 - 1.0
+        # "raw"：保持 [0,255]（无任何现有模型使用；保留以便日后对齐其它口径）
         return seq.numpy() if hasattr(seq, "numpy") else np.asarray(seq)
 
     # ---- 解码（带置信度，镜像 greedy_decode） ----------------------------
@@ -280,6 +301,7 @@ class VacTrainedService(CslrRecognitionService):
     CK_KEY = "model_state"
     STRICT = False                 # VAC 主干不含辅助头键时用宽松加载，推理只看 CTC(out[0])
     OFFICIAL_PAD = False           # P150 训练用默认 collate（真实帧数，不补帧）
+    PIXEL_SCALE = "pm1"            # 与官方 RGBSeqDataset 一致：ToTensor([0,255]) -> /127.5-1 -> [-1,1]
     MODEL_VERSION = "vac"
     LABEL = "VAC（自训 P150）"
     WER = "dev 53.73%"
