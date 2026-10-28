@@ -86,11 +86,9 @@ def run(model, word2idx, idx2word, labels, img, rgb_fix):
             batch = P.collate([ds[i]])
             vid, _t, _tl, dl, _tl_len, sids, _ids = batch
             out = model(vid.to("cuda"), dl, False)
-            lp = ls(out[0])[:, 0, :]
-            L = min(P._conv_len(int(dl.view(-1)[0])), lp.shape[0])
-            x = lp[:L].to("cpu", torch.float32)
+            logp = ls(out[0])  # [T,B,C]，已是卷积后长度，切勿再手动截断
             P.BLANK_BIAS = 0.0
-            t = P.greedy_decode(x.unsqueeze(1), torch.LongTensor([[L]]), idx2word)
+            t = P.greedy_decode(logp, dl, idx2word)  # 长度由内部 _conv_len(dl) 处理（修复旧版双重 _conv_len 把解码帧压成 1/5 的 bug）
             hyps += t
             ntok += sum(len(q) for q in t)
             for b in sids:
