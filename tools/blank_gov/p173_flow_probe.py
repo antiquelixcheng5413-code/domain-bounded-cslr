@@ -153,11 +153,14 @@ def build_dev_eval(idx2word, labels_dv):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--img-size", type=int, default=160)
+    ap.add_argument("--hidden", type=int, default=1024)
     ap.add_argument("--epochs", type=int, default=55)
     ap.add_argument("--batch", type=int, default=2)
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
     ap.add_argument("--tag", type=str, default="p173-flow")
+    ap.add_argument("--resume", type=str, default=None,
+                   help="续跑：载入该 checkpoint 的模型/优化器/调度器，从 epoch+1 继续")
     a = ap.parse_args()
 
     dev = "cuda"
@@ -199,8 +202,19 @@ def main():
 
     best = float("inf")
     hist = []
+    start_ep = 1
+    if a.resume:
+        ck = torch.load(a.resume, map_location="cpu", weights_only=False)
+        model.load_state_dict(ck["model_state"])
+        opt.load_state_dict(ck["opt_state"])
+        sched.load_state_dict(ck["sched_state"])
+        best = ck.get("best_dev", float("inf"))
+        hist = list(ck.get("history", []))
+        start_ep = int(ck["epoch"]) + 1
+        log("续跑：从 ep%d 起（载入 %s，best=%.2f%%）"
+            % (start_ep - 1, a.resume, best))
     t0 = time.time()
-    for ep in range(1, a.epochs + 1):
+    for ep in range(start_ep, a.epochs + 1):
         model.train()
         run_ctc, nstep = 0.0, 0
         for vid, tgt, tgt_len, dl, _tl, sids, _ids in tr_ld:
