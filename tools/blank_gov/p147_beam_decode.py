@@ -56,8 +56,14 @@ def log(*a):
                             " ".join(str(x) for x in a)), flush=True)
 
 
-def prefix_beam_search(lp, beam_width=BEAM, blank=BLANK, topk=TOPK):
-    """标准 CTC prefix beam search（log 空间）。lp: [T, V] log-prob。返回 id 列表。"""
+def prefix_beam_search(lp, beam_width=BEAM, blank=BLANK, topk=TOPK,
+                       length_penalty=0.0):
+    """标准 CTC prefix beam search（log 空间）。lp: [T, V] log-prob。返回 id 列表。
+
+    length_penalty: 最终选 best 时的长度归一化指数（Google NMT 式）。
+      0.0 = 不归一化（默认，保持旧行为，P120/P152 调用不变）；
+      >0 时分数 /= len(prefix)**alpha，抑制过度生成（P183 用于修复 greedy 欠生成）。
+    """
     T, V = lp.shape
     k = min(topk, V)
     topv, topi = lp.topk(k, dim=-1)                 # [T, k]
@@ -103,7 +109,16 @@ def prefix_beam_search(lp, beam_width=BEAM, blank=BLANK, topk=TOPK):
                            key=lambda kv: -lse(kv[1][0], kv[1][1]))[:beam_width])
     if not beam:
         return []
-    best = max(beam.items(), key=lambda kv: lse(kv[1][0], kv[1][1]))
+
+    def _score(kv):
+        s = lse(kv[1][0], kv[1][1])
+        if length_penalty and length_penalty > 0:
+            n = len(kv[0])
+            if n > 0:
+                s /= n ** length_penalty
+        return s
+
+    best = max(beam.items(), key=_score)
     return list(best[0])
 
 

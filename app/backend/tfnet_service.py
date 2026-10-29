@@ -5,7 +5,7 @@
 基类 CslrRecognitionService 封装通用管线：
     上传/录制的视频 -> cv2 抽帧 -> 官方预处理(RGB_FIX+可选 OFFICIAL_PAD) -> 官方 Net -> CTC 贪心解码 -> gloss
 精确复刻 tools/blank_gov/p156_test_eval.py 推理口径：
-    RGB_FIX=True / BLANK_BIAS=0.0 / img_size=160
+    RGB_FIX=True / BLANK_BIAS（VAC=1.0 抑制 blank 修复欠生成，P164+P183 一致 −0.8pp）/ img_size=160
     collate 官方补帧 L=ceil(T/4)*4+12（仅 TFNet 发布权重用），首帧重复6 + 末帧补齐
     model(vid, dl, False); LogSoftmax(out[0]); greedy_decode(logp, dl, idx2word)
 
@@ -47,6 +47,7 @@ class CslrRecognitionService:
     OFFICIAL_PAD = True            # 是否用官方补帧（TFNet 用；VAC 训练用 False）
     CHANNEL_FIX = True             # cv2 解码 BGR -> RGB（对齐官方 RGB_FIX=True，P177 实测 MAE 10.32->1.42）
     PIXEL_SCALE = "pm1"            # "pm1"=官方 TFNet 口径 /127.5-1 -> [-1,1]；"raw"=[0,255] 不缩放
+    BLANK_BIAS = 0.0              # 解码时给 blank(logit index 0) 减的常数；>0 抑制 blank⇒多输出，零训练成本
     MODEL_VERSION = "tfnet"
     LABEL = "TFNet（发布权重）"
     WER = "dev 36.81% / test 35.66%"
@@ -97,7 +98,7 @@ class CslrRecognitionService:
         self._P = P
         P.RGB_FIX = True
         P.OFFICIAL_PAD = self.OFFICIAL_PAD
-        P.BLANK_BIAS = 0.0
+        P.BLANK_BIAS = self.BLANK_BIAS
 
         word2idx, wordSetNum, idx2word = P.DPM.Word2Id(
             str(P.CSV_DIR / "train.csv"),
@@ -171,6 +172,8 @@ class CslrRecognitionService:
         seq = logp.detach().cpu()
         if seq.shape[0] != 1 and seq.shape[1] == 1:
             seq = seq.transpose(0, 1)       # -> [B,T,C]
+        if self.BLANK_BIAS:
+            seq[:, :, 0] -= self.BLANK_BIAS  # 抑制 blank ⇒ 迫使多输出，零训练成本
         t = min(self._P._conv_len(int(L)), seq.shape[1])
         best = seq[0, :t].argmax(-1).numpy()
         confs = seq[0, :t].max(-1).values.numpy()
@@ -301,6 +304,7 @@ class VacTrainedService(CslrRecognitionService):
     CK_KEY = "model_state"
     STRICT = False                 # VAC 主干不含辅助头键时用宽松加载，推理只看 CTC(out[0])
     OFFICIAL_PAD = False           # P150 训练用默认 collate（真实帧数，不补帧）
+    BLANK_BIAS = 1.0               # 抑制 blank 修复欠生成：P183 全量 53.73%→52.92%（−0.81pp，与 P164 逐位一致）；低于 1.556pp 噪声地板属"强提示"非确证，但免费无 downside ⇒ 默认开
     PIXEL_SCALE = "pm1"            # 与官方 RGBSeqDataset 一致：ToTensor([0,255]) -> /127.5-1 -> [-1,1]
     MODEL_VERSION = "vac"
     LABEL = "VAC（自训 P150）"
