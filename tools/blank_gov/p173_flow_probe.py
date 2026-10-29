@@ -138,7 +138,7 @@ def build_dev_eval(idx2word, labels_dv):
                 vid = vid.to(device)
                 out = mdl(vid, dl, False)
                 logp = ls(out[0].float().cpu())
-                P.BLANK_BIAS = 0.0
+                P.BLANK_BIAS = 1.0  # VAC 默认，与 P150 同口径（0.0 会系统性差 ~0.8pp）
                 hyps += P.greedy_decode(logp, dl, idx2word)
                 ntok += sum(len(q) for q in hyps[-len(sids):])
                 for b in sids:
@@ -247,7 +247,7 @@ def main():
                 "opt_state": opt.state_dict(),
                 "sched_state": sched.state_dict(), "best_dev": best,
                 "history": hist,
-            }, str(CACHE / ("%s-ep%02d.pt" % a.tag)))
+            }, str(CACHE / ("%s-ep%02d.pt" % (a.tag, ep))))
         log("ep%02d  ctc=%.3f  dev=%.2f%%(gen%.1f) %s  (%.0fs)"
             % (ep, run_ctc / max(nstep, 1), dw, gen, flag, time.time() - t0))
 
