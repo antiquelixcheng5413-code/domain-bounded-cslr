@@ -501,7 +501,6 @@ def main() -> None:
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
     ap.add_argument("--hidden", type=int, default=1024)
-    ap.add_argument("--w-kd", type=float, default=1.0, help="SeqKD 权重（官方未给）")
     ap.add_argument("--no-hflip", action="store_true",
                     help="关掉 RandomHorizontalFlip（中文手语镜像语义可能相反）")
     ap.add_argument("--test-crop-shift", type=int, default=0,
