@@ -1,0 +1,114 @@
+{
+  "experiment": "P78",
+  "date": "2026-11-02",
+  "purpose": "官方 moduleChoice=TFNet 真训练（RGB）",
+  "official_code": "external/TFNet (Net.py / Module.py / videoAugmentation.py / DataProcessMoudle.py 均直接 import，未重写)",
+  "official_benchmark_dev": 42.1,
+  "best_wer_official": 34.24,
+  "swa_wer_official": null,
+  "module": "TFNet",
+  "img_size": 160,
+  "amp_bf16": true,
+  "word_head_w": 0.0,
+  "word_boundary": "equal",
+  "word_head_lowlr_mult": 1.0,
+  "lr_milestone_ep": 4,
+  "lr_milestones": [
+    4,
+    5
+  ],
+  "lr_gamma": 0.2,
+  "official_pad": true,
+  "backbone_ckpt": null,
+  "warmup_ep": 0,
+  "pseudo_boundary": false,
+  "mem_budget_GB": 7.0,
+  "vocab": {
+    "wordSetNum": 3515,
+    "note": "官方 Word2Id，train+dev+test 全收、无截断"
+  },
+  "config": {
+    "epochs": 6,
+    "batch": 2,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "hidden": 1024,
+    "no_hflip": false,
+    "test_crop_shift": 0,
+    "no_temporal_rescale": false,
+    "label_smoothing": 0.0,
+    "blank_bias": 0.0,
+    "max_train": 0,
+    "max_dev": 0,
+    "workers": 4,
+    "mem_budget": 7000000000.0,
+    "module": "TFNet",
+    "word_head": 0.0,
+    "word_boundary": "equal",
+    "word_head_lowlr_mult": 1.0,
+    "warmup_ep": 0,
+    "pseudo_boundary": false,
+    "img_size": 160,
+    "amp_bf16": true,
+    "resume": "artifacts/checkpoints/p184-init-tfnet160.pt",
+    "fix_rgb_order": true,
+    "official_pad": true,
+    "backbone_ckpt": "",
+    "freeze_backbone": true,
+    "freeze_heads": true,
+    "total_epochs": 6,
+    "sched": "multistep",
+    "eta_min": 0.0,
+    "no_resume_sched": true,
+    "swa_start": 0,
+    "dropout": 0.0,
+    "tag": "p184b-frozen-heads",
+    "seed": 42,
+    "eval_every": 1
+  },
+  "resumed_from": "artifacts/checkpoints/p184-init-tfnet160.pt",
+  "total_epochs_planned": 6,
+  "n_params_M": 73.27,
+  "short_samples_padded": 4,
+  "ctc": "blank=0, reduction='none', zero_infinity=True（官方配置）",
+  "nan_steps_skipped": 0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ctc": 4.9132,
+      "dev_wer_official": 34.59,
+      "gap_to_sota": 7.51
+    },
+    {
+      "epoch": 2,
+      "train_ctc": 4.3682,
+      "dev_wer_official": 34.41,
+      "gap_to_sota": 7.69
+    },
+    {
+      "epoch": 3,
+      "train_ctc": 4.0981,
+      "dev_wer_official": 34.38,
+      "gap_to_sota": 7.72
+    },
+    {
+      "epoch": 4,
+      "train_ctc": 3.8715,
+      "dev_wer_official": 34.31,
+      "gap_to_sota": 7.79
+    },
+    {
+      "epoch": 5,
+      "train_ctc": 3.9093,
+      "dev_wer_official": 34.66,
+      "gap_to_sota": 7.44
+    },
+    {
+      "epoch": 6,
+      "train_ctc": 3.8112,
+      "dev_wer_official": 34.24,
+      "gap_to_sota": 7.86
+    }
+  ],
+  "minutes": 170.2
+}

@@ -1,0 +1,30 @@
+{
+  "tags": [
+    "p184",
+    "p184b",
+    "official"
+  ],
+  "weights": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "best_single": "official",
+  "single_WER": {
+    "p184": 34.342,
+    "p184b": 34.236,
+    "official": 33.92
+  },
+  "ensemble_WER": 33.779,
+  "delta_pp": -0.141,
+  "ci95": [
+    -0.902,
+    0.63
+  ],
+  "crosses_zero": true,
+  "per_sentence": {
+    "better": 52,
+    "worse": 49,
+    "tie": 414
+  }
+}

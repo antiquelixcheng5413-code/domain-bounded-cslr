@@ -66,6 +66,11 @@ if MODE == "fast":
 else:
     COMBOS = [(224, True), (160, True), (224, False), (160, False)]
 
+# P187：分辨率扫描（只改推理分辨率，RGB 固定），格式如 RES_LIST=160,192,224
+_RES = os.environ.get("RES_LIST", "")
+if _RES:
+    COMBOS = [(int(x), True) for x in _RES.split(",") if x.strip()]
+
 
 def log(*a):
     print("[P156 %s] %s" % (time.strftime("%H:%M:%S"),
@@ -106,8 +111,10 @@ def main() -> int:
         str(P.CSV_DIR / "test.csv"), "CE-CSL")
     model = P.Net.moduleNet(1024, wordSetNum + 1, "TFNet",
                             torch.device("cuda"), "CE-CSL", True).to("cuda")
-    sd = torch.load(str(CK), map_location="cpu", weights_only=False,
-                    mmap=True)["moduleNet_state_dict"]
+    _ck = torch.load(str(CK), map_location="cpu", weights_only=False,
+                     mmap=True)
+    # 兼容：官方发布权重用 moduleNet_state_dict，p78 训练产物用 model_state
+    sd = _ck.get("moduleNet_state_dict") or _ck["model_state"]
     model.load_state_dict(sd, strict=True)
     model.eval()
     P.OFFICIAL_PAD = True

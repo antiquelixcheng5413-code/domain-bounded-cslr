@@ -1,0 +1,28 @@
+{
+  "tags": [
+    "p184",
+    "p184b",
+    "official"
+  ],
+  "weights": [
+    1.0,
+    1.0,
+    2.0
+  ],
+  "n": 515,
+  "WER_official": 33.81,
+  "metrics": {
+    "WER_official": 33.81,
+    "edits": 961,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 20.59,
+    "gap_to_sota_TFNet": 8.29,
+    "WER_excl_unk": 33.81,
+    "WER_per_sentence": 186.6019,
+    "exact_rate_pct": 14.17,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  }
+}

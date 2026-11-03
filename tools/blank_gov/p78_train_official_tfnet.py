@@ -584,6 +584,17 @@ def main() -> None:
                     help="🔴 P124：用自监督预训练的 2D 主干权重替代 ImageNet 初始化。"
                          "VAC 的主干是 **2D resnet18**（官方 Net.py:88，逐帧前向），"
                          "故 torchvision resnet18 的 state_dict 可直接载入")
+    ap.add_argument("--freeze-backbone", action="store_true",
+                    help="P184：冻结 conv2d 主干（resnet34MAM / resnet18），"
+                         "只训练时序模块与分类头（参数高效适配）")
+    ap.add_argument("--freeze-heads", action="store_true",
+                    help="P184b：在 --freeze-backbone 基础上再冻结 TFNet 的 3 个分类头"
+                         "（classifier11/33/55，22/44 为别名），只训时序模块")
+    ap.add_argument("--mlctc-weight", type=float, default=0.0,
+                    help="P185：时间多尺度 CTC 权重（0=关闭）。在融合输出上按 "
+                         "stride 池化后追加 CTC，强制时序对齐在多尺度成立")
+    ap.add_argument("--mlctc-strides", type=int, nargs="+", default=[2, 4],
+                    help="P185：多尺度 CTC 的时间池化步长列表")
     ap.add_argument("--total-epochs", type=int, default=0,
                     help="🔴 lr 调度按**最终总轮数**算，而不是本次要跑的轮数。"
                          "0 = 用 --epochs（首次训练）。"
@@ -761,6 +772,23 @@ def main() -> None:
                           dropout=a.dropout).to(dev)
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
+
+    # P184：参数高效适配——冻结主干，只训练时序模块与分类头
+    if a.freeze_backbone:
+        for _p in model.conv2d.parameters():
+            _p.requires_grad = False
+        if a.freeze_heads:
+            # P184b：再冻结 3 个分类头（classifier22/44 是 11/33 的别名，同一张量）
+            for _h in (model.classifier11, model.classifier33,
+                       model.classifier55):
+                for _p in _h.parameters():
+                    _p.requires_grad = False
+        _n_frozen = sum(p.numel() for p in model.parameters()
+                        if not p.requires_grad) / 1e6
+        _n_train = sum(p.numel() for p in model.parameters()
+                       if p.requires_grad) / 1e6
+        print("冻结参数            %.2f M；可训练 %.2f M"
+              % (_n_frozen, _n_train))
 
     # ---- P124：自监督预训练主干替换（替代 ImageNet 初始化）----
     if a.backbone_ckpt:
@@ -952,6 +980,9 @@ def main() -> None:
 
     for ep in range(start_ep, a.epochs + 1):
         model.train()
+        if a.freeze_backbone:
+            # 冻结主干保持 eval，避免 BatchNorm 统计量在训练中被改写
+            model.conv2d.eval()
         run, nrun = 0.0, 0
         for vid, tgt, tgt_len, dl, _tl, _sids, _ids in tr_dl:
             vid = vid.to(dev)                      # [B,T,3,H,W]
@@ -993,6 +1024,22 @@ def main() -> None:
                 loss = (loss_ctc
                         + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[1], out[0], use_blank=False))
+            # P185：时间多尺度 CTC——融合输出按 stride 池化后再算 CTC，
+            #   迫使时序对齐在粗时间尺度上同样成立（USTM 式中间监督的轻量等价）
+            if a.mlctc_weight > 0:
+                _main_logit = out[4] if a.module == "TFNet" else out[0]
+                _prob = torch.exp(ls(_main_logit))          # [T,B,C]
+                for _s in a.mlctc_strides:
+                    if _s <= 1:
+                        continue
+                    _p = torch.nn.functional.avg_pool1d(
+                        _prob.permute(1, 2, 0), kernel_size=_s, stride=_s)
+                    _lp = torch.log(_p.clamp_min(1e-8)).permute(2, 0, 1)
+                    _lgt = torch.clamp(
+                        torch.ceil(lgt.float() / _s).long(),
+                        max=_lp.shape[0])
+                    loss = loss + a.mlctc_weight * ctc_loss(
+                        _lp, tgt, _lgt, tgt_len.cpu()).mean()
             # C 方向：词级辅助分类头（多任务，主任务仍是 CTC）
             # C 方向：词级辅助头（主任务仍是 CTC）
             # 🔴 warmup：前 warmup_ep 轮不开（早期对齐不可靠）

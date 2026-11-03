@@ -1,25 +1,21 @@
 {
-  "ckpt": "TFNet-CE-CSL-CSLDaily-32.46.pth",
+  "ckpt": "p184-tfnet-freeze-best.pt",
   "module": "TFNet",
   "n": 516,
   "baseline_224_rgb": 33.92,
   "rows": {
-    "224_RGB": {
-      "WER": 33.92,
-      "gen_rate": 94.93314567206193
-    },
     "160_RGB": {
-      "WER": 36.81,
-      "gen_rate": 93.34975369458128
+      "WER": 34.34,
+      "gen_rate": 96.37579169598874
     },
-    "224_BGR": {
-      "WER": 77.59,
-      "gen_rate": 44.6164672765658
+    "192_RGB": {
+      "WER": 34.83,
+      "gen_rate": 97.36101337086559
     },
-    "160_BGR": {
-      "WER": 79.38,
-      "gen_rate": 43.17382125263899
+    "224_RGB": {
+      "WER": 36.56,
+      "gen_rate": 97.57213230119633
     }
   },
-  "mode": "all"
+  "mode": "fast"
 }
