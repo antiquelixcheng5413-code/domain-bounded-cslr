@@ -50,11 +50,12 @@ def dump(args):
     word2idx, word_set_num, idx2word = P.DPM.Word2Id(
         str(P.CSV_DIR / "train.csv"), str(P.CSV_DIR / "dev.csv"),
         str(P.CSV_DIR / "test.csv"), "CE-CSL")
-    labels = P.read_csv_split("dev.csv")
+    split = getattr(args, "split", "dev")
+    labels = P.read_csv_split(split + ".csv")
     P.OFFICIAL_PAD = True
     P.RGB_FIX = True
     _, tf = P.build_transforms(hflip=False, img_size=args.img)
-    ds = P.RGBSeqDataset("dev", labels, word2idx, tf, False)
+    ds = P.RGBSeqDataset(split, labels, word2idx, tf, False)
     if args.max_dev:
         ds.items = ds.items[:args.max_dev]
 
@@ -226,6 +227,7 @@ def main():
     d.add_argument("--img", type=int, default=160)
     d.add_argument("--tag", required=True)
     d.add_argument("--max-dev", type=int, default=0)
+    d.add_argument("--split", default="dev", choices=["dev", "test"])
     c = sub.add_parser("combine")
     c.add_argument("--inputs", required=True)
     c.add_argument("--weights", default="")

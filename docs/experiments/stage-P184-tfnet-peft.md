@@ -1,5 +1,4 @@
 # P184 — 冻结主干：TFNet@160 的参数高效适配（含 P184b / P185 / P186 / P187 / P188）
-
 > 状态：已收口（2026-11-03）
 > 定位：发布权重在 **160 轻量配置**下的最佳用法；并系统性排除同权重上的推理侧技巧。
 > 结论一句话：**冻结 ResNet34MAM 主干、只适配时序分支，是本约束下唯一稳定正向的改动（dev 36.81→34.34，test 35.66→33.98）；其余手段均为负向或不显著。**
@@ -85,7 +84,7 @@
 - 机制证据为行为层（ctc/WER 走势），未做 CKA / 线性探针来直接证明"视觉特征被保住"。
 - dev 仅 515 句，最小可分辨效应约 ±0.77pp；0.14pp 级差异无法判定。
 - 224 训练/推理在 8GB 上不稳（P187 已实测 OOM），224 侧改进受限。
-- 未试：部分解冻 layer4、跨分辨率蒸馏 224→160、视觉对比损失。三者的预期上限均 ≤0.9pp（小于噪声地板），故未排期。
+- 未试：跨分辨率蒸馏 224→160、视觉对比损失。两者预期上限均 ≤0.9pp（小于噪声地板），故未排期。（部分解冻结 layer4 已于 P193 测过，见 §8.5，负向。）
 
 ## 6. 复现命令
 
@@ -118,3 +117,119 @@ venv/bin/python tools/blank_gov/p188_ensemble.py compare --inputs p184,p184b,off
 - 权重：`artifacts/checkpoints/p184-tfnet-freeze-{best,last}.pt`、`p184b-frozen-heads-{best,last}.pt`、`p186-224-peft-*.pt`
 - 收据：`artifacts/metrics/blank-gov/p184-tfnet-freeze-official-tfnet.json`、`p184b-frozen-heads-official-tfnet.json`、`p186-224-peft-official-tfnet.json`、`p188-ensemble-dev.json`、`p188-ensemble-paired.json`
 - 日志：`artifacts/logs_P184_train.log`、`logs_P184_cont.log`、`logs_P184_test.log`、`logs_P184b_train.log`、`logs_P185_mlctc.log`、`logs_P186_224.log`、`logs_P187_res_sweep.log`、`logs_P188_ensemble.log`
+
+## 8. P189–P192（2026-11-03 晚，收尾四问）
+
+### 8.1 P189 协议对齐：0.63pp 的"差距"主要是**口径**，不是性能
+
+先核对官方评测链路（`external/TFNet`）：
+
+| 环节 | 官方实现 | 我们此前 |
+|---|---|---|
+| 解码 | `Train.py:152` → `ctcdecode.CTCBeamDecoder(beam_width=10, blank_id=0)` | greedy |
+| 打分 | `Train.py:295` `WER = sum(batchWER)/len(loader)`；`WER.py:WerScore` 内部是**逐句 ed/len 求均值** | 语料级 ed 累加 |
+| 预处理 | `cv2.resize(256,256)` + `CenterCrop(224)` + `/127.5-1` | 帧已存 256×256（`_dbg_size` 核对），直接 CenterCrop ⇒ 等价 |
+
+本机无 `ctcdecode`（C++ 扩展未装），故自实现等价 prefix beam search（`p189_beam_eval.py`），并在 dev/test 各算四种口径：
+
+| 集 | greedy 语料级 | greedy 逐句均值 | beam10 语料级 | beam10 逐句均值 | 官方 README |
+|---|---|---|---|---|---|
+| dev（515） | 33.92 | 33.55 | 33.88 | 33.54 | — |
+| test（500） | 33.09 | **32.74** | 32.99 | **32.63** | **32.46** |
+
+- 口径差（语料级 → 逐句均值）：dev −0.37pp，test −0.35pp；
+- beam10 再加 −0.04 ~ −0.11pp；
+- **与 README 的残差从 0.63pp 缩到 0.17pp（32.63 vs 32.46）**，剩余部分来自 ctcdecode 内部实现细节与 fp16 落盘，不再值得追。
+
+⇒ 后续所有对外数字建议统一用**逐句均值**（官方口径），否则跨表比较会白丢 0.35pp。
+
+### 8.2 P190 模型内部多头集成：**负向，零成本排除**
+
+TFNet 推理时 `logProbs1 = logProbs5`（`Net.py:474-490`），故可用互异头 4 个（融合 / 时间支路原始 / 频域注意力 / 频域原始）。一次前向落盘后做 log 概率平均：
+
+| 组合 | dev（逐句均值） |
+|---|---|
+| h0 融合（基线） | **33.55** |
+| h2 频域注意力 | 36.11 |
+| h1 时间支路原始 | 41.38 |
+| h3 频域原始 | 41.66 |
+| h0+h2 | 34.22 |
+| h0+h1+h3 | 39.14 |
+| 全 4 头 | 40.36 |
+
+弱头的 blank 校准与融合头不一致，几何平均反而把 blank 概率拉低 ⇒ 比单头更差。**排除。**
+
+### 8.3 P191 误差构成：67% 是替换，欠生成只占 1/4
+
+官方权重 @224 test（官方口径 32.74）：
+
+- 编辑构成：**替换 67.5% / 删除 24.5% / 插入 8.1%**（dev P184@160：71.0 / 19.8 / 9.2）；
+- 生成率 94.6%（dev 96.4%），句子完全正确率 13.0%；
+- 无 `<unk>`（词表覆盖没问题）；
+- 高频混淆：`？→。` 28 次（占全部替换 4%）、`今天→现在`、`设计→计划`、`完了→完`（切分粒度）；
+- 高频漏词：`喜欢`(10)、`最`(7)、`介绍`(7)、`而且`(7)；
+- 句长分桶（test）：1–3 词 WER 23.2%（生成率 100%），4–6 词 30.2%，7–9 词 36.3%（生成率 92%），10+ 词 39.4%（生成率 81%）。
+
+⇒ 长句的欠生成确实存在，但即使全部补回也只占 1/4 的误差；**主矛盾是同类手势的细粒度区分（替换）**，不是长度校准。这也解释了为什么 blank 偏置 / 多尺度 CTC 都无效。
+
+### 8.4 P192 权重插值：数值最低但不显著
+
+`soup = 0.5*P184 + 0.5*P184b`，dev **34.10**（P184 34.34 / P184b 34.24）。−0.24pp，远小于噪声地板 1.556pp ⇒ 记"不显著"，不改变部署结论。
+
+### 8.5 P193 layer4 部分解冻 @224：**负向，与零样本统计无差别**
+
+这是"全冻（P186，34.13）↔ 全解（P171，退化）"之间唯一未测的中点：`--freeze-backbone --freeze-heads --unfreeze-layer4 --bb-lr 1e-6`，从 `p184-init-tfnet160.pt` 起、224 输入、6 轮（冻结 19.22 M / 可训练 54.05 M），共 324.7 分钟。
+
+| 轮次 | train ctc | dev 语料级 WER |
+|---|---|---|
+| ep1 | 0.7279 | 34.27 |
+| **ep2** | 0.6932 | **33.81（best）** |
+| ep3 | 0.6919 | 34.38 |
+| ep4 | 0.6962 | 34.17 |
+| ep5 | 0.6315 | 33.95 |
+| ep6 | 0.6214 | 34.03 |
+
+best 检查点按官方协议重跑（`p188 dump` + `p189` + 逐句配对）：
+
+| 模型 | 语料级 | 逐句均值 |
+|---|---|---|
+| 224 零样本（official） | 33.92 | 33.55 |
+| P193 best | 33.81 | **33.50** |
+
+逐句配对（20000 次 bootstrap，n=515）：P193 更好 52 / 更差 51 / 持平 412；Δ语料级 +0.102pp，95% CI [−0.633, +0.840]；Δ逐句均值 +0.043pp，95% CI [−0.723, +0.809]，**两条 CI 均跨 0**。
+
+⇒ 名义上逐句均值 33.50 略低于 33.55 的判据线，但 0.05pp 远小于噪声地板（dev 最小可分辨效应 ±0.77pp），**判定为无差别，不构成有效提升**。同时 train ctc 从 0.728 单调降到 0.621 而 WER 原地震荡，是"训练损失下降、识别不变"的典型过拟合形态：224 域内的适配已经被 73 M 参数的容量吃掉了。
+
+至此 160/224 两侧可低成本尝试的方向（续训、冻头、多尺度 CTC、TTA、logit 集成、权重插值、部分解冻、内部多头、beam/口径对齐）已全部闭环，**部署仍维持双轨：P184@160（dev 34.34 / test 33.98，语料级，速度优先）与官方权重 @224 零样本（test 32.74，官方口径，精度优先）**。
+
+### 8.6 复现命令（P189–P193）
+
+```bash
+# P189：dev 四口径（test 需先把 dump 的 --split 换成 test）
+venv/bin/python tools/blank_gov/p189_beam_eval.py --tag official --p184b --beam 10
+venv/bin/python tools/blank_gov/p189_beam_eval.py --tag official_test --split test
+# P190：一次前向落盘 4 头 + 组合评估
+venv/bin/python tools/blank_gov/p190_head_ensemble.py --ckpt <官方权重> --img 224 --tag official224
+# P191：误差构成（读已有 dump，无需 GPU）
+venv/bin/python tools/blank_gov/p191_error_analysis.py --tag official_test --split test
+# P192：权重插值
+venv/bin/python tools/blank_gov/p192_soup.py --split dev
+# P193：layer4 部分解冻 @224（6 轮，约 5.4 h）
+venv/bin/python tools/blank_gov/p78_train_official_tfnet.py \
+  --tag p193-layer4-224 --module TFNet --img-size 224 --batch 2 \
+  --mem-budget 7e9 --amp-bf16 --lr 2e-5 --weight-decay 1e-4 \
+  --hidden 1024 --seed 42 --official-pad --fix-rgb-order \
+  --freeze-backbone --freeze-heads --unfreeze-layer4 --bb-lr 1e-6 \
+  --epochs 6 --total-epochs 6 --resume artifacts/checkpoints/p184-init-tfnet160.pt
+# P193 官方口径复评 + 逐句配对
+venv/bin/python tools/blank_gov/p188_ensemble.py dump \
+  --ckpt artifacts/checkpoints/p193-layer4-224-best.pt --img 224 --tag p193
+venv/bin/python tools/blank_gov/p189_beam_eval.py --tag p193
+```
+
+### 8.7 新增产物
+
+- 收据：`p189-beam-protocol-{dev,test}.json`、`p190-head-ensemble-dev.json`、`p191-error-{test-official_test,dev-p184}.json`、`p192-soup-dev.json`、`p193-layer4-224-official-tfnet.json`
+- dump：`p188_logp_official_test.pt`、`p190_heads_official224.pt`、`p188_logp_p193.pt`
+- 权重：`p193-layer4-224-{best,last}.pt`
+- 日志：`logs_P189_beam*.log`、`logs_P189_test*.log`、`logs_P190_heads.log`、`logs_P191_*.log`、`logs_P192_soup.log`、`logs_P193_layer4_224{,_resume}.log`、`logs_P193_dump.log`、`logs_P193_p189.log`、`logs_P193_paired.log`

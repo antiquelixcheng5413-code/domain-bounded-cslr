@@ -590,6 +590,11 @@ def main() -> None:
     ap.add_argument("--freeze-heads", action="store_true",
                     help="P184b：在 --freeze-backbone 基础上再冻结 TFNet 的 3 个分类头"
                          "（classifier11/33/55，22/44 为别名），只训时序模块")
+    ap.add_argument("--unfreeze-layer4", action="store_true",
+                    help="P193：冻结主干但放开 layer4（--bb-lr 单独给低学习率），"
+                         "即『全冻(P186) ↔ 全解(P171)』之间的中间点")
+    ap.add_argument("--bb-lr", type=float, default=1e-6,
+                    help="P193：放开的 layer4 参数学习率（默认 1e-6）")
     ap.add_argument("--mlctc-weight", type=float, default=0.0,
                     help="P185：时间多尺度 CTC 权重（0=关闭）。在融合输出上按 "
                          "stride 池化后追加 CTC，强制时序对齐在多尺度成立")
@@ -777,6 +782,11 @@ def main() -> None:
     if a.freeze_backbone:
         for _p in model.conv2d.parameters():
             _p.requires_grad = False
+        if a.unfreeze_layer4:
+            # P193：只放开 layer4（resnet 命名 layer1..layer4）
+            for _n, _p in model.conv2d.named_parameters():
+                if _n.startswith("layer4"):
+                    _p.requires_grad = True
         if a.freeze_heads:
             # P184b：再冻结 3 个分类头（classifier22/44 是 11/33 的别名，同一张量）
             for _h in (model.classifier11, model.classifier33,
@@ -838,7 +848,20 @@ def main() -> None:
     _params = list(model.parameters())
     if a.word_head > 0 and word_classifier is not None:
         _params += list(word_classifier.parameters())
-    opt = torch.optim.Adam(_params, lr=a.lr, weight_decay=a.weight_decay)
+    # P193：放开的 layer4 走单独的低学习率组，其余参数保持 a.lr
+    _l4_ids = set()
+    if a.freeze_backbone and a.unfreeze_layer4:
+        _l4_ids = {id(_p) for _n, _p in model.conv2d.named_parameters()
+                   if _n.startswith("layer4")}
+    if _l4_ids:
+        _groups = [{"params": [p for p in _params if id(p) not in _l4_ids],
+                    "lr": a.lr},
+                   {"params": [p for p in _params if id(p) in _l4_ids],
+                    "lr": a.bb_lr}]
+        print("layer4 学习率       %.1e（其余 %.1e）" % (a.bb_lr, a.lr))
+        opt = torch.optim.Adam(_groups, lr=a.lr, weight_decay=a.weight_decay)
+    else:
+        opt = torch.optim.Adam(_params, lr=a.lr, weight_decay=a.weight_decay)
     # 🔴 lr 里程碑必须按**最终目标总轮数**算，不是本次要跑的轮数。
     #   原因：续训时若按本次轮数算，衰减会提前/错位
     #   （例：从 20 续到 30，若按 30 算 ms=[19,25]，
@@ -884,7 +907,13 @@ def main() -> None:
                 "❌ %s 里没有 optimizer_state，无法真正续训。\n"
                 "   （只存 model_state 会丢 Adam 二阶动量 + lr 位置）"
                 % a.resume)
-        opt.load_state_dict(ck["optimizer_state"])
+        try:
+            opt.load_state_dict(ck["optimizer_state"])
+        except ValueError:
+            # P193：layer4 单独成组后参数组数变化，旧 Adam 状态无法直接映射。
+            # 此时 lr 已被 --no-resume-sched 重置，丢掉二阶动量影响有限。
+            print("  优化器状态跳过（参数组数量不一致，按全新 Adam 起步）")
+            start_ep = 1
         # 🔴 P123 续训事故修复：word_classifier 是**独立于 model 的全局模块**，
         #   不在 model.state_dict() 里 ⇒ 不单独存就会在续训时被随机重建，
         #   却配上上一轮针对旧权重的 Adam 二阶动量 ⇒ 词级头梯度把共享特征带偏。
