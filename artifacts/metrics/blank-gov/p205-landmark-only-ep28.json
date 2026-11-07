@@ -1,0 +1,17 @@
+{
+ "epoch": 28,
+ "dev_wer": {
+  "WER_official": 68.66,
+  "edits": 1952,
+  "ref_tokens": 2843,
+  "n_sentences": 516,
+  "better_than": "TFNet",
+  "worse_than": null,
+  "gap_to_that_method": 26.56,
+  "gap_to_sota_TFNet": -26.56,
+  "WER_excl_unk": 68.66,
+  "WER_per_sentence": 378.2946,
+  "exact_rate_pct": 0.0,
+  "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+ }
+}

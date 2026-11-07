@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import random
 import sys
 import time
@@ -66,6 +67,7 @@ import DataProcessMoudle as DPM          # noqa: E402
 import Net# noqa: E402
 import videoAugmentation as VA          # noqa: E402
 from official_wer import evaluate, position_vs_official   # noqa: E402
+from landmark_fusion import LandmarkBank, LandmarkFusion   # noqa: E402
 
 assert "test" not in str(RGB_ROOT), "test split 冻结"
 MIN_FRAMES = 48          # TemporalConv 两次 MaxPool 后至少要 9 步，实测下限
@@ -103,8 +105,139 @@ class CenterCropShift(object):
         return [img[y0:y0 + sh, x0:x0 + sw] for img in clip]
 
 
+class ClipSpatialAug(object):
+    """P202 / E1：强空间增广（随机参数**按 clip 采样一次**，整段帧共用）。
+
+    动机：D0 实测 train WER 1.03% vs dev 34.34% ⇒ 33.3pp 泛化间隙、强过拟合。
+    组成（全部在 clip 级 numpy 上做，与官方 videoAugmentation 风格一致）：
+      RandomResizedCrop(scale=(0.7,1.0), ratio=(0.85,1.18))  构图/尺度/位置
+      RandomRotation(±8°)                                    机位倾斜
+      ColorJitter(b/c/s ±0.2, hue ±0.05)                     光照/肤色
+      RandomErasing(p=0.25, scale=(0.02,0.10))               局部遮挡
+    只在训练分支接入；验证/测试保持 CenterCropShift（无随机性）。
+    ⚠️ 帧间共享随机参数是关键：逐帧独立采样会给同一段视频制造闪烁，
+       相当于给 CTC 对齐注入噪声。
+    """
+
+    def __init__(self, size: int, scale=(0.7, 1.0), ratio=(0.85, 1.18),
+                 degrees: float = 8.0, jitter: float = 0.2,
+                 hue: float = 0.05, erase_p: float = 0.25,
+                 erase_scale=(0.02, 0.10)):
+        self.size = int(size)
+        self.scale = scale
+        self.ratio = ratio
+        self.degrees = float(degrees)
+        self.jitter = float(jitter)
+        self.hue = float(hue)
+        self.erase_p = float(erase_p)
+        self.erase_scale = erase_scale
+
+    def __call__(self, clip):
+        size = self.size
+        h, w = clip[0].shape[:2]
+        # ---- RandomResizedCrop：整段共享同一个裁切框 ----
+        ch, cw = h, w
+        for _ in range(10):
+            _a = h * w * random.uniform(*self.scale)
+            _ar = math.exp(random.uniform(math.log(self.ratio[0]),
+                                          math.log(self.ratio[1])))
+            _cw = int(round(math.sqrt(_a * _ar)))
+            _ch = int(round(math.sqrt(_a / _ar)))
+            if 0 < _ch <= h and 0 < _cw <= w:
+                ch, cw = _ch, _cw
+                break
+        x0 = random.randint(0, w - cw)
+        y0 = random.randint(0, h - ch)
+        # ---- 几何/颜色：整段共享标量 ----
+        ang = random.uniform(-self.degrees, self.degrees)
+        _b = 1.0 + random.uniform(-self.jitter, self.jitter)
+        _c = 1.0 + random.uniform(-self.jitter, self.jitter)
+        _s = 1.0 + random.uniform(-self.jitter, self.jitter)
+        _dh = int(round(random.uniform(-self.hue, self.hue) * 256.0))
+        # ---- 随机擦除框：整段共享 ----
+        erase = None
+        if random.random() < self.erase_p:
+            _ea = size * size * random.uniform(*self.erase_scale)
+            _ear = math.exp(random.uniform(math.log(0.3), math.log(3.3)))
+            ew = min(size - 1, max(1, int(round(math.sqrt(_ea * _ear)))))
+            eh = min(size - 1, max(1, int(round(math.sqrt(_ea / _ear)))))
+            erase = (random.randint(0, size - ew), random.randint(0, size - eh),
+                     ew, eh)
+
+        M = None
+        if abs(ang) > 1e-6:
+            M = cv2.getRotationMatrix2D((size / 2.0, size / 2.0), ang, 1.0)
+
+        out = []
+        for img in clip:
+            _im = img[y0:y0 + ch, x0:x0 + cw]
+            _im = cv2.resize(_im, (size, size), interpolation=cv2.INTER_LINEAR)
+            if M is not None:
+                _im = cv2.warpAffine(_im, M, (size, size),
+                                     flags=cv2.INTER_LINEAR,
+                                     borderMode=cv2.BORDER_REFLECT_101)
+            if _dh:
+                _hsv = cv2.cvtColor(_im, cv2.COLOR_RGB2HSV_FULL)
+                _hsv[..., 0] = ((_hsv[..., 0].astype(np.int16) + _dh) % 256
+                                ).astype(np.uint8)
+                _im = cv2.cvtColor(_hsv, cv2.COLOR_HSV2RGB_FULL)
+            if _b != 1.0 or _c != 1.0 or _s != 1.0:
+                _f = _im.astype(np.float32) * _b
+                _mean = _f.mean(axis=(0, 1), keepdims=True)
+                _f = (_f - _mean) * _c + _mean
+                _gray = _f.mean(axis=2, keepdims=True)
+                _f = _gray + (_f - _gray) * _s
+                _im = np.clip(_f, 0, 255).astype(np.uint8)
+            else:
+                _im = _im.astype(np.uint8)      # resize/warp 后 dtype 不变，保险
+            if erase is not None:
+                ex, ey, ew, eh = erase
+                _im = _im.copy()
+                _im[ey:ey + eh, ex:ex + ew] = 0
+            out.append(_im)
+        return out
+
+
+class ClipTemporalAug(object):
+    """P203 / E2：强时序增广（帧列表级，随机参数按 clip 采样一次）。
+
+    组成：
+      1) 随机时序裁剪：保留 keep ∈ [0.7, 1.0] 的连续帧段，首/尾用该段
+         边界帧补齐回原长（长度不变 ⇒ CTC dataLen 口径不变）。
+      2) 时间掩码：1 段、≤10% 帧，用**前邻帧复制**代替置零
+         （置零会让 CTC 对齐出现整段 blank，风险更大；先按方案的小档做）。
+    不足 MIN_FRAMES 的样本（数据集已补到 48）不做裁剪，只做掩码。
+    速度扰动不在这里做：由官方 TemporalRescale(0.3) 给出 0.7–1.3×。
+    """
+
+    def __init__(self, min_len: int = 48, keep=(0.7, 1.0),
+                 mask_frac: float = 0.1):
+        self.min_len = int(min_len)
+        self.keep = keep
+        self.mask_frac = float(mask_frac)
+
+    def __call__(self, clip):
+        T = len(clip)
+        # ---- 1) 随机时序裁剪 + 首尾补帧（输出长度仍为 T；过短样本跳过）----
+        if T > self.min_len:
+            n = max(self.min_len, int(round(T * random.uniform(*self.keep))))
+            n = min(T, n)
+            if n < T:
+                s = random.randint(0, T - n)
+                seg = clip[s:s + n]
+                clip = [seg[0]] * s + list(seg) + [seg[-1]] * (T - s - n)
+        # ---- 2) 时间掩码（1 段，≤10% 帧，前邻帧复制）----
+        m = max(1, int(round(T * self.mask_frac)))
+        m = min(m, T - 1)
+        s = random.randint(0, T - m)
+        for i in range(s, s + m):
+            clip[i] = clip[i - 1] if i > 0 else clip[min(i + 1, T - 1)]
+        return clip
+
+
 def build_transforms(hflip: bool, img_size: int = 224, y_shift: int = 0,
-                     temporal_rescale: float = 0.2):
+                     temporal_rescale: float = 0.2, spatial_aug: bool = False,
+                     temporal_aug: bool = False):
     """官方增强链 + 两个可选偏离开关（默认 y_shift=0 / 0.2 ⇒ 与官方完全一致）。
 
     ⚠️ 官方默认含 RandomHorizontalFlip(0.5)。中文手语的镜像手势语义可能相反，
@@ -121,6 +254,14 @@ def build_transforms(hflip: bool, img_size: int = 224, y_shift: int = 0,
     train_ops = [VA.RandomCrop(img_size)]          # 训练侧恒为官方行为
     if hflip:
         train_ops.append(VA.RandomHorizontalFlip(0.5))
+    if spatial_aug:
+        # P202 / E1：强空间增广（仅训练分支；dev/test 仍只中心裁剪）
+        train_ops.append(ClipSpatialAug(img_size))
+    if temporal_aug:
+        # P203 / E2：时序裁剪 + 时间掩码（速度扰动由 TemporalRescale(0.3) 给）
+        train_ops.append(ClipTemporalAug(MIN_FRAMES))
+        if temporal_rescale:
+            temporal_rescale = 0.3       # 0.7–1.3×（官方语义：±temp_scaling）
     train_ops += [VA.ToTensor()]
     if temporal_rescale:
         train_ops.append(VA.TemporalRescale(temporal_rescale))
@@ -200,6 +341,19 @@ OFFICIAL_PAD = False
 #   全局量是因为解码在 evaluate() 内部，参数对象不方便逐层传递（与 OFFICIAL_PAD 同模式）。
 #   默认 0.0 = 官方行为；>0 抑制 blank ⇒ 迫使多输出，零训练成本。
 BLANK_BIAS = 0.0
+
+# 🔴 P206：landmark 逐帧残差融合模块。main 里按 --lm-fusion 构造后赋给此全局量，
+#   conv2d 的 forward hook 才能从任意调用点（训练 / dev / SWA）取到它。
+#   默认 None ⇒ 不加 --lm-fusion 时行为与 P184 完全一致。
+LM_FUSE = None
+
+
+def _lm_forward_hook(module, inputs, output):
+    """全局转发函数：AveragedModel 深拷贝时函数对象不会被复制，
+    SWA 评估因此仍走同一个（持续更新的）融合模块。"""
+    if LM_FUSE is None:
+        return output
+    return LM_FUSE.hook(module, inputs, output)
 
 
 def ls_penalty(log_probs, lgt):
@@ -421,6 +575,35 @@ def word_head_loss(logits_seq: torch.Tensor, ids: list[int],
 word_classifier = None
 
 
+def kd_term(main_lp: torch.Tensor, lgt: torch.Tensor, sids, kd_ctx,
+            temp: float = 1.0) -> torch.Tensor:
+    """P195：帧级 KL 蒸馏（教师 TFNet@224 → 学生 @160）。
+
+    教师与学生的有效时间步都是 `_conv_len(dl)`，逐样本相等 ⇒ 直接按前 T 帧
+    对齐，不做插值。main_lp 已是对数概率 [T,B,C]。
+    """
+    total = main_lp.new_zeros(())
+    cnt = 0
+    for bi, sid in enumerate(sids):
+        rec = kd_ctx["index"].get(str(sid))
+        if rec is None:
+            continue
+        t_c, t_s = int(rec[2]), int(lgt[bi])
+        T = min(t_c, t_s)
+        if T <= 0:
+            continue
+        te = torch.from_numpy(
+            np.load(str(kd_ctx["arr"] / ("%s.npy" % sid)))[:T]).to(main_lp.device)
+        t_lp = torch.log_softmax(te / temp, dim=-1)
+        s_lp = torch.log_softmax(main_lp[:T, bi, :] / temp, dim=-1)
+        # KL(t‖s) = Σ p_t·(log p_t − log p_s)；同分布时为 0
+        total = total + (t_lp.exp() * (t_lp - s_lp)).sum(-1).mean()
+        cnt += 1
+    if cnt == 0:
+        return main_lp.new_zeros(())
+    return total / cnt * (temp * temp)
+
+
 def _conv_len(n: int) -> int:
     """官方 TemporalConv(conv_type=2) 的长度公式：L→L-4→/2→L-4→/2。"""
     for _ in range(2):
@@ -463,10 +646,14 @@ def _dev_eval(mdl, dv_loader, device, idx2word, labels_dv):
     """官方口径 dev 评估（供训练循环与 SWA 终评复用）。
     idx2word / labels_dv 由 main 传入（它们是 main 局部量，不可模块级引用）。"""
     mdl.eval()
+    if LM_FUSE is not None:
+        LM_FUSE.eval()             # 不在 model 的子模块里，需手动同步 eval 模式
     hyps, refs = [], []
     with torch.no_grad():
         for vid, tgt, tgt_len, dl, tl_len, _sids, _ids in dv_loader:
             vid = vid.to(device)
+            if LM_FUSE is not None:
+                LM_FUSE.set_sids(_sids)
             out = mdl(vid, dl, False)
             logp5 = F.log_softmax(out[0], dim=-1)   # 官方布局 [T,B,C]
             if BLANK_BIAS:
@@ -483,6 +670,8 @@ def _update_bn(loader, swa_mdl, device):
     但 TFNet.forward 签名是 forward(x, len_x, ...)，单参会令 len_x=None 崩。
     这里手动按 (vid, dl, False) 两参喂入，刷新 BN running stats。"""
     swa_mdl.train()
+    if LM_FUSE is not None:
+        LM_FUSE.eval()             # BN 刷新不需要融合模块的 dropout 噪声
     with torch.no_grad():
         for batch in loader:
             vid = batch[0].to(device)
@@ -490,8 +679,79 @@ def _update_bn(loader, swa_mdl, device):
             #    要求 lengths 为 1D CPU int64，搬 cuda 会崩（正常训练/_dev_eval
             #    里 dl 也一直是 CPU）。
             dl = batch[3]
+            if LM_FUSE is not None:
+                LM_FUSE.set_sids(batch[5])
             swa_mdl(vid, dl, False)
     swa_mdl.eval()
+
+
+def attach_conformer_adapters(model, cfg, device):
+    """P198：给 TFNet 的 temporal_model / temporal_model1 挂 Conformer 适配器。
+
+    hook 改写 `temporal_model(x, lgt)` 返回 dict 里的 'predictions'：
+        predictions = predictions + adapter(predictions, lgt)
+    适配器最后一层零初始化 ⇒ 初始严格恒等（接上后输出 == 不接时的输出）。
+    作为 model 的子模块注册 ⇒ 权重进 model.state_dict()，随 checkpoint 一起存取。
+
+    Args:
+        cfg: argparse Namespace 的 vars()，需含 adapter / adapter_dim /
+             adapter_layers / adapter_heads（缺省按 P198 默认值）。
+    Returns:
+        适配器模块列表（[] 表示未启用），供优化器单独分组。
+    """
+    if not cfg or cfg.get("adapter", "none") in (None, "none"):
+        return []
+    from conformer_adapter import ConformerAdapter
+
+    def _mk():
+        return ConformerAdapter(in_dim=cfg.get("hidden", 1024),
+                                d=cfg.get("adapter_dim", 256),
+                                layers=cfg.get("adapter_layers", 2),
+                                heads=cfg.get("adapter_heads", 4),
+                                kernel=15, dropout=0.1).to(device)
+
+    _ad, _ad1 = _mk(), _mk()
+    model.add_module("temporal_adapter", _ad)
+    model.add_module("temporal_adapter1", _ad1)
+
+    def _mk_hook(ad):
+        def _hook(_mod, _inp, _out):
+            _lens = _inp[1]
+            _out["predictions"] = (_out["predictions"]
+                                   + ad(_out["predictions"], _lens))
+            return _out
+        return _hook
+
+    model.temporal_model.register_forward_hook(_mk_hook(_ad))
+    model.temporal_model1.register_forward_hook(_mk_hook(_ad1))
+    return [_ad, _ad1]
+
+
+def attach_temporal_backbone(model, cfg, device):
+    """P200：用 Conformer 替换 TFNet 的 BiLSTM 时序主干（不是残差适配器）。
+
+    接口与 BiLSTMLayer 一致（x[T,B,D] + lgt -> dict['predictions']），
+    因此官方 Net.py 无需改动。替换后上游 ckpt 里的 temporal_model.*
+    权重会整段失效（BiLSTM → Conformer），续训时按新模块随机初始化。
+    """
+    if not cfg or cfg.get("temporal_backbone", "bilstm") != "conformer":
+        return []
+    from conformer_backbone import ConformerTemporal
+
+    def _mk():
+        return ConformerTemporal(
+            input_size=cfg.get("hidden", 1024),
+            hidden_size=cfg.get("hidden", 1024),
+            d=cfg.get("tb_dim", 256),
+            layers=cfg.get("tb_layers", 4),
+            heads=cfg.get("tb_heads", 4),
+            kernel=cfg.get("tb_kernel", 15),
+            dropout=(cfg.get("dropout", 0.1) or 0.1)).to(device)
+
+    _tm, _tm1 = _mk(), _mk()
+    model.add_module("temporal_model", _tm)
+    model.add_module("temporal_model1", _tm1)
+    return [_tm, _tm1]
 
 
 def main() -> None:
@@ -511,6 +771,16 @@ def main() -> None:
     ap.add_argument("--no-temporal-rescale", action="store_true",
                     help="关掉 TemporalRescale(0.2)：官方 Train.py:76 未启用，\n"
                          "是我们长期多带的增强（P125 静态核对发现）")
+    ap.add_argument("--spatial-aug", action="store_true",
+                    help="P202 / E1：训练期强空间增广（RandomResizedCrop 0.7-1.0\n"
+                         "+ 旋转 ±8° + ColorJitter ±0.2/hue 0.05 + RandomErasing"
+                         " p=0.25）。\n"
+                         "随机参数按 clip 采样一次、整段帧共用；dev/test 分支不变。\n"
+                         "动机：D0 实测 train WER 1.03%% vs dev 34.34%%（强过拟合）")
+    ap.add_argument("--temporal-aug", action="store_true",
+                    help="P203 / E2：训练期强时序增广（随机时序裁剪 保留 70-100%%\n"
+                         "+ 首尾补帧 + 1 段时间掩码 ≤10%% 帧；速度扰动由\n"
+                         "TemporalRescale(0.3) 提供 0.7-1.3×）。dev/test 分支不变")
     ap.add_argument("--label-smoothing", type=float, default=0.0,
                     help="🔴 CTC 的 label smoothing 系数 β（默认 0=官方行为）。\n"
                          "标准 LS 把目标分布换成 y_ls=(1-β)·onehot + β·uniform，\n"
@@ -600,6 +870,39 @@ def main() -> None:
                          "stride 池化后追加 CTC，强制时序对齐在多尺度成立")
     ap.add_argument("--mlctc-strides", type=int, nargs="+", default=[2, 4],
                     help="P185：多尺度 CTC 的时间池化步长列表")
+    ap.add_argument("--kd-dir", default="",
+                    help="P195：教师缓存目录（含 teacher_meta.json 与 "
+                         "teacher_logits/）。空=不做蒸馏")
+    ap.add_argument("--kd-weight", type=float, default=0.0,
+                    help="P195：帧级 KL 蒸馏权重（0=关闭）。教师与学生时间步"
+                         "均为 _conv_len(dl)，逐样本对齐，无需插值")
+    ap.add_argument("--kd-temp", type=float, default=1.0,
+                    help="P195：蒸馏温度（P174 已证 T=4 有害，默认 1.0）")
+    ap.add_argument("--aux-ww", type=float, default=0.0,
+                    help="P196：WE/WC 辅助约束权重（0=关闭）。WE=词存在性"
+                         "（对逐帧 max 做多标签 BCE），WC=词数回归（Σ(1-p_blank)"
+                         " 对齐真实词数）；零推理开销，无新增参数")
+    ap.add_argument("--adapter", default="none", choices=["none", "conformer"],
+                    help="P198：在 temporal_model / temporal_model1 输出后插 Conformer "
+                         "时序适配器（bottleneck 1024→d→1024，零初始化 ⇒ 初始恒等）")
+    ap.add_argument("--adapter-dim", type=int, default=256,
+                    help="适配器内部维度 d（bottleneck）")
+    ap.add_argument("--adapter-layers", type=int, default=2)
+    ap.add_argument("--adapter-heads", type=int, default=4)
+    ap.add_argument("--adapter-lr", type=float, default=5e-4,
+                    help="适配器单独的低学习率组（主干 lr 通常只有 2e-5）")
+    ap.add_argument("--temporal-backbone", default="bilstm",
+                    choices=["bilstm", "conformer"],
+                    help="P200：时序主干。bilstm=官方默认；conformer=整段替换"
+                         "（随机初始化，上游 BiLSTM 权重失效）")
+    ap.add_argument("--tb-dim", type=int, default=256,
+                    help="P200：Conformer 内部宽度（bottleneck 1024→tb-dim→1024）")
+    ap.add_argument("--tb-layers", type=int, default=4)
+    ap.add_argument("--tb-heads", type=int, default=4)
+    ap.add_argument("--tb-kernel", type=int, default=15,
+                    help="P200：深度可分离卷积核（与 P198 适配器一致）")
+    ap.add_argument("--tb-lr", type=float, default=1e-4,
+                    help="P200：新时序主干的单独学习率（其余参数仍用 --lr）")
     ap.add_argument("--total-epochs", type=int, default=0,
                     help="🔴 lr 调度按**最终总轮数**算，而不是本次要跑的轮数。"
                          "0 = 用 --epochs（首次训练）。"
@@ -618,10 +921,17 @@ def main() -> None:
     ap.add_argument("--tag", default="p78")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--eval-every", type=int, default=1)
+    # P206 / E4：landmark 逐帧残差融合（默认关闭 ⇒ 行为与 P184 完全一致）
+    ap.add_argument("--lm-fusion", action="store_true",
+                    help="启用 landmark 残差融合（conv2d forward hook，proj 零初始化）")
+    ap.add_argument("--lm-hidden", type=int, default=256,
+                    help="融合编码器隐层维度（Linear 368→hidden，BiLSTM 输出 2×(hidden/2)）")
+    ap.add_argument("--lm-lr", type=float, default=5e-4,
+                    help="融合模块单独学习率（随机初始化，2e-5 太慢）")
     a = ap.parse_args()
 
     # 🔴 collate 是模块级函数，用全局开关传递官方补帧约定
-    global OFFICIAL_PAD, BLANK_BIAS, RGB_FIX
+    global OFFICIAL_PAD, BLANK_BIAS, RGB_FIX, LM_FUSE
     OFFICIAL_PAD = bool(a.official_pad)
     BLANK_BIAS = float(a.blank_bias)
     RGB_FIX = bool(a.fix_rgb_order)
@@ -645,7 +955,8 @@ def main() -> None:
     tr_tf, dv_tf = build_transforms(
         hflip=not a.no_hflip, img_size=a.img_size,
         y_shift=a.test_crop_shift,
-        temporal_rescale=(0.0 if a.no_temporal_rescale else 0.2))
+        temporal_rescale=(0.0 if a.no_temporal_rescale else 0.2),
+        spatial_aug=a.spatial_aug, temporal_aug=a.temporal_aug)
     tr_ds = RGBSeqDataset("train", labels_tr, word2idx, tr_tf, True)
     dv_ds = RGBSeqDataset("validation", labels_dv, word2idx, dv_tf, False)
     # dev 在 P77 里落在 validation/ 目录名
@@ -663,6 +974,10 @@ def main() -> None:
     print("train / dev         %d / %d 条" % (len(tr_ds), len(dv_ds)))
     print("帧数 < %d 的训练样本  %d 条（已重复补帧）" % (MIN_FRAMES, tr_ds.n_short))
     print("RandomHorizontalFlip %s" % ("关闭（对照组）" if a.no_hflip else "开启（官方默认 0.5）"))
+    print("强空间增广（E1）    %s" % ("开启（RRC 0.7-1.0 + 旋转±8° + Jitter + Erasing）"
+                                    if a.spatial_aug else "关闭（P184 原始配方）"))
+    print("强时序增广（E2）    %s" % ("开启（裁剪 70-100%% + 1 段掩码 + 速度 0.7-1.3×）"
+                                    if a.temporal_aug else "关闭（P184 原始配方）"))
     print("官方 moduleChoice  %s" % a.module)
     print("输入分辨率         %d×%d%s" % (
         a.img_size, a.img_size,
@@ -673,6 +988,9 @@ def main() -> None:
                                   "VAC": 27.1}.get(a.module, 55.7)))
     print("超参                hidden=%d lr=%g wd=%g batch=%d epochs=%d"
           % (a.hidden, a.lr, a.weight_decay, a.batch, a.epochs))
+    print("landmark 融合       %s" % (
+        "开启（P206，hidden=%d lr=%.1e，proj 零初始化 ⇒ ep0 等价 P184）"
+        % (a.lm_hidden, a.lm_lr) if a.lm_fusion else "关闭"))
     print("补帧约定           %s" % (
         "★官方 collate（left_pad=6 + 末帧复制，dataLen=ceil(T/4)*4+12）"
         if a.official_pad else "零填充 + dataLen=真实帧数（P93~P121 口径）"))
@@ -778,6 +1096,17 @@ def main() -> None:
     n_par = sum(p.numel() for p in model.parameters()) / 1e6
     print("参数                %.2f M" % n_par)
 
+    # ---- P200：Conformer 整段替换 BiLSTM 时序主干（必须在载入 ckpt 之前）----
+    tb_mods = attach_temporal_backbone(model, vars(a), dev)
+    if tb_mods:
+        _n_tb = sum(p.numel() for m in tb_mods for p in m.parameters()) / 1e6
+        print("P200 时序主干      Conformer d=%d layers=%d heads=%d k=%d"
+              "（%.2f M ×2，lr=%.1e；上游 BiLSTM 权重整段失效）"
+              % (a.tb_dim, a.tb_layers, a.tb_heads, a.tb_kernel,
+                 _n_tb / 2, a.tb_lr))
+        n_par = sum(p.numel() for p in model.parameters()) / 1e6
+        print("参数（替换后）      %.2f M" % n_par)
+
     # P184：参数高效适配——冻结主干，只训练时序模块与分类头
     if a.freeze_backbone:
         for _p in model.conv2d.parameters():
@@ -799,6 +1128,34 @@ def main() -> None:
                        if p.requires_grad) / 1e6
         print("冻结参数            %.2f M；可训练 %.2f M"
               % (_n_frozen, _n_train))
+
+    # ---- P198：Conformer 时序适配器（forward hook 注入，不 fork 官方 Net.py）----
+    #   hook 改写 temporal_model(x, lgt) 返回 dict 里的 'predictions'：
+    #     predictions = predictions + adapter(predictions, lgt)
+    #   adapter 最后一层零初始化 ⇒ 初始严格恒等，接上后第 0 步输出 == p184 基线。
+    adapter_mods = attach_conformer_adapters(model, vars(a), dev)
+    if adapter_mods:
+        _n_ad = sum(p.numel() for m in adapter_mods
+                    for p in m.parameters()) / 1e6
+        print("P198 适配器         conformer d=%d layers=%d heads=%d "
+              "k=15（%.2f M，lr=%.1e，最后一层零初始化 ⇒ 初始恒等）"
+              % (a.adapter_dim, a.adapter_layers, a.adapter_heads,
+                 _n_ad, a.adapter_lr))
+
+    # ---- P206：landmark 逐帧残差融合（forward hook 注入，proj 零初始化）----
+    #   hook 把 conv2d 的第 0 项输出（[B*temp,512] 逐帧特征）加上 delta；
+    #   proj 全零 ⇒ 初始 delta ≡ 0，ep0 与不接融合时严格等价。
+    if a.lm_fusion:
+        LM_DIR = REPO / "data/processed/ce-csl-landmark48"
+        LM_FUSE = LandmarkFusion(hidden=a.lm_hidden).to(dev)
+        LM_FUSE.set_bank(LandmarkBank(LM_DIR))
+        model.conv2d.register_forward_hook(_lm_forward_hook)
+        _n_lm = sum(p.numel() for p in LM_FUSE.parameters()) / 1e6
+        _bm = LM_FUSE.bank.stats()
+        print("P206 landmark 融合  hidden=%d（%.2f M，lr=%.1e，proj 零初始化 ⇒ 初始恒等）"
+              % (a.lm_hidden, _n_lm, a.lm_lr))
+        print("  landmark bank       %s（已缓存 %d 条，缺失 %d 条）"
+              % (_bm["root"], _bm["cached"], _bm["miss"]))
 
     # ---- P124：自监督预训练主干替换（替代 ImageNet 初始化）----
     if a.backbone_ckpt:
@@ -844,24 +1201,55 @@ def main() -> None:
     # ★ 官方的 CTC 配置（zero_infinity=True 是关键，我 P72 就是漏了这行导致永久 nan）
     ctc_loss = torch.nn.CTCLoss(blank=0, reduction="none", zero_infinity=True)
     kld = DPM.SeqKD(T=8)
+    kd_ctx = None
+    if a.kd_weight > 0:
+        _kd_root = Path(a.kd_dir)
+        kd_ctx = {
+            "arr": _kd_root / "teacher_logits",
+            "index": json.loads((_kd_root / "teacher_meta.json").read_text(
+                encoding="utf-8"))["index"],
+        }
+        print("[P195] 蒸馏已启用：w=%.2f temp=%.1f 教师样本=%d"
+              % (a.kd_weight, a.kd_temp, len(kd_ctx["index"]), ), flush=True)
     ls = torch.nn.LogSoftmax(dim=-1)
     _params = list(model.parameters())
     if a.word_head > 0 and word_classifier is not None:
         _params += list(word_classifier.parameters())
+    if LM_FUSE is not None:
+        _params += list(LM_FUSE.parameters())
     # P193：放开的 layer4 走单独的低学习率组，其余参数保持 a.lr
     _l4_ids = set()
     if a.freeze_backbone and a.unfreeze_layer4:
         _l4_ids = {id(_p) for _n, _p in model.conv2d.named_parameters()
                    if _n.startswith("layer4")}
+    # P198：适配器走单独的高学习率组（主干 lr=2e-5 对新增模块太小）
+    _ad_ids = {id(p) for m in adapter_mods for p in m.parameters()}
+    # P200：新时序主干同样需要单独 lr（随机初始化，2e-5 太慢）
+    _tb_ids = {id(p) for m in tb_mods for p in m.parameters()}
+    # P206：landmark 融合模块同样需要单独 lr（随机初始化，2e-5 太慢）
+    _lm_ids = {id(p) for p in (LM_FUSE.parameters()
+                               if LM_FUSE is not None else [])}
+    _groups = [{"params": [p for p in _params
+                           if id(p) not in _l4_ids and id(p) not in _ad_ids
+                           and id(p) not in _tb_ids and id(p) not in _lm_ids],
+                "lr": a.lr}]
     if _l4_ids:
-        _groups = [{"params": [p for p in _params if id(p) not in _l4_ids],
-                    "lr": a.lr},
-                   {"params": [p for p in _params if id(p) in _l4_ids],
-                    "lr": a.bb_lr}]
+        _groups.append({"params": [p for p in _params if id(p) in _l4_ids],
+                        "lr": a.bb_lr})
         print("layer4 学习率       %.1e（其余 %.1e）" % (a.bb_lr, a.lr))
-        opt = torch.optim.Adam(_groups, lr=a.lr, weight_decay=a.weight_decay)
-    else:
-        opt = torch.optim.Adam(_params, lr=a.lr, weight_decay=a.weight_decay)
+    if _ad_ids:
+        _groups.append({"params": [p for p in _params if id(p) in _ad_ids],
+                        "lr": a.adapter_lr})
+        print("适配器学习率       %.1e（其余 %.1e）" % (a.adapter_lr, a.lr))
+    if _tb_ids:
+        _groups.append({"params": [p for p in _params if id(p) in _tb_ids],
+                        "lr": a.tb_lr})
+        print("时序主干学习率     %.1e（其余 %.1e）" % (a.tb_lr, a.lr))
+    if _lm_ids:
+        _groups.append({"params": [p for p in _params if id(p) in _lm_ids],
+                        "lr": a.lm_lr})
+        print("landmark 融合学习率 %.1e（其余 %.1e）" % (a.lm_lr, a.lr))
+    opt = torch.optim.Adam(_groups, lr=a.lr, weight_decay=a.weight_decay)
     # 🔴 lr 里程碑必须按**最终目标总轮数**算，不是本次要跑的轮数。
     #   原因：续训时若按本次轮数算，衰减会提前/错位
     #   （例：从 20 续到 30，若按 30 算 ms=[19,25]，
@@ -901,7 +1289,27 @@ def main() -> None:
     if a.resume:
         # 🔴 用前面已读的 ck（避免重复读 423MB 文件）
         ck = _ck_pre
-        model.load_state_dict(ck["model_state"])
+        # P198：上游 ckpt（p184）没有适配器权重 ⇒ strict=False 只放行
+        #   temporal_adapter* 的 missing；其余 key 缺失仍是严重问题，需打印核对
+        # P200：整段替换时序主干时，temporal_model* 的缺失/多余都属于预期
+        _ld = model.load_state_dict(ck["model_state"], strict=False)
+        _ok_prefix = ("temporal_adapter",)
+        if a.temporal_backbone == "conformer":
+            _ok_prefix = _ok_prefix + ("temporal_model",)
+        _miss = [k for k in _ld.missing_keys
+                 if not k.startswith(_ok_prefix)]
+        if _miss:
+            raise SystemExit("❌ ckpt 与模型结构不匹配，缺少 key：%s" % _miss[:8])
+        _ign = [k for k in _ld.unexpected_keys
+                if not k.startswith(_ok_prefix)]
+        if _ign:
+            raise SystemExit("❌ ckpt 与模型结构不匹配，多余 key：%s" % _ign[:8])
+        if _ld.missing_keys:
+            print("  新增模块权重未在上游 ckpt 中（按初始化起步）：%d 项"
+                  % len(_ld.missing_keys))
+        if _ld.unexpected_keys:
+            print("  上游 ckpt 中多余 key 已忽略：%d 项（例：%s）"
+                  % (len(_ld.unexpected_keys), _ld.unexpected_keys[:2]))
         if "optimizer_state" not in ck:
             raise SystemExit(
                 "❌ %s 里没有 optimizer_state，无法真正续训。\n"
@@ -926,6 +1334,14 @@ def main() -> None:
             else:
                 print("  ⚠️ ckpt 里没有 word_classifier_state ⇒ 词级头被随机重建，"
                       "将配着旧 Adam 动量跑，头几轮 ctc 会被抬高（需 1-2 轮恢复）")
+        if LM_FUSE is not None:
+            _lms = ck.get("lm_fusion_state")
+            if _lms is not None:
+                LM_FUSE.load_state_dict(_lms)
+                print("  landmark 融合状态恢复  ✅")
+            else:
+                print("  ⚠️ ckpt 里没有 lm_fusion_state ⇒ landmark 融合模块保持"
+                      "零初始化（proj）与随机初始化（编码器），ep0 仍等价 P184")
         start_ep = int(ck["epoch"]) + 1
         if "torch_rng" in ck:
             torch.set_rng_state(ck["torch_rng"].cpu())
@@ -948,7 +1364,13 @@ def main() -> None:
             #    否则扩展段在 4e-6 下空转（p78 注释已警告过此坑）。
             #    同时【不】恢复旧 scheduler，避免里程碑被覆盖回旧的 [35,45]。
             for _pg in opt.param_groups:
-                _pg["lr"] = a.lr
+                # P198：分组重置要保住各自的基线 lr（layer4 / 适配器不是 a.lr）
+                _p0 = _pg["params"][0]
+                _pg["lr"] = (a.adapter_lr if id(_p0) in _ad_ids
+                             else a.tb_lr if id(_p0) in _tb_ids
+                             else a.lm_lr if id(_p0) in _lm_ids
+                             else a.bb_lr if id(_p0) in _l4_ids
+                             else a.lr)
             _ext = a.epochs - start_ep + 1
             if a.sched == "cosine":
                 sched = CosineAnnealingLR(opt, T_max=_ext, eta_min=a.eta_min)
@@ -1009,12 +1431,16 @@ def main() -> None:
 
     for ep in range(start_ep, a.epochs + 1):
         model.train()
+        if LM_FUSE is not None:
+            LM_FUSE.train()        # 不在 model 的子模块里，需手动同步 train 模式
         if a.freeze_backbone:
             # 冻结主干保持 eval，避免 BatchNorm 统计量在训练中被改写
             model.conv2d.eval()
         run, nrun = 0.0, 0
         for vid, tgt, tgt_len, dl, _tl, _sids, _ids in tr_dl:
             vid = vid.to(dev)                      # [B,T,3,H,W]
+            if LM_FUSE is not None:
+                LM_FUSE.set_sids(_sids)
             with torch.amp.autocast("cuda", enabled=a.amp_bf16,
                                     dtype=torch.bfloat16):
                 out = model(vid, dl, True)
@@ -1099,6 +1525,35 @@ def main() -> None:
                         n_seg += 1
                 if n_seg:
                     loss = loss / (1.0 + _w * n_seg)
+            # P195：跨分辨率蒸馏（同骨架 TFNet@224 教师 → 本模型@160）
+            if kd_ctx is not None:
+                loss = loss + a.kd_weight * kd_term(
+                    main_lp, lgt, _sids, kd_ctx, a.kd_temp)
+            # P196：WE/WC 辅助约束（词存在性 + 词数；无新增参数、推理零开销）
+            if a.aux_ww > 0:
+                _lp = main_lp                                   # [T,B,C]
+                _T, _B, _C = _lp.shape
+                _mask = (torch.arange(_T, device=_lp.device)[:, None]
+                         < lgt.to(_lp.device).long()[None, :])
+                _pres = _lp.masked_fill(~_mask[:, :, None], -1e4).amax(dim=0)
+                _gt = torch.zeros_like(_pres)
+                _flat = tgt.view(-1).tolist()        # 🔴 tgt 是 1-D 拼接，不是 [B,L]
+                _off = 0
+                for _b in range(_B):
+                    _n = int(tgt_len[_b])
+                    for _g in _flat[_off:_off + _n]:
+                        if 0 < _g < _C:
+                            _gt[_b, _g] = 1.0
+                    _off += _n
+                _npos = _gt.sum(dim=1, keepdim=True).clamp_min(1.0)
+                _pw = ((_C - _npos) / _npos).clamp_max(500.0)
+                _bce = F.binary_cross_entropy_with_logits(
+                    _pres, _gt, pos_weight=_pw.expand_as(_gt))
+                _cnt = ((1.0 - torch.exp(_lp[:, :, 0])).mul(_mask.float())
+                        .sum(dim=0))
+                _wc = ((_cnt - tgt_len.float().to(_cnt.device))
+                       / tgt_len.float().to(_cnt.device).clamp_min(1.0)).abs().mean()
+                loss = loss + a.aux_ww * (_bce + _wc)
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
@@ -1139,6 +1594,8 @@ def main() -> None:
             "word_classifier_state":
                 (word_classifier.state_dict()
                  if (a.word_head > 0 and word_classifier is not None) else None),
+            "lm_fusion_state":
+                (LM_FUSE.state_dict() if LM_FUSE is not None else None),
             "optimizer_state": opt.state_dict(),   # 🔴 Adam 二阶动量
             "sched_state": sched.state_dict(),     # 🔴 lr 当前位置
             "torch_rng": torch.get_rng_state(),
@@ -1166,6 +1623,9 @@ def main() -> None:
                             (word_classifier.state_dict()
                              if (a.word_head > 0 and word_classifier is not None)
                              else None),
+                        "lm_fusion_state":
+                            (LM_FUSE.state_dict()
+                             if LM_FUSE is not None else None),
                         "optimizer_state": opt.state_dict(),
                         "sched_state": sched.state_dict(),
                         "torch_rng": torch.random.get_rng_state(),
@@ -1191,6 +1651,8 @@ def main() -> None:
                         (word_classifier.state_dict()
                          if (a.word_head > 0 and word_classifier is not None)
                          else None),
+                    "lm_fusion_state":
+                        (LM_FUSE.state_dict() if LM_FUSE is not None else None),
                     "wordSetNum": wordSetNum, "idx2word": idx2word,
                     "hidden": a.hidden, "config": vars(a)},
                    ck_dir / ("%s-swa.pt" % a.tag))
@@ -1218,9 +1680,21 @@ def main() -> None:
         "lr_milestones": ms,
         "lr_gamma": 0.2,
         "official_pad": bool(a.official_pad),
+        "spatial_aug": bool(a.spatial_aug),
+        "temporal_aug": bool(a.temporal_aug),
         "backbone_ckpt": a.backbone_ckpt or None,
         "warmup_ep": a.warmup_ep,
+        "adapter": (a.adapter if a.adapter != "none" else None),
+        "adapter_cfg": ({"dim": a.adapter_dim, "layers": a.adapter_layers,
+                         "heads": a.adapter_heads, "kernel": 15,
+                         "lr": a.adapter_lr, "zero_init": True}
+                        if a.adapter != "none" else None),
         "pseudo_boundary": a.pseudo_boundary,
+        "lm_fusion": bool(a.lm_fusion),
+        "lm_hidden": (a.lm_hidden if a.lm_fusion else None),
+        "lm_lr": (a.lm_lr if a.lm_fusion else None),
+        "lm_bank_miss": (LM_FUSE.bank.stats()["miss"]
+                         if LM_FUSE is not None else None),
         "mem_budget_GB": round(a.mem_budget / 1e9, 2),
         "vocab": {"wordSetNum": wordSetNum,
                   "note": "官方 Word2Id，train+dev+test 全收、无截断"},
