@@ -1,0 +1,72 @@
+{
+  "tag": "p240",
+  "timestamp": "2026-11-09 07:55:16",
+  "note": "只读 train/dev 标注 + p184-base 收据；未跑 test、未跑模型、未改判据",
+  "vocab": {
+    "train_tokens": 28273,
+    "train_distinct_gloss": 3516,
+    "dev_sentences_labels": 516,
+    "dev_sentences_matched_receipt": 515,
+    "dev_tokens": 2843,
+    "dev_distinct_gloss": 775
+  },
+  "M0_oov": {
+    "dev_oov_gloss": 0,
+    "dev_oov_token": 0,
+    "dev_oov_token_pct": 0.0,
+    "dev_token_freq_le_1_pct": 3.87,
+    "dev_token_freq_le_10_pct": 24.38,
+    "verdict": "OOV_PREMISE_FALSE"
+  },
+  "M1_compositional": {
+    "dev_bigram_total": 2327,
+    "dev_bigram_seen_in_train": 1218,
+    "dev_bigram_unseen_pct": 47.66,
+    "dev_sentences_exact_in_train": 6,
+    "dev_sentence_exact_match_pct": 1.16,
+    "sentences_with_unseen_bigram": 473,
+    "sentences_all_bigrams_seen": 42
+  },
+  "stratified_WER": {
+    "all": {
+      "n": 515,
+      "WER_pct": 34.41,
+      "low_bucket_WER_pct": 70.66,
+      "ins": 90,
+      "sub": 696,
+      "del": 192
+    },
+    "has_unseen_bigram": {
+      "n": 473,
+      "WER_pct": 35.28,
+      "low_bucket_WER_pct": 71.02,
+      "ins": 80,
+      "sub": 664,
+      "del": 182
+    },
+    "all_bigrams_seen": {
+      "n": 42,
+      "WER_pct": 23.96,
+      "low_bucket_WER_pct": 61.54,
+      "ins": 10,
+      "sub": 32,
+      "del": 10
+    },
+    "has_oov_gloss": {
+      "n": 0,
+      "WER_pct": 0.0,
+      "low_bucket_WER_pct": 0.0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0
+    },
+    "no_oov_gloss": {
+      "n": 515,
+      "WER_pct": 34.41,
+      "low_bucket_WER_pct": 70.66,
+      "ins": 90,
+      "sub": 696,
+      "del": 192
+    }
+  }
+}
