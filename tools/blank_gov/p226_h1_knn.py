@@ -81,8 +81,16 @@ def main():
 
     # dev 后验（已落盘，同一 p184 模型）
     d = torch.load(M / "p188_logp_p184.pt", map_location="cpu", weights_only=False)
-    sids = [s for s in dv["NT"] if s in labels_dv and s in d["items"]]
+    # 以 p188 后验的 515 句为准，保证与 p184-base 收据逐句配对；
+    # dev dump 跳过的超长视频没有段特征 ⇒ 该句不做融合，自然保持 λ=0 输出。
+    sids = [s for s in d["items"] if s in labels_dv]
     print("dev sentences with posterior =", len(sids), flush=True)
+    try:
+        _bs = [x["sid"] for x in json.loads(
+            (M / "p184-base-uwer.json").read_text(encoding="utf-8"))["per_item"]]
+        print("sid order matches base:", _bs == sids[:len(_bs)], flush=True)
+    except Exception as _e:
+        print("sid order check skipped:", _e, flush=True)
     # OW.evaluate 要原始 gloss 字符串；align_ops 要切分后的 token list
     raw_refs = [labels_dv[s][1] for s in sids]
     refs = [OW.split_glued(OW.split_gloss_sequence(labels_dv[s][1], OW.CFG))
@@ -103,9 +111,9 @@ def main():
         lo, hi = {"n": 0, "err": 0}, {"n": 0, "err": 0}
         ins = sub = dele = nref = 0
         per_item = []
-        for r, h in zip(refs, hyps):
+        for ix, (r, h) in enumerate(zip(refs, hyps)):
             hh = OW.split_glued(list(h))
-            ops, ii = align_ops(r, hh)
+            ops, ii = align_ops(r, hh)   # ii = 插入数；句序索引必须用 ix
             for t, op in zip(r, ops):
                 bk = lo if freq.get(t, 0) <= 10 else hi
                 per_cls[t]["n"] += 1
@@ -118,7 +126,7 @@ def main():
             _ln = sum(1 for t in r if freq.get(t, 0) <= 10)
             _le = sum(1 for t, op in zip(r, ops)
                       if freq.get(t, 0) <= 10 and op != "match")
-            per_item.append({"sid": "", "ref_n": len(r),
+            per_item.append({"sid": sids[ix], "ref_n": len(r),
                              "edits": OW.levenshtein(r, hh), "ins": ii,
                              "sub": s_, "del": d_, "low_n": _ln, "low_err": _le})
         cls_rates = [v["err"] / v["n"] for v in per_cls.values() if v["n"] > 0]
@@ -170,25 +178,39 @@ def main():
           % (lam, len(guard)), flush=True)
     rep, per_item = metrics(best_hyps[lam])
 
-    uwer = {
-        "tag": TAG, "ckpt": "p184-tfnet-freeze-best.pt + kNN posterior refinement",
-        "n": len(sids), "WER_official": rep["WER_official"],
-        "uWER_pct": rep["uWER_pct"],
-        "uWER_n_classes": len(set(t for r in refs for t in r)),
-        "low_freq_max": 10,
-        "low_bucket": {"n_tokens": rep["low_n"], "WER_pct": rep["low_bucket_WER"]},
-        "high_bucket": {"n_tokens": rep["high_n"], "WER_pct": rep["high_bucket_WER"]},
-        "edits": {"ins": rep["ins"], "sub": rep["sub"], "del": rep["del"],
-                  "n_ref_tokens": rep["n_ref"],
-                  "micro_subdel_pct": rep["micro_subdel_pct"],
-                  "ins_rate_pct": rep["ins_rate_pct"]},
-        "nonblank_frame_ratio_pct": None,
-        "per_item": per_item,
-        "note": "H1 代表组合 lam=%.2f（护栏内 uWER 最低）；记忆库仅 train，PCA%d/K%d"
-                % (lam, PCA_DIM, KNN_K),
-    }
-    (M / (TAG + "-uwer.json")).write_text(
-        json.dumps(uwer, ensure_ascii=False, indent=2), encoding="utf-8")
+    def as_uwer(r, pi, tag, note):
+        return {
+            "tag": tag,
+            "ckpt": "p188_logp_p184.pt + kNN posterior refinement",
+            "n": len(sids), "WER_official": r["WER_official"],
+            "uWER_pct": r["uWER_pct"],
+            "uWER_n_classes": len(set(t for rr in refs for t in rr)),
+            "low_freq_max": 10,
+            "low_bucket": {"n_tokens": r["low_n"], "WER_pct": r["low_bucket_WER"]},
+            "high_bucket": {"n_tokens": r["high_n"], "WER_pct": r["high_bucket_WER"]},
+            "edits": {"ins": r["ins"], "sub": r["sub"], "del": r["del"],
+                      "n_ref_tokens": r["n_ref"],
+                      "micro_subdel_pct": r["micro_subdel_pct"],
+                      "ins_rate_pct": r["ins_rate_pct"]},
+            "nonblank_frame_ratio_pct": None,
+            "per_item": pi, "note": note,
+        }
+
+    # 同后验、同句序的 λ=0 基线：消除 p188 与重新前向之间的 0.07pp 系统偏差，
+    # 并让配对 bootstrap 真正按同一句配对（sid 已写入 per_item）。
+    rep0, pi0 = metrics(best_hyps[0.0])
+    (M / "p226-h1-base-uwer.json").write_text(json.dumps(
+        as_uwer(rep0, pi0, "p226-h1-base",
+                "同 p188 后验 / 同句序的 λ=0 基线（H1 配对照）"),
+        ensure_ascii=False, indent=2), encoding="utf-8")
+    print("same-posterior base WER=%.2f uWER=%.2f -> p226-h1-base-uwer.json"
+          % (rep0["WER_official"], rep0["uWER_pct"]), flush=True)
+
+    (M / (TAG + "-uwer.json")).write_text(json.dumps(
+        as_uwer(rep, per_item, TAG,
+                "H1 代表组合 lam=%.2f（护栏内 uWER 最低）；记忆库仅 train，PCA%d/K%d"
+                % (lam, PCA_DIM, KNN_K)),
+        ensure_ascii=False, indent=2), encoding="utf-8")
     (M / (TAG + "-scan.json")).write_text(json.dumps({
         "grid": grid, "chosen": chosen, "guard_count": len(guard),
         "lambdas": LAMBDAS, "pca_dim": PCA_DIM, "knn_k": KNN_K,

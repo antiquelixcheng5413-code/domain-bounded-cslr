@@ -38,6 +38,11 @@ def paired_bootstrap(base, cand, n_boot=20000, seed=42):
     c = np.asarray([x["edits"] for x in cand["per_item"]], dtype=np.float64)
     n = np.asarray([x["ref_n"] for x in base["per_item"]], dtype=np.float64)
     assert len(b) == len(c) == len(n), "paired sample mismatch"
+    # 审计：两边都有 sid 时必须逐句同序，否则配对 bootstrap 会错位（17:37 H1 的教训）
+    bs = [x.get("sid", "") for x in base["per_item"]]
+    cs = [x.get("sid", "") for x in cand["per_item"]]
+    if bs and cs and all(bs) and all(cs):
+        assert bs == cs, "paired sid order mismatch (bootstrap would be invalid)"
     rng = np.random.default_rng(seed)
     idx = rng.integers(0, len(n), size=(n_boot, len(n)))
     db = (b[idx].sum(1) - c[idx].sum(1)) / n[idx].sum(1) * 100.0

@@ -1,0 +1,104 @@
+{
+  "tag": "p226-h1",
+  "title": "H1 / P224-P226 检索增强 kNN 后验精修（RAC 分布插值）",
+  "kind": "decode",
+  "base_tag": "p226-h1-base",
+  "base": {
+    "tag": "p226-h1-base",
+    "ckpt": "p188_logp_p184.pt + kNN posterior refinement",
+    "n": 515,
+    "WER_official": 34.34,
+    "uWER_pct": 60.28,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.52
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.51
+    },
+    "edits": {
+      "ins": 90,
+      "sub": 693,
+      "del": 193,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 31.18,
+      "ins_rate_pct": 3.17
+    },
+    "nonblank_frame_ratio_pct": null,
+    "note": "同 p188 后验 / 同句序的 λ=0 基线（H1 配对照）"
+  },
+  "cand": {
+    "tag": "p226-h1",
+    "ckpt": "p188_logp_p184.pt + kNN posterior refinement",
+    "n": 515,
+    "WER_official": 34.31,
+    "uWER_pct": 60.21,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.38
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.47
+    },
+    "edits": {
+      "ins": 91,
+      "sub": 691,
+      "del": 193,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 31.1,
+      "ins_rate_pct": 3.2
+    },
+    "nonblank_frame_ratio_pct": null,
+    "note": "H1 代表组合 lam=0.05（护栏内 uWER 最低）；记忆库仅 train，PCA128/K32"
+  },
+  "train_curve": [],
+  "train_best_dev_wer": null,
+  "delta": {
+    "WER_official_improve_pp": 0.03,
+    "uWER_improve_pp": 0.07,
+    "low_bucket_improve_pp": 0.14,
+    "high_bucket_worsen_pp": -0.04,
+    "micro_subdel_worsen_pp": -0.08,
+    "ins_relative_increase": 0.0111,
+    "ins_base": 90,
+    "ins_cand": 91
+  },
+  "paired_bootstrap": {
+    "n_boot": 20000,
+    "delta_WER_pp": 0.035,
+    "ci95": [
+      -0.071,
+      0.144
+    ],
+    "ci_contains_zero": true
+  },
+  "lowfreq_bootstrap": {
+    "delta_pp": 0.145,
+    "ci95": [
+      0.0,
+      0.447
+    ],
+    "n_sentences": 430
+  },
+  "checks": {
+    "R1_uWER_improve_ge_2pp": false,
+    "R2_low_bucket_improve_ge_2pp": false,
+    "R3_high_bucket_worsen_le_1pp": true,
+    "R4_WER_official_degrade_le_1pp": true,
+    "R5_ins_increase_le_10pct": true,
+    "R6_micro_worsen_le_0.30pp": true,
+    "R8_lowfreq_CI_gt_0": false
+  },
+  "pre_registered": {
+    "fixed_at": "2026-11-07 23:30 CST (before any of tonight's experiments)",
+    "rule": "R1..R6 (+R7 for train) all must hold; tail metrics are primary",
+    "note": "不得事后调整；仅总量改善不算正向（D4/E0 教训）"
+  },
+  "verdict": "FAIL"
+}

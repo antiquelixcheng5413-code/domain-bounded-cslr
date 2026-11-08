@@ -36,14 +36,24 @@ $PY -u tools/blank_gov/p226_h1_knn.py > artifacts/logs_P226_h1_knn.log 2>&1
 rc=$?
 log "knn rc=$rc"
 grep -E "^lam=|chosen" artifacts/logs_P226_h1_knn.log >> "$LOG"
-if [ "$rc" -ne 0 ] || [ ! -f artifacts/metrics/blank-gov/p226-h1-uwer.json ]; then
+if [ "$rc" -ne 0 ] || [ ! -f artifacts/metrics/blank-gov/p226-h1-uwer.json ] \
+   || [ ! -f artifacts/metrics/blank-gov/p226-h1-base-uwer.json ]; then
   log "knn FAILED -> abort"; exit 1
 fi
 
 log "===== JUDGE R1-R8 ====="
-$PY -u tools/blank_gov/night_judge.py --tag p226-h1 --base p184-base \
+$PY -u tools/blank_gov/night_judge.py --tag p226-h1 --base p226-h1-base \
   --kind decode --title "H1 / P224-P226 检索增强 kNN 后验精修（RAC 分布插值）" \
   > artifacts/logs_P226_h1_judge.log 2>&1
+jrc=$?
+log "judge rc=$jrc"
 grep -E '"verdict"|R8|"delta_WER_pp"' artifacts/logs_P226_h1_judge.log >> "$LOG"
+if [ "$jrc" -ne 0 ] || [ ! -f artifacts/metrics/blank-gov/p226-h1-judge.json ]; then
+  log "JUDGE FAILED -> abort (no verdict)"; exit 1
+fi
 $PY -u tools/blank_gov/night_report.py --tag p226-h1 >> "$LOG" 2>&1
+rrc=$?
+if [ "$rrc" -ne 0 ] || [ ! -f docs/experiments/stage-p226-h1.md ]; then
+  log "REPORT FAILED -> abort"; exit 1
+fi
 log "===== H1 chain done ====="
