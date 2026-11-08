@@ -1,0 +1,273 @@
+{
+  "tag": "p228-i0",
+  "verdict": "FAIL",
+  "representative": null,
+  "rule_delta_pp": 2.0,
+  "base_group": "step1",
+  "base_WER_official": 34.34,
+  "audit_clean_in_range": true,
+  "clean_allowed_range": [
+    34.2,
+    34.6
+  ],
+  "groups": [
+    "step2",
+    "step1",
+    "repeat2",
+    "step3"
+  ],
+  "candidates": [
+    "step2",
+    "repeat2",
+    "step3"
+  ],
+  "checks": {
+    "step2": {
+      "delta_pp": -3.91,
+      "bootstrap_point_pp": -3.9057,
+      "ci95": [
+        -5.1437,
+        -2.6592
+      ],
+      "R1_delta": false,
+      "R2_ci": false,
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "R7_low_bucket": false,
+      "pass": false
+    },
+    "repeat2": {
+      "delta_pp": -5.28,
+      "bootstrap_point_pp": -5.278,
+      "ci95": [
+        -6.5316,
+        -4.0656
+      ],
+      "R1_delta": false,
+      "R2_ci": false,
+      "R3_high": false,
+      "R5_ins": false,
+      "R6_micro": false,
+      "R7_low_bucket": false,
+      "pass": false
+    },
+    "step3": {
+      "delta_pp": -14.08,
+      "bootstrap_point_pp": -14.0746,
+      "ci95": [
+        -15.7233,
+        -12.4162
+      ],
+      "R1_delta": false,
+      "R2_ci": false,
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "R7_low_bucket": false,
+      "pass": false
+    }
+  },
+  "deltas_all_pp": {
+    "step2": -3.91,
+    "step1": 0.0,
+    "repeat2": -5.28,
+    "step3": -14.08
+  },
+  "results": {
+    "step2": {
+      "tag": "p228-i0-step2",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 38.25,
+      "uWER_pct": 65.83,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 75.29
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 24.09
+      },
+      "edits": {
+        "ins": 48,
+        "sub": 715,
+        "del": 324,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 36.56,
+        "ins_rate_pct": 1.69
+      },
+      "nonblank_frame_ratio_pct": 22.6,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 461
+      },
+      "note": "I0 推理期时间分辨率扫描；指标口径与 night_eval_full.py 一致",
+      "resample": "step2",
+      "alignment": {
+        "T_conv_per_gloss_median": 4.29,
+        "T_conv_per_gloss_mean": 4.45,
+        "nonblank_frames_per_gloss_mean": 0.983
+      },
+      "T_conv_per_gloss_median": 4.29,
+      "nonblank_frames_per_gloss_mean": 0.983,
+      "n_padded_short": 3
+    },
+    "step1": {
+      "tag": "p228-i0-step1",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 34.34,
+      "uWER_pct": 60.28,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 70.52
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 18.51
+      },
+      "edits": {
+        "ins": 90,
+        "sub": 693,
+        "del": 193,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 31.18,
+        "ins_rate_pct": 3.17
+      },
+      "nonblank_frame_ratio_pct": 12.35,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 546
+      },
+      "note": "I0 推理期时间分辨率扫描；指标口径与 night_eval_full.py 一致",
+      "resample": "step1",
+      "alignment": {
+        "T_conv_per_gloss_median": 8.5,
+        "T_conv_per_gloss_mean": 8.81,
+        "nonblank_frames_per_gloss_mean": 1.059
+      },
+      "T_conv_per_gloss_median": 8.5,
+      "nonblank_frames_per_gloss_mean": 1.059,
+      "n_padded_short": 0
+    },
+    "repeat2": {
+      "tag": "p228-i0-repeat2",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 39.62,
+      "uWER_pct": 66.12,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 76.16
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 22.56
+      },
+      "edits": {
+        "ins": 114,
+        "sub": 789,
+        "del": 223,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 35.61,
+        "ins_rate_pct": 4.01
+      },
+      "nonblank_frame_ratio_pct": 6.36,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 515
+      },
+      "note": "I0 推理期时间分辨率扫描；指标口径与 night_eval_full.py 一致",
+      "resample": "repeat2",
+      "alignment": {
+        "T_conv_per_gloss_median": 17.0,
+        "T_conv_per_gloss_mean": 17.54,
+        "nonblank_frames_per_gloss_mean": 1.086
+      },
+      "T_conv_per_gloss_median": 17.0,
+      "nonblank_frames_per_gloss_mean": 1.086,
+      "n_padded_short": 0
+    },
+    "step3": {
+      "tag": "p228-i0-step3",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 48.42,
+      "uWER_pct": 77.57,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 86.42
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 35.02
+      },
+      "edits": {
+        "ins": 25,
+        "sub": 759,
+        "del": 592,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 47.54,
+        "ins_rate_pct": 0.88
+      },
+      "nonblank_frame_ratio_pct": 29.7,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 378
+      },
+      "note": "I0 推理期时间分辨率扫描；指标口径与 night_eval_full.py 一致",
+      "resample": "step3",
+      "alignment": {
+        "T_conv_per_gloss_median": 3.0,
+        "T_conv_per_gloss_mean": 3.04,
+        "nonblank_frames_per_gloss_mean": 0.888
+      },
+      "T_conv_per_gloss_median": 3.0,
+      "nonblank_frames_per_gloss_mean": 0.888,
+      "n_padded_short": 74
+    }
+  },
+  "I1": {
+    "tag": "p228-i1",
+    "n": 515,
+    "rule": "Spearman |rho| >= 0.20 且 bootstrap 95% CI 不含 0",
+    "rho_TL_vs_del_rate": -0.1529,
+    "ci95": [
+      -0.2354,
+      -0.0689
+    ],
+    "ci_excludes_zero": true,
+    "related": false,
+    "verdict": "NOT_RELATED",
+    "rho_TL_vs_sub_rate": -0.0799,
+    "T_conv_per_gloss": {
+      "p10": 6.0,
+      "median": 8.5,
+      "mean": 8.81,
+      "p90": 11.8
+    },
+    "del_rate_mean_pct": 6.02,
+    "buckets": {
+      "low_TL_half": {
+        "n": 262,
+        "del_rate_pct": 7.16
+      },
+      "high_TL_half": {
+        "n": 253,
+        "del_rate_pct": 4.84
+      }
+    },
+    "note": "解释性诊断，不改变 I0 判定；del_rate 用 p227-h2a-clean 的逐句 del/ref_n，T_conv 用 p188 后验长度，L 用 dev 参考 gloss 数"
+  },
+  "prereg": "docs/planning/I0-PREREG-2026-11-08.md",
+  "note": "零训练、参数无关；FAIL 后不投 I2、不进 test；repeat2 的重复帧不增加视觉信息，只增加 CTC 可发射位置"
+}

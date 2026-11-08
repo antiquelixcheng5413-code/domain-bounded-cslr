@@ -1,0 +1,32 @@
+{
+  "tag": "p228-i1",
+  "n": 515,
+  "rule": "Spearman |rho| >= 0.20 且 bootstrap 95% CI 不含 0",
+  "rho_TL_vs_del_rate": -0.1529,
+  "ci95": [
+    -0.2354,
+    -0.0689
+  ],
+  "ci_excludes_zero": true,
+  "related": false,
+  "verdict": "NOT_RELATED",
+  "rho_TL_vs_sub_rate": -0.0799,
+  "T_conv_per_gloss": {
+    "p10": 6.0,
+    "median": 8.5,
+    "mean": 8.81,
+    "p90": 11.8
+  },
+  "del_rate_mean_pct": 6.02,
+  "buckets": {
+    "low_TL_half": {
+      "n": 262,
+      "del_rate_pct": 7.16
+    },
+    "high_TL_half": {
+      "n": 253,
+      "del_rate_pct": 4.84
+    }
+  },
+  "note": "解释性诊断，不改变 I0 判定；del_rate 用 p227-h2a-clean 的逐句 del/ref_n，T_conv 用 p188 后验长度，L 用 dev 参考 gloss 数"
+}
