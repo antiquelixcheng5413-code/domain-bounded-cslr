@@ -1,0 +1,16 @@
+{
+  "cand": "p238-k1-s43",
+  "base": "p184-base",
+  "n": 515,
+  "sums_verified": {
+    "edits": 981,
+    "ref_n": 2842,
+    "ins": 56,
+    "sub": 673,
+    "del": 252,
+    "low_n": 692,
+    "low_err": 482
+  },
+  "aggregates_unchanged": true,
+  "timestamp": "2026-11-09 05:19:08"
+}

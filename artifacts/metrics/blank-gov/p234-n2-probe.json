@@ -150,5 +150,5 @@
     "R6_micro_max_pp": 0.3,
     "selection": "guard-pass 内 WER 最低；否则 λ=0 直接 FAIL"
   },
-  "timestamp": "2026-11-09 01:06:21"
+  "timestamp": "2026-11-09 01:27:32"
 }
