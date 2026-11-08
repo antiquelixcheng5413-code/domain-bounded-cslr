@@ -122,13 +122,26 @@ else
     log "S3 TRAIN FAILED（rc/轮数检查）-> ABORT 该阶段，不评估不判定"
     state "S3-TRAIN-FAILED"
   else
-    log "S3 训练完成 6 轮，开始评估"
-    $PY -u tools/blank_gov/night_eval_full.py \
-      --ckpt artifacts/checkpoints/p238-k1-s43-best.pt --tag p238-k1-s43 \
-      > artifacts/logs_P238_k1_s43_eval.log 2>&1
-    erc=$?
-    log "S3 eval rc=$erc"
+    log "S3 训练完成 6 轮，等待 GPU 恢复后评估（batch=1，最多 3 次）"
+    # 01:05 K1 的教训：长时训练后 WSL 驱动报 device not ready，
+    # 需等 ~150s 才恢复；batch=1 降低 GPU mapping 需求。纯工程加固，不改判据。
+    sleep 150
+    erc=1
+    for j in 1 2 3; do
+      $PY -u tools/blank_gov/night_eval_full.py \
+        --ckpt artifacts/checkpoints/p238-k1-s43-best.pt --tag p238-k1-s43 --batch 1 \
+        > artifacts/logs_P238_k1_s43_eval.log 2>&1
+      erc=$?
+      log "S3 eval attempt $j rc=$erc"
+      [ "$erc" -eq 0 ] && break
+      sleep 150
+    done
     if [ "$erc" -eq 0 ]; then
+      # 01:24 教训：历史 base 收据句序与自然句序不同，需按 sid 对齐，
+      # 否则 night_judge 的配对同序断言会拦下（聚合指标一字不变）。
+      $PY -u tools/blank_gov/n2_align_peritem.py --cand p238-k1-s43 --base p184-base \
+        >> "$LOG" 2>&1
+      log "S3 align rc=$?"
       $PY -u tools/blank_gov/night_judge.py --tag p238-k1-s43 --base p184-base \
         --log "$S43LOG" --kind train \
         --title "N2-S3 / K1 语料合成 seed 43 复跑（2 seed 稳健性）" \
@@ -160,6 +173,7 @@ for f in \
   tools/blank_gov/p234_n2_spike_fusion.py \
   tools/blank_gov/p235_n2_k1_audit.py \
   tools/blank_gov/night2_summary.py \
+  tools/blank_gov/n2_align_peritem.py \
   tools/blank_gov/night2_chain.sh; do
   [ -f "$f" ] && git add "$f"
 done

@@ -50,7 +50,11 @@ def main():
     k1_uw = k1u.get("uWER_pct") if k1u else None
     k1_low = (k1u.get("low_bucket") or {}).get("WER_pct") if k1u else None
     k1_high = (k1u.get("high_bucket") or {}).get("WER_pct") if k1u else None
-    k1_delta = (k1j.get("delta") or {}).get("delta_WER_pp") if k1j else None
+    k1_delta = None
+    if k1j:
+        k1_delta = ((k1j.get("paired_bootstrap") or {}).get("delta_WER_pp")
+                    if (k1j.get("paired_bootstrap") or {}).get("delta_WER_pp") is not None
+                    else (k1j.get("delta") or {}).get("WER_official_improve_pp"))
     k1_ci = ((k1j.get("paired_bootstrap") or {}).get("ci95")
              if k1j else None)
 
