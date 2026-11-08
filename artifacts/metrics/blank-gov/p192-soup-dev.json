@@ -1,0 +1,13 @@
+{
+  "a": "p184-tfnet-freeze-best",
+  "b": "p184b-frozen-heads-best",
+  "split": "dev",
+  "n": 515,
+  "WER": {
+    "corpus_split": 34.1,
+    "sentmean_split": 33.77,
+    "corpus_raw": 34.1,
+    "sentmean_raw": 33.77,
+    "corpus": 34.1
+  }
+}

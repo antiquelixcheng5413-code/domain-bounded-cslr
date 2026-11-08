@@ -1,0 +1,45 @@
+{
+  "tag": "p222",
+  "kind": "g0_precondition_diagnostic",
+  "train_samples": 32,
+  "skipped_long_samples": 0,
+  "batch_size": 1,
+  "max_frames": 400,
+  "train_greedy_WER_pct": 1.648,
+  "n_train_greedy_sub_pairs": 2,
+  "greedy_unique": 2,
+  "greedy_dev_hit": 1,
+  "greedy_recall": 0.0017,
+  "dev_unique_confusion_pairs": 606,
+  "topk": {
+    "k1": {
+      "n_pairs_raw": 181,
+      "unique_pairs": 132,
+      "dev_hit": 11,
+      "recall": 0.0182,
+      "random_recall": 0.00165,
+      "lift": 11.0
+    },
+    "k2": {
+      "n_pairs_raw": 362,
+      "unique_pairs": 257,
+      "dev_hit": 15,
+      "recall": 0.0248,
+      "random_recall": 0.00165,
+      "lift": 15.0
+    },
+    "k3": {
+      "n_pairs_raw": 543,
+      "unique_pairs": 388,
+      "dev_hit": 19,
+      "recall": 0.0314,
+      "random_recall": 0.00165,
+      "lift": 19.0
+    }
+  },
+  "pre_registered": {
+    "fixed_at": "2026-11-08 08:25 CST (before forward pass)",
+    "rule": "k=2 recall>=0.20 AND lift>=3.0 -> PRECONDITION_PASS else STOP"
+  },
+  "verdict": "STOP"
+}

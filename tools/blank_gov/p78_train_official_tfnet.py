@@ -882,6 +882,40 @@ def main() -> None:
                     help="P196：WE/WC 辅助约束权重（0=关闭）。WE=词存在性"
                          "（对逐帧 max 做多标签 BCE），WC=词数回归（Σ(1-p_blank)"
                          " 对齐真实词数）；零推理开销，无新增参数")
+    ap.add_argument("--cons-weight", type=float, default=0.0,
+                    help="P208/D2：多视图一致性正则权重（0=关闭，不改变默认行为）。"
+                         "两个视图各做一次前向，主 CTC 仍只用第一视图；"
+                         "对称 KL 按非 blank 帧加权，避免 CTC 峰值分布里 blank 主导")
+    ap.add_argument("--cons-noise", type=float, default=0.05,
+                    help="P208/D2：第二视图的高斯扰动幅度（输入已归一化到 [-1,1]）")
+    ap.add_argument("--cb-alpha", type=float, default=0.0,
+                    help="P210/D4：类平衡样本加权强度（0=关闭，不改变默认行为）。"
+                         "按句内 gloss 的 train 频次稀有度给 CTC loss 加权，"
+                         "权重归一化到均值 1；针对低频实词识别差")
+    ap.add_argument("--la-tau", type=float, default=0.0,
+                    help="P213/F1：训练期 logit adjustment 强度（0=关闭，不改变默认行为）。"
+                         "la(lp)=log_softmax(lp - tau*log pi_c)，blank 不动，推理零开销")
+    ap.add_argument("--la-pi-power", type=float, default=1.0,
+                    help="P213/F1：类先验指数（1.0=标准 LA，<1 更温和）")
+    ap.add_argument("--vta-weight", type=float, default=0.0,
+                    help="P214/F2：视觉-文本语义原型对齐权重（0=关闭）。"
+                         "训练期-only，推理零开销；用 Qwen gloss 嵌入牵引低频类原型")
+    ap.add_argument("--vta-emb", default="artifacts/cache/p214_vta_target.npy",
+                    help="P214/F2：语义目标 [C,1024]")
+    ap.add_argument("--vta-mask", default="artifacts/cache/p214_vta_mask.npy",
+                    help="P214/F2：类别权重 [C]")
+    ap.add_argument("--csgc-confusion", default="",
+                    help="P223/G1：train 混淆对表 json（confusion map）。"
+                         "空=严格保持 E1 原行为；给定时 CSGC 负类优先取真实混淆类")
+    ap.add_argument("--csgc-weight", type=float, default=0.0,
+                    help="P212/E1：跨句 gloss 原型对比损失权重（0=关闭）。"
+                         "训练期-only，推理零开销；原型用 NormLinear 权重初始化")
+    ap.add_argument("--csgc-momentum", type=float, default=0.99,
+                    help="P212/E1：gloss 原型动量")
+    ap.add_argument("--csgc-tau", type=float, default=0.07,
+                    help="P212/E1：InfoNCE 温度")
+    ap.add_argument("--csgc-nneg", type=int, default=16,
+                    help="P212/E1：hard negative 数量")
     ap.add_argument("--adapter", default="none", choices=["none", "conformer"],
                     help="P198：在 temporal_model / temporal_model1 输出后插 Conformer "
                          "时序适配器（bottleneck 1024→d→1024，零初始化 ⇒ 初始恒等）")
@@ -1200,6 +1234,94 @@ def main() -> None:
 
     # ★ 官方的 CTC 配置（zero_infinity=True 是关键，我 P72 就是漏了这行导致永久 nan）
     ctc_loss = torch.nn.CTCLoss(blank=0, reduction="none", zero_infinity=True)
+    # P213/F1：训练期 logit adjustment（Menon ICLR21 / Balanced Softmax）
+    #   pi_c 走训练实际路径 DPM.PreWords -> word2idx，与 D4 频次表同口径。
+    #   la_tau=0 时 la_lp 原样返回，严格等价默认行为。
+    LA_LOGPI = None
+    if a.la_tau > 0:
+        _tr = read_csv_split("train.csv")
+        _cnt = np.zeros(wordSetNum + 1, dtype=np.float64)
+        for _sid, (_p, _seq) in _tr.items():
+            for _t in DPM.PreWords(str(_seq).split("/")):
+                _g = word2idx.get(_t)
+                if _g is not None and 0 <= _g < len(_cnt):
+                    _cnt[_g] += 1.0
+        _cnt[1:] = np.maximum(_cnt[1:], 1.0)
+        _pi = _cnt[1:] / _cnt[1:].sum()
+        _logpi = np.zeros(wordSetNum + 1, dtype=np.float32)
+        _logpi[1:] = (a.la_pi_power * np.log(_pi)).astype(np.float32)
+        LA_LOGPI = torch.from_numpy(_logpi).to(dev).view(1, 1, -1)
+        print("LA-CTC: tau=%.3f pi_power=%.2f  logpi[1:] min=%.3f max=%.3f"
+              % (a.la_tau, a.la_pi_power, float(_logpi[1:].min()),
+                 float(_logpi[1:].max())), flush=True)
+
+    def la_lp(lp):
+        """输入已是 log-prob [T,B,C]；只在训练 loss 上使用。"""
+        if LA_LOGPI is None:
+            return lp
+        z = lp.float() - a.la_tau * LA_LOGPI.to(lp.device, torch.float32)
+        return torch.log_softmax(z, dim=-1).to(lp.dtype)
+    # P214/F2：视觉-文本语义原型对齐（训练期-only，投影固定无新参数）
+    VTA_TARGET = None
+    VTA_MASK = None
+    if a.vta_weight > 0:
+        # 链保证 cwd = 仓库根；默认参数为相对路径
+        _t = np.load(a.vta_emb)
+        _m = np.load(a.vta_mask)
+        VTA_TARGET = torch.from_numpy(_t.astype("float32")).to(dev)
+        VTA_MASK = torch.from_numpy(_m.astype("float32")).to(dev)
+        print("VTA: target %s mask %s  low-freq weight=1.0 classes=%d"
+              % (tuple(VTA_TARGET.shape), tuple(VTA_MASK.shape),
+                 int((VTA_MASK >= 0.99).sum())), flush=True)
+    # P212/E1：跨句 gloss 原型对比（训练期-only）
+    global CSGC_BANK, CSGC_CAP
+    CSGC_BANK, CSGC_CAP = None, None
+    if a.csgc_weight > 0:
+        from csgc_module import GlossPrototypeBank, FeatureCapture
+        _cm = {}
+        if a.csgc_confusion:
+            import json as _json
+            _d = _json.loads(Path(a.csgc_confusion).read_text(encoding="utf-8"))
+            _cm = _d.get("map", _d)
+            print("G1 confusion map: %d gloss / %d pairs <- %s"
+                  % (len(_cm), sum(len(v) for v in _cm.values()),
+                     a.csgc_confusion), flush=True)
+        CSGC_BANK = GlossPrototypeBank(
+            model.classifier11.weight, momentum=a.csgc_momentum,
+            tau=a.csgc_tau, n_neg=a.csgc_nneg, conf_map=_cm).to(dev)
+        CSGC_CAP = FeatureCapture().attach(model)
+        print("CSGC: proto %s, momentum %.3f, tau %.3f, nneg %d"
+              % (tuple(CSGC_BANK.proto.shape), a.csgc_momentum,
+                 a.csgc_tau, a.csgc_nneg), flush=True)
+    # P210/D4：train 标注的 gloss 频次表（按 word2idx 索引），供类平衡加权用
+    CB_FREQ = None
+    if a.cb_alpha > 0:
+        try:
+            # 🔴 走训练实际路径：DPM.PreWords(gloss.split("/")) → word2idx，
+            #    与 RGBSeqDataset.__init__ 的 ids 构造逐字一致。
+            #    不能用原始字符串（最2/很1/帮助（我）等变体词条会被归一化，
+            #    按原始串查表会漏掉 434 类、1703 次出现）。
+            _tr = read_csv_split("train.csv")
+            _cnt = np.zeros(wordSetNum + 1, dtype=np.float64)
+            _n_miss = 0
+            for _sid, (_p, _seq) in _tr.items():
+                for _t in DPM.PreWords(str(_seq).split("/")):
+                    _gi = word2idx.get(_t)
+                    if _gi is not None and 0 <= _gi < len(_cnt):
+                        _cnt[_gi] += 1.0
+                    else:
+                        _n_miss += 1
+            CB_FREQ = _cnt
+            print("CB_FREQ: non-zero %d / %d, median %.1f, min %.1f, "
+                  "miss(含表头/UNK)=%d"
+                  % (int((_cnt > 0).sum()), len(_cnt),
+                     float(np.median(_cnt[_cnt > 0])) if (_cnt > 0).any() else 0,
+                     float(_cnt[_cnt > 0].min()) if (_cnt > 0).any() else 0,
+                     _n_miss), flush=True)
+        except Exception as _e:
+            print("CB_FREQ build FAILED: %r (fallback: no weighting)" % _e,
+                  flush=True)
+            CB_FREQ = None
     kld = DPM.SeqKD(T=8)
     kd_ctx = None
     if a.kd_weight > 0:
@@ -1441,6 +1563,8 @@ def main() -> None:
             vid = vid.to(dev)                      # [B,T,3,H,W]
             if LM_FUSE is not None:
                 LM_FUSE.set_sids(_sids)
+            if CSGC_CAP is not None:
+                CSGC_CAP.reset()
             with torch.amp.autocast("cuda", enabled=a.amp_bf16,
                                     dtype=torch.bfloat16):
                 out = model(vid, dl, True)
@@ -1460,7 +1584,26 @@ def main() -> None:
                 continue
             #训练时统一用 logProbs1 做主 CTC
             main_lp = ls(out[0])
-            loss_ctc = ctc_loss(main_lp, tgt, lgt, tgt_len.cpu()).mean()
+            _ctc_per = ctc_loss(la_lp(main_lp), tgt, lgt, tgt_len.cpu())
+            if a.cb_alpha > 0 and CB_FREQ is not None:
+                _ws = []
+                _flat = tgt.view(-1).tolist()
+                _off = 0
+                for _b in range(_ctc_per.shape[0]):
+                    _n = int(tgt_len[_b])
+                    _ids_b = _flat[_off:_off + _n]
+                    _off += _n
+                    _inv = [1.0 / ((CB_FREQ[g] + 1.0) ** 0.5)
+                            for g in _ids_b if 0 < g < len(CB_FREQ)]
+                    _ws.append(float(np.mean(_inv)) if _inv else 0.0)
+                _w = np.asarray(_ws, dtype=np.float64)
+                _w = _w / max(_w.mean(), 1e-8)
+                _w = torch.as_tensor(1.0 + a.cb_alpha * (_w - 1.0),
+                                     dtype=_ctc_per.dtype,
+                                     device=_ctc_per.device)
+                loss_ctc = (_ctc_per * _w).mean()
+            else:
+                loss_ctc = _ctc_per.mean()
             # 🔴 label smoothing：CTC 项替换成 (1-β)·CTC + β·[对均匀分布的平均 CE]
             #    β=0 时严格等价（(1-0)·CTC + 0·penalty）⇒ 默认行为不变
             if a.label_smoothing > 0:
@@ -1468,16 +1611,16 @@ def main() -> None:
                             + a.label_smoothing * ls_penalty(main_lp, lgt))
             if a.module == "TFNet":
                 # 官方 Train.py 210-223：4 个 CTC + 2 个 SeqKD(×25) + 1 个融合 CTC
-                loss = (ctc_loss(ls(out[4]), tgt, lgt, tgt_len.cpu()).mean()
-                        + ctc_loss(ls(out[2]), tgt, lgt, tgt_len.cpu()).mean()
+                loss = (ctc_loss(la_lp(ls(out[4])), tgt, lgt, tgt_len.cpu()).mean()
+                        + ctc_loss(la_lp(ls(out[2])), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[3], out[2], use_blank=False)
-                        + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
+                        + ctc_loss(la_lp(ls(out[1])), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[1], out[0], use_blank=False)
                         + loss_ctc)
             else:
                 # 官方 CorrNet/VAC/SEN 分支：2 个 CTC + 1 个 SeqKD(×25)
                 loss = (loss_ctc
-                        + ctc_loss(ls(out[1]), tgt, lgt, tgt_len.cpu()).mean()
+                        + ctc_loss(la_lp(ls(out[1])), tgt, lgt, tgt_len.cpu()).mean()
                         + 25.0 * kld(out[1], out[0], use_blank=False))
             # P185：时间多尺度 CTC——融合输出按 stride 池化后再算 CTC，
             #   迫使时序对齐在粗时间尺度上同样成立（USTM 式中间监督的轻量等价）
@@ -1554,6 +1697,42 @@ def main() -> None:
                 _wc = ((_cnt - tgt_len.float().to(_cnt.device))
                        / tgt_len.float().to(_cnt.device).clamp_min(1.0)).abs().mean()
                 loss = loss + a.aux_ww * (_bce + _wc)
+            # P208 / D2：多视图一致性正则（R-Drop / CR-CTC 风格）
+            # 第二视图 = 输入加轻微高斯扰动；不改帧数 ⇒ CTC 对齐与 lgt 完全不变。
+            # 对称 KL 用 detach 的对方分布作 target（标准 R-Drop 做法，双向都有梯度）；
+            # 按非 blank 帧加权，避免 CTC 峰值分布中 ~87% blank 帧主导 KL。
+            if a.cons_weight > 0:
+                _vid2 = (vid + a.cons_noise * torch.randn_like(vid)).clamp(-1.0, 1.0)
+                with torch.amp.autocast("cuda", enabled=a.amp_bf16,
+                                        dtype=torch.bfloat16):
+                    _out2 = model(_vid2, dl, True)
+                _out2 = [(o.float() if (torch.is_tensor(o) and o.is_floating_point())
+                          else o) for o in _out2]
+                _lp2 = ls(_out2[0])
+                if torch.isfinite(_lp2).all():
+                    _p1 = main_lp.detach().exp()
+                    _p2 = _lp2.detach().exp()
+                    _T = min(main_lp.shape[0], _lp2.shape[0])
+                    _wnb = 1.0 - 0.5 * (_p1[:_T, :, 0] + _p2[:_T, :, 0])
+                    _msk = (torch.arange(_T, device=main_lp.device)[:, None]
+                            < lgt.to(main_lp.device).long()[None, :])
+                    _kl1 = F.kl_div(_lp2[:_T], _p1[:_T], reduction="none").sum(-1)
+                    _kl2 = F.kl_div(main_lp[:_T], _p2[:_T], reduction="none").sum(-1)
+                    _kl = 0.5 * (_kl1 + _kl2)
+                    _w = (_wnb * _msk.float()).detach()
+                    _cons = (_kl * _w).sum() / _w.sum().clamp_min(1.0)
+                    loss = loss + a.cons_weight * _cons
+            # P212/E1：跨句 gloss 原型对比损失（训练期-only）
+            if CSGC_BANK is not None and CSGC_CAP.feat is not None:
+                _cl = CSGC_BANK(main_lp, CSGC_CAP.feat, tgt, tgt_len, lgt)
+                loss = loss + a.csgc_weight * _cl
+            # P214/F2：类原型 -> 文本语义目标的 cosine 一致性（低频类加权）
+            if VTA_TARGET is not None:
+                _wn = F.normalize(model.classifier11.weight.float(), dim=0)
+                _cos = (_wn * VTA_TARGET.t()).sum(0)
+                _mm = VTA_MASK
+                loss = loss + a.vta_weight * (
+                    ((1.0 - _cos) * _mm).sum() / _mm.sum().clamp_min(1.0))
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)

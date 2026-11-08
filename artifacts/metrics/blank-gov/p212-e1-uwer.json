@@ -1,0 +1,18 @@
+{
+  "tag": "p212-e1",
+  "ckpt": "artifacts/checkpoints/p212-e1-csgc-best.pt",
+  "n": 515,
+  "WER_official": 34.41,
+  "uWER_pct": 59.26,
+  "uWER_n_classes": 774,
+  "low_freq_max": 10,
+  "low_bucket": {
+    "n_tokens": 692,
+    "WER_pct": 69.08
+  },
+  "high_bucket": {
+    "n_tokens": 2150,
+    "WER_pct": 19.12
+  },
+  "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+}

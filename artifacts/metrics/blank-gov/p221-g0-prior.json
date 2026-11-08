@@ -1,0 +1,87 @@
+{
+  "tag": "p221",
+  "kind": "prerequisite_diagnostic_no_verdict",
+  "train_sentences": 4974,
+  "n_dev_sub_pairs": 693,
+  "n_unique_pairs": 606,
+  "ref_train_freq_median": 8.0,
+  "hyp_train_freq_median": 31.0,
+  "ref_freq_le10_share": 0.5628,
+  "hyp_freq_le10_share": 0.2294,
+  "both_freq_le10_share": 0.1732,
+  "pair_cooccur_in_train_sentence": 101,
+  "pair_cooccur_rate": 0.1667,
+  "random_pair_cooccur_rate": 0.012,
+  "top_pairs": [
+    {
+      "ref": "？",
+      "hyp": "。",
+      "count": 25,
+      "ref_freq": 1397,
+      "hyp_freq": 3576
+    },
+    {
+      "ref": "。",
+      "hyp": "？",
+      "count": 18,
+      "ref_freq": 3576,
+      "hyp_freq": 1397
+    },
+    {
+      "ref": "学",
+      "hyp": "学习",
+      "count": 4,
+      "ref_freq": 17,
+      "hyp_freq": 31
+    },
+    {
+      "ref": "他",
+      "hyp": "那",
+      "count": 4,
+      "ref_freq": 204,
+      "hyp_freq": 68
+    },
+    {
+      "ref": "需要",
+      "hyp": "要",
+      "count": 4,
+      "ref_freq": 22,
+      "hyp_freq": 214
+    },
+    {
+      "ref": "那",
+      "hyp": "这",
+      "count": 4,
+      "ref_freq": 68,
+      "hyp_freq": 446
+    },
+    {
+      "ref": "吃饭",
+      "hyp": "吃",
+      "count": 3,
+      "ref_freq": 30,
+      "hyp_freq": 75
+    },
+    {
+      "ref": "任务",
+      "hyp": "真",
+      "count": 3,
+      "ref_freq": 4,
+      "hyp_freq": 77
+    },
+    {
+      "ref": "我",
+      "hyp": "你",
+      "count": 3,
+      "ref_freq": 1313,
+      "hyp_freq": 1286
+    },
+    {
+      "ref": "漂亮",
+      "hyp": "美",
+      "count": 3,
+      "ref_freq": 12,
+      "hyp_freq": 14
+    }
+  ]
+}

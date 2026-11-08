@@ -1,0 +1,51 @@
+{
+  "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+  "beam": 12,
+  "topk": 12,
+  "nbest": 8,
+  "greedy": {
+    "WER_official": 34.41,
+    "edits": 978,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 19.99,
+    "gap_to_sota_TFNet": 7.69,
+    "WER_excl_unk": 34.41,
+    "WER_per_sentence": 189.9029,
+    "exact_rate_pct": 13.59,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "beam_1best": {
+    "WER_official": 34.34,
+    "edits": 976,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 20.06,
+    "gap_to_sota_TFNet": 7.76,
+    "WER_excl_unk": 34.34,
+    "WER_per_sentence": 189.5146,
+    "exact_rate_pct": 13.59,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "blank_bias_grid": {
+    "-0.6": 34.2,
+    "0.0": 34.41,
+    "0.6": 34.94
+  },
+  "beam_oracle_wer": 25.44,
+  "lm_grid": {
+    "0.0": 34.34,
+    "0.3": 34.87,
+    "0.6": 36.45,
+    "1.0": 37.12,
+    "1.5": 37.4,
+    "2.0": 37.58
+  },
+  "best_lambda": 0.0,
+  "best_wer": 34.34,
+  "n_sentences": 515
+}

@@ -1,0 +1,24 @@
+{
+  "tag": "p219",
+  "kind": "diagnostic_no_verdict",
+  "self_check": {
+    "sentences": 515,
+    "dp_equals_official": true
+  },
+  "n_sub_pairs": 693,
+  "low_freq_ref_share": 0.5628,
+  "mean_cos_error_pairs": 0.1974,
+  "mean_cos_conditional_random": -0.001,
+  "mean_cos_unconditional_random": -0.001,
+  "mean_cos_correct_adjacent": 0.0817,
+  "lift_vs_conditional": 194.9,
+  "paired_bootstrap": {
+    "delta_error_minus_cond": 0.1984,
+    "ci95": [
+      0.1747,
+      0.2214
+    ],
+    "ci_excludes_zero": true
+  },
+  "note": "严格 Levenshtein 回溯；嵌入 = Qwen2.5-1.5B gloss 文本 PCA1024（F2 副产物）"
+}

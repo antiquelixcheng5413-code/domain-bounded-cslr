@@ -1,0 +1,17 @@
+{
+  "tag": "p216-e3",
+  "landmark_dir": "ce-csl-landmark48",
+  "n_files": 514,
+  "raw_shape": [
+    48,
+    368
+  ],
+  "n_usable": 514,
+  "n_distinct_main_gloss": 162,
+  "one_nn_top1_pct": 27.44,
+  "random_baseline_pct": 0.617,
+  "lift_over_random": 44.45,
+  "kmeans_ami": 0.0599,
+  "pre_registered": "1-NN top1>=5% AND AMI>=0.10",
+  "verdict": "STOP"
+}

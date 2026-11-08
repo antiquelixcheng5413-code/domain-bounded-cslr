@@ -1,0 +1,508 @@
+{
+  "tag": "p217-posthoc",
+  "kind": "exploratory_no_verdict",
+  "grid": {
+    "tau": [
+      0.0,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "beta": [
+      0.0,
+      1.0,
+      2.0
+    ]
+  },
+  "results": {
+    "p184-base": [
+      {
+        "tau": 0.0,
+        "beta": 0.0,
+        "WER_official": 34.41,
+        "uWER_pct": 60.41,
+        "low_bucket_WER": 70.66,
+        "high_bucket_WER": 18.56,
+        "ins": 90,
+        "micro_subdel_pct": 31.25
+      },
+      {
+        "tau": 0.0,
+        "beta": 1.0,
+        "WER_official": 34.76,
+        "uWER_pct": 62.84,
+        "low_bucket_WER": 73.12,
+        "high_bucket_WER": 20.14,
+        "ins": 49,
+        "micro_subdel_pct": 33.04
+      },
+      {
+        "tau": 0.0,
+        "beta": 2.0,
+        "WER_official": 36.84,
+        "uWER_pct": 67.37,
+        "low_bucket_WER": 77.6,
+        "high_bucket_WER": 22.84,
+        "ins": 19,
+        "micro_subdel_pct": 36.17
+      },
+      {
+        "tau": 0.1,
+        "beta": 0.0,
+        "WER_official": 35.78,
+        "uWER_pct": 64.65,
+        "low_bucket_WER": 74.28,
+        "high_bucket_WER": 22.14,
+        "ins": 27,
+        "micro_subdel_pct": 34.83
+      },
+      {
+        "tau": 0.1,
+        "beta": 1.0,
+        "WER_official": 36.07,
+        "uWER_pct": 64.68,
+        "low_bucket_WER": 74.28,
+        "high_bucket_WER": 22.7,
+        "ins": 23,
+        "micro_subdel_pct": 35.26
+      },
+      {
+        "tau": 0.1,
+        "beta": 2.0,
+        "WER_official": 39.48,
+        "uWER_pct": 68.9,
+        "low_bucket_WER": 78.32,
+        "high_bucket_WER": 26.56,
+        "ins": 9,
+        "micro_subdel_pct": 39.16
+      },
+      {
+        "tau": 0.2,
+        "beta": 0.0,
+        "WER_official": 36.7,
+        "uWER_pct": 63.81,
+        "low_bucket_WER": 72.98,
+        "high_bucket_WER": 23.95,
+        "ins": 23,
+        "micro_subdel_pct": 35.89
+      },
+      {
+        "tau": 0.2,
+        "beta": 1.0,
+        "WER_official": 36.56,
+        "uWER_pct": 62.26,
+        "low_bucket_WER": 70.52,
+        "high_bucket_WER": 24.37,
+        "ins": 27,
+        "micro_subdel_pct": 35.61
+      },
+      {
+        "tau": 0.2,
+        "beta": 2.0,
+        "WER_official": 38.67,
+        "uWER_pct": 63.37,
+        "low_bucket_WER": 71.24,
+        "high_bucket_WER": 27.35,
+        "ins": 18,
+        "micro_subdel_pct": 38.04
+      },
+      {
+        "tau": 0.3,
+        "beta": 0.0,
+        "WER_official": 37.37,
+        "uWER_pct": 58.27,
+        "low_bucket_WER": 65.32,
+        "high_bucket_WER": 25.58,
+        "ins": 60,
+        "micro_subdel_pct": 35.26
+      },
+      {
+        "tau": 0.3,
+        "beta": 1.0,
+        "WER_official": 40.92,
+        "uWER_pct": 59.4,
+        "low_bucket_WER": 65.32,
+        "high_bucket_WER": 28.09,
+        "ins": 107,
+        "micro_subdel_pct": 37.16
+      },
+      {
+        "tau": 0.3,
+        "beta": 2.0,
+        "WER_official": 47.68,
+        "uWER_pct": 61.44,
+        "low_bucket_WER": 66.76,
+        "high_bucket_WER": 35.63,
+        "ins": 127,
+        "micro_subdel_pct": 43.21
+      }
+    ],
+    "p212-e1": [
+      {
+        "tau": 0.0,
+        "beta": 0.0,
+        "WER_official": 34.41,
+        "uWER_pct": 59.26,
+        "low_bucket_WER": 69.08,
+        "high_bucket_WER": 19.12,
+        "ins": 89,
+        "micro_subdel_pct": 31.28
+      },
+      {
+        "tau": 0.0,
+        "beta": 1.0,
+        "WER_official": 34.45,
+        "uWER_pct": 60.9,
+        "low_bucket_WER": 70.81,
+        "high_bucket_WER": 20.19,
+        "ins": 55,
+        "micro_subdel_pct": 32.51
+      },
+      {
+        "tau": 0.0,
+        "beta": 2.0,
+        "WER_official": 36.95,
+        "uWER_pct": 66.55,
+        "low_bucket_WER": 76.01,
+        "high_bucket_WER": 23.44,
+        "ins": 20,
+        "micro_subdel_pct": 36.24
+      },
+      {
+        "tau": 0.1,
+        "beta": 0.0,
+        "WER_official": 35.75,
+        "uWER_pct": 63.82,
+        "low_bucket_WER": 73.27,
+        "high_bucket_WER": 22.42,
+        "ins": 27,
+        "micro_subdel_pct": 34.8
+      },
+      {
+        "tau": 0.1,
+        "beta": 1.0,
+        "WER_official": 36.28,
+        "uWER_pct": 64.38,
+        "low_bucket_WER": 73.41,
+        "high_bucket_WER": 23.26,
+        "ins": 23,
+        "micro_subdel_pct": 35.47
+      },
+      {
+        "tau": 0.1,
+        "beta": 2.0,
+        "WER_official": 39.9,
+        "uWER_pct": 68.02,
+        "low_bucket_WER": 76.73,
+        "high_bucket_WER": 27.49,
+        "ins": 12,
+        "micro_subdel_pct": 39.48
+      },
+      {
+        "tau": 0.2,
+        "beta": 0.0,
+        "WER_official": 36.49,
+        "uWER_pct": 62.44,
+        "low_bucket_WER": 70.38,
+        "high_bucket_WER": 24.47,
+        "ins": 24,
+        "micro_subdel_pct": 35.64
+      },
+      {
+        "tau": 0.2,
+        "beta": 1.0,
+        "WER_official": 36.63,
+        "uWER_pct": 61.06,
+        "low_bucket_WER": 68.64,
+        "high_bucket_WER": 24.88,
+        "ins": 31,
+        "micro_subdel_pct": 35.54
+      },
+      {
+        "tau": 0.2,
+        "beta": 2.0,
+        "WER_official": 39.62,
+        "uWER_pct": 62.19,
+        "low_bucket_WER": 68.93,
+        "high_bucket_WER": 29.35,
+        "ins": 18,
+        "micro_subdel_pct": 38.99
+      },
+      {
+        "tau": 0.3,
+        "beta": 0.0,
+        "WER_official": 37.76,
+        "uWER_pct": 58.52,
+        "low_bucket_WER": 65.17,
+        "high_bucket_WER": 26.33,
+        "ins": 56,
+        "micro_subdel_pct": 35.78
+      },
+      {
+        "tau": 0.3,
+        "beta": 1.0,
+        "WER_official": 40.5,
+        "uWER_pct": 57.94,
+        "low_bucket_WER": 63.87,
+        "high_bucket_WER": 28.14,
+        "ins": 104,
+        "micro_subdel_pct": 36.84
+      },
+      {
+        "tau": 0.3,
+        "beta": 2.0,
+        "WER_official": 45.99,
+        "uWER_pct": 59.86,
+        "low_bucket_WER": 64.6,
+        "high_bucket_WER": 34.65,
+        "ins": 115,
+        "micro_subdel_pct": 41.94
+      }
+    ],
+    "p213-f1": [
+      {
+        "tau": 0.0,
+        "beta": 0.0,
+        "WER_official": 35.54,
+        "uWER_pct": 65.76,
+        "low_bucket_WER": 76.59,
+        "high_bucket_WER": 20.51,
+        "ins": 39,
+        "micro_subdel_pct": 34.17
+      },
+      {
+        "tau": 0.0,
+        "beta": 1.0,
+        "WER_official": 36.56,
+        "uWER_pct": 67.87,
+        "low_bucket_WER": 78.61,
+        "high_bucket_WER": 21.81,
+        "ins": 26,
+        "micro_subdel_pct": 35.64
+      },
+      {
+        "tau": 0.0,
+        "beta": 2.0,
+        "WER_official": 41.48,
+        "uWER_pct": 74.77,
+        "low_bucket_WER": 86.42,
+        "high_bucket_WER": 26.56,
+        "ins": 10,
+        "micro_subdel_pct": 41.13
+      },
+      {
+        "tau": 0.1,
+        "beta": 0.0,
+        "WER_official": 39.09,
+        "uWER_pct": 71.43,
+        "low_bucket_WER": 81.79,
+        "high_bucket_WER": 24.84,
+        "ins": 11,
+        "micro_subdel_pct": 38.71
+      },
+      {
+        "tau": 0.1,
+        "beta": 1.0,
+        "WER_official": 40.25,
+        "uWER_pct": 72.27,
+        "low_bucket_WER": 82.23,
+        "high_bucket_WER": 26.28,
+        "ins": 10,
+        "micro_subdel_pct": 39.9
+      },
+      {
+        "tau": 0.1,
+        "beta": 2.0,
+        "WER_official": 44.97,
+        "uWER_pct": 76.89,
+        "low_bucket_WER": 86.99,
+        "high_bucket_WER": 31.12,
+        "ins": 7,
+        "micro_subdel_pct": 44.72
+      },
+      {
+        "tau": 0.2,
+        "beta": 0.0,
+        "WER_official": 40.11,
+        "uWER_pct": 70.27,
+        "low_bucket_WER": 79.62,
+        "high_bucket_WER": 26.98,
+        "ins": 9,
+        "micro_subdel_pct": 39.8
+      },
+      {
+        "tau": 0.2,
+        "beta": 1.0,
+        "WER_official": 39.58,
+        "uWER_pct": 68.23,
+        "low_bucket_WER": 77.17,
+        "high_bucket_WER": 26.98,
+        "ins": 11,
+        "micro_subdel_pct": 39.2
+      },
+      {
+        "tau": 0.2,
+        "beta": 2.0,
+        "WER_official": 43.17,
+        "uWER_pct": 69.41,
+        "low_bucket_WER": 77.6,
+        "high_bucket_WER": 31.67,
+        "ins": 9,
+        "micro_subdel_pct": 42.86
+      },
+      {
+        "tau": 0.3,
+        "beta": 0.0,
+        "WER_official": 37.93,
+        "uWER_pct": 61.79,
+        "low_bucket_WER": 69.08,
+        "high_bucket_WER": 26.79,
+        "ins": 24,
+        "micro_subdel_pct": 37.09
+      },
+      {
+        "tau": 0.3,
+        "beta": 1.0,
+        "WER_official": 38.39,
+        "uWER_pct": 59.61,
+        "low_bucket_WER": 67.2,
+        "high_bucket_WER": 27.02,
+        "ins": 45,
+        "micro_subdel_pct": 36.81
+      },
+      {
+        "tau": 0.3,
+        "beta": 2.0,
+        "WER_official": 40.99,
+        "uWER_pct": 59.87,
+        "low_bucket_WER": 65.9,
+        "high_bucket_WER": 30.88,
+        "ins": 45,
+        "micro_subdel_pct": 39.41
+      }
+    ],
+    "p214-f2": [
+      {
+        "tau": 0.0,
+        "beta": 0.0,
+        "WER_official": 34.31,
+        "uWER_pct": 60.85,
+        "low_bucket_WER": 71.1,
+        "high_bucket_WER": 19.4,
+        "ins": 66,
+        "micro_subdel_pct": 31.98
+      },
+      {
+        "tau": 0.0,
+        "beta": 1.0,
+        "WER_official": 34.62,
+        "uWER_pct": 62.38,
+        "low_bucket_WER": 72.54,
+        "high_bucket_WER": 20.51,
+        "ins": 41,
+        "micro_subdel_pct": 33.18
+      },
+      {
+        "tau": 0.0,
+        "beta": 2.0,
+        "WER_official": 37.4,
+        "uWER_pct": 68.25,
+        "low_bucket_WER": 78.61,
+        "high_bucket_WER": 23.58,
+        "ins": 12,
+        "micro_subdel_pct": 36.98
+      },
+      {
+        "tau": 0.1,
+        "beta": 0.0,
+        "WER_official": 36.28,
+        "uWER_pct": 65.77,
+        "low_bucket_WER": 75.58,
+        "high_bucket_WER": 22.74,
+        "ins": 19,
+        "micro_subdel_pct": 35.61
+      },
+      {
+        "tau": 0.1,
+        "beta": 1.0,
+        "WER_official": 36.56,
+        "uWER_pct": 65.61,
+        "low_bucket_WER": 75.14,
+        "high_bucket_WER": 23.44,
+        "ins": 15,
+        "micro_subdel_pct": 36.03
+      },
+      {
+        "tau": 0.1,
+        "beta": 2.0,
+        "WER_official": 40.75,
+        "uWER_pct": 70.28,
+        "low_bucket_WER": 79.91,
+        "high_bucket_WER": 27.72,
+        "ins": 9,
+        "micro_subdel_pct": 40.43
+      },
+      {
+        "tau": 0.2,
+        "beta": 0.0,
+        "WER_official": 36.59,
+        "uWER_pct": 63.31,
+        "low_bucket_WER": 71.82,
+        "high_bucket_WER": 24.47,
+        "ins": 17,
+        "micro_subdel_pct": 36.0
+      },
+      {
+        "tau": 0.2,
+        "beta": 1.0,
+        "WER_official": 36.81,
+        "uWER_pct": 62.19,
+        "low_bucket_WER": 69.8,
+        "high_bucket_WER": 25.16,
+        "ins": 22,
+        "micro_subdel_pct": 36.03
+      },
+      {
+        "tau": 0.2,
+        "beta": 2.0,
+        "WER_official": 39.69,
+        "uWER_pct": 62.66,
+        "low_bucket_WER": 69.94,
+        "high_bucket_WER": 29.3,
+        "ins": 14,
+        "micro_subdel_pct": 39.2
+      },
+      {
+        "tau": 0.3,
+        "beta": 0.0,
+        "WER_official": 37.37,
+        "uWER_pct": 58.05,
+        "low_bucket_WER": 64.6,
+        "high_bucket_WER": 26.14,
+        "ins": 53,
+        "micro_subdel_pct": 35.5
+      },
+      {
+        "tau": 0.3,
+        "beta": 1.0,
+        "WER_official": 38.95,
+        "uWER_pct": 57.63,
+        "low_bucket_WER": 62.14,
+        "high_bucket_WER": 27.72,
+        "ins": 81,
+        "micro_subdel_pct": 36.1
+      },
+      {
+        "tau": 0.3,
+        "beta": 2.0,
+        "WER_official": 45.18,
+        "uWER_pct": 59.03,
+        "low_bucket_WER": 63.73,
+        "high_bucket_WER": 34.88,
+        "ins": 93,
+        "micro_subdel_pct": 41.91
+      }
+    ]
+  },
+  "note": "探索性诊断；不做 PASS/FAIL，不进 test，不用于报性能"
+}

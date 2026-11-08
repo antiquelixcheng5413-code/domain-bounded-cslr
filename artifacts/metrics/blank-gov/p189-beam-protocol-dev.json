@@ -1,0 +1,19 @@
+{
+  "p193": {
+    "n": 515,
+    "greedy_corpus": 33.81,
+    "beam10_corpus": 33.85,
+    "greedy": {
+      "corpus_split": 33.81,
+      "sentmean_split": 33.5,
+      "corpus_raw": 33.81,
+      "sentmean_raw": 33.5
+    },
+    "beam10": {
+      "corpus_split": 33.85,
+      "sentmean_split": 33.54,
+      "corpus_raw": 33.85,
+      "sentmean_raw": 33.54
+    }
+  }
+}

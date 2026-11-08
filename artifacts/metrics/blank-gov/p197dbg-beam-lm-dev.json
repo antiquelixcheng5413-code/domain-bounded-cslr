@@ -1,0 +1,43 @@
+{
+  "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+  "beam": 12,
+  "topk": 12,
+  "nbest": 8,
+  "greedy": {
+    "WER_official": 34.41,
+    "edits": 978,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 19.99,
+    "gap_to_sota_TFNet": 7.69,
+    "WER_excl_unk": 34.41,
+    "WER_per_sentence": 189.9029,
+    "exact_rate_pct": 13.59,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "beam_1best": {
+    "WER_official": 35.22,
+    "edits": 1001,
+    "ref_tokens": 2842,
+    "n_sentences": 515,
+    "better_than": null,
+    "worse_than": null,
+    "gap_to_that_method": 19.18,
+    "gap_to_sota_TFNet": 6.88,
+    "WER_excl_unk": 35.22,
+    "WER_per_sentence": 194.3689,
+    "exact_rate_pct": 12.62,
+    "_usage": "判优只用 WER_official；其余为附加诊断，官方未报，不得用于与论文表格对照"
+  },
+  "beam_oracle_wer": 27.41,
+  "lm_grid": {
+    "0.0": 35.22,
+    "0.4": 35.86,
+    "0.8": 36.24
+  },
+  "best_lambda": 0.0,
+  "best_wer": 35.22,
+  "n_sentences": 515
+}

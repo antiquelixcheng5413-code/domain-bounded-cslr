@@ -1,0 +1,50 @@
+{
+  "tag": "p210-d4-cb",
+  "base": {
+    "tag": "p184-base",
+    "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+    "n": 515,
+    "WER_official": 34.41,
+    "uWER_pct": 60.41,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.66
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.56
+    },
+    "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+  },
+  "cand": {
+    "tag": "p210-d4",
+    "ckpt": "artifacts/checkpoints/p210-d4-cb-best.pt",
+    "n": 515,
+    "WER_official": 34.27,
+    "uWER_pct": 59.85,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 69.51
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 19.16
+    },
+    "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+  },
+  "train_best_dev_wer": 34.27,
+  "delta": {
+    "WER_official": 0.14,
+    "uWER_pct": 0.56,
+    "low_bucket_WER_pct": 1.15
+  },
+  "pre_registered": {
+    "rule": "dev<=33.60 且 uWER 与低频桶 WER 均改善；否则判负",
+    "note": "不能只看总 WER（FGXM PRL25 指出高频功能词掩盖低频实词）"
+  },
+  "verdict": "FAIL"
+}

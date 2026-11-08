@@ -1,0 +1,14 @@
+{
+  "pad": true,
+  "done": 400,
+  "n": 515,
+  "wer": 89.6797153024911,
+  "pure_period": 314,
+  "empty": 85,
+  "sample_mean_wer": 89.04503690753691,
+  "diag": {
+    "WER_excl_unk": 89.68,
+    "WER_per_sentence": 504.0,
+    "exact_rate_pct": 0.0
+  }
+}

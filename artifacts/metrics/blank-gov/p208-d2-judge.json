@@ -1,0 +1,50 @@
+{
+  "tag": "p208-d2-cons",
+  "baseline_dev": 34.34,
+  "curve": [
+    {
+      "ep": 1,
+      "train_ctc": 5.4102,
+      "dev_wer": 35.61
+    },
+    {
+      "ep": 2,
+      "train_ctc": 5.0464,
+      "dev_wer": 34.45
+    },
+    {
+      "ep": 3,
+      "train_ctc": 4.9422,
+      "dev_wer": 34.98
+    },
+    {
+      "ep": 4,
+      "train_ctc": 4.8354,
+      "dev_wer": 34.17
+    },
+    {
+      "ep": 5,
+      "train_ctc": 4.7971,
+      "dev_wer": 35.05
+    },
+    {
+      "ep": 6,
+      "train_ctc": 4.6649,
+      "dev_wer": 34.41
+    }
+  ],
+  "best": {
+    "epoch": 4,
+    "train_ctc": 4.8354,
+    "dev_wer": 34.17
+  },
+  "delta_pp": 0.17,
+  "noise_floor_pp": 0.77,
+  "pre_registered": {
+    "screen": "dev <= 33.80 且 train-dev 间隙缩小（train ctc 为代理）",
+    "hard": "项目硬约束：比 34.34 好 >= 0.70pp 才进 paired_eval/2seed/test"
+  },
+  "screen_passed": false,
+  "hard_passed": false,
+  "verdict": "NEGATIVE"
+}

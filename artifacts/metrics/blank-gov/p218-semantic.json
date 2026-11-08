@@ -1,0 +1,7 @@
+{
+  "available": true,
+  "n_sub_pairs": 673,
+  "mean_cos_error_pairs": 0.1632,
+  "mean_cos_random_pairs": 0.0069,
+  "lift": 23.72
+}

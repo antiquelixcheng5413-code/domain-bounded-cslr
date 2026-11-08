@@ -1,0 +1,63 @@
+{
+  "tag": "official224",
+  "img": 224,
+  "n": 515,
+  "rows": {
+    "h0": {
+      "corpus_split": 33.92,
+      "sentmean_split": 33.55,
+      "corpus_raw": 33.92,
+      "sentmean_raw": 33.55,
+      "corpus": 33.92
+    },
+    "h1": {
+      "corpus_split": 41.34,
+      "sentmean_split": 41.38,
+      "corpus_raw": 41.34,
+      "sentmean_raw": 41.38,
+      "corpus": 41.34
+    },
+    "h2": {
+      "corpus_split": 36.28,
+      "sentmean_split": 36.11,
+      "corpus_raw": 36.28,
+      "sentmean_raw": 36.11,
+      "corpus": 36.28
+    },
+    "h3": {
+      "corpus_split": 41.7,
+      "sentmean_split": 41.66,
+      "corpus_raw": 41.7,
+      "sentmean_raw": 41.66,
+      "corpus": 41.7
+    },
+    "h0+h1": {
+      "corpus_split": 37.51,
+      "sentmean_split": 37.11,
+      "corpus_raw": 37.51,
+      "sentmean_raw": 37.11,
+      "corpus": 37.51
+    },
+    "h0+h2": {
+      "corpus_split": 34.45,
+      "sentmean_split": 34.22,
+      "corpus_raw": 34.45,
+      "sentmean_raw": 34.22,
+      "corpus": 34.45
+    },
+    "h0+h1+h3": {
+      "corpus_split": 39.44,
+      "sentmean_split": 39.14,
+      "corpus_raw": 39.44,
+      "sentmean_raw": 39.14,
+      "corpus": 39.44
+    },
+    "all4": {
+      "corpus_split": 40.71,
+      "sentmean_split": 40.36,
+      "corpus_raw": 40.71,
+      "sentmean_raw": 40.36,
+      "corpus": 40.71
+    }
+  }
+}

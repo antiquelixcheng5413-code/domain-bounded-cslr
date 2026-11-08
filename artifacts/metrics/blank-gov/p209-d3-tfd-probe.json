@@ -1,0 +1,30 @@
+{
+  "tag": "p209-d3-tfd",
+  "n": 514,
+  "posterior": "artifacts/metrics/blank-gov/p188_logp_p184.pt",
+  "landmark": "data/processed/ce-csl-landmark48",
+  "pre_registered": {
+    "A": "spike_ratio<0.25 且 frames_per_word<3",
+    "B": "corr(词数,边界数)>=0.5 且 |边界数-词数|均值<=2",
+    "rule": "A且B成立才投入 GTM/Sign Spotting；否则 D3 判负"
+  },
+  "A": {
+    "spike_ratio": 0.129,
+    "frames_per_word": 1.059,
+    "mean_words": 5.521,
+    "passed": true
+  },
+  "B": {
+    "mean_bounds": 5.745,
+    "corr_words_bounds": 0.2895,
+    "mae_bounds_words": 1.243,
+    "passed": false
+  },
+  "C": {
+    "hit": 0.6298,
+    "hit_random": 0.5378,
+    "lift": 1.171
+  },
+  "verdict": "STOP",
+  "note": "TFD 无训练参数、纯 CPU；命中率用归一化时间坐标 ±3/47 容差"
+}

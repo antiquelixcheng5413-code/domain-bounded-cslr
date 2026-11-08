@@ -1,0 +1,83 @@
+{
+  "tag": "p212-e1-csgc",
+  "base": {
+    "tag": "p184-base",
+    "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+    "n": 515,
+    "WER_official": 34.41,
+    "uWER_pct": 60.41,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.66
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.56
+    },
+    "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+  },
+  "cand": {
+    "tag": "p212-e1",
+    "ckpt": "artifacts/checkpoints/p212-e1-csgc-best.pt",
+    "n": 515,
+    "WER_official": 34.41,
+    "uWER_pct": 59.26,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 69.08
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 19.12
+    },
+    "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+  },
+  "train_curve": [
+    {
+      "ep": 1,
+      "ctc": 5.4231,
+      "wer": 35.64
+    },
+    {
+      "ep": 2,
+      "ctc": 5.0597,
+      "wer": 34.41
+    },
+    {
+      "ep": 3,
+      "ctc": 4.9525,
+      "wer": 35.15
+    },
+    {
+      "ep": 4,
+      "ctc": 4.8462,
+      "wer": 34.52
+    },
+    {
+      "ep": 5,
+      "ctc": 4.8109,
+      "wer": 34.87
+    },
+    {
+      "ep": 6,
+      "ctc": 4.6696,
+      "wer": 34.41
+    }
+  ],
+  "train_best_dev_wer": 34.41,
+  "delta": {
+    "WER_official": 0.0,
+    "uWER_pct": 1.15,
+    "low_bucket_WER_pct": 1.58,
+    "high_bucket_WER_pct_worsen": 0.56
+  },
+  "pre_registered": {
+    "rule": "uWER改善>=2pp 且 低频桶改善>=2pp 且 高频桶恶化<=1pp 且 WER_official退化<=1.0pp 且 dev<=34.80",
+    "note": "主看 uWER/低频桶；仅总量改善不算正向（D4 教训）"
+  },
+  "verdict": "FAIL"
+}

@@ -1,0 +1,84 @@
+{
+  "tag": "p220",
+  "kind": "diagnostic_no_verdict",
+  "n_all_sub_pairs": 693,
+  "variant": {
+    "n": 0,
+    "share": 0.0,
+    "mean_cos": null
+  },
+  "non_variant": {
+    "n": 693,
+    "mean_cos": 0.1974,
+    "cond_random_cos": -0.001,
+    "delta": 0.1984,
+    "ci95": [
+      0.1747,
+      0.2214
+    ],
+    "ci_excludes_zero": true
+  },
+  "top_pairs": [
+    {
+      "ref": "？",
+      "hyp": "。",
+      "count": 25
+    },
+    {
+      "ref": "。",
+      "hyp": "？",
+      "count": 18
+    },
+    {
+      "ref": "学",
+      "hyp": "学习",
+      "count": 4
+    },
+    {
+      "ref": "他",
+      "hyp": "那",
+      "count": 4
+    },
+    {
+      "ref": "需要",
+      "hyp": "要",
+      "count": 4
+    },
+    {
+      "ref": "那",
+      "hyp": "这",
+      "count": 4
+    },
+    {
+      "ref": "吃饭",
+      "hyp": "吃",
+      "count": 3
+    },
+    {
+      "ref": "任务",
+      "hyp": "真",
+      "count": 3
+    },
+    {
+      "ref": "我",
+      "hyp": "你",
+      "count": 3
+    },
+    {
+      "ref": "漂亮",
+      "hyp": "美",
+      "count": 3
+    },
+    {
+      "ref": "哪",
+      "hyp": "哪里",
+      "count": 2
+    },
+    {
+      "ref": "事情",
+      "hyp": "事",
+      "count": 2
+    }
+  ],
+  "note": "变体判定 = 去尾部数字 + 去括号内容后字符串相同"
+}

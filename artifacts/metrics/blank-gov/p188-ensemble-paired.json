@@ -1,30 +1,27 @@
 {
   "tags": [
-    "p184",
-    "p184b",
-    "official"
+    "official",
+    "p193"
   ],
   "weights": [
     1.0,
-    1.0,
     1.0
   ],
-  "best_single": "official",
+  "best_single": "p193",
   "single_WER": {
-    "p184": 34.342,
-    "p184b": 34.236,
-    "official": 33.92
+    "official": 33.92,
+    "p193": 33.814
   },
-  "ensemble_WER": 33.779,
-  "delta_pp": -0.141,
+  "ensemble_WER": 34.025,
+  "delta_pp": 0.211,
   "ci95": [
-    -0.902,
-    0.63
+    -0.321,
+    0.774
   ],
   "crosses_zero": true,
   "per_sentence": {
-    "better": 52,
-    "worse": 49,
-    "tie": 414
+    "better": 28,
+    "worse": 33,
+    "tie": 454
   }
 }

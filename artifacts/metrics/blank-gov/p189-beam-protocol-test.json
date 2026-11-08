@@ -1,0 +1,19 @@
+{
+  "official_test": {
+    "n": 500,
+    "greedy_corpus": 33.09,
+    "beam10_corpus": 32.99,
+    "greedy": {
+      "corpus_split": 33.09,
+      "sentmean_split": 32.74,
+      "corpus_raw": 33.09,
+      "sentmean_raw": 32.74
+    },
+    "beam10": {
+      "corpus_split": 32.99,
+      "sentmean_split": 32.63,
+      "corpus_raw": 32.99,
+      "sentmean_raw": 32.63
+    }
+  }
+}

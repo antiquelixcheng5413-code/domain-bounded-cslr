@@ -1,0 +1,715 @@
+{
+  "tag": "p207-d1",
+  "nbest_pkl": "artifacts/cache/p207_d1_nbest.pkl",
+  "n": 515,
+  "lm": "Qwen2.5-1.5B-Instruct (local, base-LM logP, no chat template)",
+  "baseline_greedy_wer": 34.41,
+  "beam1_wer": 34.34,
+  "oracle_wer": 25.44,
+  "pre_registered": {
+    "threshold": 33.6,
+    "noise_floor_pp": 0.77,
+    "rule": "dev<=33.60 且配对 bootstrap 95% CI 不含 0 才过线，否则判负不进 test"
+  },
+  "grid": {
+    "plain/raw": {
+      "0.0": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.0001": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.0003": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.001": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.003": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.106,
+          0.246
+        ],
+        "better": 4,
+        "worse": 2,
+        "tie": 509,
+        "oracle_util": 0.0078
+      },
+      "0.01": {
+        "WER_official": 34.17,
+        "delta_pp": 0.246,
+        "ci95": [
+          0.035,
+          0.493
+        ],
+        "better": 9,
+        "worse": 2,
+        "tie": 504,
+        "oracle_util": 0.0268
+      },
+      "0.03": {
+        "WER_official": 34.17,
+        "delta_pp": 0.246,
+        "ci95": [
+          -0.141,
+          0.633
+        ],
+        "better": 19,
+        "worse": 12,
+        "tie": 484,
+        "oracle_util": 0.0268
+      },
+      "0.1": {
+        "WER_official": 33.88,
+        "delta_pp": 0.528,
+        "ci95": [
+          -0.035,
+          1.091
+        ],
+        "better": 39,
+        "worse": 22,
+        "tie": 454,
+        "oracle_util": 0.0591
+      },
+      "0.3": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -1.232,
+          0.387
+        ],
+        "better": 63,
+        "worse": 72,
+        "tie": 380,
+        "oracle_util": -0.0468
+      },
+      "1.0": {
+        "WER_official": 36.88,
+        "delta_pp": -2.463,
+        "ci95": [
+          -3.483,
+          -1.443
+        ],
+        "better": 75,
+        "worse": 138,
+        "tie": 302,
+        "oracle_util": -0.2754
+      }
+    },
+    "plain/norm": {
+      "0.0": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.0001": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.0003": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.001": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.003": {
+        "WER_official": 34.76,
+        "delta_pp": -0.352,
+        "ci95": [
+          -0.809,
+          0.07
+        ],
+        "better": 14,
+        "worse": 23,
+        "tie": 478,
+        "oracle_util": -0.039
+      },
+      "0.01": {
+        "WER_official": 34.73,
+        "delta_pp": -0.317,
+        "ci95": [
+          -0.774,
+          0.141
+        ],
+        "better": 15,
+        "worse": 23,
+        "tie": 477,
+        "oracle_util": -0.0357
+      },
+      "0.03": {
+        "WER_official": 34.66,
+        "delta_pp": -0.246,
+        "ci95": [
+          -0.739,
+          0.246
+        ],
+        "better": 20,
+        "worse": 26,
+        "tie": 469,
+        "oracle_util": -0.0279
+      },
+      "0.1": {
+        "WER_official": 34.45,
+        "delta_pp": -0.035,
+        "ci95": [
+          -0.598,
+          0.528
+        ],
+        "better": 34,
+        "worse": 34,
+        "tie": 447,
+        "oracle_util": -0.0045
+      },
+      "0.3": {
+        "WER_official": 34.41,
+        "delta_pp": 0.0,
+        "ci95": [
+          -0.774,
+          0.774
+        ],
+        "better": 60,
+        "worse": 58,
+        "tie": 397,
+        "oracle_util": 0.0
+      },
+      "1.0": {
+        "WER_official": 36.0,
+        "delta_pp": -1.583,
+        "ci95": [
+          -2.569,
+          -0.598
+        ],
+        "better": 74,
+        "worse": 115,
+        "tie": 326,
+        "oracle_util": -0.1773
+      }
+    },
+    "plain/zscore": {
+      "0.0": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.1": {
+        "WER_official": 34.03,
+        "delta_pp": 0.387,
+        "ci95": [
+          0.106,
+          0.704
+        ],
+        "better": 15,
+        "worse": 4,
+        "tie": 496,
+        "oracle_util": 0.0424
+      },
+      "0.2": {
+        "WER_official": 34.2,
+        "delta_pp": 0.211,
+        "ci95": [
+          -0.141,
+          0.564
+        ],
+        "better": 17,
+        "worse": 11,
+        "tie": 487,
+        "oracle_util": 0.0234
+      },
+      "0.3": {
+        "WER_official": 34.31,
+        "delta_pp": 0.106,
+        "ci95": [
+          -0.317,
+          0.528
+        ],
+        "better": 21,
+        "worse": 18,
+        "tie": 476,
+        "oracle_util": 0.0111
+      },
+      "0.5": {
+        "WER_official": 34.31,
+        "delta_pp": 0.106,
+        "ci95": [
+          -0.422,
+          0.633
+        ],
+        "better": 32,
+        "worse": 29,
+        "tie": 454,
+        "oracle_util": 0.0111
+      },
+      "0.7": {
+        "WER_official": 34.48,
+        "delta_pp": -0.07,
+        "ci95": [
+          -0.669,
+          0.528
+        ],
+        "better": 36,
+        "worse": 38,
+        "tie": 441,
+        "oracle_util": -0.0078
+      },
+      "1.0": {
+        "WER_official": 34.41,
+        "delta_pp": 0.0,
+        "ci95": [
+          -0.704,
+          0.704
+        ],
+        "better": 53,
+        "worse": 53,
+        "tie": 409,
+        "oracle_util": 0.0
+      },
+      "1.5": {
+        "WER_official": 34.76,
+        "delta_pp": -0.352,
+        "ci95": [
+          -1.196,
+          0.493
+        ],
+        "better": 66,
+        "worse": 74,
+        "tie": 375,
+        "oracle_util": -0.039
+      }
+    },
+    "space/raw": {
+      "0.0": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.0001": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.0003": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.001": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.003": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.01": {
+        "WER_official": 34.27,
+        "delta_pp": 0.141,
+        "ci95": [
+          -0.035,
+          0.352
+        ],
+        "better": 6,
+        "worse": 2,
+        "tie": 507,
+        "oracle_util": 0.0156
+      },
+      "0.03": {
+        "WER_official": 34.13,
+        "delta_pp": 0.281,
+        "ci95": [
+          -0.07,
+          0.669
+        ],
+        "better": 18,
+        "worse": 10,
+        "tie": 487,
+        "oracle_util": 0.0312
+      },
+      "0.1": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.493,
+          0.633
+        ],
+        "better": 31,
+        "worse": 27,
+        "tie": 457,
+        "oracle_util": 0.0078
+      },
+      "0.3": {
+        "WER_official": 35.43,
+        "delta_pp": -1.02,
+        "ci95": [
+          -1.9,
+          -0.141
+        ],
+        "better": 55,
+        "worse": 79,
+        "tie": 381,
+        "oracle_util": -0.1137
+      },
+      "1.0": {
+        "WER_official": 37.23,
+        "delta_pp": -2.815,
+        "ci95": [
+          -3.906,
+          -1.759
+        ],
+        "better": 67,
+        "worse": 139,
+        "tie": 309,
+        "oracle_util": -0.3144
+      }
+    },
+    "space/norm": {
+      "0.0": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.0001": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.0003": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.844,
+          0.0
+        ],
+        "better": 12,
+        "worse": 23,
+        "tie": 480,
+        "oracle_util": -0.0468
+      },
+      "0.001": {
+        "WER_official": 34.87,
+        "delta_pp": -0.457,
+        "ci95": [
+          -0.915,
+          -0.035
+        ],
+        "better": 12,
+        "worse": 24,
+        "tie": 479,
+        "oracle_util": -0.0513
+      },
+      "0.003": {
+        "WER_official": 34.87,
+        "delta_pp": -0.457,
+        "ci95": [
+          -0.915,
+          -0.035
+        ],
+        "better": 12,
+        "worse": 24,
+        "tie": 479,
+        "oracle_util": -0.0513
+      },
+      "0.01": {
+        "WER_official": 34.9,
+        "delta_pp": -0.493,
+        "ci95": [
+          -0.95,
+          -0.07
+        ],
+        "better": 12,
+        "worse": 25,
+        "tie": 478,
+        "oracle_util": -0.0546
+      },
+      "0.03": {
+        "WER_official": 34.9,
+        "delta_pp": -0.493,
+        "ci95": [
+          -0.985,
+          -0.035
+        ],
+        "better": 15,
+        "worse": 28,
+        "tie": 472,
+        "oracle_util": -0.0546
+      },
+      "0.1": {
+        "WER_official": 35.08,
+        "delta_pp": -0.669,
+        "ci95": [
+          -1.196,
+          -0.141
+        ],
+        "better": 20,
+        "worse": 38,
+        "tie": 457,
+        "oracle_util": -0.0747
+      },
+      "0.3": {
+        "WER_official": 34.94,
+        "delta_pp": -0.528,
+        "ci95": [
+          -1.161,
+          0.106
+        ],
+        "better": 34,
+        "worse": 48,
+        "tie": 433,
+        "oracle_util": -0.0591
+      },
+      "1.0": {
+        "WER_official": 36.24,
+        "delta_pp": -1.83,
+        "ci95": [
+          -2.709,
+          -0.915
+        ],
+        "better": 54,
+        "worse": 104,
+        "tie": 357,
+        "oracle_util": -0.204
+      }
+    },
+    "space/zscore": {
+      "0.0": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.07,
+          0.211
+        ],
+        "better": 3,
+        "worse": 1,
+        "tie": 511,
+        "oracle_util": 0.0078
+      },
+      "0.1": {
+        "WER_official": 34.34,
+        "delta_pp": 0.07,
+        "ci95": [
+          -0.211,
+          0.352
+        ],
+        "better": 9,
+        "worse": 7,
+        "tie": 499,
+        "oracle_util": 0.0078
+      },
+      "0.2": {
+        "WER_official": 34.2,
+        "delta_pp": 0.211,
+        "ci95": [
+          -0.176,
+          0.598
+        ],
+        "better": 19,
+        "worse": 13,
+        "tie": 483,
+        "oracle_util": 0.0234
+      },
+      "0.3": {
+        "WER_official": 34.41,
+        "delta_pp": 0.0,
+        "ci95": [
+          -0.457,
+          0.457
+        ],
+        "better": 23,
+        "worse": 23,
+        "tie": 469,
+        "oracle_util": 0.0
+      },
+      "0.5": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -0.985,
+          0.141
+        ],
+        "better": 28,
+        "worse": 40,
+        "tie": 447,
+        "oracle_util": -0.0468
+      },
+      "0.7": {
+        "WER_official": 34.8,
+        "delta_pp": -0.387,
+        "ci95": [
+          -0.985,
+          0.211
+        ],
+        "better": 33,
+        "worse": 44,
+        "tie": 438,
+        "oracle_util": -0.0435
+      },
+      "1.0": {
+        "WER_official": 34.83,
+        "delta_pp": -0.422,
+        "ci95": [
+          -1.126,
+          0.281
+        ],
+        "better": 46,
+        "worse": 57,
+        "tie": 412,
+        "oracle_util": -0.0468
+      },
+      "1.5": {
+        "WER_official": 35.93,
+        "delta_pp": -1.513,
+        "ci95": [
+          -2.357,
+          -0.633
+        ],
+        "better": 52,
+        "worse": 92,
+        "tie": 371,
+        "oracle_util": -0.1695
+      }
+    }
+  },
+  "best": {
+    "setting": "plain/raw lam=0.1",
+    "WER_official": 33.88,
+    "delta_pp": 0.528,
+    "ci95": [
+      -0.035,
+      1.091
+    ],
+    "better": 39,
+    "worse": 22,
+    "tie": 454,
+    "oracle_util": 0.0591
+  },
+  "verdict": "FAIL",
+  "note": "oracle_wer 为用参考标签挑最优候选的作弊上界，不可达；oracle_util 仅表示候选集合信息被利用的比例，非性能增益"
+}

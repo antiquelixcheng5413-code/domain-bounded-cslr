@@ -1,0 +1,127 @@
+{
+  "tag": "p214-f2",
+  "title": "F2 / P214 视觉-文本语义原型对齐（VTA）",
+  "kind": "train",
+  "base_tag": "p184-base",
+  "base": {
+    "tag": "p184-base",
+    "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+    "n": 515,
+    "WER_official": 34.41,
+    "uWER_pct": 60.41,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.66
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.56
+    },
+    "edits": {
+      "ins": 90,
+      "sub": 696,
+      "del": 192,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 31.25,
+      "ins_rate_pct": 3.17
+    },
+    "nonblank_frame_ratio_pct": 12.52,
+    "note": "uWER 对 dev 出现过的 gloss 类别等权；桶按 train 频次<=10 划分，只统计 ref token 的 sub+del；插入数必须单列（E0 教训）"
+  },
+  "cand": {
+    "tag": "p214-f2",
+    "ckpt": "artifacts/checkpoints/p214-f2-best.pt",
+    "n": 515,
+    "WER_official": 34.31,
+    "uWER_pct": 60.85,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 71.1
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 19.4
+    },
+    "edits": {
+      "ins": 66,
+      "sub": 693,
+      "del": 216,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 31.98,
+      "ins_rate_pct": 2.32
+    },
+    "nonblank_frame_ratio_pct": 12.27,
+    "note": "uWER 对 dev 出现过的 gloss 类别等权；桶按 train 频次<=10 划分，只统计 ref token 的 sub+del；插入数必须单列（E0 教训）"
+  },
+  "train_curve": [
+    {
+      "ep": 1,
+      "ctc": 5.415,
+      "wer": 35.47
+    },
+    {
+      "ep": 2,
+      "ctc": 5.0488,
+      "wer": 34.59
+    },
+    {
+      "ep": 3,
+      "ctc": 4.9394,
+      "wer": 35.26
+    },
+    {
+      "ep": 4,
+      "ctc": 4.8371,
+      "wer": 34.41
+    },
+    {
+      "ep": 5,
+      "ctc": 4.7951,
+      "wer": 34.83
+    },
+    {
+      "ep": 6,
+      "ctc": 4.6635,
+      "wer": 34.27
+    }
+  ],
+  "train_best_dev_wer": 34.27,
+  "delta": {
+    "WER_official_improve_pp": 0.1,
+    "uWER_improve_pp": -0.44,
+    "low_bucket_improve_pp": -0.44,
+    "high_bucket_worsen_pp": 0.84,
+    "micro_subdel_worsen_pp": 0.73,
+    "ins_relative_increase": -0.2667,
+    "ins_base": 90,
+    "ins_cand": 66
+  },
+  "paired_bootstrap": {
+    "n_boot": 20000,
+    "delta_WER_pp": 0.106,
+    "ci95": [
+      -0.496,
+      0.726
+    ],
+    "ci_contains_zero": true
+  },
+  "checks": {
+    "R1_uWER_improve_ge_2pp": false,
+    "R2_low_bucket_improve_ge_2pp": false,
+    "R3_high_bucket_worsen_le_1pp": true,
+    "R4_WER_official_degrade_le_1pp": true,
+    "R5_ins_increase_le_10pct": true,
+    "R6_micro_worsen_le_0.30pp": false,
+    "R7_train_best_dev_le_34.80": true
+  },
+  "pre_registered": {
+    "fixed_at": "2026-11-07 23:30 CST (before any of tonight's experiments)",
+    "rule": "R1..R6 (+R7 for train) all must hold; tail metrics are primary",
+    "note": "不得事后调整；仅总量改善不算正向（D4/E0 教训）"
+  },
+  "verdict": "FAIL"
+}

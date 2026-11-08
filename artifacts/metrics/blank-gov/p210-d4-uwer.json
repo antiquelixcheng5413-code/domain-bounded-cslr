@@ -1,0 +1,18 @@
+{
+  "tag": "p210-d4",
+  "ckpt": "artifacts/checkpoints/p210-d4-cb-best.pt",
+  "n": 515,
+  "WER_official": 34.27,
+  "uWER_pct": 59.85,
+  "uWER_n_classes": 774,
+  "low_freq_max": 10,
+  "low_bucket": {
+    "n_tokens": 692,
+    "WER_pct": 69.51
+  },
+  "high_bucket": {
+    "n_tokens": 2150,
+    "WER_pct": 19.16
+  },
+  "note": "uWER 对 dev 中出现过的 gloss 类别等权平均（FGXM PRL25 无偏指标）；桶 WER 按 train 频次是否 <=10 划分，仅统计 ref token 的 sub+del"
+}

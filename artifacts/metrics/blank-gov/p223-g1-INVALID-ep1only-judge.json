@@ -1,0 +1,111 @@
+{
+  "tag": "p223-g1",
+  "title": "G1 / P223 真实混淆对 hard negatives（CSGC 负类替换）",
+  "kind": "train",
+  "base_tag": "p184-base",
+  "base": {
+    "tag": "p184-base",
+    "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+    "n": 515,
+    "WER_official": 34.41,
+    "uWER_pct": 60.41,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 70.66
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 18.56
+    },
+    "edits": {
+      "ins": 90,
+      "sub": 696,
+      "del": 192,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 31.25,
+      "ins_rate_pct": 3.17
+    },
+    "nonblank_frame_ratio_pct": 12.52,
+    "note": "uWER 对 dev 出现过的 gloss 类别等权；桶按 train 频次<=10 划分，只统计 ref token 的 sub+del；插入数必须单列（E0 教训）"
+  },
+  "cand": {
+    "tag": "p223-g1",
+    "ckpt": "artifacts/checkpoints/p223-g1-best.pt",
+    "n": 515,
+    "WER_official": 35.86,
+    "uWER_pct": 61.91,
+    "uWER_n_classes": 774,
+    "low_freq_max": 10,
+    "low_bucket": {
+      "n_tokens": 692,
+      "WER_pct": 71.97
+    },
+    "high_bucket": {
+      "n_tokens": 2150,
+      "WER_pct": 19.21
+    },
+    "edits": {
+      "ins": 108,
+      "sub": 751,
+      "del": 160,
+      "n_ref_tokens": 2842,
+      "micro_subdel_pct": 32.05,
+      "ins_rate_pct": 3.8
+    },
+    "nonblank_frame_ratio_pct": 12.93,
+    "note": "uWER 对 dev 出现过的 gloss 类别等权；桶按 train 频次<=10 划分，只统计 ref token 的 sub+del；插入数必须单列（E0 教训）"
+  },
+  "train_curve": [
+    {
+      "ep": 1,
+      "ctc": 5.4414,
+      "wer": 35.82
+    }
+  ],
+  "train_best_dev_wer": 35.82,
+  "delta": {
+    "WER_official_improve_pp": -1.45,
+    "uWER_improve_pp": -1.5,
+    "low_bucket_improve_pp": -1.31,
+    "high_bucket_worsen_pp": 0.65,
+    "micro_subdel_worsen_pp": 0.8,
+    "ins_relative_increase": 0.2,
+    "ins_base": 90,
+    "ins_cand": 108
+  },
+  "paired_bootstrap": {
+    "n_boot": 20000,
+    "delta_WER_pp": -1.443,
+    "ci95": [
+      -2.265,
+      -0.613
+    ],
+    "ci_contains_zero": false
+  },
+  "lowfreq_bootstrap": {
+    "delta_pp": -1.301,
+    "ci95": [
+      -3.38,
+      0.743
+    ],
+    "n_sentences": 430
+  },
+  "checks": {
+    "R1_uWER_improve_ge_2pp": false,
+    "R2_low_bucket_improve_ge_2pp": false,
+    "R3_high_bucket_worsen_le_1pp": true,
+    "R4_WER_official_degrade_le_1pp": false,
+    "R5_ins_increase_le_10pct": false,
+    "R6_micro_worsen_le_0.30pp": false,
+    "R7_train_best_dev_le_34.80": false,
+    "R8_lowfreq_CI_gt_0": false
+  },
+  "pre_registered": {
+    "fixed_at": "2026-11-07 23:30 CST (before any of tonight's experiments)",
+    "rule": "R1..R6 (+R7 for train) all must hold; tail metrics are primary",
+    "note": "不得事后调整；仅总量改善不算正向（D4/E0 教训）"
+  },
+  "verdict": "FAIL"
+}
