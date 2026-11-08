@@ -1,0 +1,154 @@
+{
+  "tag": "p234-n2",
+  "prereg": "docs/planning/N2-PREREG-2026-11-08.md (20:55)",
+  "verdict": "FAIL",
+  "reason": "无任一档通过护栏 R3/R5/R6，按预注册强制 λ=0 并判 FAIL",
+  "audit_clean_in_range": true,
+  "base_WER_official": 34.34,
+  "chosen": null,
+  "chosen_delta_pp": 0.0,
+  "chosen_ci95": [
+    0.0,
+    0.0
+  ],
+  "grid": {
+    "k1_lam0.3": {
+      "k": 1,
+      "lambda": 0.3,
+      "WER_official": 34.87,
+      "delta_pp": -0.53,
+      "uWER_pct": 64.38,
+      "low_bucket_WER": 75.29,
+      "high_bucket_WER": 19.95,
+      "ins": 41,
+      "del": 373,
+      "micro_subdel_pct": 33.43,
+      "paired_delta_pp": -0.528,
+      "ci95": [
+        -1.172,
+        0.107
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    },
+    "k1_lam0.6": {
+      "k": 1,
+      "lambda": 0.6,
+      "WER_official": 39.02,
+      "delta_pp": -4.68,
+      "uWER_pct": 72.32,
+      "low_bucket_WER": 84.1,
+      "high_bucket_WER": 23.49,
+      "ins": 22,
+      "del": 723,
+      "micro_subdel_pct": 38.25,
+      "paired_delta_pp": -4.68,
+      "ci95": [
+        -5.725,
+        -3.628
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    },
+    "k2_lam0.3": {
+      "k": 2,
+      "lambda": 0.3,
+      "WER_official": 35.29,
+      "delta_pp": -0.95,
+      "uWER_pct": 65.46,
+      "low_bucket_WER": 77.02,
+      "high_bucket_WER": 20.23,
+      "ins": 35,
+      "del": 431,
+      "micro_subdel_pct": 34.06,
+      "paired_delta_pp": -0.95,
+      "ci95": [
+        -1.661,
+        -0.242
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    },
+    "k2_lam0.6": {
+      "k": 2,
+      "lambda": 0.6,
+      "WER_official": 44.86,
+      "delta_pp": -10.52,
+      "uWER_pct": 82.3,
+      "low_bucket_WER": 93.93,
+      "high_bucket_WER": 28.65,
+      "ins": 9,
+      "del": 1030,
+      "micro_subdel_pct": 44.55,
+      "paired_delta_pp": -10.521,
+      "ci95": [
+        -11.805,
+        -9.236
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    },
+    "k4_lam0.3": {
+      "k": 4,
+      "lambda": 0.3,
+      "WER_official": 35.54,
+      "delta_pp": -1.2,
+      "uWER_pct": 65.66,
+      "low_bucket_WER": 77.31,
+      "high_bucket_WER": 20.42,
+      "ins": 36,
+      "del": 453,
+      "micro_subdel_pct": 34.27,
+      "paired_delta_pp": -1.196,
+      "ci95": [
+        -1.938,
+        -0.459
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    },
+    "k4_lam0.6": {
+      "k": 4,
+      "lambda": 0.6,
+      "WER_official": 60.03,
+      "delta_pp": -25.69,
+      "uWER_pct": 94.16,
+      "low_bucket_WER": 99.42,
+      "high_bucket_WER": 47.16,
+      "ins": 4,
+      "del": 1569,
+      "micro_subdel_pct": 59.89,
+      "paired_delta_pp": -25.686,
+      "ci95": [
+        -27.443,
+        -23.905
+      ],
+      "R3_high": false,
+      "R5_ins": true,
+      "R6_micro": false,
+      "guard_pass": false
+    }
+  },
+  "rules": {
+    "delta_min_pp": 2.0,
+    "audit_range": [
+      34.2,
+      34.6
+    ],
+    "R3_high_max_pp": 1.0,
+    "R5_ins_rel_max": 1.1,
+    "R6_micro_max_pp": 0.3,
+    "selection": "guard-pass 内 WER 最低；否则 λ=0 直接 FAIL"
+  },
+  "timestamp": "2026-11-09 01:06:21"
+}

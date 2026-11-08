@@ -1,0 +1,120 @@
+{
+  "tag": "p235-n2",
+  "status": "OK",
+  "timestamp": "2026-11-09 01:06:24",
+  "sentences": {
+    "n": 1500,
+    "target": 1500,
+    "tries": 2323,
+    "length": {
+      "min": 3.0,
+      "p25": 4.0,
+      "median": 6.0,
+      "p75": 8.0,
+      "p90": 10.0,
+      "max": 10.0,
+      "mean": 6.34
+    },
+    "low_freq_per_sentence": {
+      "min": 1.0,
+      "p25": 1.0,
+      "median": 2.0,
+      "p75": 3.0,
+      "p90": 4.0,
+      "max": 8.0,
+      "mean": 2.1
+    },
+    "n_distinct_gloss": 2015,
+    "low_freq_gloss_in_clip_bank": 3179,
+    "low_freq_gloss_used": 1681,
+    "low_freq_coverage": 0.5288,
+    "sample_sentences": [
+      "唱歌/你/胡说/什么/时候/可以/帮助/。",
+      "美容/化妆/穿/裙子/我/等/我/咳嗽/一直/不行",
+      "经营/环境/是/。",
+      "我们/卫生间/我/读/医/学校/完成/希望/我们/楼层",
+      "结婚/我/想/勾引/我/想/勾引/我/是/？"
+    ]
+  },
+  "distribution_vs_train": {
+    "js_divergence": 0.052625,
+    "top20_jaccard": 0.8182,
+    "top20_gen": [
+      "。",
+      "我",
+      "你",
+      "？",
+      "这",
+      "可以",
+      "我们",
+      "是",
+      "有",
+      "什么",
+      "做",
+      "不",
+      "要",
+      "看",
+      "好",
+      "他",
+      "想",
+      "在",
+      "给",
+      "喜欢"
+    ],
+    "top20_train": [
+      "。",
+      "？",
+      "我",
+      "你",
+      "这",
+      "可以",
+      "有",
+      "我们",
+      "什么",
+      "是",
+      "好",
+      "要",
+      "他",
+      "喜欢",
+      "去",
+      "不",
+      "想",
+      "做",
+      "这里",
+      "看"
+    ]
+  },
+  "leakage": {
+    "exact_duplicates_train_dev_test": 0
+  },
+  "clip_bank": {
+    "n_gloss_covered": 3515,
+    "n_clips_total": 28272,
+    "clips_per_gloss": {
+      "min": 1.0,
+      "p25": 1.0,
+      "median": 2.0,
+      "p75": 4.0,
+      "p90": 10.0,
+      "max": 3576.0,
+      "mean": 8.04
+    },
+    "clip_length_input_frames": {
+      "min": 2.0,
+      "p25": 20.0,
+      "median": 28.0,
+      "p75": 42.0,
+      "p90": 56.0,
+      "max": 170.0,
+      "mean": 32.92
+    }
+  },
+  "manifest": {
+    "n_samples": 1500,
+    "n_missing_clip": 0,
+    "n_frames_linked": 313873,
+    "seed": 42,
+    "n_gloss_used": 2015,
+    "max_reuse_of_one_gloss": 962
+  }
+}

@@ -1,0 +1,5174 @@
+{
+  "WER_official": 34.34,
+  "uWER_pct": 60.28,
+  "low_bucket": {
+    "n_tokens": 692,
+    "WER_pct": 70.52
+  },
+  "high_bucket": {
+    "n_tokens": 2150,
+    "WER_pct": 18.51
+  },
+  "edits": {
+    "ins": 90,
+    "sub": 693,
+    "del": 193,
+    "n_ref_tokens": 2842,
+    "micro_subdel_pct": 31.18,
+    "ins_rate_pct": 3.17
+  },
+  "per_item": [
+    {
+      "sid": "dev-00001",
+      "ref_n": 9,
+      "edits": 5,
+      "ins": 0,
+      "sub": 2,
+      "del": 3,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00002",
+      "ref_n": 13,
+      "edits": 8,
+      "ins": 0,
+      "sub": 5,
+      "del": 3,
+      "low_n": 5,
+      "low_err": 4
+    },
+    {
+      "sid": "dev-00003",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00004",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00005",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00006",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00007",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00008",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00009",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00010",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00011",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00012",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00013",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00014",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00015",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00016",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00017",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00018",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00019",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00020",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00021",
+      "ref_n": 10,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 7,
+      "low_err": 4
+    },
+    {
+      "sid": "dev-00022",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00023",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00024",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00025",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00026",
+      "ref_n": 8,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00027",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00028",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00029",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00030",
+      "ref_n": 3,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00031",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00032",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00033",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00034",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00035",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00036",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00037",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00038",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00039",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00040",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00041",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00042",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00043",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00044",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00045",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00046",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00047",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00048",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00049",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00050",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00051",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00052",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00053",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00054",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00055",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00056",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00057",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00058",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00059",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00060",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00061",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00062",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00063",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00064",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00065",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00066",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00067",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00068",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00069",
+      "ref_n": 5,
+      "edits": 7,
+      "ins": 4,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00070",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00071",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00072",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00073",
+      "ref_n": 10,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00074",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00075",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00076",
+      "ref_n": 8,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00077",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00078",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00079",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00080",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00081",
+      "ref_n": 11,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00082",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00083",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00084",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00085",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00086",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00087",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00088",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00089",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00090",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00091",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00092",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00093",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00094",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00095",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00096",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00097",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00098",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00099",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00100",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00101",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00102",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00103",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00104",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00105",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00106",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00107",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00108",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00109",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00110",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00111",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00112",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00113",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00114",
+      "ref_n": 5,
+      "edits": 5,
+      "ins": 1,
+      "sub": 4,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00115",
+      "ref_n": 5,
+      "edits": 5,
+      "ins": 0,
+      "sub": 4,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00116",
+      "ref_n": 7,
+      "edits": 6,
+      "ins": 0,
+      "sub": 6,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00117",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00118",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00119",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 2,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00120",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00121",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 1,
+      "sub": 1,
+      "del": 2,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00122",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00123",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00124",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00125",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00126",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00127",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00128",
+      "ref_n": 8,
+      "edits": 5,
+      "ins": 0,
+      "sub": 2,
+      "del": 3,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00129",
+      "ref_n": 7,
+      "edits": 5,
+      "ins": 0,
+      "sub": 5,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00130",
+      "ref_n": 9,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00131",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00132",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00133",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00134",
+      "ref_n": 5,
+      "edits": 6,
+      "ins": 1,
+      "sub": 5,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00135",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00136",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00137",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00138",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00139",
+      "ref_n": 7,
+      "edits": 5,
+      "ins": 0,
+      "sub": 5,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00140",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00141",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00142",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00143",
+      "ref_n": 5,
+      "edits": 5,
+      "ins": 0,
+      "sub": 4,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00144",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00145",
+      "ref_n": 6,
+      "edits": 5,
+      "ins": 0,
+      "sub": 2,
+      "del": 3,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00146",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00147",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00148",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00149",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00150",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00151",
+      "ref_n": 8,
+      "edits": 6,
+      "ins": 1,
+      "sub": 4,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00152",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00153",
+      "ref_n": 5,
+      "edits": 5,
+      "ins": 0,
+      "sub": 5,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00154",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00155",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00156",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00157",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00158",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00159",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00160",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00161",
+      "ref_n": 9,
+      "edits": 6,
+      "ins": 0,
+      "sub": 4,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00162",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00163",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00164",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00165",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00166",
+      "ref_n": 10,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00167",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00168",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00169",
+      "ref_n": 10,
+      "edits": 5,
+      "ins": 0,
+      "sub": 3,
+      "del": 2,
+      "low_n": 5,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00170",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00171",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00172",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00173",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00174",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00175",
+      "ref_n": 6,
+      "edits": 5,
+      "ins": 0,
+      "sub": 3,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00176",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00177",
+      "ref_n": 7,
+      "edits": 5,
+      "ins": 0,
+      "sub": 2,
+      "del": 3,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00178",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00179",
+      "ref_n": 6,
+      "edits": 5,
+      "ins": 1,
+      "sub": 4,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00180",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00181",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00182",
+      "ref_n": 8,
+      "edits": 5,
+      "ins": 0,
+      "sub": 5,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00183",
+      "ref_n": 8,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00184",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00185",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00186",
+      "ref_n": 4,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00187",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00188",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00189",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00190",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00191",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00192",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00193",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00194",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00195",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00196",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00197",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00198",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00199",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00200",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00201",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00202",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00203",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00204",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 0,
+      "del": 3,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00205",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00206",
+      "ref_n": 6,
+      "edits": 5,
+      "ins": 0,
+      "sub": 5,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00207",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00208",
+      "ref_n": 8,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00209",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00210",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00211",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00212",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00213",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00214",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00215",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00216",
+      "ref_n": 3,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00217",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00218",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00219",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00220",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00221",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 2,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00222",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00223",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00224",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00225",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00226",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00227",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00228",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00229",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00230",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00231",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00232",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00233",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00234",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00235",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00236",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 2,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00237",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00238",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00239",
+      "ref_n": 8,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00240",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00241",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00242",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00243",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00244",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00245",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00246",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00247",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00248",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00249",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00250",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00251",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00252",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00253",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00254",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00255",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00256",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00257",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00258",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00259",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00260",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00261",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00262",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00263",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00264",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00265",
+      "ref_n": 9,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 5,
+      "low_err": 4
+    },
+    {
+      "sid": "dev-00266",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00267",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00268",
+      "ref_n": 11,
+      "edits": 6,
+      "ins": 0,
+      "sub": 2,
+      "del": 4,
+      "low_n": 5,
+      "low_err": 4
+    },
+    {
+      "sid": "dev-00269",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00270",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00271",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00272",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00273",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00274",
+      "ref_n": 8,
+      "edits": 2,
+      "ins": 1,
+      "sub": 0,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00275",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00276",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00277",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00278",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00279",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00280",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00281",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00282",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00283",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00284",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00285",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00286",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00287",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00288",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00289",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00290",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00291",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00292",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00293",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00294",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00295",
+      "ref_n": 9,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00296",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00297",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00298",
+      "ref_n": 8,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00299",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00300",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00301",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00302",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00303",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 1,
+      "sub": 3,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00304",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00305",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00306",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00307",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00308",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00309",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00310",
+      "ref_n": 8,
+      "edits": 4,
+      "ins": 0,
+      "sub": 1,
+      "del": 3,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00311",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00312",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00313",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00314",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00315",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00316",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00317",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00318",
+      "ref_n": 7,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00319",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00320",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00321",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00322",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00323",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00324",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00325",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00326",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00327",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00328",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00329",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00330",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00331",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00332",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00333",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00334",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00335",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00336",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00337",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00338",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00339",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00340",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00341",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00342",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00343",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00344",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00345",
+      "ref_n": 8,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00346",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 0,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00347",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00348",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00349",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00350",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00351",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00352",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00353",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00354",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00355",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00356",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00357",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00358",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00359",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00360",
+      "ref_n": 8,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00361",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00362",
+      "ref_n": 9,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00363",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00364",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00365",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00366",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00367",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00368",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00369",
+      "ref_n": 2,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00370",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00371",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00372",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00373",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00374",
+      "ref_n": 3,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00375",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00376",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00377",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00378",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00379",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00380",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00381",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00382",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00383",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00384",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00385",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00386",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00387",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00388",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 4,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00389",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00390",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00391",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00392",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00393",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00394",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 4,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00395",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00396",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00397",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00398",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00399",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00400",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00401",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00402",
+      "ref_n": 6,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00403",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00404",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00405",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00406",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00407",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00408",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00409",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00410",
+      "ref_n": 5,
+      "edits": 5,
+      "ins": 2,
+      "sub": 3,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00411",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00412",
+      "ref_n": 9,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00413",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00414",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 1,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00415",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00416",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 3,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00417",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00418",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00419",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 1,
+      "sub": 0,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00420",
+      "ref_n": 7,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00421",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00422",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00423",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00424",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00425",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00426",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00427",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00428",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00429",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00430",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00431",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00432",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00433",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00434",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00435",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00436",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00437",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00438",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00439",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00440",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00441",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00442",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00443",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 1,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00444",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00445",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00446",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00447",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00448",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00449",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00450",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00451",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00452",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00453",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00454",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00455",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00456",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00457",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00458",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00459",
+      "ref_n": 7,
+      "edits": 5,
+      "ins": 1,
+      "sub": 4,
+      "del": 0,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00460",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00461",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00462",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00463",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00464",
+      "ref_n": 5,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00465",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00466",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00467",
+      "ref_n": 7,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00468",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00469",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00470",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00471",
+      "ref_n": 6,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00472",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00473",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00474",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00475",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00476",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00477",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00478",
+      "ref_n": 7,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00479",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00480",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00481",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00482",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00483",
+      "ref_n": 7,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00484",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00485",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00486",
+      "ref_n": 8,
+      "edits": 4,
+      "ins": 0,
+      "sub": 1,
+      "del": 3,
+      "low_n": 4,
+      "low_err": 3
+    },
+    {
+      "sid": "dev-00487",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00488",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00489",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00490",
+      "ref_n": 6,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00491",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00492",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00493",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00494",
+      "ref_n": 3,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00495",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00496",
+      "ref_n": 6,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00497",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00498",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00499",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00500",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00501",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00502",
+      "ref_n": 4,
+      "edits": 0,
+      "ins": 0,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00503",
+      "ref_n": 8,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 0,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00504",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 2,
+      "del": 2,
+      "low_n": 1,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00505",
+      "ref_n": 5,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00506",
+      "ref_n": 5,
+      "edits": 3,
+      "ins": 0,
+      "sub": 1,
+      "del": 2,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00507",
+      "ref_n": 7,
+      "edits": 1,
+      "ins": 0,
+      "sub": 1,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00508",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00509",
+      "ref_n": 4,
+      "edits": 3,
+      "ins": 0,
+      "sub": 2,
+      "del": 1,
+      "low_n": 3,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00510",
+      "ref_n": 7,
+      "edits": 2,
+      "ins": 0,
+      "sub": 1,
+      "del": 1,
+      "low_n": 2,
+      "low_err": 1
+    },
+    {
+      "sid": "dev-00511",
+      "ref_n": 6,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00512",
+      "ref_n": 5,
+      "edits": 1,
+      "ins": 0,
+      "sub": 0,
+      "del": 1,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00513",
+      "ref_n": 4,
+      "edits": 1,
+      "ins": 1,
+      "sub": 0,
+      "del": 0,
+      "low_n": 1,
+      "low_err": 0
+    },
+    {
+      "sid": "dev-00514",
+      "ref_n": 4,
+      "edits": 2,
+      "ins": 0,
+      "sub": 2,
+      "del": 0,
+      "low_n": 2,
+      "low_err": 2
+    },
+    {
+      "sid": "dev-00515",
+      "ref_n": 5,
+      "edits": 4,
+      "ins": 0,
+      "sub": 3,
+      "del": 1,
+      "low_n": 0,
+      "low_err": 0
+    }
+  ],
+  "n": 515,
+  "tag": "p234-n2"
+}
