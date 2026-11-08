@@ -916,6 +916,8 @@ def main() -> None:
                     help="P212/E1：InfoNCE 温度")
     ap.add_argument("--csgc-nneg", type=int, default=16,
                     help="P212/E1：hard negative 数量")
+    ap.add_argument("--k1-manifest", default="",
+                    help="P233/K1：合成训练样本 manifest json；空=严格保持原行为")
     ap.add_argument("--adapter", default="none", choices=["none", "conformer"],
                     help="P198：在 temporal_model / temporal_model1 输出后插 Conformer "
                          "时序适配器（bottleneck 1024→d→1024，零初始化 ⇒ 初始恒等）")
@@ -978,6 +980,16 @@ def main() -> None:
 
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     labels_tr = read_csv_split("train.csv")
+    # P233/K1：合成训练样本只注入内存 labels；
+    # 词表仍由 CSV_DIR/*.csv 构建（Word2Id 不读 labels_tr），故 strict load 不受影响。
+    if a.k1_manifest:
+        _km = __import__("json").loads(
+            open(a.k1_manifest, encoding="utf-8").read())
+        _add = {str(k): (str(v[0]), str(v[1]))
+                for k, v in _km["manifest"].items()}
+        labels_tr.update(_add)
+        print("K1 合成样本注入 %d 条，train 总数 %d"
+              % (len(_add), len(labels_tr)), flush=True)
     labels_dv = read_csv_split("dev.csv")
 
     # 🔴 官方词表：train+dev+test 全收（词表层面用了 test 标注，
