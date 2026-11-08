@@ -1,0 +1,112 @@
+{
+  "tag": "p239-n2",
+  "prereg": "docs/planning/N3-CLOSURE-PREREG-2026-11-09.md (05:22)",
+  "nature": "exploratory, NO PASS/FAIL, no re-judgment",
+  "timestamp": "2026-11-09 05:22:23",
+  "paired_bootstrap": {
+    "seed42": {
+      "delta_WER_pp": -0.035,
+      "ci95": [
+        -0.907,
+        0.854
+      ]
+    },
+    "seed43": {
+      "delta_WER_pp": -0.106,
+      "ci95": [
+        -1.092,
+        0.888
+      ]
+    },
+    "two_seed_mean": {
+      "delta_WER_pp": -0.07,
+      "ci95": [
+        -0.929,
+        0.794
+      ]
+    }
+  },
+  "per_sentence_agreement": {
+    "n": 515,
+    "both_better": 45,
+    "both_worse": 40,
+    "split": 1,
+    "at_least_one_tie": 429,
+    "both_better_pct": 8.74,
+    "both_worse_pct": 7.77,
+    "split_pct": 0.19,
+    "tie_pct": 83.3
+  },
+  "metrics": {
+    "base": {
+      "WER_official": 34.41,
+      "uWER_pct": 60.41,
+      "low_bucket_WER": 70.66,
+      "high_bucket_WER": 18.56,
+      "ins": 90,
+      "sub": 696,
+      "del": 192,
+      "micro_subdel_pct": 31.25,
+      "low_n": 692,
+      "low_err": 489
+    },
+    "seed42": {
+      "WER_official": 34.45,
+      "uWER_pct": 60.53,
+      "low_bucket_WER": 69.94,
+      "high_bucket_WER": 19.95,
+      "ins": 66,
+      "sub": 670,
+      "del": 243,
+      "micro_subdel_pct": 32.13,
+      "low_n": 692,
+      "low_err": 484
+    },
+    "seed43": {
+      "WER_official": 34.52,
+      "uWER_pct": 60.26,
+      "low_bucket_WER": 69.65,
+      "high_bucket_WER": 20.6,
+      "ins": 56,
+      "sub": 673,
+      "del": 252,
+      "micro_subdel_pct": 32.55,
+      "low_n": 692,
+      "low_err": 482
+    }
+  },
+  "synthetic_corpus_diversity": {
+    "n_sentences": 1500,
+    "n_tokens": 9506,
+    "n_distinct_gloss": 2015,
+    "top1_share_pct": 10.12,
+    "top10_share_pct": 28.88,
+    "top1_gloss": "。",
+    "top10_gloss": [
+      "。",
+      "我",
+      "你",
+      "？",
+      "这",
+      "可以",
+      "我们",
+      "是",
+      "有",
+      "什么"
+    ],
+    "max_gloss_reuse": 962,
+    "n_distinct_sentences": 1500,
+    "n_distinct_bigrams": 5646,
+    "exact_duplicates_train_dev_test": 0,
+    "low_freq_coverage_pct": 52.88,
+    "js_divergence_vs_train": 0.052625,
+    "clip_bank_gloss_covered": 3515,
+    "clip_span_median_input_frames": 28.0,
+    "manifest_n_samples": 1500
+  },
+  "verdicts_unchanged": {
+    "p233-k1": "FAIL",
+    "p238-k1-s43": "FAIL",
+    "p234-n2": "FAIL"
+  }
+}
