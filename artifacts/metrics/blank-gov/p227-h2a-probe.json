@@ -1,0 +1,327 @@
+{
+  "tag": "p227-h2a",
+  "verdict": "PRECONDITION_PASS",
+  "rule_delta_pp": 2.0,
+  "delta_mild_max_pp": 45.85,
+  "clean_WER_official": 34.34,
+  "audit_clean_in_range": true,
+  "clean_allowed_range": [
+    34.2,
+    34.6
+  ],
+  "mild_groups": [
+    "blur_mild",
+    "jpeg_mild",
+    "bright_mild",
+    "occlud_mild"
+  ],
+  "medium_groups": [
+    "blur_med",
+    "jpeg_med",
+    "bright_med",
+    "occlud_med"
+  ],
+  "deltas_all_pp": {
+    "clean": 0.0,
+    "blur_mild": 1.97,
+    "blur_med": 12.32,
+    "jpeg_mild": 1.34,
+    "jpeg_med": 6.9,
+    "bright_mild": 0.28,
+    "bright_med": 1.59,
+    "occlud_mild": 45.85,
+    "occlud_med": 56.3
+  },
+  "results": {
+    "clean": {
+      "tag": "p227-h2a-clean",
+      "corruption": "clean",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 34.34,
+      "uWER_pct": 60.28,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 70.52
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 18.51
+      },
+      "edits": {
+        "ins": 90,
+        "sub": 693,
+        "del": 193,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 31.18,
+        "ins_rate_pct": 3.17
+      },
+      "nonblank_frame_ratio_pct": 12.35,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 546
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "blur_mild": {
+      "tag": "p227-h2a-blur_mild",
+      "corruption": "blur_mild",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 36.31,
+      "uWER_pct": 63.06,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 72.69
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 21.35
+      },
+      "edits": {
+        "ins": 70,
+        "sub": 732,
+        "del": 230,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 33.85,
+        "ins_rate_pct": 2.46
+      },
+      "nonblank_frame_ratio_pct": 12.17,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 522
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "blur_med": {
+      "tag": "p227-h2a-blur_med",
+      "corruption": "blur_med",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 46.66,
+      "uWER_pct": 73.56,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 83.82
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 33.02
+      },
+      "edits": {
+        "ins": 36,
+        "sub": 834,
+        "del": 456,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 45.39,
+        "ins_rate_pct": 1.27
+      },
+      "nonblank_frame_ratio_pct": 10.95,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 464
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "jpeg_mild": {
+      "tag": "p227-h2a-jpeg_mild",
+      "corruption": "jpeg_mild",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 35.68,
+      "uWER_pct": 61.65,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 71.53
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 19.4
+      },
+      "edits": {
+        "ins": 102,
+        "sub": 720,
+        "del": 192,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 32.09,
+        "ins_rate_pct": 3.59
+      },
+      "nonblank_frame_ratio_pct": 12.38,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 529
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "jpeg_med": {
+      "tag": "p227-h2a-jpeg_med",
+      "corruption": "jpeg_med",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 41.24,
+      "uWER_pct": 65.42,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 76.16
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 24.37
+      },
+      "edits": {
+        "ins": 121,
+        "sub": 842,
+        "del": 209,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 36.98,
+        "ins_rate_pct": 4.26
+      },
+      "nonblank_frame_ratio_pct": 12.19,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 536
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "bright_mild": {
+      "tag": "p227-h2a-bright_mild",
+      "corruption": "bright_mild",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 34.62,
+      "uWER_pct": 60.7,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 70.95
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 18.7
+      },
+      "edits": {
+        "ins": 91,
+        "sub": 694,
+        "del": 199,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 31.42,
+        "ins_rate_pct": 3.2
+      },
+      "nonblank_frame_ratio_pct": 12.26,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 541
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "bright_med": {
+      "tag": "p227-h2a-bright_med",
+      "corruption": "bright_med",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 35.93,
+      "uWER_pct": 62.64,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 73.27
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 20.28
+      },
+      "edits": {
+        "ins": 78,
+        "sub": 712,
+        "del": 231,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 33.18,
+        "ins_rate_pct": 2.74
+      },
+      "nonblank_frame_ratio_pct": 11.9,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 516
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "occlud_mild": {
+      "tag": "p227-h2a-occlud_mild",
+      "corruption": "occlud_mild",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 80.19,
+      "uWER_pct": 95.32,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 96.68
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 74.74
+      },
+      "edits": {
+        "ins": 3,
+        "sub": 898,
+        "del": 1378,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 80.08,
+        "ins_rate_pct": 0.11
+      },
+      "nonblank_frame_ratio_pct": 6.1,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 230
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    },
+    "occlud_med": {
+      "tag": "p227-h2a-occlud_med",
+      "corruption": "occlud_med",
+      "ckpt": "artifacts/checkpoints/p184-tfnet-freeze-best.pt",
+      "n": 515,
+      "WER_official": 90.64,
+      "uWER_pct": 99.69,
+      "uWER_n_classes": 774,
+      "low_freq_max": 10,
+      "low_bucket": {
+        "n_tokens": 692,
+        "WER_pct": 99.86
+      },
+      "high_bucket": {
+        "n_tokens": 2150,
+        "WER_pct": 87.58
+      },
+      "edits": {
+        "ins": 2,
+        "sub": 859,
+        "del": 1715,
+        "n_ref_tokens": 2842,
+        "micro_subdel_pct": 90.57,
+        "ins_rate_pct": 0.07
+      },
+      "nonblank_frame_ratio_pct": 4.68,
+      "collapse": {
+        "empty_output_rate_pct": 0.0,
+        "distinct_gloss_count": 49
+      },
+      "note": "H2-a 前提诊断；指标口径与 night_eval_full.py 一致；不产生候选模型，不参与性能比较"
+    }
+  },
+  "prereg": "docs/planning/H2A-PREREG-2026-11-08.md",
+  "note": "前提诊断，不产生候选模型；medium 档不参与判定；STOP 后不启动 H2-b；未跑 test、未改权重"
+}
