@@ -1,0 +1,41 @@
+{
+  "tag": "p229-j1j2",
+  "note": "零成本 CPU 前提诊断，不启动实验、不占 GPU、不跑 test；判据写死于 OPT-DIRECTIONS-6 §3",
+  "J1_forced_alignment": {
+    "n_sentences": 515,
+    "n_gloss_instances": 2842,
+    "n_align_failed": 0,
+    "spike_frames_per_gloss": {
+      "median": 1.0,
+      "mean": 1.078,
+      "p10": 1.0,
+      "p90": 1.0
+    },
+    "span_encoder_steps": {
+      "median": 8.0,
+      "mean": 8.5,
+      "p10": 4.0,
+      "p90": 14.0
+    },
+    "span_input_frames": {
+      "median": 31.48,
+      "mean": 33.44,
+      "p10": 15.74,
+      "p90": 55.09,
+      "share_ge_8_frames": 0.9926
+    },
+    "step_to_frame_factor": 3.935,
+    "rule": "median>=16 输入帧 且 >=8帧占比>=0.80",
+    "verdict": "CLIP_BANK_FEASIBLE"
+  },
+  "J2_selective": {
+    "n_sentences": 515,
+    "confidence": "mean over frames of max log-prob",
+    "rho_conf_vs_sentence_wer": -0.4924,
+    "base_sentence_wer_pct": 34.06,
+    "kept_wer_at_70pct_coverage_pct": 28.69,
+    "relative_wer_drop_pct": 15.75,
+    "rule": "Spearman |rho|>=0.30 (负向) 且 70% coverage 下 WER 相对下降>=25%",
+    "verdict": "STOP"
+  }
+}
