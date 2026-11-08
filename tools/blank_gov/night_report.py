@@ -35,6 +35,22 @@ META = {
         "method": "同 E1 原始实验，此处用夜间链统一评估器重新出全指标并复判"
                   "（原 E1 链判据未含插入数护栏，统一口径补上 R5/R6）。",
     },
+    "p226-h1": {
+        "title": "H1 / P224-P226 检索增强 kNN 后验精修（RAC 分布插值）",
+        "basis": "【有】IEEE 2025 泰语指语多模态检索增强识别：train 派生知识库 + "
+                 "kNN 后验精修，signer-independent 显著改善、野外 WER 降 >30%，"
+                 "并明确要求 data-leakage-controlled；"
+                 "【有】CSLR² (Raude et al., ECCV 2024, arXiv:2405.10266)：句级检索与 CSLR 互益，"
+                 "BOBSL CSLR-TEST WER 65.5 vs 71.7，检索式分类对同义词/视觉相似手语更宽容；"
+                 "【有】RAC 通用框架：P(y|x)=λP_knn+(1−λ)P_cls 分布插值；"
+                 "【有】本地 E3 1-NN 27.44%（随机 44×）与 G0 train 混淆表（38.45% 覆盖 / lift 111×）；"
+                 "【无】gloss 级稠密检索修正无直接先例，属自建协议。",
+        "method": "零训练、参数无关。记忆库只由 train 构建：CTC greedy 路径切成连续相同非 blank 段，"
+                  "每段取 classifier11 输入帧特征均值 + L2，PCA128 后建 cosine 索引（K=32）。"
+                  "dev 段检索得 P_knn，对段内每帧做 log((1−λ)exp(lp)+λP_knn) 融合后 greedy 解码。"
+                  "主干/适配器/分类头全部不动，不花 6 轮训练预算。λ 选择规则与 R1–R8 判据见 "
+                  "`docs/planning/H1-PREREG-2026-11-08.md`。",
+    },
     "p223-g1": {
         "title": "G1 / P223 真实混淆对 hard negatives（CSGC 负类替换）",
         "basis": "【有】P222/G0 前提诊断：train 帧级 top-2 竞争对覆盖 dev 606 个真实混淆对的 "
