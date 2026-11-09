@@ -918,6 +918,12 @@ def main() -> None:
                     help="P212/E1：hard negative 数量")
     ap.add_argument("--k1-manifest", default="",
                     help="P233/K1：合成训练样本 manifest json；空=严格保持原行为")
+    ap.add_argument("--o4-weight", type=float, default=0.0,
+                    help="P242/O4：静态 Viterbi 区间级帧级表征监督权重（0=关闭）")
+    ap.add_argument("--o4-tau", type=float, default=0.07,
+                    help="P242/O4：cosine CE 温度")
+    ap.add_argument("--o4-clips", default="artifacts/cache/p230_k1_clips.json",
+                    help="P242/O4：K1 A 阶段 CTC 强制对齐片段库（只含 train）")
     ap.add_argument("--adapter", default="none", choices=["none", "conformer"],
                     help="P198：在 temporal_model / temporal_model1 输出后插 Conformer "
                          "时序适配器（bottleneck 1024→d→1024，零初始化 ⇒ 初始恒等）")
@@ -1559,6 +1565,19 @@ def main() -> None:
     #   解法：把 RNG 恢复**挪到建 loader 之前**，让 shuffle 用上轮的 RNG 状态。
     #   （若不修，逐级扩展仍可用，但节点间的数字不可与连续跑直接对比。）
 
+    # ---- P242/O4：训练期 Viterbi 区间级监督（默认关闭） ----
+    O4_BANK = None
+    O4_CAP = None
+    o4_interval_loss = None
+    if a.o4_weight > 0:
+        from o4_interval_module import IntervalBank
+        from o4_interval_module import interval_loss as o4_interval_loss
+        from csgc_module import FeatureCapture as O4FeatureCapture
+        O4_BANK = IntervalBank(a.o4_clips, word2idx, str(RGB_ROOT))
+        O4_CAP = O4FeatureCapture().attach(model)
+        print("O4: %s | lambda=%.3f tau=%.3f" %
+              (O4_BANK.summary(), a.o4_weight, a.o4_tau), flush=True)
+
     hist = list(prev_hist)
     t0 = time.time()
     nan_steps = 0
@@ -1577,6 +1596,8 @@ def main() -> None:
                 LM_FUSE.set_sids(_sids)
             if CSGC_CAP is not None:
                 CSGC_CAP.reset()
+            if O4_CAP is not None:
+                O4_CAP.reset()
             with torch.amp.autocast("cuda", enabled=a.amp_bf16,
                                     dtype=torch.bfloat16):
                 out = model(vid, dl, True)
@@ -1745,6 +1766,14 @@ def main() -> None:
                 _mm = VTA_MASK
                 loss = loss + a.vta_weight * (
                     ((1.0 - _cos) * _mm).sum() / _mm.sum().clamp_min(1.0))
+            # P242/O4：静态 Viterbi 区间级帧级表征监督（训练期-only，推理零开销）
+            # 只在 classifier11 输入特征上加 cosine-CE；不动 CTC 输出 / blank / 类先验；
+            # 目标原型取当前分类头权重并 detach ⇒ 不新增可训练参数。
+            if O4_BANK is not None and O4_CAP is not None and O4_CAP.feat is not None:
+                _W = F.normalize(model.classifier11.weight.detach().float().t(), dim=1)
+                _il, _nfr = o4_interval_loss(O4_CAP.feat, lgt, _sids,
+                                             O4_BANK, _W, a.o4_tau)
+                loss = loss + a.o4_weight * _il
             opt.zero_grad()
             loss.backward()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
