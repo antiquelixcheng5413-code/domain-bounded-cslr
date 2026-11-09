@@ -1,0 +1,16 @@
+{
+  "cand": "p242-o4",
+  "base": "p184-base",
+  "n": 515,
+  "sums_verified": {
+    "edits": 979,
+    "ref_n": 2842,
+    "ins": 69,
+    "sub": 696,
+    "del": 214,
+    "low_n": 692,
+    "low_err": 492
+  },
+  "aggregates_unchanged": true,
+  "timestamp": "2026-11-09 11:45:20"
+}

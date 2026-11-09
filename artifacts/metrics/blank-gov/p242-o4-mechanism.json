@@ -1,0 +1,9 @@
+{
+  "tag": "p242-o4",
+  "verdict": "FAIL",
+  "nonblank_frame_ratio_base_pct": 12.52,
+  "nonblank_frame_ratio_cand_pct": 12.35,
+  "delta_pp": -0.17,
+  "mechanism_verified": false,
+  "note": "机制报告义务（非 PASS 门槛）：若 R1-R8 全过但占比未上升，仍判 PASS 但标注机制未验证"
+}
