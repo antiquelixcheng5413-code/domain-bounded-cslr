@@ -1,0 +1,138 @@
+{
+  "tag": "p241-n1",
+  "prereg": "docs/planning/N1-PREREG-2026-11-09.md (08:14)",
+  "nature": "evaluation-metric diagnostic; NOT a performance claim; no test",
+  "timestamp": "2026-11-09 08:14:27",
+  "self_check": {
+    "base_WER": 34.34,
+    "n_sub_pairs": 693,
+    "expected_sub_pairs": 693,
+    "audit_range": [
+      34.2,
+      34.6
+    ],
+    "audit_pass": true
+  },
+  "rules": {
+    "E1_punct": {
+      "n_equiv_sub": 43,
+      "share_of_sub_pct": 6.2,
+      "WER_synonym_aware": 32.83,
+      "delta_vs_official_pp": 1.51
+    },
+    "E2_substring": {
+      "n_equiv_sub": 87,
+      "share_of_sub_pct": 12.55,
+      "WER_synonym_aware": 31.28,
+      "delta_vs_official_pp": 3.06
+    },
+    "E3_cos075": {
+      "n_equiv_sub": 48,
+      "share_of_sub_pct": 6.93,
+      "WER_synonym_aware": 32.65,
+      "delta_vs_official_pp": 1.69
+    },
+    "UNION_upper_bound": {
+      "n_equiv_sub": 134,
+      "share_of_sub_pct": 19.34,
+      "WER_synonym_aware": 29.63,
+      "delta_vs_official_pp": 4.71
+    }
+  },
+  "punct_pair_question_period_count": 43,
+  "bucket_breakdown": {
+    "punct": {
+      "tokens": 515,
+      "token_share_pct": 18.12,
+      "sub": 43,
+      "del": 0,
+      "equiv_E1": 43,
+      "equiv_E2": 0,
+      "equiv_E3": 43,
+      "sub_share_of_all_sub_pct": 6.2
+    },
+    "low": {
+      "tokens": 692,
+      "token_share_pct": 24.35,
+      "sub": 390,
+      "del": 98,
+      "equiv_E1": 0,
+      "equiv_E2": 45,
+      "equiv_E3": 1,
+      "sub_share_of_all_sub_pct": 56.28
+    },
+    "high": {
+      "tokens": 1635,
+      "token_share_pct": 57.53,
+      "sub": 260,
+      "del": 95,
+      "equiv_E1": 0,
+      "equiv_E2": 42,
+      "equiv_E3": 4,
+      "sub_share_of_all_sub_pct": 37.52
+    }
+  },
+  "top_sub_pairs": [
+    {
+      "ref": "？",
+      "hyp": "。",
+      "count": 25
+    },
+    {
+      "ref": "。",
+      "hyp": "？",
+      "count": 18
+    },
+    {
+      "ref": "学",
+      "hyp": "学习",
+      "count": 4
+    },
+    {
+      "ref": "他",
+      "hyp": "那",
+      "count": 4
+    },
+    {
+      "ref": "需要",
+      "hyp": "要",
+      "count": 4
+    },
+    {
+      "ref": "那",
+      "hyp": "这",
+      "count": 4
+    },
+    {
+      "ref": "吃饭",
+      "hyp": "吃",
+      "count": 3
+    },
+    {
+      "ref": "任务",
+      "hyp": "真",
+      "count": 3
+    },
+    {
+      "ref": "我",
+      "hyp": "你",
+      "count": 3
+    },
+    {
+      "ref": "漂亮",
+      "hyp": "美",
+      "count": 3
+    },
+    {
+      "ref": "哪",
+      "hyp": "哪里",
+      "count": 2
+    },
+    {
+      "ref": "事情",
+      "hyp": "事",
+      "count": 2
+    }
+  ],
+  "cos_threshold": 0.75
+}
